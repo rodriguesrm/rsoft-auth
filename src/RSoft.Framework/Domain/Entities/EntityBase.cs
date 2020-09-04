@@ -88,7 +88,7 @@ namespace RSoft.Framework.Domain.Entities
         /// <summary>
         /// Get object entity name
         /// </summary>
-        public string GetName()
+        public virtual string GetName()
         {
             return GetType().Name.Split(".").ToList().Last();
         }

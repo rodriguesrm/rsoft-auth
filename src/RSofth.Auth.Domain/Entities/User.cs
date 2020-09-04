@@ -1,10 +1,11 @@
-﻿using RSoft.Framework.Domain.Entities;
+﻿using RSoft.Framework.Domain.Contracts;
+using RSoft.Framework.Domain.Entities;
 using System;
 
 namespace RSofth.Auth.Domain.Entities
 {
 
-    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive
+    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive, IFullName
     {
 
         #region Local objects/variables
@@ -110,8 +111,12 @@ namespace RSofth.Auth.Domain.Entities
         /// </summary>
         public override void Validate()
         {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
+
+            //TODO: Globalization
+            AddNotifications(new FullNameValidationContract(this).Contract.Notifications);
+            AddNotifications(new EmailValidationContract(Email).Contract.Notifications);
+            AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);
+
         }
 
         /// <summary>
