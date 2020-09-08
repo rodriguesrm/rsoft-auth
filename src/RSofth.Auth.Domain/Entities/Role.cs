@@ -1,15 +1,14 @@
 ﻿using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
 using System;
-using System.Collections.Generic;
 
 namespace RSofth.Auth.Domain.Entities
 {
 
     /// <summary>
-    /// User of the eco-system applications
+    /// Roles of registered users
     /// </summary>
-    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive, IFullName
+    public class Role : EntityIdNameAuditBase<Guid, Role>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive
     {
 
         #region Local objects/variables
@@ -19,36 +18,35 @@ namespace RSofth.Auth.Domain.Entities
         #region Constructors
 
         /// <summary>
-        /// Create a new user instance
+        /// Create a new role instance
         /// </summary>
-        public User() : base(Guid.NewGuid())
+        public Role() : base(Guid.NewGuid(), null)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Create a new user instance
+        /// Create a new role instance
         /// </summary>
-        /// <param name="id">User id value</param>
-        public User(Guid id) : base(id)
+        /// <param name="id">role id value</param>
+        public Role(Guid id) : base(id, null)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Create a new user instance
+        /// Create a new role instance
         /// </summary>
-        /// <param name="id">User id text</param>
+        /// <param name="id">role id text</param>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.FormatException"></exception>
         /// <exception cref="System.OverflowException"></exception>
-        public User(string id) : base()
+        public Role(string id) : base()
         {
             Id = new Guid(id);
         }
 
         #endregion
-
 
         #region Properties
 
@@ -63,24 +61,9 @@ namespace RSofth.Auth.Domain.Entities
         public bool IsDeleted { get; set; }
 
         /// <summary>
-        /// First name
+        /// Role description
         /// </summary>
-        public string FirstName { get; set; }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName { get; set; }
-
-        /// <summary>
-        /// User's date of birth
-        /// </summary>
-        public DateTime? BornDate { get; set; }
-
-        /// <summary>
-        /// User e-mail
-        /// </summary>
-        public string Email { get; set; }
+        public string Description { get; set; }
 
         #endregion
 
@@ -97,9 +80,9 @@ namespace RSofth.Auth.Domain.Entities
         public User ChangedAuthor { get; set; }
 
         /// <summary>
-        /// Roles list
+        /// Scope data
         /// </summary>
-        public ICollection<UserRole> Roles { get; set; }
+        public Scope Scope { get; set; }
 
         #endregion
 
@@ -108,7 +91,6 @@ namespace RSofth.Auth.Domain.Entities
         private void Initialize()
         {
             IsActive = true;
-            Roles = new HashSet<UserRole>();
         }
 
         #endregion
@@ -121,17 +103,8 @@ namespace RSofth.Auth.Domain.Entities
         public override void Validate()
         {
             //TODO: Globalization
-            AddNotifications(new FullNameValidationContract(this).Contract.Notifications);
-            AddNotifications(new EmailValidationContract(Email).Contract.Notifications);
-            AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);
-        }
-
-        /// <summary>
-        /// Get full name
-        /// </summary>
-        public string GetFullName()
-        {
-            return $"{FirstName ?? string.Empty} {LastName ?? string.Empty}";
+            AddNotifications(new SingleStringValidationContract(Name, nameof(Name), true, 3, 50).Contract.Notifications);
+            AddNotifications(new SingleStringValidationContract(Description, nameof(Description), true, 3, 150).Contract.Notifications);
         }
 
         #endregion

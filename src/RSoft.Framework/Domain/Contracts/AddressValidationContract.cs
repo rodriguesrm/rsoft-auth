@@ -2,6 +2,17 @@
 
 namespace RSoft.Framework.Domain.Contracts
 {
+    
+    /// <summary>
+    /// Address validate contract, where:
+    /// Street name is required and has 2 and 80 characters.
+    /// Address number is required and has 20 maximum characters.
+    /// Secondary address is optional, but has 40 maxium characters.
+    /// District/Neighborhood is required and 2 and 50 characters.
+    /// City is required and 2 and 80 characters.
+    /// State is required and has 2 characters.
+    /// Zip code is required and has 8 digits (only numbers)
+    /// </summary>
     public class AddressValidationContract : BaseValidationContract
     {
 
@@ -23,7 +34,6 @@ namespace RSoft.Framework.Domain.Contracts
                 .HasMaxLen(address.StreetName ?? string.Empty, 80, "StreetName", "Street name must contain a maximum of 80 characters")
 
                 .IsNotNullOrEmpty(address.AddressNumber, "AddressNumber", "Address number is required")
-                .HasMinLen(address.StreetName ?? string.Empty, 2, "AddressNumber", "Addres number must contain at least 2 characters")
                 .HasMaxLen(address.StreetName ?? string.Empty, 20, "AddressNumber", "Address number must contain a maximum of 20 characters")
 
                 .HasMaxLen(address.SecondaryAddress ?? string.Empty, 40, "SecondaryAddress", "Secondary address must contain a maximum of 40 characters")

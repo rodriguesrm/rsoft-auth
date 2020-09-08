@@ -2,6 +2,11 @@
 
 namespace RSoft.Framework.Domain.Contracts
 {
+
+
+    /// <summary>
+    /// Past date validate contract. Validate if date is in past.
+    /// </summary>
     public class PastDateValidationContract : BaseValidationContract
     {
 

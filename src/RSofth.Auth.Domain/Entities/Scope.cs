@@ -7,9 +7,9 @@ namespace RSofth.Auth.Domain.Entities
 {
 
     /// <summary>
-    /// User of the eco-system applications
+    /// Scope of action
     /// </summary>
-    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive, IFullName
+    public class Scope : EntityIdNameAuditBase<Guid, Scope>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive
     {
 
         #region Local objects/variables
@@ -19,36 +19,35 @@ namespace RSofth.Auth.Domain.Entities
         #region Constructors
 
         /// <summary>
-        /// Create a new user instance
+        /// Create a new application scope instance
         /// </summary>
-        public User() : base(Guid.NewGuid())
+        public Scope() : base(Guid.NewGuid(), null)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Create a new user instance
+        /// Create a new application scope instance
         /// </summary>
-        /// <param name="id">User id value</param>
-        public User(Guid id) : base(id)
+        /// <param name="id">application scope id value</param>
+        public Scope(Guid id) : base(id, null)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Create a new user instance
+        /// Create a new application scope instance
         /// </summary>
-        /// <param name="id">User id text</param>
+        /// <param name="id">application scope id text</param>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.FormatException"></exception>
         /// <exception cref="System.OverflowException"></exception>
-        public User(string id) : base()
+        public Scope(string id) : base()
         {
             Id = new Guid(id);
         }
 
         #endregion
-
 
         #region Properties
 
@@ -61,26 +60,6 @@ namespace RSofth.Auth.Domain.Entities
         /// Soft deletion
         /// </summary>
         public bool IsDeleted { get; set; }
-
-        /// <summary>
-        /// First name
-        /// </summary>
-        public string FirstName { get; set; }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName { get; set; }
-
-        /// <summary>
-        /// User's date of birth
-        /// </summary>
-        public DateTime? BornDate { get; set; }
-
-        /// <summary>
-        /// User e-mail
-        /// </summary>
-        public string Email { get; set; }
 
         #endregion
 
@@ -99,7 +78,7 @@ namespace RSofth.Auth.Domain.Entities
         /// <summary>
         /// Roles list
         /// </summary>
-        public ICollection<UserRole> Roles { get; set; }
+        public ICollection<Role> Roles { get; set; }
 
         #endregion
 
@@ -108,7 +87,6 @@ namespace RSofth.Auth.Domain.Entities
         private void Initialize()
         {
             IsActive = true;
-            Roles = new HashSet<UserRole>();
         }
 
         #endregion
@@ -121,17 +99,7 @@ namespace RSofth.Auth.Domain.Entities
         public override void Validate()
         {
             //TODO: Globalization
-            AddNotifications(new FullNameValidationContract(this).Contract.Notifications);
-            AddNotifications(new EmailValidationContract(Email).Contract.Notifications);
-            AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);
-        }
-
-        /// <summary>
-        /// Get full name
-        /// </summary>
-        public string GetFullName()
-        {
-            return $"{FirstName ?? string.Empty} {LastName ?? string.Empty}";
+            AddNotifications(new SingleStringValidationContract(this.Name, nameof(Name), true, 3, 80).Contract.Notifications);
         }
 
         #endregion

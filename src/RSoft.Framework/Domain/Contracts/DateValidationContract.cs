@@ -2,6 +2,10 @@
 
 namespace RSoft.Framework.Domain.Contracts
 {
+
+    /// <summary>
+    /// Date validation contract. Validate if date is not null and valid;
+    /// </summary>
     public class DateValidationContract : BaseValidationContract
     {
 

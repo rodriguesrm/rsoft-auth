@@ -1,5 +1,9 @@
 ﻿namespace RSoft.Framework.Domain.Contracts
 {
+
+    /// <summary>
+    /// String validaction contract
+    /// </summary>
     public class SingleStringValidationContract : BaseValidationContract
     {
 
@@ -40,7 +44,7 @@
                     Contract
                         .HasMinLen(expression, minLen.Value, fieldName, $"The {fieldName} field must contain at least {minLen.Value} character(s)");
 
-                if (maxLen.HasValue && maxLen.Value > 0 && maxLen.Value >= (minLen.HasValue ? minLen.Value : 0))
+                if (maxLen.HasValue && maxLen.Value > 0 && maxLen.Value >= (minLen ?? 0))
                     Contract
                         .HasMaxLen(expression, maxLen.Value, fieldName, $"The {fieldName} fields must contain a maximum {maxLen.Value} character(s)");
 

@@ -2,6 +2,10 @@
 
 namespace RSoft.Framework.Domain.Contracts
 {
+
+    /// <summary>
+    /// Period date validation contract. Validate if date is between in period.
+    /// </summary>
     public class PeriodDateValidationContract : BaseValidationContract
     {
 

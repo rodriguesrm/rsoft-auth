@@ -4,7 +4,7 @@ namespace RSoft.Framework.Domain.Contracts
 {
 
     /// <summary>
-    /// Contract future date validation
+    /// Contract future date validation. Validate date if is in future.
     /// </summary>
     public class FutureDateValidationContract : BaseValidationContract
     {

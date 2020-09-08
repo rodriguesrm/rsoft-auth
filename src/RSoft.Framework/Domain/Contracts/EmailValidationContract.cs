@@ -1,5 +1,9 @@
 ﻿namespace RSoft.Framework.Domain.Contracts
 {
+
+    /// <summary>
+    /// E-mail validation contract. Validate if e-mail is valid.
+    /// </summary>
     public class EmailValidationContract : BaseValidationContract
     {
 

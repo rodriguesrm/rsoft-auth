@@ -2,6 +2,13 @@
 
 namespace RSoft.Framework.Domain.Contracts
 {
+
+    /// <summary>
+    /// Full name validation contract.
+    /// First name and last name are required.
+    /// First name must between 2 and 50 characters.
+    /// Last name must between 2 and 100 characters
+    /// </summary>
     public class FullNameValidationContract : BaseValidationContract
     {
 

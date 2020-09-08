@@ -6,7 +6,7 @@
     /// </summary>
     /// <typeparam name="TKey">Entity key type</typeparam>
     /// <typeparam name="TEntity">Entity type</typeparam>
-    public abstract class EntityIdDescriptionAuditBase<TKey, TEntity> : EntityIdAuditBase<TKey, TEntity>
+    public abstract class EntityIdNameAuditBase<TKey, TEntity> : EntityIdAuditBase<TKey, TEntity>
         where TKey : struct
         where TEntity : EntityIdAuditBase<TKey, TEntity>
     {
@@ -16,16 +16,16 @@
         /// <summary>
         /// Create a new entity instance
         /// </summary>
-        public EntityIdDescriptionAuditBase() : base() { }
+        public EntityIdNameAuditBase() : base() { }
 
         /// <summary>
         /// Create a new entity instance
         /// </summary>
         /// <param name="id">Entity id</param>
         /// <param name="description">Entity description value</param>
-        public EntityIdDescriptionAuditBase(TKey id, string description) : base(id)
+        public EntityIdNameAuditBase(TKey id, string description) : base(id)
         {
-            Description = description;
+            Name = description;
         }
 
         #endregion
@@ -33,9 +33,9 @@
         #region Properties
 
         /// <summary>
-        /// Entity description value
+        /// Entity name value
         /// </summary>
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         #endregion
 
