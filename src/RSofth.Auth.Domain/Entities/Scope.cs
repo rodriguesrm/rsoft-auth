@@ -68,17 +68,17 @@ namespace RSofth.Auth.Domain.Entities
         /// <summary>
         /// Created author data
         /// </summary>
-        public User CreatedAuthor { get; set; }
+        public virtual User CreatedAuthor { get; set; }
 
         /// <summary>
         /// Changed author data
         /// </summary>
-        public User ChangedAuthor { get; set; }
+        public virtual User ChangedAuthor { get; set; }
 
         /// <summary>
         /// Roles list
         /// </summary>
-        public ICollection<Role> Roles { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
 
         #endregion
 

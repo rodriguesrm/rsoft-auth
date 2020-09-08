@@ -6,9 +6,9 @@ namespace RSofth.Auth.Domain.Entities
 {
 
     /// <summary>
-    /// User roles
+    /// User Scopes
     /// </summary>
-    public class UserRole : EntityBase<UserRole>, IEntity
+    public class UserScope : EntityBase<UserScope>, IEntity
     {
 
         #region Properties
@@ -19,9 +19,9 @@ namespace RSofth.Auth.Domain.Entities
         public Guid? UserId { get; set; }
 
         /// <summary>
-        /// Role id
+        /// Scope id
         /// </summary>
-        public Guid? RoleId { get; set; }
+        public Guid? ScopeId { get; set; }
 
         #endregion
 
@@ -33,9 +33,9 @@ namespace RSofth.Auth.Domain.Entities
         public virtual User User { get; set; }
 
         /// <summary>
-        /// Role data
+        /// Scope data
         /// </summary>
-        public virtual Role Role { get; set; }
+        public virtual Scope Scope { get; set; }
 
         #endregion
 
@@ -45,7 +45,7 @@ namespace RSofth.Auth.Domain.Entities
         public override void Validate()
         {
             AddNotifications(new RequiredValidationContract<Guid?>(UserId, nameof(UserId), "User id is required").Contract.Notifications);
-            AddNotifications(new RequiredValidationContract<Guid?>(RoleId, nameof(RoleId), "Role id is required").Contract.Notifications);
+            AddNotifications(new RequiredValidationContract<Guid?>(ScopeId, nameof(ScopeId), "Scope id is required").Contract.Notifications);
         }
 
         #endregion

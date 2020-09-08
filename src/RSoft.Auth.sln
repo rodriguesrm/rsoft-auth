@@ -17,9 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9-Tests", "9-Tests", "{FE03
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "8-RFramework", "8-RFramework", "{1C0C038D-8F03-40A8-9ECC-B76F31352629}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSofth.Auth.Domain", "RSofth.Auth.Domain\RSofth.Auth.Domain.csproj", "{BF950F6E-DE44-4AC6-9785-902FED64B172}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSofth.Auth.Domain", "RSofth.Auth.Domain\RSofth.Auth.Domain.csproj", "{BF950F6E-DE44-4AC6-9785-902FED64B172}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSoft.Framework", "RSoft.Framework\RSoft.Framework.csproj", "{01B7115C-9B9E-4CD9-88BA-B9AE121AB3A3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSoft.Auth.Infra.Data", "RSoft.Auth.Infra.Data\RSoft.Auth.Infra.Data.csproj", "{781F232C-04FB-4E23-A82E-BBA794F472BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,18 @@ Global
 		{01B7115C-9B9E-4CD9-88BA-B9AE121AB3A3}.Release|x64.Build.0 = Release|Any CPU
 		{01B7115C-9B9E-4CD9-88BA-B9AE121AB3A3}.Release|x86.ActiveCfg = Release|Any CPU
 		{01B7115C-9B9E-4CD9-88BA-B9AE121AB3A3}.Release|x86.Build.0 = Release|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Debug|x64.Build.0 = Debug|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Debug|x86.Build.0 = Debug|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Release|x64.ActiveCfg = Release|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Release|x64.Build.0 = Release|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Release|x86.ActiveCfg = Release|Any CPU
+		{781F232C-04FB-4E23-A82E-BBA794F472BC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +76,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BF950F6E-DE44-4AC6-9785-902FED64B172} = {D55C4D31-4643-4C81-96BE-21A1E5F460A6}
 		{01B7115C-9B9E-4CD9-88BA-B9AE121AB3A3} = {1C0C038D-8F03-40A8-9ECC-B76F31352629}
+		{781F232C-04FB-4E23-A82E-BBA794F472BC} = {D588E11C-EAC8-4D39-9A44-25136C5B54BE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0AF8D4A1-68F0-4527-8629-1926633A1E52}

@@ -49,7 +49,6 @@ namespace RSofth.Auth.Domain.Entities
 
         #endregion
 
-
         #region Properties
 
         /// <summary>
@@ -89,17 +88,56 @@ namespace RSofth.Auth.Domain.Entities
         /// <summary>
         /// Created author data
         /// </summary>
-        public User CreatedAuthor { get; set; }
+        public virtual User CreatedAuthor { get; set; }
 
         /// <summary>
         /// Changed author data
         /// </summary>
-        public User ChangedAuthor { get; set; }
+        public virtual User ChangedAuthor { get; set; }
 
         /// <summary>
-        /// Roles list
+        /// User roles list
         /// </summary>
-        public ICollection<UserRole> Roles { get; set; }
+        public virtual ICollection<UserRole> Roles { get; set; }
+
+        /// <summary>
+        /// User scopes list
+        /// </summary>
+        public virtual ICollection<UserScope> Scopes { get; set; }
+
+        #region Navigation Audit
+
+        /// <summary>
+        /// Created users
+        /// </summary>
+        public virtual ICollection<User> CreatedUsers { get; set; }
+        
+        /// <summary>
+        /// Changed users
+        /// </summary>
+        public virtual ICollection<User> ChangedUsers { get; set; }
+        
+        /// <summary>
+        /// Created roles
+        /// </summary>
+        public virtual ICollection<Role> CreatedRoles { get; set; }
+        
+        /// <summary>
+        /// Changed roles
+        /// </summary>
+        public virtual ICollection<Role> ChangedRoles { get; set; }
+        
+        /// <summary>
+        /// Created scopes
+        /// </summary>
+        public virtual ICollection<Scope> CreatedScopes { get; set; }
+        
+        /// <summary>
+        /// Changed scopes
+        /// </summary>
+        public virtual ICollection<Scope> ChangedScopes { get; set; }
+
+        #endregion
 
         #endregion
 
@@ -109,6 +147,13 @@ namespace RSofth.Auth.Domain.Entities
         {
             IsActive = true;
             Roles = new HashSet<UserRole>();
+            Scopes = new HashSet<UserScope>();
+            CreatedUsers = new HashSet<User>();
+            ChangedUsers = new HashSet<User>();
+            CreatedRoles = new HashSet<Role>();
+            ChangedRoles = new HashSet<Role>();
+            CreatedScopes = new HashSet<Scope>();
+            ChangedScopes = new HashSet<Scope>();
         }
 
         #endregion
