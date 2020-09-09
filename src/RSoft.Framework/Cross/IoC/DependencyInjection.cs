@@ -9,7 +9,7 @@ namespace RSoft.Framework.Cross.IoC
     /// <summary>
     /// Dependency injection register
     /// </summary>
-    public static class DependencyInjectionBootStrapper
+    public static class DependencyInjection
     {
 
         private const string DEFAULT_CONNECTION_STRING_NAME = "DbServer";

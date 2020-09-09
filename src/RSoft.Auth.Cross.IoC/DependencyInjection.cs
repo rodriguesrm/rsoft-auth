@@ -4,6 +4,7 @@ using RSoft.Auth.Infra.Data;
 using RSoft.Auth.Infra.Data.Repositories;
 using RSoft.Framework.Cross.IoC;
 using RSofth.Auth.Domain.Repositories;
+using RSofth.Auth.Domain.Services;
 
 namespace RSoft.Auth.Cross.IoC
 {
@@ -11,7 +12,7 @@ namespace RSoft.Auth.Cross.IoC
     /// <summary>
     /// Dependency injection register
     /// </summary>
-    public static class DependencyInjectionBootStrapper
+    public static class DependencyInjection
     {
 
         /// <summary>
@@ -35,6 +36,10 @@ namespace RSoft.Auth.Cross.IoC
             #endregion
 
             #region Domain
+
+            services.AddScoped<IUserDomainService, UserDomainService>();
+            services.AddScoped<IScopeDomainService, ScopeDomainService>();
+            services.AddScoped<IRoleDomainService, RoleDomainService>();
 
             #endregion
 

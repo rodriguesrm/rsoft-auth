@@ -7,19 +7,19 @@ namespace RSoft.Framework.Cross
     /// <summary>
     /// Http logged application user interface
     /// </summary>
-    public interface IHttpLoggedUser<TKey> : IDisposable
+    public interface IHttpLoggedUser<TKey>
         where TKey : struct
     {
 
         /// <summary>
         /// User id
         /// </summary>
-        TKey Id { get; }
+        TKey? Id { get; }
 
         /// <summary>
         /// User name
         /// </summary>
-        string Name { get; }
+        string Username { get; }
 
         /// <summary>
         /// user login
