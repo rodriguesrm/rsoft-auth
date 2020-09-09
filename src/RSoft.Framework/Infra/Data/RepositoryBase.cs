@@ -68,11 +68,11 @@ namespace RSoft.Framework.Infra.Data
         }
 
         ///<inheritdoc/>
-        public virtual async Task<TEntity> GetByIdAsync(TKey key, CancellationToken cancellationToken = default)
-            => await GetByIdAsync(key, false, cancellationToken);
+        public virtual async Task<TEntity> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default)
+            => await GetByKeyAsync(key, false, cancellationToken);
 
         ///<inheritdoc/>
-        public virtual async Task<TEntity> GetByIdAsync(TKey key, bool includeDeleted, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> GetByKeyAsync(TKey key, bool includeDeleted, CancellationToken cancellationToken = default)
         {
 
             if (cancellationToken.IsCancellationRequested)

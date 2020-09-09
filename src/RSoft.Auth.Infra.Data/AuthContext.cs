@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RSoft.Auth.Infra.Data.Configuration;
+using RSoft.Auth.Infra.Data.Configurations;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Infra.Data;
 using RSofth.Auth.Domain.Entities;

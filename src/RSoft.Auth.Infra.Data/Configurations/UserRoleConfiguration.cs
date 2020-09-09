@@ -3,38 +3,38 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RSofth.Auth.Domain.Entities;
 using System;
 
-namespace RSoft.Auth.Infra.Data.Configuration
+namespace RSoft.Auth.Infra.Data.Configurations
 {
 
     /// <summary>
-    /// User Scope entity table configuration
+    /// User role entity table configuration
     /// </summary>
-    public class UserScopeConfiguration : IEntityTypeConfiguration<UserScope>
+    public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
     {
 
         ///<inheritdoc/>
-        public void Configure(EntityTypeBuilder<UserScope> builder)
+        public void Configure(EntityTypeBuilder<UserRole> builder)
         {
 
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
 
-            builder.ToTable(nameof(UserScope));
+            builder.ToTable(nameof(UserRole));
 
             #region PK
 
-            builder.HasKey(k => new { k.UserId, k.ScopeId });
+            builder.HasKey(k => new { k.UserId, k.RoleId });
 
             #endregion
 
             #region Columns
 
             builder.Property(c => c.UserId)
-                .HasColumnName(nameof(UserScope.UserId))
+                .HasColumnName(nameof(UserRole.UserId))
                 .IsRequired();
 
-            builder.Property(c => c.ScopeId)
-                .HasColumnName(nameof(UserScope.ScopeId))
+            builder.Property(c => c.RoleId)
+                .HasColumnName(nameof(UserRole.RoleId))
                 .IsRequired();
 
             #endregion
@@ -42,16 +42,16 @@ namespace RSoft.Auth.Infra.Data.Configuration
             #region Indexes
 
             builder.HasOne(o => o.User)
-                .WithMany(d => d.Scopes)
+                .WithMany(d => d.Roles)
                 .HasForeignKey(fk => fk.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName($"FK_{nameof(UserScope)}_{nameof(User)}");
+                .HasConstraintName($"FK_{nameof(UserRole)}_{nameof(User)}");
 
-            builder.HasOne(o => o.Scope)
+            builder.HasOne(o => o.Role)
                 .WithMany(d => d.Users)
-                .HasForeignKey(fk => fk.ScopeId)
+                .HasForeignKey(fk => fk.RoleId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName($"FK_{nameof(UserScope)}_{nameof(Scope)}");
+                .HasConstraintName($"FK_{nameof(UserRole)}_{nameof(Role)}");
 
             #endregion
 

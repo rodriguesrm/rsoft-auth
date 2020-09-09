@@ -40,7 +40,7 @@ namespace RSoft.Framework
         /// </summary>
         /// <param name="key">Row key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<TEntity> GetByIdAsync(TKey key, CancellationToken cancellationToken = default);
+        Task<TEntity> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get row by id
@@ -48,7 +48,7 @@ namespace RSoft.Framework
         /// <param name="key">Row key</param>
         /// <param name="includeDeleted">Indicate if will get deleted row</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<TEntity> GetByIdAsync(TKey key, bool includeDeleted, CancellationToken cancellationToken = default);
+        Task<TEntity> GetByKeyAsync(TKey key, bool includeDeleted, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get all record by lambda expression

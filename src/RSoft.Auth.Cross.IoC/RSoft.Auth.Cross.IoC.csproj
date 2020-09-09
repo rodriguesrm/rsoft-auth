@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RSoft.Auth.Infra.Data\RSoft.Auth.Infra.Data.csproj" />
+    <ProjectReference Include="..\RSoft.Framework\RSoft.Framework.csproj" />
+    <ProjectReference Include="..\RSofth.Auth.Domain\RSofth.Auth.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
