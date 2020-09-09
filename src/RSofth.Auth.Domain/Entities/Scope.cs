@@ -80,6 +80,11 @@ namespace RSofth.Auth.Domain.Entities
         /// </summary>
         public virtual ICollection<Role> Roles { get; set; }
 
+        /// <summary>
+        /// Users list
+        /// </summary>
+        public virtual ICollection<UserScope> Users { get; set; }
+
         #endregion
 
         #region Local Methods
@@ -87,6 +92,8 @@ namespace RSofth.Auth.Domain.Entities
         private void Initialize()
         {
             IsActive = true;
+            Roles = new HashSet<Role>();
+            Users = new HashSet<UserScope>();
         }
 
         #endregion

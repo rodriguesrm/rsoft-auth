@@ -26,7 +26,7 @@ namespace RSoft.Auth.Infra.Data.Configuration
 
             #endregion
 
-            #region Campos
+            #region Columns
 
             builder.Property(c => c.FirstName)
                 .HasColumnName(nameof(User.FirstName))
@@ -37,6 +37,18 @@ namespace RSoft.Auth.Infra.Data.Configuration
             #endregion
 
             #region FKs
+
+            builder.HasOne(o => o.CreatedAuthor)
+                .WithMany(d => d.CreatedUsers)
+                .HasForeignKey(fk => fk.Id)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName($"FK_{nameof(User)}_CreatedAuthor");
+
+            builder.HasOne(o => o.ChangedAuthor)
+                .WithMany(d => d.ChangedUsers)
+                .HasForeignKey(fk => fk.Id)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName($"FK_{nameof(User)}_ChangedAuthor");
 
             #endregion
 

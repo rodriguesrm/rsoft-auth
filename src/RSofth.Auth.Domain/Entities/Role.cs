@@ -1,6 +1,7 @@
 ﻿using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
 using System;
+using System.Collections.Generic;
 
 namespace RSofth.Auth.Domain.Entities
 {
@@ -84,6 +85,11 @@ namespace RSofth.Auth.Domain.Entities
         /// </summary>
         public virtual Scope Scope { get; set; }
 
+        /// <summary>
+        /// Users for this role
+        /// </summary>
+        public virtual ICollection<UserRole> Users { get; set; }
+
         #endregion
 
         #region Local Methods
@@ -91,6 +97,7 @@ namespace RSofth.Auth.Domain.Entities
         private void Initialize()
         {
             IsActive = true;
+            Users = new HashSet<UserRole>();
         }
 
         #endregion
