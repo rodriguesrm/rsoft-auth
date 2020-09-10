@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RSoft.Framework.Application.Service
+namespace RSoft.Framework.Application.Services
 {
 
     /// <summary>
