@@ -29,7 +29,7 @@ namespace RSoft.Framework.Application.Service
 
         #endregion
 
-        #region Construtores
+        #region Constructors
 
         /// <summary>
         /// Cria uma nova instância do objeto 'AppService'
@@ -64,7 +64,7 @@ namespace RSoft.Framework.Application.Service
         /// Get entity by key
         /// </summary>
         /// <param name="dto">Dto instance</param>
-        /// <param name="cancellationToken">Token de cancelamento</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected abstract Task<TEntity> GetEntityByKeyAsync(TDto dto, CancellationToken cancellationToken = default);
 
         /// <summary>

@@ -96,7 +96,7 @@ namespace RSoft.Framework.Infra.Data
         /// <summary>
         /// Saves all changes made in that context to the database.
         /// </summary>
-        /// <param name="cancellationToken">Um System.Threading.CancellationToken para observar enquanto aguarda a conclusão da tarefa.</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             OnBeforeSaving();
