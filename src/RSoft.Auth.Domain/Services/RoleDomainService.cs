@@ -1,9 +1,9 @@
 ﻿using RSoft.Framework.Domain.Services;
-using RSofth.Auth.Domain.Entities;
-using RSofth.Auth.Domain.Repositories;
+using RSoft.Auth.Domain.Entities;
+using RSoft.Auth.Domain.Repositories;
 using System;
 
-namespace RSofth.Auth.Domain.Services
+namespace RSoft.Auth.Domain.Services
 {
 
     /// <summary>

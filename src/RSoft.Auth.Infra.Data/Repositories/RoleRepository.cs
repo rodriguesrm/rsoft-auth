@@ -1,6 +1,6 @@
 ﻿using RSoft.Framework.Infra.Data;
-using RSofth.Auth.Domain.Entities;
-using RSofth.Auth.Domain.Repositories;
+using RSoft.Auth.Domain.Entities;
+using RSoft.Auth.Domain.Repositories;
 using System;
 
 namespace RSoft.Auth.Infra.Data.Repositories

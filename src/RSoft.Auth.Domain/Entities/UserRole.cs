@@ -2,7 +2,7 @@
 using RSoft.Framework.Domain.Entities;
 using System;
 
-namespace RSofth.Auth.Domain.Entities
+namespace RSoft.Auth.Domain.Entities
 {
 
     /// <summary>

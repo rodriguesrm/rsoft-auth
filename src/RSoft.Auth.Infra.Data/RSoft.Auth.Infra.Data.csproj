@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RSoft.Framework\RSoft.Framework.csproj" />
-    <ProjectReference Include="..\RSofth.Auth.Domain\RSofth.Auth.Domain.csproj" />
+    <ProjectReference Include="..\RSoft.Auth.Domain\RSoft.Auth.Domain.csproj" />
   </ItemGroup>
 
 </Project>

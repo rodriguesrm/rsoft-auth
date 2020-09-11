@@ -3,7 +3,7 @@ using RSoft.Framework.Domain.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace RSofth.Auth.Domain.Entities
+namespace RSoft.Auth.Domain.Entities
 {
 
     /// <summary>
@@ -11,10 +11,6 @@ namespace RSofth.Auth.Domain.Entities
     /// </summary>
     public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive, IFullName
     {
-
-        #region Local objects/variables
-
-        #endregion
 
         #region Constructors
 

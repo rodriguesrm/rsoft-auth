@@ -5,12 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\RSoft.Auth.Domain\RSoft.Auth.Domain.csproj" />
     <ProjectReference Include="..\RSoft.Framework\RSoft.Framework.csproj" />
-    <ProjectReference Include="..\RSofth.Auth.Domain\RSofth.Auth.Domain.csproj" />
   </ItemGroup>
 
 </Project>

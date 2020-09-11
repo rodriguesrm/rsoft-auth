@@ -4,23 +4,21 @@ namespace RSoft.Auth.Application.Model.Extensions
 {
 
     /// <summary>
-    /// Contains methods for user entity-dto mapping
+    /// Contains methods for role entity-dto mapping
     /// </summary>
-    public static class UserMap
+    public static class RoleMap
     {
 
         /// <summary>
         /// Map dto to entity
         /// </summary>
         /// <param name="dto">Object to extension</param>
-        public static User Map(this UserDto dto)
+        public static Role Map(this RoleDto dto)
         {
-            return new User()
+            return new Role()
             {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                BornDate = dto.BornDate,
-                Email = dto.Email,
+                Name = dto.Name,
+                Description = dto.Description,
                 IsActive = dto.IsActive
             };
         }
@@ -29,16 +27,13 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// Map entity to dto
         /// </summary>
         /// <param name="entity">Object to extension</param>
-        /// <param name="dto">User Dto object</param>
-        /// <returns></returns>
-        public static User Map(this User entity, UserDto dto)
+        /// <param name="dto">Role Dto object</param>
+        public static Role Map(this Role entity, RoleDto dto)
         {
             if (dto != null)
             {
-                entity.FirstName = dto.FirstName;
-                entity.LastName = dto.LastName;
-                entity.BornDate = dto.BornDate;
-                entity.Email = dto.Email;
+                entity.Name = dto.Name;
+                entity.Description = dto.Description;
                 entity.IsActive = dto.IsActive;
             }
             return entity;
@@ -47,19 +42,19 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// <summary>
         /// Map entity to dto
         /// </summary>
-        /// <param name="entity">Object to extension</param>
-        public static UserDto Map(this User entity)
-            => Map(entity, true);
+        /// <param name="Role">Object to extension</param>
+        public static RoleDto Map(this Role Role)
+            => Map(Role, true);
 
         /// <summary>
         /// Map entity to dto
         /// </summary>
         /// <param name="entity">Object to extension</param>
         /// <param name="addAuthors">Indicate if add authors data in dto</param>
-        public static UserDto Map(this User entity, bool addAuthors)
+        public static RoleDto Map(this Role entity, bool addAuthors)
         {
             
-            UserDto dto = new UserDto();
+            RoleDto dto = new RoleDto();
 
             if (entity.Valid)
             {
@@ -74,10 +69,8 @@ namespace RSoft.Auth.Application.Model.Extensions
                 dto.AddNotifications(entity.Notifications);
             }
 
-            dto.FirstName = entity.FirstName;
-            dto.LastName = entity.LastName;
-            dto.BornDate = entity.BornDate;
-            dto.Email = entity.Email;
+            dto.Name = entity.Name;
+            dto.Description = entity.Description;
             dto.IsActive = entity.IsActive;
 
             return dto;

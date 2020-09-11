@@ -1,8 +1,8 @@
 ﻿using RSoft.Framework.Domain.Services;
-using RSofth.Auth.Domain.Entities;
+using RSoft.Auth.Domain.Entities;
 using System;
 
-namespace RSofth.Auth.Domain.Services
+namespace RSoft.Auth.Domain.Services
 {
 
     /// <summary>

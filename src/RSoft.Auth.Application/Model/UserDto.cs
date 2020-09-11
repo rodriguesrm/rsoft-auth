@@ -4,7 +4,10 @@ using RSoft.Framework.Application.Model;
 namespace RSoft.Auth.Application.Model
 {
 
-    public class UserDto : AppDtoIdAuditBase<Guid>
+    /// <summary>
+    /// User data transport object
+    /// </summary>
+    public class UserDto : AppDtoIdAuditBase<Guid>, IAuditDto<Guid>
     {
 
         #region Properties

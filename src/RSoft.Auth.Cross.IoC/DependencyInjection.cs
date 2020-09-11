@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using RSoft.Auth.Infra.Data;
 using RSoft.Auth.Infra.Data.Repositories;
 using RSoft.Framework.Cross.IoC;
-using RSofth.Auth.Domain.Repositories;
-using RSofth.Auth.Domain.Services;
+using RSoft.Auth.Domain.Repositories;
+using RSoft.Auth.Domain.Services;
 
 namespace RSoft.Auth.Cross.IoC
 {
