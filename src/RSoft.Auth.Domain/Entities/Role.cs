@@ -106,8 +106,8 @@ namespace RSoft.Auth.Domain.Entities
         public override void Validate()
         {
             //TODO: Globalization
-            AddNotifications(new SingleStringValidationContract(Name, nameof(Name), true, 3, 50).Contract.Notifications);
-            AddNotifications(new SingleStringValidationContract(Description, nameof(Description), true, 3, 150).Contract.Notifications);
+            AddNotifications(new SimpleStringValidationContract(Name, nameof(Name), true, 3, 50).Contract.Notifications);
+            AddNotifications(new SimpleStringValidationContract(Description, nameof(Description), true, 3, 150).Contract.Notifications);
         }
 
         #endregion

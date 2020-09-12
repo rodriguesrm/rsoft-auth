@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RSoft.Framework.Application.Model;
 
 namespace RSoft.Auth.Application.Model
@@ -36,6 +37,20 @@ namespace RSoft.Auth.Application.Model
         /// User e-mail
         /// </summary>
         public string Email { get; set; }
+
+        #endregion
+
+        #region Children data
+
+        /// <summary>
+        /// User roles
+        /// </summary>
+        public IEnumerable<RoleDto> Roles { get; set; }
+
+        /// <summary>
+        /// User scopes
+        /// </summary>
+        public IEnumerable<ScopeDto> Scopes { get; set; }
 
         #endregion
 

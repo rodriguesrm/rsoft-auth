@@ -1,0 +1,60 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using RSoft.Auth.Domain.Entities;
+using System;
+
+namespace RSoft.Auth.Infra.Data.Configurations
+{
+
+    /// <summary>
+    /// User Credential entity table configuration
+    /// </summary>
+    public class UserCredentialConfiguration : IEntityTypeConfiguration<UserCredential>
+    {
+
+        ///<inheritdoc/>
+        public void Configure(EntityTypeBuilder<UserCredential> builder)
+        {
+
+            if (builder is null)
+                throw new ArgumentNullException(nameof(builder));
+
+            builder.ToTable(nameof(UserCredential));
+
+            #region PK
+
+            builder.HasKey(k => k.UserId);
+
+            #endregion
+
+            #region Columns
+
+            builder.Property(c => c.UserKey)
+                .HasColumnName(nameof(UserCredential.UserKey))
+                .HasMaxLength(32)
+                .IsUnicode(false)
+                .IsRequired();
+
+            builder.Property(c => c.Password)
+                .HasColumnName(nameof(UserCredential.Password))
+                .HasMaxLength(32)
+                .IsUnicode(false)
+                .IsRequired();
+
+            #endregion
+
+            #region Indexes
+
+            builder.HasOne(o => o.User)
+                .WithOne(d => d.Credential)
+                .HasForeignKey<UserCredential>(fk => fk.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName($"FK_{nameof(UserCredential)}_{nameof(User)}");
+
+            #endregion
+
+        }
+
+    }
+
+}

@@ -1,4 +1,6 @@
 ﻿using RSoft.Auth.Domain.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RSoft.Auth.Application.Model.Extensions
 {
@@ -10,18 +12,40 @@ namespace RSoft.Auth.Application.Model.Extensions
     {
 
         /// <summary>
+        /// Map children data from entity to dto
+        /// </summary>
+        /// <param name="entity">Entity object</param>
+        /// <param name="dto">Dto object</param>
+        private static void LoadChildren(User entity, UserDto dto)
+        {
+            IEnumerable<RoleDto> roles = null;
+            IEnumerable<ScopeDto> scopes = null;
+            if (entity.Roles?.Count > 0)
+                roles = entity.Roles.Select(r => r.Role.Map()).ToList();
+            if (entity.Scopes?.Count > 0)
+                scopes = entity.Scopes.Select(s => s.Scope.Map()).ToList();
+
+            dto.Roles = roles;
+            dto.Scopes = scopes;
+        }
+
+        /// <summary>
         /// Map dto to entity
         /// </summary>
         /// <param name="dto">Object to extension</param>
         public static User Map(this UserDto dto)
         {
+            ICollection<UserRole> roles = dto.Roles?.Select(r => new UserRole() { Role = r.Map() }).ToList();
+            ICollection<UserScope> scopes = dto.Scopes?.Select(s => new UserScope() { Scope = s.Map() }).ToList();
             return new User()
             {
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 BornDate = dto.BornDate,
                 Email = dto.Email,
-                IsActive = dto.IsActive
+                IsActive = dto.IsActive,
+                Roles = roles,
+                Scopes = scopes
             };
         }
 
@@ -30,8 +54,8 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// </summary>
         /// <param name="entity">Object to extension</param>
         /// <param name="dto">User Dto object</param>
-        /// <returns></returns>
-        public static User Map(this User entity, UserDto dto)
+        /// <param name="loadChildren">Indicate if load children data in dto</param>
+        public static User Map(this User entity, UserDto dto, bool loadChildren)
         {
             if (dto != null)
             {
@@ -40,6 +64,8 @@ namespace RSoft.Auth.Application.Model.Extensions
                 entity.BornDate = dto.BornDate;
                 entity.Email = dto.Email;
                 entity.IsActive = dto.IsActive;
+                if (loadChildren)
+                    LoadChildren(entity, dto);
             }
             return entity;
         }
@@ -49,14 +75,15 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// </summary>
         /// <param name="entity">Object to extension</param>
         public static UserDto Map(this User entity)
-            => Map(entity, true);
+            => Map(entity, true, true);
 
         /// <summary>
         /// Map entity to dto
         /// </summary>
         /// <param name="entity">Object to extension</param>
         /// <param name="addAuthors">Indicate if add authors data in dto</param>
-        public static UserDto Map(this User entity, bool addAuthors)
+        /// <param name="loadChildren">Indicate if load children data in dto</param>
+        public static UserDto Map(this User entity, bool addAuthors, bool loadChildren)
         {
             
             UserDto dto = new UserDto();
@@ -79,6 +106,9 @@ namespace RSoft.Auth.Application.Model.Extensions
             dto.BornDate = entity.BornDate;
             dto.Email = entity.Email;
             dto.IsActive = entity.IsActive;
+
+            if (loadChildren)
+                LoadChildren(entity, dto);
 
             return dto;
 

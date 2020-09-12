@@ -4,7 +4,7 @@
     /// <summary>
     /// String validaction contract
     /// </summary>
-    public class SingleStringValidationContract : BaseValidationContract
+    public class SimpleStringValidationContract : BaseValidationContract
     {
 
         #region Constructors
@@ -15,7 +15,7 @@
         /// <param name="expression">Expression to validate</param>
         /// <param name="fieldName">Field name</param>
         /// <param name="required">Indicate if field is required</param>
-        public SingleStringValidationContract(string expression, string fieldName, bool required) : this(expression, fieldName, required, null, null) { }
+        public SimpleStringValidationContract(string expression, string fieldName, bool required) : this(expression, fieldName, required, null, null) { }
 
         /// <summary>
         /// Create a new instance of object
@@ -25,7 +25,7 @@
         /// <param name="required">Indicate if field is required</param>
         /// <param name="minLen">Indicate a mininum length expression</param>
         /// <param name="maxLen">Indicate a maximum length expression</param>
-        public SingleStringValidationContract(string expression, string fieldName, bool required, int? minLen, int? maxLen)
+        public SimpleStringValidationContract(string expression, string fieldName, bool required, int? minLen, int? maxLen)
         {
 
             if (expression != null)
@@ -40,13 +40,22 @@
             if (expression != null)
             {
 
-                if (minLen.HasValue && minLen.Value > 0)
-                    Contract
-                        .HasMinLen(expression, minLen.Value, fieldName, $"The {fieldName} field must contain at least {minLen.Value} character(s)");
+                if ((minLen ?? 0) > 0 && (maxLen ?? 0) > 0 && minLen.Value == maxLen.Value)
+                {
+                    Contract.HasLen(expression, minLen.Value, fieldName, $"The {fieldName} must have {minLen.Value} character(es)");
+                }
+                else
+                {
 
-                if (maxLen.HasValue && maxLen.Value > 0 && maxLen.Value >= (minLen ?? 0))
-                    Contract
-                        .HasMaxLen(expression, maxLen.Value, fieldName, $"The {fieldName} fields must contain a maximum {maxLen.Value} character(s)");
+                    if (minLen.HasValue && minLen.Value > 0)
+                        Contract
+                            .HasMinLen(expression, minLen.Value, fieldName, $"The {fieldName} field must contain at least {minLen.Value} character(s)");
+
+                    if (maxLen.HasValue && maxLen.Value > 0 && maxLen.Value >= (minLen ?? 0))
+                        Contract
+                            .HasMaxLen(expression, maxLen.Value, fieldName, $"The {fieldName} fields must contain a maximum {maxLen.Value} character(s)");
+
+                }
 
             }
 

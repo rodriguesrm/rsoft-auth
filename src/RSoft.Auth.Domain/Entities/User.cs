@@ -2,6 +2,7 @@
 using RSoft.Framework.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RSoft.Auth.Domain.Entities
 {
@@ -92,6 +93,11 @@ namespace RSoft.Auth.Domain.Entities
         public virtual User ChangedAuthor { get; set; }
 
         /// <summary>
+        /// User credential data
+        /// </summary>
+        public virtual UserCredential Credential { get; set; }
+
+        /// <summary>
         /// User roles list
         /// </summary>
         public virtual ICollection<UserRole> Roles { get; set; }
@@ -161,10 +167,52 @@ namespace RSoft.Auth.Domain.Entities
         /// </summary>
         public override void Validate()
         {
+
             //TODO: Globalization
             AddNotifications(new FullNameValidationContract(this).Contract.Notifications);
             AddNotifications(new EmailValidationContract(Email).Contract.Notifications);
             AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);
+
+            if (Credential == null)
+            {
+                AddNotification(nameof(Credential), "Credential is required");
+            }
+            else
+            {
+                Credential.Validate();
+                AddNotifications(Credential.Notifications);
+            }
+
+            if (!Scopes.Any())
+            {
+                AddNotification(nameof(Scopes), "The user must be assigned to at least one scope");
+            }
+            else
+            {
+                Scopes
+                    .ToList()
+                    .ForEach(scope =>
+                    {
+                        scope.Validate();
+                        AddNotifications(scope.Notifications);
+                    });
+            }
+
+            if (!Roles.Any())
+            {
+                AddNotification(nameof(Scopes), "The user must have at least one role");
+            }
+            else
+            {
+                Roles
+                    .ToList()
+                    .ForEach(role =>
+                    {
+                        role.Validate();
+                        AddNotifications(role.Notifications);
+                    });
+            }
+
         }
 
         /// <summary>
