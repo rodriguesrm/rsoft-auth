@@ -1,7 +1,6 @@
 ﻿using RSoft.Framework.Cross.Entities;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
-using RSoft.Framework.Infra.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace RSoft.Auth.Domain.Entities
     /// <summary>
     /// User of the eco-system applications
     /// </summary>
-    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive, IFullName
+    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditNavigation<Guid, User>, IActive, IFullName
     {
 
         #region Constructors
@@ -56,11 +55,6 @@ namespace RSoft.Auth.Domain.Entities
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// Soft deletion
-        /// </summary>
-        public bool IsDeleted { get; set; }
-
-        /// <summary>
         /// First name
         /// </summary>
         public string FirstName { get; set; }
@@ -102,46 +96,12 @@ namespace RSoft.Auth.Domain.Entities
         /// <summary>
         /// User roles list
         /// </summary>
-        public virtual ICollection<UserRole> Roles { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
 
         /// <summary>
         /// User scopes list
         /// </summary>
-        public virtual ICollection<UserScope> Scopes { get; set; }
-
-        #region Navigation Audit
-
-        /// <summary>
-        /// Created users
-        /// </summary>
-        public virtual ICollection<User> CreatedUsers { get; set; }
-        
-        /// <summary>
-        /// Changed users
-        /// </summary>
-        public virtual ICollection<User> ChangedUsers { get; set; }
-        
-        /// <summary>
-        /// Created roles
-        /// </summary>
-        public virtual ICollection<Role> CreatedRoles { get; set; }
-        
-        /// <summary>
-        /// Changed roles
-        /// </summary>
-        public virtual ICollection<Role> ChangedRoles { get; set; }
-        
-        /// <summary>
-        /// Created scopes
-        /// </summary>
-        public virtual ICollection<Scope> CreatedScopes { get; set; }
-        
-        /// <summary>
-        /// Changed scopes
-        /// </summary>
-        public virtual ICollection<Scope> ChangedScopes { get; set; }
-
-        #endregion
+        public virtual ICollection<Scope> Scopes { get; set; }
 
         #endregion
 
@@ -150,14 +110,8 @@ namespace RSoft.Auth.Domain.Entities
         private void Initialize()
         {
             IsActive = true;
-            Roles = new HashSet<UserRole>();
-            Scopes = new HashSet<UserScope>();
-            CreatedUsers = new HashSet<User>();
-            ChangedUsers = new HashSet<User>();
-            CreatedRoles = new HashSet<Role>();
-            ChangedRoles = new HashSet<Role>();
-            CreatedScopes = new HashSet<Scope>();
-            ChangedScopes = new HashSet<Scope>();
+            Roles = new HashSet<Role>();
+            Scopes = new HashSet<Scope>();
         }
 
         #endregion
@@ -175,6 +129,7 @@ namespace RSoft.Auth.Domain.Entities
             AddNotifications(new EmailValidationContract(Email).Contract.Notifications);
             AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);
 
+            //TODO: Verificar na implementação das camadas superiores se a regra será essa ou vai gerar credencial automáticamente
             if (Credential == null)
             {
                 AddNotification(nameof(Credential), "Credential is required");

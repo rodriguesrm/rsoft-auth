@@ -1,7 +1,6 @@
 ﻿using RSoft.Framework.Cross.Entities;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
-using RSoft.Framework.Infra.Data;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +10,7 @@ namespace RSoft.Auth.Domain.Entities
     /// <summary>
     /// Roles of registered users
     /// </summary>
-    public class Role : EntityIdNameAuditBase<Guid, Role>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive
+    public class Role : EntityIdNameAuditBase<Guid, Role>, IEntity, IAuditNavigation<Guid, User>, IActive
     {
 
         #region Constructors
@@ -55,11 +54,6 @@ namespace RSoft.Auth.Domain.Entities
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// Soft deletion
-        /// </summary>
-        public bool IsDeleted { get; set; }
-
-        /// <summary>
         /// Role description
         /// </summary>
         public string Description { get; set; }
@@ -86,7 +80,7 @@ namespace RSoft.Auth.Domain.Entities
         /// <summary>
         /// Users for this role
         /// </summary>
-        public virtual ICollection<UserRole> Users { get; set; }
+        public virtual ICollection<User> Users { get; set; }
 
         #endregion
 
@@ -95,7 +89,7 @@ namespace RSoft.Auth.Domain.Entities
         private void Initialize()
         {
             IsActive = true;
-            Users = new HashSet<UserRole>();
+            Users = new HashSet<User>();
         }
 
         #endregion

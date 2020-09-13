@@ -178,14 +178,9 @@ namespace RSoft.Framework.Application.Services
         {
 
             bool useTransaction = !_uow.TransactionStarted;
-
             if (useTransaction) await _uow.BeginTransactionAsync(cancellationToken);
-
-            TEntity entity = await _dmn.GetByKeyAsync(key, cancellationToken);
-            _dmn.Delete(entity);
-
+            _dmn.Delete(key);
             await _uow.SaveChangesAsync(cancellationToken);
-
             if (useTransaction) await _uow.CommitAsync(cancellationToken);
 
         }

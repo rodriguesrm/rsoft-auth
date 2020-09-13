@@ -45,12 +45,12 @@ namespace RSoft.Auth.Application.Model
         /// <summary>
         /// User roles
         /// </summary>
-        public IEnumerable<RoleDto> Roles { get; set; }
+        public ICollection<RoleDto> Roles { get; set; }
 
         /// <summary>
         /// User scopes
         /// </summary>
-        public IEnumerable<ScopeDto> Scopes { get; set; }
+        public ICollection<ScopeDto> Scopes { get; set; }
 
         #endregion
 

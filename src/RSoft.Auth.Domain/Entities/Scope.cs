@@ -1,7 +1,6 @@
 ﻿using RSoft.Framework.Cross.Entities;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
-using RSoft.Framework.Infra.Data;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +10,7 @@ namespace RSoft.Auth.Domain.Entities
     /// <summary>
     /// Scope of action
     /// </summary>
-    public class Scope : EntityIdNameAuditBase<Guid, Scope>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive
+    public class Scope : EntityIdNameAuditBase<Guid, Scope>, IEntity, IAuditNavigation<Guid, User>, IActive
     {
 
         #region Constructors
@@ -54,11 +53,6 @@ namespace RSoft.Auth.Domain.Entities
         /// </summary>
         public bool IsActive { get; set; }
 
-        /// <summary>
-        /// Soft deletion
-        /// </summary>
-        public bool IsDeleted { get; set; }
-
         #endregion
 
         #region Navigation Lazy
@@ -81,7 +75,7 @@ namespace RSoft.Auth.Domain.Entities
         /// <summary>
         /// Users list
         /// </summary>
-        public virtual ICollection<UserScope> Users { get; set; }
+        public virtual ICollection<User> Users { get; set; }
 
         #endregion
 
@@ -91,7 +85,7 @@ namespace RSoft.Auth.Domain.Entities
         {
             IsActive = true;
             Roles = new HashSet<Role>();
-            Users = new HashSet<UserScope>();
+            Users = new HashSet<User>();
         }
 
         #endregion

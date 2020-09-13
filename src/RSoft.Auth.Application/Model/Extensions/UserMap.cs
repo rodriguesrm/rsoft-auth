@@ -18,12 +18,12 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// <param name="dto">Dto object</param>
         private static void LoadChildren(User entity, UserDto dto)
         {
-            IEnumerable<RoleDto> roles = null;
-            IEnumerable<ScopeDto> scopes = null;
+            ICollection<RoleDto> roles = null;
+            ICollection<ScopeDto> scopes = null;
             if (entity.Roles?.Count > 0)
-                roles = entity.Roles.Select(r => r.Role.Map()).ToList();
+                roles = entity.Roles.Select(r => r.Map()).ToList();
             if (entity.Scopes?.Count > 0)
-                scopes = entity.Scopes.Select(s => s.Scope.Map()).ToList();
+                scopes = entity.Scopes.Select(s => s.Map()).ToList();
 
             dto.Roles = roles;
             dto.Scopes = scopes;
@@ -35,8 +35,8 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// <param name="dto">Object to extension</param>
         public static User Map(this UserDto dto)
         {
-            ICollection<UserRole> roles = dto.Roles?.Select(r => new UserRole() { Role = r.Map() }).ToList();
-            ICollection<UserScope> scopes = dto.Scopes?.Select(s => new UserScope() { Scope = s.Map() }).ToList();
+            ICollection<Role> roles = dto.Roles?.Select(r => r.Map()).ToList();
+            ICollection<Scope> scopes = dto.Scopes?.Select(s => s.Map()).ToList();
             return new User()
             {
                 FirstName = dto.FirstName,
@@ -48,6 +48,14 @@ namespace RSoft.Auth.Application.Model.Extensions
                 Scopes = scopes
             };
         }
+
+        /// <summary>
+        /// Map entity to dto
+        /// </summary>
+        /// <param name="entity">Object to extension</param>
+        /// <param name="dto">User Dto object</param>
+        public static User Map(this User entity, UserDto dto)
+            => Map(entity, dto, true);
 
         /// <summary>
         /// Map entity to dto

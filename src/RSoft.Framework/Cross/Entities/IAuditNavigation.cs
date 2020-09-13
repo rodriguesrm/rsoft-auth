@@ -10,7 +10,7 @@ namespace RSoft.Framework.Cross.Entities
     /// <typeparam name="TUser">User entity type</typeparam>
     public interface IAuditNavigation<TKey, TUser> : IAudit<TKey>
         where TKey : struct
-        where TUser : class, ITable
+        where TUser : class
     {
 
         /// <summary>

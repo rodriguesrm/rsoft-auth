@@ -1,7 +1,6 @@
 ﻿using RSoft.Framework.Domain.Entities;
 using System;
-using System.Linq;
-using System.Linq.Expressions;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,12 +29,6 @@ namespace RSoft.Framework
         TEntity Update(TEntity entity);
 
         /// <summary>
-        /// Get all rows
-        /// </summary>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<IQueryable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Get row by id
         /// </summary>
         /// <param name="key">Row key</param>
@@ -43,25 +36,16 @@ namespace RSoft.Framework
         Task<TEntity> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Get row by id
+        /// Get all entity rows
         /// </summary>
-        /// <param name="key">Row key</param>
-        /// <param name="includeDeleted">Indicate if will get deleted row</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<TEntity> GetByKeyAsync(TKey key, bool includeDeleted, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Get all record by lambda expression
-        /// </summary>
-        /// <param name="predicate">Lambda expression</param>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<IQueryable<TEntity>> GetByExpressionAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
+        Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Remove entity of context
         /// </summary>
-        /// <param name="entity">Entity instance</param>
-        void Delete(TEntity entity);
+        /// <param name="key">Entity id value</param>
+        void Delete(TKey key);
 
     }
 

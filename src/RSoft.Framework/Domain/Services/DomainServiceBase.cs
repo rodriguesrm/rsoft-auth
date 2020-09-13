@@ -1,8 +1,7 @@
 ﻿using RSoft.Framework.Domain.Entities;
 using RSoft.Framework.Infra.Data;
 using System;
-using System.Linq;
-using System.Linq.Expressions;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -62,24 +61,16 @@ namespace RSoft.Framework.Domain.Services
         }
 
         ///<inheritdoc/>
-        public async Task<IQueryable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
-            => await _repository.GetAllAsync(cancellationToken);
-
-        ///<inheritdoc/>
         public async Task<TEntity> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default)
             => await _repository.GetByKeyAsync(key, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<TEntity> GetByKeyAsync(TKey key, bool includeDeleted, CancellationToken cancellationToken = default)
-            => await _repository.GetByKeyAsync(key, includeDeleted, cancellationToken);
+        Task<IEnumerable<TEntity>> ICommonBase<TEntity, TKey>.GetAllAsync(CancellationToken cancellationToken)
+            => _repository.GetAllAsync(cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<IQueryable<TEntity>> GetByExpressionAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
-            => await _repository.GetByExpressionAsync(predicate, cancellationToken);
-
-        ///<inheritdoc/>
-        public void Delete(TEntity entity)
-            => _repository.Delete(entity);
+        public void Delete(TKey key)
+            => _repository.Delete(key);
 
         #endregion
 
