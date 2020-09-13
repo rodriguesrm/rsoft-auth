@@ -1,6 +1,6 @@
 ﻿using RSoft.Framework.Application.Model;
 using RSoft.Auth.Domain.Entities;
-using RSoft.Framework.Cross.Entities;
+using RSoft.Framework.Infra.Data;
 
 namespace RSoft.Auth.Application.Model.Extensions
 {

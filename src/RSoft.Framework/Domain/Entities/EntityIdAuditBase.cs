@@ -1,4 +1,4 @@
-﻿using RSoft.Framework.Cross.Entities;
+﻿using RSoft.Framework.Infra.Data;
 using System;
 
 namespace RSoft.Framework.Domain.Entities

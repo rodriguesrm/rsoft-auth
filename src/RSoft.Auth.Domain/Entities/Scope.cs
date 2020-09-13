@@ -1,6 +1,7 @@
 ﻿using RSoft.Framework.Cross.Entities;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
+using RSoft.Framework.Infra.Data;
 using System;
 using System.Collections.Generic;
 

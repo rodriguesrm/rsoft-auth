@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RSoft.Framework.Cross.Entities
+namespace RSoft.Framework.Infra.Data
 {
 
     /// <summary>

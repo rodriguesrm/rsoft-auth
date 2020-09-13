@@ -1,6 +1,4 @@
-﻿using RSoft.Framework.Infra.Data.Tables;
-
-namespace RSoft.Framework.Cross.Entities
+﻿namespace RSoft.Framework.Infra.Data
 {
 
     /// <summary>

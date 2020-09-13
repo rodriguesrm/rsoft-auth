@@ -101,8 +101,6 @@ namespace RSoft.Framework.Infra.Data
 
         }
 
-        
-
         ///<inheritdoc/>
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
         {
