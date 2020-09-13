@@ -1,17 +1,16 @@
 ﻿using RSoft.Framework.Cross.Entities;
-using RSoft.Framework.Domain.Contracts;
-using RSoft.Framework.Domain.Entities;
 using RSoft.Framework.Infra.Data;
+using RSoft.Framework.Infra.Data.Tables;
 using System;
 using System.Collections.Generic;
 
-namespace RSoft.Auth.Domain.Entities
+namespace RSoft.Auth.Infra.Data.Entities
 {
 
     /// <summary>
     /// Roles of registered users
     /// </summary>
-    public class Role : EntityIdNameAuditBase<Guid, Role>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive
+    public class Role : TableIdNameAuditBase<Guid, Role>, ITable, IAuditNavigation<Guid, User>, ISoftDeletion, IActive
     {
 
         #region Constructors
@@ -37,9 +36,9 @@ namespace RSoft.Auth.Domain.Entities
         /// Create a new role instance
         /// </summary>
         /// <param name="id">role id text</param>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        /// <exception cref="System.FormatException"></exception>
-        /// <exception cref="System.OverflowException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         public Role(string id) : base()
         {
             Id = new Guid(id);
@@ -96,20 +95,6 @@ namespace RSoft.Auth.Domain.Entities
         {
             IsActive = true;
             Users = new HashSet<UserRole>();
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Validate entity
-        /// </summary>
-        public override void Validate()
-        {
-            //TODO: Globalization
-            AddNotifications(new SimpleStringValidationContract(Name, nameof(Name), true, 3, 50).Contract.Notifications);
-            AddNotifications(new SimpleStringValidationContract(Description, nameof(Description), true, 3, 150).Contract.Notifications);
         }
 
         #endregion

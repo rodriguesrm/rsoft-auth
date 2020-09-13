@@ -1,8 +1,8 @@
-﻿using RSoft.Framework.Domain.Entities;
+﻿using RSoft.Framework.Cross.Entities;
 
 namespace RSoft.Framework.Domain.Contracts
 {
-    
+
     /// <summary>
     /// Address validate contract, where:
     /// Street name is required and has 2 and 80 characters.

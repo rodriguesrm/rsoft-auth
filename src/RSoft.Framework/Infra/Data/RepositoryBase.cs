@@ -1,17 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RSoft.Framework.Domain.Entities;
+using RSoft.Framework.Infra.Data.Tables;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace RSoft.Framework.Infra.Data
 {
 
-    public abstract class RepositoryBase<TEntity, TKey> : IRepositoryBase<TEntity, TKey>
+    public abstract class RepositoryBase<TEntity, TTable, TKey> : IRepositoryBase<TEntity, TKey>
         where TEntity : EntityBase<TEntity>
+        where TTable : TableBase<TTable>
         where TKey : struct
     {
 
@@ -25,7 +27,7 @@ namespace RSoft.Framework.Infra.Data
         /// <summary>
         /// Dbset object
         /// </summary>
-        protected DbSet<TEntity> _dbSet;
+        protected DbSet<TTable> _dbSet;
 
         #endregion
 
@@ -38,8 +40,24 @@ namespace RSoft.Framework.Infra.Data
         public RepositoryBase(DbContext ctx)
         {
             _ctx = ctx;
-            _dbSet = _ctx.Set<TEntity>();
+            _dbSet = _ctx.Set<TTable>();
         }
+
+        #endregion
+
+        #region Abstract methods
+
+        /// <summary>
+        /// Map table to entity
+        /// </summary>
+        /// <param name="table">Table object</param>
+        protected abstract TEntity Map(TTable table);
+
+        /// <summary>
+        /// Map entity to table
+        /// </summary>
+        /// <param name="entity">Entity table</param>
+        protected abstract TTable Map(TEntity entity);
 
         #endregion
 
@@ -49,30 +67,23 @@ namespace RSoft.Framework.Infra.Data
         public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            EntityEntry<TEntity> tsk = await _dbSet.AddAsync(entity, cancellationToken).AsTask();
-            return tsk.Entity;
+            TTable table = Map(entity);
+            EntityEntry<TTable> tsk = await _dbSet.AddAsync(table, cancellationToken).AsTask();
+            entity = Map(tsk.Entity);
+            return entity;
         }
 
         ///<inheritdoc/>
         public virtual TEntity Update(TEntity entity)
-            => _dbSet.Update(entity).Entity;
-
-        ///<inheritdoc/>
-        public virtual async Task<IQueryable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return await Task.Run(() =>
-            {
-                return _dbSet;
-            }, cancellationToken);
+            TTable table = Map(entity);
+            table = _dbSet.Update(table).Entity;
+            entity = Map(table);
+            return entity;
         }
 
         ///<inheritdoc/>
         public virtual async Task<TEntity> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default)
-            => await GetByKeyAsync(key, false, cancellationToken);
-
-        ///<inheritdoc/>
-        public virtual async Task<TEntity> GetByKeyAsync(TKey key, bool includeDeleted, CancellationToken cancellationToken = default)
         {
 
             if (cancellationToken.IsCancellationRequested)
@@ -80,16 +91,8 @@ namespace RSoft.Framework.Infra.Data
 
             object[] keyValues = new object[] { key };
 
-            TEntity entity = await _dbSet.FindAsync(keyValues: keyValues, cancellationToken: cancellationToken);
-
-            if (!includeDeleted)
-            {
-                if (entity != null)
-                {
-                    if (entity is ISoftDeletion x && x.IsDeleted)
-                        entity = default;
-                }
-            }
+            TTable table = await _dbSet.FindAsync(keyValues: keyValues, cancellationToken: cancellationToken);
+            TEntity entity = Map(table);
 
             if (cancellationToken.IsCancellationRequested)
                 return null;
@@ -98,20 +101,31 @@ namespace RSoft.Framework.Infra.Data
 
         }
 
+        
+
         ///<inheritdoc/>
-        public Task<IQueryable<TEntity>> GetByExpressionAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            Task<IQueryable<TEntity>> task = Task.Factory.StartNew(() =>
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                return _dbSet.Where(predicate);
-            });
-            return task;
+
+            if (cancellationToken.IsCancellationRequested)
+                return null;
+
+            IEnumerable<TTable> rows = await _dbSet.ToListAsync(cancellationToken);
+            IEnumerable<TEntity> entities = rows.ToList().Select(r => Map(r));
+
+            if (cancellationToken.IsCancellationRequested)
+                return null;
+
+            return entities;
+
         }
 
         ///<inheritdoc/>
-        public virtual void Delete(TEntity entity)
-            => _dbSet.Remove(entity);
+        public virtual void Delete(TKey key)
+        {
+            TTable table = _dbSet.FindAsync(keyValues: new object[] { key }, default).GetAwaiter().GetResult();
+            _dbSet.Remove(table);
+        }
 
         #endregion
 

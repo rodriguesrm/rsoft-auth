@@ -10,7 +10,7 @@
         where TEntity : EntityIdBase<TKey, TEntity>
     {
 
-        #region Construtores
+        #region Constructors
 
         /// <summary>
         /// Create a new entity instance
@@ -53,21 +53,13 @@
             return Id.Equals(compareTo.Id);
         }
 
-        /// <summary>
-        /// Get HashCode 
-        /// </summary>
+        ///<inheritdoc/>
         public override int GetHashCode()
-        {
-            return (GetType().GetHashCode() * 293) + Id.GetHashCode();
-        }
+            => (GetType().GetHashCode() * 293) + Id.GetHashCode();
 
-        /// <summary>
-        /// Get string object
-        /// </summary>
+        ///<inheritdoc/>
         public override string ToString()
-        {
-            return $"{GetType().Name} - Id = {Id}";
-        }
+            => $"{GetType().Name} - Id = {Id}";
 
         #endregion
 

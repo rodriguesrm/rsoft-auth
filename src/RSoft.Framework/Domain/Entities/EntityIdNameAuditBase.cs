@@ -21,11 +21,11 @@
         /// <summary>
         /// Create a new entity instance
         /// </summary>
-        /// <param name="id">Entity id</param>
-        /// <param name="description">Entity description value</param>
-        public EntityIdNameAuditBase(TKey id, string description) : base(id)
+        /// <param name="id">Id value</param>
+        /// <param name="name">Name value</param>
+        public EntityIdNameAuditBase(TKey id, string name) : base(id)
         {
-            Name = description;
+            Name = name;
         }
 
         #endregion

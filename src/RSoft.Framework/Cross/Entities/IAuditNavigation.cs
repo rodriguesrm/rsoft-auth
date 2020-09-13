@@ -1,4 +1,6 @@
-﻿namespace RSoft.Framework.Domain.Entities
+﻿using RSoft.Framework.Infra.Data.Tables;
+
+namespace RSoft.Framework.Cross.Entities
 {
 
     /// <summary>
@@ -8,7 +10,7 @@
     /// <typeparam name="TUser">User entity type</typeparam>
     public interface IAuditNavigation<TKey, TUser> : IAudit<TKey>
         where TKey : struct
-        where TUser : class, IEntity
+        where TUser : class, ITable
     {
 
         /// <summary>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
 using RSoft.Framework.Cross;
-using RSoft.Framework.Domain.Entities;
+using RSoft.Framework.Cross.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

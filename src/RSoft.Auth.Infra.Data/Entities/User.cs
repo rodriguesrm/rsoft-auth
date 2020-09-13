@@ -1,18 +1,16 @@
 ﻿using RSoft.Framework.Cross.Entities;
-using RSoft.Framework.Domain.Contracts;
-using RSoft.Framework.Domain.Entities;
 using RSoft.Framework.Infra.Data;
+using RSoft.Framework.Infra.Data.Tables;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace RSoft.Auth.Domain.Entities
+namespace RSoft.Auth.Infra.Data.Entities
 {
 
     /// <summary>
     /// User of the eco-system applications
     /// </summary>
-    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive, IFullName
+    public class User : TableIdAuditBase<Guid, User>, ITable, IAuditNavigation<Guid, User>, ISoftDeletion, IActive, IFullName
     {
 
         #region Constructors
@@ -163,59 +161,6 @@ namespace RSoft.Auth.Domain.Entities
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Validate entity
-        /// </summary>
-        public override void Validate()
-        {
-
-            //TODO: Globalization
-            AddNotifications(new FullNameValidationContract(this).Contract.Notifications);
-            AddNotifications(new EmailValidationContract(Email).Contract.Notifications);
-            AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);
-
-            if (Credential == null)
-            {
-                AddNotification(nameof(Credential), "Credential is required");
-            }
-            else
-            {
-                Credential.Validate();
-                AddNotifications(Credential.Notifications);
-            }
-
-            if (!Scopes.Any())
-            {
-                AddNotification(nameof(Scopes), "The user must be assigned to at least one scope");
-            }
-            else
-            {
-                Scopes
-                    .ToList()
-                    .ForEach(scope =>
-                    {
-                        scope.Validate();
-                        AddNotifications(scope.Notifications);
-                    });
-            }
-
-            if (!Roles.Any())
-            {
-                AddNotification(nameof(Scopes), "The user must have at least one role");
-            }
-            else
-            {
-                Roles
-                    .ToList()
-                    .ForEach(role =>
-                    {
-                        role.Validate();
-                        AddNotifications(role.Notifications);
-                    });
-            }
-
-        }
 
         /// <summary>
         /// Get full name

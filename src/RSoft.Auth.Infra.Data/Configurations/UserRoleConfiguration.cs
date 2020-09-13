@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RSoft.Auth.Domain.Entities;
+using RSoft.Auth.Infra.Data.Entities;
 using System;
 
 namespace RSoft.Auth.Infra.Data.Configurations

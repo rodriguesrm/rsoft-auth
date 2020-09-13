@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RSoft.Framework.Domain.Entities
+namespace RSoft.Framework.Cross.Entities
 {
 
     /// <summary>

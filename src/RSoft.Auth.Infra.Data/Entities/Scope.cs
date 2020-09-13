@@ -1,46 +1,45 @@
 ﻿using RSoft.Framework.Cross.Entities;
-using RSoft.Framework.Domain.Contracts;
-using RSoft.Framework.Domain.Entities;
 using RSoft.Framework.Infra.Data;
+using RSoft.Framework.Infra.Data.Tables;
 using System;
 using System.Collections.Generic;
 
-namespace RSoft.Auth.Domain.Entities
+namespace RSoft.Auth.Infra.Data.Entities
 {
 
     /// <summary>
-    /// Roles of registered users
+    /// Scope of action
     /// </summary>
-    public class Role : EntityIdNameAuditBase<Guid, Role>, IEntity, IAuditNavigation<Guid, User>, ISoftDeletion, IActive
+    public class Scope : TableIdNameAuditBase<Guid, Scope>, ITable, IAuditNavigation<Guid, User>, ISoftDeletion, IActive
     {
 
         #region Constructors
 
         /// <summary>
-        /// Create a new role instance
+        /// Create a new application scope instance
         /// </summary>
-        public Role() : base(Guid.NewGuid(), null)
+        public Scope() : base(Guid.NewGuid(), null)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Create a new role instance
+        /// Create a new application scope instance
         /// </summary>
-        /// <param name="id">role id value</param>
-        public Role(Guid id) : base(id, null)
+        /// <param name="id">application scope id value</param>
+        public Scope(Guid id) : base(id, null)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Create a new role instance
+        /// Create a new application scope instance
         /// </summary>
-        /// <param name="id">role id text</param>
+        /// <param name="id">application scope id text</param>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.FormatException"></exception>
         /// <exception cref="System.OverflowException"></exception>
-        public Role(string id) : base()
+        public Scope(string id) : base()
         {
             Id = new Guid(id);
         }
@@ -59,11 +58,6 @@ namespace RSoft.Auth.Domain.Entities
         /// </summary>
         public bool IsDeleted { get; set; }
 
-        /// <summary>
-        /// Role description
-        /// </summary>
-        public string Description { get; set; }
-
         #endregion
 
         #region Navigation Lazy
@@ -79,14 +73,14 @@ namespace RSoft.Auth.Domain.Entities
         public virtual User ChangedAuthor { get; set; }
 
         /// <summary>
-        /// Scope data
+        /// Roles list
         /// </summary>
-        public virtual Scope Scope { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
 
         /// <summary>
-        /// Users for this role
+        /// Users list
         /// </summary>
-        public virtual ICollection<UserRole> Users { get; set; }
+        public virtual ICollection<UserScope> Users { get; set; }
 
         #endregion
 
@@ -95,21 +89,8 @@ namespace RSoft.Auth.Domain.Entities
         private void Initialize()
         {
             IsActive = true;
-            Users = new HashSet<UserRole>();
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Validate entity
-        /// </summary>
-        public override void Validate()
-        {
-            //TODO: Globalization
-            AddNotifications(new SimpleStringValidationContract(Name, nameof(Name), true, 3, 50).Contract.Notifications);
-            AddNotifications(new SimpleStringValidationContract(Description, nameof(Description), true, 3, 150).Contract.Notifications);
+            Roles = new HashSet<Role>();
+            Users = new HashSet<UserScope>();
         }
 
         #endregion

@@ -1,4 +1,4 @@
-﻿using RSoft.Framework.Domain.Entities;
+﻿using RSoft.Framework.Cross.Entities;
 
 namespace RSoft.Framework.Domain.Contracts
 {

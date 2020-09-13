@@ -1,25 +1,22 @@
 ﻿using RSoft.Framework.Cross.Entities;
 using System;
 
-namespace RSoft.Framework.Domain.Entities
+namespace RSoft.Framework.Infra.Data.Tables
 {
 
     /// <summary>
-    /// Entity abstract class with id column
+    /// Table entity abstract class with id column
     /// </summary>
-    /// <typeparam name="TEntity">Entity type</typeparam>
-    /// <typeparam name="TKey">Entity key type</typeparam>
-    public abstract class EntityAuditBase<TEntity, TKey> : EntityBase<TEntity>, IEntity, IAudit<TKey>
-        where TEntity : EntityBase<TEntity>
+    /// <typeparam name="TTable">Table entity type</typeparam>
+    /// <typeparam name="TKey">Table entity key</typeparam>
+    public abstract class TableAuditBase<TTable, TKey> : TableBase<TTable>, ITable, IAudit<TKey>
+        where TTable : TableBase<TTable>
         where TKey : struct
     {
 
         #region Constructors
 
-        /// <summary>
-        /// Create a new entity instance
-        /// </summary>
-        public EntityAuditBase() : base() { }
+        public TableAuditBase() : base() { }
 
         #endregion
 
