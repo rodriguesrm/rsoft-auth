@@ -12,12 +12,12 @@
         /// <summary>
         /// First name
         /// </summary>
-        string FirstName { get; set; }
+        string FirstName { get; }
 
         /// <summary>
         /// Last/Family name
         /// </summary>
-        string LastName { get; set; }
+        string LastName { get; }
 
         #endregion
 

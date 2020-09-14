@@ -13,15 +13,20 @@
         /// Craate a new instance of contract
         /// </summary>
         /// <param name="email">E-mail to validate</param>
-        public EmailValidationContract(string email) : base()
+        public EmailValidationContract(string email) : this(email, true) { }
+
+        /// <summary>
+        /// Craate a new instance of contract
+        /// </summary>
+        /// <param name="email">E-mail to validate</param>
+        /// <param name="required">Indicates whether email is required (default true)</param>
+        public EmailValidationContract(string email, bool required) : base()
         {
-
             //TODO: Globalization
+            if (required)
+                Contract.Requires();
             Contract
-                .Requires()
                 .IsEmailOrEmpty(email, "Email", "Invalid e-mail");
-            ;
-
         }
 
         #endregion

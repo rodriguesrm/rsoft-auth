@@ -1,9 +1,6 @@
 ﻿using FluentValidator;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace RSoft.Auth.Domain.ValueObjects
+namespace RSoft.Framework.Domain.ValueObjects
 {
 
     /// <summary>
