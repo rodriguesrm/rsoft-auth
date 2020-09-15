@@ -1,7 +1,6 @@
 ﻿using RSoft.Framework.Cross.Entities;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
-using RSoft.Framework.Infra.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace RSoft.Auth.Domain.Entities
     /// <summary>
     /// User of the eco-system applications
     /// </summary>
-    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditNavigation<Guid, User>, IActive, IFullName
+    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditAuthor<Guid>, IActive, IFullName
     {
 
         #region Constructors
@@ -80,16 +79,6 @@ namespace RSoft.Auth.Domain.Entities
         #region Navigation Lazy
 
         /// <summary>
-        /// Created author data
-        /// </summary>
-        public virtual User CreatedAuthor { get; set; }
-
-        /// <summary>
-        /// Changed author data
-        /// </summary>
-        public virtual User ChangedAuthor { get; set; }
-
-        /// <summary>
         /// User credential data
         /// </summary>
         public virtual UserCredential Credential { get; set; }
@@ -126,6 +115,8 @@ namespace RSoft.Auth.Domain.Entities
         {
 
             //TODO: Globalization
+            AddNotifications(CreatedAuthor?.Notifications);
+            AddNotifications(ChangedAuthor?.Notifications);
             AddNotifications(new FullNameValidationContract(this).Contract.Notifications);
             AddNotifications(new EmailValidationContract(Email).Contract.Notifications);
             AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);

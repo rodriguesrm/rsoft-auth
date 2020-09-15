@@ -1,4 +1,4 @@
-﻿using RSoft.Framework.Infra.Data;
+﻿using RSoft.Framework.Domain.ValueObjects;
 using System;
 
 namespace RSoft.Framework.Domain.Entities
@@ -9,7 +9,7 @@ namespace RSoft.Framework.Domain.Entities
     /// </summary>
     /// <typeparam name="TKey">Entity key type</typeparam>
     /// <typeparam name="TEntity">Entity type</typeparam>
-    public abstract class EntityIdAuditBase<TKey, TEntity> : EntityIdBase<TKey, TEntity>, IAudit<TKey>
+    public abstract class EntityIdAuditBase<TKey, TEntity> : EntityIdBase<TKey, TEntity>, IAuditAuthor<TKey>
         where TKey : struct
         where TEntity : EntityIdAuditBase<TKey, TEntity>
     {
@@ -31,25 +31,17 @@ namespace RSoft.Framework.Domain.Entities
 
         #region Properties
 
-        /// <summary>
-        /// Log creation date
-        /// </summary>
+        ///<inheritdoc/>
         public DateTime CreatedOn { get; set; }
 
-        /// <summary>
-        /// Log creation user id
-        /// </summary>
-        public TKey CreatedBy { get; set; }
+        ///<inheritdoc/>
+        public Author<TKey> CreatedAuthor { get; set; }
 
-        /// <summary>
-        /// Log change date
-        /// </summary>
+        ///<inheritdoc/>
         public DateTime? ChangedOn { get; set; }
 
-        /// <summary>
-        /// Log change user id
-        /// </summary>
-        public TKey? ChangedBy { get; set; }
+        ///<inheritdoc/>
+        public AuthorNullable<TKey> ChangedAuthor { get; set; }
 
         #endregion
 

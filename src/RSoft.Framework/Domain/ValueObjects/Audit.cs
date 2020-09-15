@@ -1,11 +1,14 @@
-﻿namespace RSoft.Framework.Domain.ValueObjects
+﻿using RSoft.Framework.Domain.Entities;
+using System;
+
+namespace RSoft.Framework.Domain.ValueObjects
 {
 
     /// <summary>
     /// Audit value object model
     /// </summary>
     /// <typeparam name="TKey">Key type</typeparam>
-    public class Audit<TKey> : BaseVO
+    public class Audit<TKey> : BaseVO, IAuditAuthor<TKey> 
         where TKey : struct
     {
 
@@ -15,12 +18,16 @@
         /// <summary>
         /// Create a new Audit-Value-Object instance
         /// </summary>
-        /// <param name="creationAuthor">Creation author data</param>
+        /// <param name="createdOn">Row created date</param>
+        /// <param name="createdAuthor">Created author data</param>
+        /// <param name="changedOn">Row changed date</param>
         /// <param name="changeAuthor">Last change author data</param>
-        public Audit(Author<TKey> creationAuthor, AuthorNullable<TKey> changeAuthor)
+        public Audit(DateTime createdOn, Author<TKey> createdAuthor, DateTime? changedOn, AuthorNullable<TKey> changeAuthor)
         {
-            CreationAuthor = creationAuthor;
-            ChangeAuthor = changeAuthor;
+            CreatedOn = createdOn;
+            CreatedAuthor = createdAuthor;
+            ChangedOn = changedOn;
+            ChangedAuthor = changeAuthor;
             Validate();
         }
 
@@ -28,15 +35,17 @@
 
         #region Properties
 
-        /// <summary>
-        /// Creation author data
-        /// </summary>
-        public Author<TKey> CreationAuthor { get; set; }
+        ///<inheritdoc/>
+        public DateTime CreatedOn { get; set; }
 
-        /// <summary>
-        /// Last change author data
-        /// </summary>
-        public AuthorNullable<TKey> ChangeAuthor { get; set; }
+        ///<inheritdoc/>
+        public Author<TKey> CreatedAuthor { get; set; }
+
+        ///<inheritdoc/>
+        public DateTime? ChangedOn { get; set; }
+
+        ///<inheritdoc/>
+        public AuthorNullable<TKey> ChangedAuthor { get; set; }
 
         #endregion
 
@@ -46,10 +55,10 @@
         protected override void Validate()
         {
             //TODO: Globalization
-            if (CreationAuthor == null)
-                AddNotification(nameof(CreationAuthor), $"{nameof(CreationAuthor)} is required");
-            AddNotifications(CreationAuthor?.Notifications);
-            AddNotifications(ChangeAuthor?.Notifications);
+            if (CreatedAuthor == null)
+                AddNotification(nameof(CreatedAuthor), $"{nameof(CreatedAuthor)} is required");
+            AddNotifications(CreatedAuthor?.Notifications);
+            AddNotifications(ChangedAuthor?.Notifications);
         }
 
         #endregion

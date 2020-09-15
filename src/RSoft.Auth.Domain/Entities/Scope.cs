@@ -1,7 +1,6 @@
 ﻿using RSoft.Framework.Cross.Entities;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
-using RSoft.Framework.Infra.Data;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +10,7 @@ namespace RSoft.Auth.Domain.Entities
     /// <summary>
     /// Scope of action
     /// </summary>
-    public class Scope : EntityIdNameAuditBase<Guid, Scope>, IEntity, IAuditNavigation<Guid, User>, IActive
+    public class Scope : EntityIdNameAuditBase<Guid, Scope>, IEntity, IAuditAuthor<Guid>, IActive
     {
 
         #region Constructors
@@ -59,16 +58,6 @@ namespace RSoft.Auth.Domain.Entities
         #region Navigation Lazy
 
         /// <summary>
-        /// Created author data
-        /// </summary>
-        public virtual User CreatedAuthor { get; set; }
-
-        /// <summary>
-        /// Changed author data
-        /// </summary>
-        public virtual User ChangedAuthor { get; set; }
-
-        /// <summary>
         /// Roles list
         /// </summary>
         public virtual ICollection<Role> Roles { get; set; }
@@ -99,6 +88,8 @@ namespace RSoft.Auth.Domain.Entities
         public override void Validate()
         {
             //TODO: Globalization
+            AddNotifications(CreatedAuthor?.Notifications);
+            AddNotifications(ChangedAuthor?.Notifications);
             AddNotifications(new SimpleStringValidationContract(this.Name, nameof(Name), true, 3, 80).Contract.Notifications);
         }
 

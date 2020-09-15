@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RSoft.Framework\RSoft.Framework.csproj" />
+    <Compile Remove="ValueObjects\**" />
+    <EmbeddedResource Remove="ValueObjects\**" />
+    <None Remove="ValueObjects\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ValueObjects\" />
+    <ProjectReference Include="..\RSoft.Framework\RSoft.Framework.csproj" />
   </ItemGroup>
 
 </Project>

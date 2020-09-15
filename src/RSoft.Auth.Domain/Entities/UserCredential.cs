@@ -14,11 +14,6 @@ namespace RSoft.Auth.Domain.Entities
         #region Properties
 
         /// <summary>
-        /// User id
-        /// </summary>
-        public Guid? UserId { get; set; }
-
-        /// <summary>
         /// User acess key (for applications)
         /// </summary>
         public string UserKey { get; set; }
@@ -44,7 +39,6 @@ namespace RSoft.Auth.Domain.Entities
         ///<inheritdoc/>
         public override void Validate()
         {
-            AddNotifications(new RequiredValidationContract<Guid?>(UserId, nameof(UserId), "User id is required").Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(UserKey, nameof(UserKey), false, 32, 32).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Password, nameof(Password), true, 32, 32).Contract.Notifications);
         }
