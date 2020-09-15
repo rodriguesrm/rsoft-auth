@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RSoft.Framework.Domain.Entities;
+using RSoft.Framework.Exception;
 using RSoft.Framework.Infra.Data.Tables;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,8 @@ namespace RSoft.Framework.Infra.Data
         public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            if (!entity.Valid)
+                throw new InvalidEntityException(nameof(entity));
             TTable table = Map(entity);
             EntityEntry<TTable> tsk = await _dbSet.AddAsync(table, cancellationToken).AsTask();
             entity = Map(tsk.Entity);
@@ -76,6 +79,8 @@ namespace RSoft.Framework.Infra.Data
         ///<inheritdoc/>
         public virtual TEntity Update(TEntity entity)
         {
+            if (!entity.Valid)
+                throw new InvalidEntityException(nameof(entity));
             TTable table = Map(entity);
             table = _dbSet.Update(table).Entity;
             entity = Map(table);
