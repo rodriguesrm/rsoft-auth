@@ -3,6 +3,7 @@ using dmn = RSoft.Auth.Domain.Entities;
 using tbl = RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
+using RSoft.Auth.Infra.Data.Extensions;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {
@@ -24,13 +25,17 @@ namespace RSoft.Auth.Infra.Data.Repositories
 
         ///<inheritdoc/>
         protected override dmn.Role Map(tbl.Role table)
+            => table.Map();
+
+        ///<inheritdoc/>
+        protected override tbl.Role MapForAdd(dmn.Role entity)
         {
             //TODO: NotImplementedException
             throw new NotImplementedException();
         }
 
         ///<inheritdoc/>
-        protected override tbl.Role Map(dmn.Role entity)
+        protected override tbl.Role MapForUpdate(dmn.Role entity, tbl.Role table)
         {
             //TODO: NotImplementedException
             throw new NotImplementedException();

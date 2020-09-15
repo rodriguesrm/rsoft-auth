@@ -28,7 +28,7 @@
 
         #endregion
 
-        #region Propriedades
+        #region Properties
 
         /// <summary>
         /// Entity id

@@ -134,7 +134,8 @@ namespace RSoft.Framework.Application.Services
             {
                 if (usarTransacao) await _uow.BeginTransactionAsync(cancellationToken);
 
-                TEntity dmnResult = _dmn.Update(entity);
+                //TODO: Add TKey or split ICommonBase
+                TEntity dmnResult = _dmn.Update(default, entity);
                 await _uow.SaveChangesAsync(cancellationToken);
                 result = MapToDto(dmnResult);
 

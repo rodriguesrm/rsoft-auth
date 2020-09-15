@@ -3,6 +3,9 @@
 namespace RSoft.Framework.Exception
 {
 
+    /// <summary>
+    /// Exception thrown when the entity to be recorded is not valid for the operation, check the entity's notifications.
+    /// </summary>
     public class InvalidEntityException : sys.Exception
     {
 

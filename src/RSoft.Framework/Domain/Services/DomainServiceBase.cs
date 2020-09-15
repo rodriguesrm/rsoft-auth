@@ -54,10 +54,10 @@ namespace RSoft.Framework.Domain.Services
 
 
         ///<inheritdoc/>
-        public TEntity Update(TEntity entity)
+        public TEntity Update(TKey key, TEntity entity)
         {
             if (entity.Invalid) return entity;
-            return _repository.Update(entity);
+            return _repository.Update(key, entity);
         }
 
         ///<inheritdoc/>

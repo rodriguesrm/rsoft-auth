@@ -25,13 +25,14 @@ namespace RSoft.Framework
         /// <summary>
         /// Update entity on context
         /// </summary>
+        /// <param name="key">Entity id value</param>
         /// <param name="entity">Entity instance</param>
-        TEntity Update(TEntity entity);
+        TEntity Update(TKey key, TEntity entity);
 
         /// <summary>
         /// Get row by id
         /// </summary>
-        /// <param name="key">Row key</param>
+        /// <param name="key">Entity id value</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<TEntity> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default);
 

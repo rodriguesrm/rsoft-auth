@@ -55,10 +55,33 @@ namespace RSoft.Framework.Infra.Data
         protected abstract TEntity Map(TTable table);
 
         /// <summary>
-        /// Map entity to table
+        /// Map entity to table for add action
         /// </summary>
-        /// <param name="entity">Entity table</param>
-        protected abstract TTable Map(TEntity entity);
+        /// <param name="entity">Domain Entity object</param>
+        protected abstract TTable MapForAdd(TEntity entity);
+
+        /// <summary>
+        /// Map entity to table for update action
+        /// </summary>
+        /// <param name="entity">Domain entity object</param>
+        /// <param name="table">Table entity object</param>
+        protected abstract TTable MapForUpdate(TEntity entity, TTable table);
+
+        #endregion
+
+        #region Local methods
+
+        /// <summary>
+        /// Find entity in context by key value
+        /// </summary>
+        /// <param name="key">Key value</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<TTable> FindByKeyAsync(TKey key, CancellationToken cancellationToken = default)
+        {
+            object[] keyValues = new object[] { key };
+            TTable table = await _dbSet.FindAsync(keyValues: keyValues, cancellationToken: default);
+            return table;
+        }
 
         #endregion
 
@@ -70,19 +93,26 @@ namespace RSoft.Framework.Infra.Data
             cancellationToken.ThrowIfCancellationRequested();
             if (!entity.Valid)
                 throw new InvalidEntityException(nameof(entity));
-            TTable table = Map(entity);
+            TTable table = MapForAdd(entity);
             EntityEntry<TTable> tsk = await _dbSet.AddAsync(table, cancellationToken).AsTask();
             entity = Map(tsk.Entity);
             return entity;
         }
 
         ///<inheritdoc/>
-        public virtual TEntity Update(TEntity entity)
+        public virtual TEntity Update(TKey key, TEntity entity)
         {
+
             if (!entity.Valid)
                 throw new InvalidEntityException(nameof(entity));
-            TTable table = Map(entity);
+
+            TTable table = FindByKeyAsync(key).GetAwaiter().GetResult();
+            if (table == null)
+                throw new InvalidOperationException($"[{key}] The data update operation cannot be completed because the entity does not exist in the database. The same may have been deleted.");
+
+            table = MapForUpdate(entity, table);
             table = _dbSet.Update(table).Entity;
+
             entity = Map(table);
             return entity;
         }
@@ -94,9 +124,7 @@ namespace RSoft.Framework.Infra.Data
             if (cancellationToken.IsCancellationRequested)
                 return null;
 
-            object[] keyValues = new object[] { key };
-
-            TTable table = await _dbSet.FindAsync(keyValues: keyValues, cancellationToken: cancellationToken);
+            TTable table = await FindByKeyAsync(key, cancellationToken);
             TEntity entity = Map(table);
 
             if (cancellationToken.IsCancellationRequested)
@@ -126,7 +154,7 @@ namespace RSoft.Framework.Infra.Data
         ///<inheritdoc/>
         public virtual void Delete(TKey key)
         {
-            TTable table = _dbSet.FindAsync(keyValues: new object[] { key }, default).GetAwaiter().GetResult();
+            TTable table = FindByKeyAsync(key).GetAwaiter().GetResult();
             _dbSet.Remove(table);
         }
 

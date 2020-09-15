@@ -30,7 +30,14 @@ namespace RSoft.Auth.Infra.Data.Repositories
         }
 
         ///<inheritdoc/>
-        protected override tbl.Scope Map(dmn.Scope entity)
+        protected override tbl.Scope MapForAdd(dmn.Scope entity)
+        {
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
+        }
+
+        ///<inheritdoc/>
+        protected override tbl.Scope MapForUpdate(dmn.Scope entity, tbl.Scope table)
         {
             //TODO: NotImplementedException
             throw new NotImplementedException();
