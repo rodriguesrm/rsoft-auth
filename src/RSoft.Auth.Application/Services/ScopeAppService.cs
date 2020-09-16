@@ -32,7 +32,7 @@ namespace RSoft.Auth.Application.Services
 
         ///<inheritdoc/>
         protected override async Task<Scope> GetEntityByKeyAsync(ScopeDto dto, CancellationToken cancellationToken = default)
-            => await _dmn.GetByKeyAsync(dto.Id, cancellationToken);
+            => await _dmn.GetByKeyAsync(new Guid[] { dto.Id }, cancellationToken);
 
         ///<inheritdoc/>
         protected override ScopeDto MapToDto(Scope entity)

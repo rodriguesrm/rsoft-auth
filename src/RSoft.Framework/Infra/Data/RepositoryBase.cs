@@ -69,22 +69,6 @@ namespace RSoft.Framework.Infra.Data
 
         #endregion
 
-        #region Local methods
-
-        /// <summary>
-        /// Find entity in context by key value
-        /// </summary>
-        /// <param name="key">Key value</param>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        private async Task<TTable> FindByKeyAsync(TKey key, CancellationToken cancellationToken = default)
-        {
-            object[] keyValues = new object[] { key };
-            TTable table = await _dbSet.FindAsync(keyValues: keyValues, cancellationToken: default);
-            return table;
-        }
-
-        #endregion
-
         #region Public Methods
 
         ///<inheritdoc/>
@@ -100,15 +84,15 @@ namespace RSoft.Framework.Infra.Data
         }
 
         ///<inheritdoc/>
-        public virtual TEntity Update(TKey key, TEntity entity)
+        public virtual TEntity Update(TKey[] keys, TEntity entity)
         {
 
             if (!entity.Valid)
                 throw new InvalidEntityException(nameof(entity));
 
-            TTable table = FindByKeyAsync(key).GetAwaiter().GetResult();
+            TTable table = _dbSet.FindAsync(keyValues: keys).GetAwaiter().GetResult();
             if (table == null)
-                throw new InvalidOperationException($"[{key}] The data update operation cannot be completed because the entity does not exist in the database. The same may have been deleted.");
+                throw new InvalidOperationException($"[{keys}] The data update operation cannot be completed because the entity does not exist in the database. The same may have been deleted.");
 
             table = MapForUpdate(entity, table);
             table = _dbSet.Update(table).Entity;
@@ -118,13 +102,13 @@ namespace RSoft.Framework.Infra.Data
         }
 
         ///<inheritdoc/>
-        public virtual async Task<TEntity> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> GetByKeyAsync(TKey[] keys, CancellationToken cancellationToken = default)
         {
 
             if (cancellationToken.IsCancellationRequested)
                 return null;
 
-            TTable table = await FindByKeyAsync(key, cancellationToken);
+            TTable table = await _dbSet.FindAsync(keys, cancellationToken);
             TEntity entity = Map(table);
 
             if (cancellationToken.IsCancellationRequested)
@@ -152,9 +136,9 @@ namespace RSoft.Framework.Infra.Data
         }
 
         ///<inheritdoc/>
-        public virtual void Delete(TKey key)
+        public virtual void Delete(TKey[] keys)
         {
-            TTable table = FindByKeyAsync(key).GetAwaiter().GetResult();
+            TTable table = _dbSet.FindAsync(keyValues: keys).GetAwaiter().GetResult();
             _dbSet.Remove(table);
         }
 

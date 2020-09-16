@@ -54,23 +54,23 @@ namespace RSoft.Framework.Domain.Services
 
 
         ///<inheritdoc/>
-        public TEntity Update(TKey key, TEntity entity)
+        public TEntity Update(TKey[] keys, TEntity entity)
         {
             if (entity.Invalid) return entity;
-            return _repository.Update(key, entity);
+            return _repository.Update(keys, entity);
         }
 
         ///<inheritdoc/>
-        public async Task<TEntity> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default)
-            => await _repository.GetByKeyAsync(key, cancellationToken);
+        public async Task<TEntity> GetByKeyAsync(TKey[] keys, CancellationToken cancellationToken = default)
+            => await _repository.GetByKeyAsync(keys, cancellationToken);
 
         ///<inheritdoc/>
         Task<IEnumerable<TEntity>> ICommonBase<TEntity, TKey>.GetAllAsync(CancellationToken cancellationToken)
             => _repository.GetAllAsync(cancellationToken);
 
         ///<inheritdoc/>
-        public void Delete(TKey key)
-            => _repository.Delete(key);
+        public void Delete(TKey[] keys)
+            => _repository.Delete(keys);
 
         #endregion
 

@@ -25,16 +25,16 @@ namespace RSoft.Framework
         /// <summary>
         /// Update entity on context
         /// </summary>
-        /// <param name="key">Entity id value</param>
+        /// <param name="keys">The values of the primary key for the entity to be found</param>
         /// <param name="entity">Entity instance</param>
-        TEntity Update(TKey key, TEntity entity);
+        TEntity Update(TKey[] keys, TEntity entity);
 
         /// <summary>
-        /// Get row by id
+        /// Get row by key values
         /// </summary>
-        /// <param name="key">Entity id value</param>
+        /// <param name="keys">The values of the primary key for the entity to be found</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<TEntity> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default);
+        Task<TEntity> GetByKeyAsync(TKey[] keys, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get all entity rows
@@ -45,8 +45,8 @@ namespace RSoft.Framework
         /// <summary>
         /// Remove entity of context
         /// </summary>
-        /// <param name="key">Entity id value</param>
-        void Delete(TKey key);
+        /// <param name="keys">The values of the primary key for the entity to be found</param>
+        void Delete(TKey[] keys);
 
     }
 
