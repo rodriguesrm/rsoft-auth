@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RSoft.Framework.Application.Model;
+using RSoft.Framework.Cross.Entities;
 
 namespace RSoft.Auth.Application.Model
 {
@@ -19,14 +20,9 @@ namespace RSoft.Auth.Application.Model
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// First name
+        /// Full name
         /// </summary>
-        public string FirstName { get; set; }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName { get; set; }
+        public IFullName Name { get; set; }
 
         /// <summary>
         /// User's date of birth

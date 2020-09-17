@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RSoft.Auth.Application\RSoft.Auth.Application.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Infra.Data\RSoft.Auth.Infra.Data.csproj" />
     <ProjectReference Include="..\RSoft.Framework\RSoft.Framework.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Domain\RSoft.Auth.Domain.csproj" />

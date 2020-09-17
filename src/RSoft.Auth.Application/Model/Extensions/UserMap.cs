@@ -40,7 +40,7 @@ namespace RSoft.Auth.Application.Model.Extensions
             ICollection<Scope> scopes = dto.Scopes?.Select(s => s.Map()).ToList();
             return new User()
             {
-                Name = new Name( dto.FirstName, dto.LastName),
+                Name = new Name(dto.Name.FirstName, dto.Name.LastName),
                 BornDate = dto.BornDate,
                 Email = new Email(dto.Email),
                 IsActive = dto.IsActive,
@@ -67,7 +67,7 @@ namespace RSoft.Auth.Application.Model.Extensions
         {
             if (dto != null)
             {
-                entity.Name = new Name(dto.FirstName, dto.LastName);
+                entity.Name = new Name(dto.Name.FirstName, dto.Name.LastName);
                 entity.BornDate = dto.BornDate;
                 entity.Email = new Email(dto.Email);
                 entity.IsActive = dto.IsActive;
@@ -108,8 +108,7 @@ namespace RSoft.Auth.Application.Model.Extensions
                 dto.AddNotifications(entity.Notifications);
             }
 
-            dto.FirstName = entity.Name.FirstName;
-            dto.LastName = entity.Name.LastName;
+            dto.Name = entity.Name;
             dto.BornDate = entity.BornDate;
             dto.Email = entity.Email.Address;
             dto.IsActive = entity.IsActive;

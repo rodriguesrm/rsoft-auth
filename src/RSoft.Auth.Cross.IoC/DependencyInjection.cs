@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RSoft.Framework.Cross.IoC;
 using RSoft.Auth.Infra.Data;
 using RSoft.Auth.Infra.Data.Repositories;
-using RSoft.Framework.Cross.IoC;
 using RSoft.Auth.Domain.Repositories;
 using RSoft.Auth.Domain.Services;
+using RSoft.Auth.Application.Services;
 
 namespace RSoft.Auth.Cross.IoC
 {
@@ -44,6 +45,8 @@ namespace RSoft.Auth.Cross.IoC
             #endregion
 
             #region Application
+
+            services.AddScoped<IRoleAppService, RoleAppService>();
 
             #endregion
 
