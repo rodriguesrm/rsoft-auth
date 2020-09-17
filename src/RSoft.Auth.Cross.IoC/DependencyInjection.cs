@@ -6,7 +6,6 @@ using RSoft.Auth.Infra.Data.Repositories;
 using RSoft.Auth.Domain.Repositories;
 using RSoft.Auth.Domain.Services;
 using RSoft.Auth.Application.Services;
-using Microsoft.EntityFrameworkCore;
 using RSoft.Framework.Infra.Data;
 
 namespace RSoft.Auth.Cross.IoC
@@ -26,18 +25,6 @@ namespace RSoft.Auth.Cross.IoC
         /// <returns></returns>
         public static IServiceCollection AddAuthRegister(this IServiceCollection services, IConfiguration configuration)
         {
-
-            #region DbContext
-
-            services.AddDbContext<AuthContext>(opt =>
-            {
-                opt
-                    .UseMySql(configuration.GetConnectionString("DbServer"))
-                    .UseLazyLoadingProxies()
-                ;
-            }, ServiceLifetime.Scoped);
-
-            #endregion
 
             // Add Framework services
             services.AddRSoftRegister<AuthContext>(configuration, true);

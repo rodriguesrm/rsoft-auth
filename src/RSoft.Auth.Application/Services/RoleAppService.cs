@@ -1,12 +1,12 @@
 ﻿using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Model.Extensions;
 using RSoft.Framework.Application.Services;
-using RSoft.Framework.Domain.Services;
 using RSoft.Framework.Infra.Data;
 using RSoft.Auth.Domain.Entities;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using RSoft.Auth.Domain.Services;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -24,7 +24,7 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="uow">Unit of work object</param>
         /// <param name="dmn">Role domain service object</param>
-        public RoleAppService(IUnitOfWork uow, IDomainServiceBase<Role, Guid> dmn) : base(uow, dmn) { }
+        public RoleAppService(IUnitOfWork uow, IRoleDomainService dmn) : base(uow, dmn) { }
 
         #endregion
 

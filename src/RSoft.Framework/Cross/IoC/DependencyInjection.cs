@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RSoft.Framework.Infra.Data;
 
 namespace RSoft.Framework.Cross.IoC
 {
@@ -49,8 +48,8 @@ namespace RSoft.Framework.Cross.IoC
         /// <param name="services">Service collection</param>
         /// <param name="configuration">Configuration object</param>
         /// <param name="connectionStringName">Connectino string name</param>
-        /// <param name="userLazyLoading">Flag indicate use lazy loading proxy</param>
-        public static IServiceCollection AddRSoftRegister<TDbContext>(this IServiceCollection services, IConfiguration configuration, string connectionStringName, bool userLazyLoading)
+        /// <param name="useLayzLoadingProxy">Flag indicate use lazy loading proxy</param>
+        public static IServiceCollection AddRSoftRegister<TDbContext>(this IServiceCollection services, IConfiguration configuration, string connectionStringName, bool useLayzLoadingProxy)
             where TDbContext : DbContext
         {
 
@@ -59,15 +58,9 @@ namespace RSoft.Framework.Cross.IoC
             services.AddDbContext<TDbContext>(opt =>
             {
                 opt.UseMySql(configuration.GetConnectionString(connectionStringName));
-                if (userLazyLoading)
+                if (useLayzLoadingProxy)
                     opt.UseLazyLoadingProxies();
             });
-
-            #endregion
-
-            #region Infra.Data
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             #endregion
 

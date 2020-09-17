@@ -10,7 +10,7 @@ namespace RSoft.Framework.Infra.Data
     /// <summary>
     /// Unit of work object to maintain the integrity of transactional operations
     /// </summary>
-    public class UnitOfWork : IUnitOfWork
+    public abstract class UnitOfWorkBase : IUnitOfWork
     {
 
         #region Local objects/variables
@@ -26,7 +26,7 @@ namespace RSoft.Framework.Infra.Data
         /// Create a new UnitOfWork instance
         /// </summary>
         /// <param name="ctx">Database context object</param>
-        public UnitOfWork(DbContext ctx)
+        public UnitOfWorkBase(DbContext ctx)
         {
             _ctx = ctx;
             TransactionStarted = false;
@@ -124,7 +124,7 @@ namespace RSoft.Framework.Infra.Data
         /// <summary>
         /// Destroy object instance and release resources
         /// </summary>
-        ~UnitOfWork()
+        ~UnitOfWorkBase()
         {
             Dispose(false);
         }

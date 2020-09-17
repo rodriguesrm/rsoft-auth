@@ -31,7 +31,6 @@ namespace RSoft.Framework.Infra.Data
 
         #region Constructors
 
-
         /// <summary>
         /// Create a new dbcontext instance
         /// </summary>
@@ -173,7 +172,7 @@ namespace RSoft.Framework.Infra.Data
         {
 
             modelBuilder.Model.GetEntityTypes()
-            .Where(f => typeof(IAudit<Guid>).IsAssignableFrom(f.ClrType))
+            .Where(f => typeof(IAudit<TKey>).IsAssignableFrom(f.ClrType))
             .ToList()
             .ForEach(e =>
             {
@@ -185,11 +184,11 @@ namespace RSoft.Framework.Infra.Data
                     .Property<DateTime?>(changedOn);
 
                 modelBuilder.Entity(e.ClrType)
-                    .Property<Guid>(createdBy)
+                    .Property<TKey>(createdBy)
                     .IsRequired();
 
                 modelBuilder.Entity(e.ClrType)
-                    .Property<Guid?>(changedBy);
+                    .Property<TKey?>(changedBy);
 
                 modelBuilder.Entity(e.ClrType)
                     .HasIndex(createdOn)

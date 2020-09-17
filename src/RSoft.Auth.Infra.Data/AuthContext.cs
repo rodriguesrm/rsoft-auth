@@ -19,7 +19,7 @@ namespace RSoft.Auth.Infra.Data
         /// Create a new dbcontext instance
         /// </summary>
         /// <param name="options">Context options settings</param>
-        public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }
+        public AuthContext(DbContextOptions options) : base(options) { }
 
         #endregion
 
