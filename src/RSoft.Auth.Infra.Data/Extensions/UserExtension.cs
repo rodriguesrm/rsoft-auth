@@ -1,22 +1,20 @@
-﻿using System.Linq;
-using dmn = RSoft.Auth.Domain.Entities;
+﻿using dmn = RSoft.Auth.Domain.Entities;
 using tbl = RSoft.Auth.Infra.Data.Entities;
 
 namespace RSoft.Auth.Infra.Data.Extensions
 {
 
     /// <summary>
-    /// Role extensions
+    /// User extensions
     /// </summary>
-    public static class RoleExtension
+    public static class UserExtension
     {
-
 
         /// <summary>
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        public static dmn.Role Map(this tbl.Role table)
+        public static dmn.User Map(this tbl.User table)
             => Map(table, true);
 
         /// <summary>
@@ -24,23 +22,30 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="table">Table entity to map</param>
         /// <param name="loadChildren">Load children data</param>
-        public static dmn.Role Map(this tbl.Role table, bool loadChildren)
+        public static dmn.User Map(this tbl.User table, bool loadChildren)
         {
-            dmn.Role result = new dmn.Role(table.Id)
+
+            dmn.User result = new dmn.User(table.Id)
             {
-                Name = table.Name,
-                Description = table.Description,
+                FirstName = table.FirstName,
+                LastName = table.LastName,
+                BornDate = table.BornDate,
+                Email = table.Email,
                 CreatedOn = table.CreatedOn,
-                ChangedOn = table.ChangedOn,
-                IsActive = table.IsActive
+                ChangedOn = table.ChangedOn
             };
 
             if (loadChildren)
             {
                 result.MapAuthor(table);
-                if (table.Users?.Count > 0)
-                    result.Users = table.Users.Select(u => u.User.Map(false)).ToList();
-                result.Scope = table.Scope?.Map(false);
+                if (table.Credential != null)
+                {
+                    result.Credential = new dmn.UserCredential()
+                    {
+                        UserKey = table.Credential.UserKey,
+                        Password = table.Credential.Password
+                    };
+                }
             }
 
             result.Validate();
@@ -53,16 +58,17 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps entity to table
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
-        public static tbl.Role Map(this dmn.Role entity)
+        public static tbl.User Map(this dmn.User entity)
         {
 
-            tbl.Role result = new tbl.Role(entity.Id)
+            tbl.User result = new tbl.User(entity.Id)
             {
-                Name = entity.Name,
-                Description = entity.Description,
+                FirstName = entity.FirstName,
+                LastName = entity.LastName,
+                BornDate = entity.BornDate,
+                Email = entity.Email,
                 CreatedOn = entity.CreatedOn,
-                CreatedBy = entity.CreatedAuthor.Id,
-                IsActive = entity.IsActive
+                CreatedBy = entity.CreatedAuthor.Id
             };
 
             return result;
@@ -74,14 +80,15 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
         /// <param name="table">Instance of existing table entity</param>
-        public static tbl.Role Map(this dmn.Role entity, tbl.Role table)
+        public static tbl.User Map(this dmn.User entity, tbl.User table)
         {
 
-            table.Name = entity.Name;
-            table.Description = entity.Description;
+            table.FirstName = entity.FirstName;
+            table.LastName = entity.LastName;
+            table.BornDate = entity.BornDate;
+            table.Email = entity.Email;
             table.ChangedOn = entity.ChangedOn;
             table.ChangedBy = entity.ChangedAuthor.Id;
-            table.IsActive = entity.IsActive;
 
             return table;
 

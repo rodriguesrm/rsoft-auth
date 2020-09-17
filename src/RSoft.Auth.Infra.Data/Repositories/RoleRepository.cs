@@ -29,17 +29,11 @@ namespace RSoft.Auth.Infra.Data.Repositories
 
         ///<inheritdoc/>
         protected override tbl.Role MapForAdd(dmn.Role entity)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+            => entity.Map();
 
         ///<inheritdoc/>
         protected override tbl.Role MapForUpdate(dmn.Role entity, tbl.Role table)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+            => entity.Map(table);
 
         #endregion
 

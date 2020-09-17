@@ -6,17 +6,16 @@ namespace RSoft.Auth.Infra.Data.Extensions
 {
 
     /// <summary>
-    /// Role extensions
+    /// Scope extensions
     /// </summary>
-    public static class RoleExtension
+    public static class ScopeExtension
     {
-
 
         /// <summary>
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        public static dmn.Role Map(this tbl.Role table)
+        public static dmn.Scope Map(this tbl.Scope table)
             => Map(table, true);
 
         /// <summary>
@@ -24,12 +23,12 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="table">Table entity to map</param>
         /// <param name="loadChildren">Load children data</param>
-        public static dmn.Role Map(this tbl.Role table, bool loadChildren)
+        public static dmn.Scope Map(this tbl.Scope table, bool loadChildren)
         {
-            dmn.Role result = new dmn.Role(table.Id)
+
+            dmn.Scope result = new dmn.Scope(table.Id)
             {
                 Name = table.Name,
-                Description = table.Description,
                 CreatedOn = table.CreatedOn,
                 ChangedOn = table.ChangedOn,
                 IsActive = table.IsActive
@@ -40,7 +39,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 result.MapAuthor(table);
                 if (table.Users?.Count > 0)
                     result.Users = table.Users.Select(u => u.User.Map(false)).ToList();
-                result.Scope = table.Scope?.Map(false);
+                if (table.Roles?.Count > 0)
+                    result.Roles = table.Roles.Select(r => r.Map(false)).ToList();
             }
 
             result.Validate();
@@ -53,13 +53,12 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps entity to table
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
-        public static tbl.Role Map(this dmn.Role entity)
+        public static tbl.Scope Map(this dmn.Scope entity)
         {
 
-            tbl.Role result = new tbl.Role(entity.Id)
+            tbl.Scope result = new tbl.Scope(entity.Id)
             {
                 Name = entity.Name,
-                Description = entity.Description,
                 CreatedOn = entity.CreatedOn,
                 CreatedBy = entity.CreatedAuthor.Id,
                 IsActive = entity.IsActive
@@ -74,11 +73,10 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
         /// <param name="table">Instance of existing table entity</param>
-        public static tbl.Role Map(this dmn.Role entity, tbl.Role table)
+        public static tbl.Scope Map(this dmn.Scope entity, tbl.Scope table)
         {
 
             table.Name = entity.Name;
-            table.Description = entity.Description;
             table.ChangedOn = entity.ChangedOn;
             table.ChangedBy = entity.ChangedAuthor.Id;
             table.IsActive = entity.IsActive;

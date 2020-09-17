@@ -3,6 +3,7 @@ using dmn = RSoft.Auth.Domain.Entities;
 using tbl = RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
+using RSoft.Auth.Infra.Data.Extensions;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {
@@ -24,24 +25,15 @@ namespace RSoft.Auth.Infra.Data.Repositories
 
         ///<inheritdoc/>
         protected override dmn.User Map(tbl.User table)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+            => table.Map();
 
         ///<inheritdoc/>
         protected override tbl.User MapForAdd(dmn.User entity)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+            => entity.Map();
 
         ///<inheritdoc/>
         protected override tbl.User MapForUpdate(dmn.User entity, tbl.User table)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+            => entity.Map(table);
 
 
         #endregion
