@@ -34,19 +34,34 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .IsUnicode(false)
                 .IsRequired();
 
+            builder.Property(c => c.LastName)
+                .HasColumnName(nameof(User.LastName))
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .IsRequired();
+
+            builder.Property(c => c.BornDate)
+                .IsRequired();
+
+            builder.Property(c => c.Email)
+                .HasColumnName(nameof(User.Email))
+                .HasMaxLength(254)
+                .IsUnicode(false)
+                .IsRequired();
+
             #endregion
 
             #region FKs
 
             builder.HasOne(o => o.CreatedAuthor)
                 .WithMany(d => d.CreatedUsers)
-                .HasForeignKey(fk => fk.Id)
+                .HasForeignKey(fk => fk.CreatedBy)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName($"FK_{nameof(User)}_CreatedAuthor");
 
             builder.HasOne(o => o.ChangedAuthor)
                 .WithMany(d => d.ChangedUsers)
-                .HasForeignKey(fk => fk.Id)
+                .HasForeignKey(fk => fk.ChangedBy)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName($"FK_{nameof(User)}_ChangedAuthor");
 

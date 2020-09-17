@@ -47,13 +47,13 @@ namespace RSoft.Auth.Infra.Data.Configurations
 
             builder.HasOne(o => o.CreatedAuthor)
                 .WithMany(d => d.CreatedRoles)
-                .HasForeignKey(fk => fk.Id)
+                .HasForeignKey(fk => fk.CreatedBy)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName($"FK_{nameof(Role)}_CreatedAuthor");
 
             builder.HasOne(o => o.ChangedAuthor)
                 .WithMany(d => d.ChangedRoles)
-                .HasForeignKey(fk => fk.Id)
+                .HasForeignKey(fk => fk.ChangedBy)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName($"FK_{nameof(Role)}_ChangedAuthor");
 

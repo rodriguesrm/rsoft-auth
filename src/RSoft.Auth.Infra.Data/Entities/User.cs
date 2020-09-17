@@ -83,6 +83,11 @@ namespace RSoft.Auth.Infra.Data.Entities
         #region Navigation Lazy
 
         /// <summary>
+        /// User credential data
+        /// </summary>
+        public virtual UserCredential Credential { get; set; }
+
+        /// <summary>
         /// Created author data
         /// </summary>
         public virtual User CreatedAuthor { get; set; }
@@ -91,11 +96,6 @@ namespace RSoft.Auth.Infra.Data.Entities
         /// Changed author data
         /// </summary>
         public virtual User ChangedAuthor { get; set; }
-
-        /// <summary>
-        /// User credential data
-        /// </summary>
-        public virtual UserCredential Credential { get; set; }
 
         /// <summary>
         /// User roles list
