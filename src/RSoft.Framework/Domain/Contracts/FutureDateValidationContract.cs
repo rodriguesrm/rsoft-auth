@@ -23,7 +23,7 @@ namespace RSoft.Framework.Domain.Contracts
             //TODO: Globalization
             Contract
                 .IsNotNull(date, field, message)
-                .IsGreaterOrEqualsThan(date.Value, DateTime.Now, field, $"The '{field}' must be greater than the current date")
+                .IsGreaterOrEqualsThan(date.Value, DateTime.UtcNow, field, $"The '{field}' must be greater than the current date")
             ;
 
         }

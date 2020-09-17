@@ -1,4 +1,5 @@
 ﻿using RSoft.Auth.Domain.Entities;
+using RSoft.Framework.Domain.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,10 +40,9 @@ namespace RSoft.Auth.Application.Model.Extensions
             ICollection<Scope> scopes = dto.Scopes?.Select(s => s.Map()).ToList();
             return new User()
             {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
+                Name = new Name( dto.FirstName, dto.LastName),
                 BornDate = dto.BornDate,
-                Email = dto.Email,
+                Email = new Email(dto.Email),
                 IsActive = dto.IsActive,
                 Roles = roles,
                 Scopes = scopes
@@ -67,10 +67,9 @@ namespace RSoft.Auth.Application.Model.Extensions
         {
             if (dto != null)
             {
-                entity.FirstName = dto.FirstName;
-                entity.LastName = dto.LastName;
+                entity.Name = new Name(dto.FirstName, dto.LastName);
                 entity.BornDate = dto.BornDate;
-                entity.Email = dto.Email;
+                entity.Email = new Email(dto.Email);
                 entity.IsActive = dto.IsActive;
                 if (loadChildren)
                     LoadChildren(entity, dto);
@@ -109,10 +108,10 @@ namespace RSoft.Auth.Application.Model.Extensions
                 dto.AddNotifications(entity.Notifications);
             }
 
-            dto.FirstName = entity.FirstName;
-            dto.LastName = entity.LastName;
+            dto.FirstName = entity.Name.FirstName;
+            dto.LastName = entity.Name.LastName;
             dto.BornDate = entity.BornDate;
-            dto.Email = entity.Email;
+            dto.Email = entity.Email.Address;
             dto.IsActive = entity.IsActive;
 
             if (loadChildren)

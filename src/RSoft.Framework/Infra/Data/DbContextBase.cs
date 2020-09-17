@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
-using RSoft.Framework.Cross;
 using RSoft.Framework.Cross.Entities;
 using System;
 using System.Collections.Generic;
@@ -28,11 +27,6 @@ namespace RSoft.Framework.Infra.Data
         private const string createdBy = nameof(IAudit<TKey>.CreatedBy);
         private const string changedBy = nameof(IAudit<TKey>.ChangedBy);
 
-        /// <summary>
-        ///  Authenticated user in the application
-        /// </summary>
-        protected IHttpLoggedUser<TKey> _user;
-
         #endregion
 
         #region Constructors
@@ -42,17 +36,7 @@ namespace RSoft.Framework.Infra.Data
         /// Create a new dbcontext instance
         /// </summary>
         /// <param name="options">Context options settings</param>
-        public DbContextBase(DbContextOptions options) : this(options, null) { }
-
-        /// <summary>
-        /// Create a new dbcontext instance
-        /// </summary>
-        /// <param name="options">Context options settings</param>
-        /// <param name="user">Authenticated user information</param>
-        public DbContextBase(DbContextOptions options, IHttpLoggedUser<TKey> user) : base(options)
-        {
-            _user = user;
-        }
+        public DbContextBase(DbContextOptions options) : base(options) { }
 
         #endregion
 
@@ -252,7 +236,7 @@ namespace RSoft.Framework.Infra.Data
         {
 
             List<EntityEntry> entities = ChangeTracker.Entries().ToList();
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.UtcNow;
 
             // Logical exclusion
             foreach (EntityEntry e in entities.Where(entry => entry.Entity is ISoftDeletion))
@@ -278,14 +262,11 @@ namespace RSoft.Framework.Infra.Data
                 {
                     case EntityState.Added:
                         e.Property(createdOn).CurrentValue = now;
-                        e.Property(createdBy).CurrentValue = _user?.Id;
                         e.Property(changedOn).CurrentValue = null;
-                        e.Property(changedBy).CurrentValue = null;
                         break;
 
                     case EntityState.Modified:
                         e.Property(changedOn).CurrentValue = now;
-                        e.Property(changedBy).CurrentValue = _user?.Id;
                         e.State = EntityState.Modified;
                         break;
                 }

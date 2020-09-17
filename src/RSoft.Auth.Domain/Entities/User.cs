@@ -1,6 +1,7 @@
 ﻿using RSoft.Framework.Cross.Entities;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
+using RSoft.Framework.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace RSoft.Auth.Domain.Entities
     /// <summary>
     /// User of the eco-system applications
     /// </summary>
-    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditAuthor<Guid>, IActive, IFullName
+    public class User : EntityIdAuditBase<Guid, User>, IEntity, IAuditAuthor<Guid>, IActive
     {
 
         #region Constructors
@@ -55,14 +56,9 @@ namespace RSoft.Auth.Domain.Entities
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// First name
+        /// User full name
         /// </summary>
-        public string FirstName { get; set; }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName { get; set; }
+        public Name Name { get; set; }
 
         /// <summary>
         /// User's date of birth
@@ -72,7 +68,7 @@ namespace RSoft.Auth.Domain.Entities
         /// <summary>
         /// User e-mail
         /// </summary>
-        public string Email { get; set; }
+        public Email Email { get; set; }
 
         #endregion
 
@@ -117,11 +113,11 @@ namespace RSoft.Auth.Domain.Entities
             //TODO: Globalization
             AddNotifications(CreatedAuthor?.Notifications);
             AddNotifications(ChangedAuthor?.Notifications);
-            AddNotifications(new FullNameValidationContract(this).Contract.Notifications);
-            AddNotifications(new EmailValidationContract(Email).Contract.Notifications);
+            AddNotifications(Name.Notifications);
+            AddNotifications(Email.Notifications);
             AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);
 
-            //TODO: Verificar na implementação das camadas superiores se a regra será essa ou vai gerar credencial automáticamente
+            //TODO: Verificar na implementação das camadas superiores se a regra será essa ou vai gerar credencial automaticamente
             if (Credential == null)
             {
                 AddNotification(nameof(Credential), "Credential is required");
@@ -162,14 +158,6 @@ namespace RSoft.Auth.Domain.Entities
                     });
             }
 
-        }
-
-        /// <summary>
-        /// Get full name
-        /// </summary>
-        public string GetFullName()
-        {
-            return $"{FirstName ?? string.Empty} {LastName ?? string.Empty}";
         }
 
         #endregion

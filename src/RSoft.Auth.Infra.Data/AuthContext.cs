@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RSoft.Auth.Infra.Data.Configurations;
 using RSoft.Auth.Infra.Data.Entities;
-using RSoft.Framework.Cross;
 using RSoft.Framework.Infra.Data;
 using System;
 
@@ -20,14 +19,7 @@ namespace RSoft.Auth.Infra.Data
         /// Create a new dbcontext instance
         /// </summary>
         /// <param name="options">Context options settings</param>
-        public AuthContext(DbContextOptions<AuthContext> options) : this(options, null) { }
-
-        /// <summary>
-        /// Create a new dbcontext instance
-        /// </summary>
-        /// <param name="options">Context options settings</param>
-        /// <param name="user">Authenticated user information</param>
-        public AuthContext(DbContextOptions<AuthContext> options, IHttpLoggedUser<Guid> user) : base(options, user) { }
+        public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }
 
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using dmn = RSoft.Auth.Domain.Entities;
+﻿using RSoft.Framework.Domain.ValueObjects;
+using dmn = RSoft.Auth.Domain.Entities;
 using tbl = RSoft.Auth.Infra.Data.Entities;
 
 namespace RSoft.Auth.Infra.Data.Extensions
@@ -27,10 +28,9 @@ namespace RSoft.Auth.Infra.Data.Extensions
 
             dmn.User result = new dmn.User(table.Id)
             {
-                FirstName = table.FirstName,
-                LastName = table.LastName,
+                Name = new Name(table.FirstName, table.LastName),
                 BornDate = table.BornDate,
-                Email = table.Email,
+                Email = new Email(table.Email),
                 CreatedOn = table.CreatedOn,
                 ChangedOn = table.ChangedOn
             };
@@ -63,10 +63,10 @@ namespace RSoft.Auth.Infra.Data.Extensions
 
             tbl.User result = new tbl.User(entity.Id)
             {
-                FirstName = entity.FirstName,
-                LastName = entity.LastName,
+                FirstName = entity.Name.FirstName,
+                LastName = entity.Name.LastName,
                 BornDate = entity.BornDate,
-                Email = entity.Email,
+                Email = entity.Email.Address,
                 CreatedOn = entity.CreatedOn,
                 CreatedBy = entity.CreatedAuthor.Id
             };
@@ -83,10 +83,10 @@ namespace RSoft.Auth.Infra.Data.Extensions
         public static tbl.User Map(this dmn.User entity, tbl.User table)
         {
 
-            table.FirstName = entity.FirstName;
-            table.LastName = entity.LastName;
+            table.FirstName = entity.Name.FirstName;
+            table.LastName = entity.Name.LastName;
             table.BornDate = entity.BornDate;
-            table.Email = entity.Email;
+            table.Email = entity.Email.Address;
             table.ChangedOn = entity.ChangedOn;
             table.ChangedBy = entity.ChangedAuthor.Id;
 

@@ -24,7 +24,7 @@ namespace RSoft.Framework.Domain.Contracts
             //TODO: Globalization
             Contract
                 .IsNotNull(date, field, message)
-                .IsLowerOrEqualsThan((date == null ? DateTime.Now : date.Value), DateTime.Now, field, $"The '{field}' must be less than the current date")
+                .IsLowerOrEqualsThan((date == null ? DateTime.UtcNow : date.Value), DateTime.UtcNow, field, $"The '{field}' must be less than the current date")
             ;
 
         }
