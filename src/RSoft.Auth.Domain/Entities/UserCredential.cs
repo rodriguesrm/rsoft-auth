@@ -1,10 +1,9 @@
 ﻿using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
-using System;
 
 namespace RSoft.Auth.Domain.Entities
 {
-    
+
     /// <summary>
     /// User credential data entity
     /// </summary>
@@ -12,6 +11,11 @@ namespace RSoft.Auth.Domain.Entities
     {
 
         #region Properties
+
+        /// <summary>
+        /// User name/Login (for persons)
+        /// </summary>
+        public string Username { get; set; }
 
         /// <summary>
         /// User acess key (for applications)
@@ -39,6 +43,7 @@ namespace RSoft.Auth.Domain.Entities
         ///<inheritdoc/>
         public override void Validate()
         {
+            AddNotifications(new SimpleStringValidationContract(Username, nameof(Username), false, 2, 254).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(UserKey, nameof(UserKey), false, 32, 32).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Password, nameof(Password), true, 32, 32).Contract.Notifications);
         }

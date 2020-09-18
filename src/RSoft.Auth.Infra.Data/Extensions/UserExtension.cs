@@ -42,6 +42,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 {
                     result.Credential = new dmn.UserCredential()
                     {
+                        Username = table.Credential.Username,
                         UserKey = table.Credential.UserKey,
                         Password = table.Credential.Password
                     };

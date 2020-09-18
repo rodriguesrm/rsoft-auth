@@ -18,6 +18,11 @@ namespace RSoft.Auth.Infra.Data.Entities
         public Guid? UserId { get; set; }
 
         /// <summary>
+        /// User name/Login (for persons)
+        /// </summary>
+        public string Username { get; set; }
+
+        /// <summary>
         /// User acess key (for applications)
         /// </summary>
         public string UserKey { get; set; }
