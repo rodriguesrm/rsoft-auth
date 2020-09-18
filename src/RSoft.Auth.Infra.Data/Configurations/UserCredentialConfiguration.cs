@@ -36,16 +36,12 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .IsRequired();
 
             builder.Property(c => c.UserKey)
-                .HasColumnName(nameof(UserCredential.UserKey))
-                .HasMaxLength(32)
-                .IsUnicode(false)
-                .IsRequired();
+                .HasColumnName(nameof(UserCredential.UserKey));
 
             builder.Property(c => c.Password)
                 .HasColumnName(nameof(UserCredential.Password))
                 .HasMaxLength(32)
-                .IsUnicode(false)
-                .IsRequired();
+                .IsUnicode(false);
 
             #endregion
 

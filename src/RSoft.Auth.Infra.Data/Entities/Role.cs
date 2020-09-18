@@ -63,6 +63,11 @@ namespace RSoft.Auth.Infra.Data.Entities
         /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Scope id value
+        /// </summary>
+        public Guid ScopeId { get; set; }
+
         #endregion
 
         #region Navigation Lazy

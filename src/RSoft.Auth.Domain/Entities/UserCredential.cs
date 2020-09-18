@@ -1,5 +1,6 @@
 ﻿using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
+using System;
 
 namespace RSoft.Auth.Domain.Entities
 {
@@ -20,7 +21,7 @@ namespace RSoft.Auth.Domain.Entities
         /// <summary>
         /// User acess key (for applications)
         /// </summary>
-        public string UserKey { get; set; }
+        public Guid? UserKey { get; set; }
 
         /// <summary>
         /// User password login
@@ -43,9 +44,15 @@ namespace RSoft.Auth.Domain.Entities
         ///<inheritdoc/>
         public override void Validate()
         {
+
+            if (!UserKey.HasValue && string.IsNullOrWhiteSpace(Password))
+                AddNotification("Key/Password", "A key or password must be provided");
+            if (UserKey.HasValue && !string.IsNullOrWhiteSpace(Password))
+                AddNotification("Key/Password", "Only the key or password must be informed, never both");
+
             AddNotifications(new SimpleStringValidationContract(Username, nameof(Username), false, 2, 254).Contract.Notifications);
-            AddNotifications(new SimpleStringValidationContract(UserKey, nameof(UserKey), false, 32, 32).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Password, nameof(Password), true, 32, 32).Contract.Notifications);
+
         }
 
         #endregion

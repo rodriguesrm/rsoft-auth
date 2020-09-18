@@ -25,7 +25,7 @@ namespace RSoft.Auth.Infra.Data.Entities
         /// <summary>
         /// User acess key (for applications)
         /// </summary>
-        public string UserKey { get; set; }
+        public Guid? UserKey { get; set; }
 
         /// <summary>
         /// User password login
