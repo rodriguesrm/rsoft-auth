@@ -140,7 +140,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(User.BornDate),
                     nameof(User.Email)
                 },
-                new object[] { userId, now, userId, null, null, 1, 0, "SERVICES", "RSOFT", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "no-reply@server.com" }
+                new object[] { serviceUserId, now, userId, null, null, 1, 0, "SERVICES", "RSOFT", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "no-reply@server.com" }
             );
 
             migrationBuilder.InsertData
