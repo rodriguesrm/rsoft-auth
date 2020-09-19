@@ -9,7 +9,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
     public abstract class InitialSeed : Migration
     {
 
-        #region Objetos/Variáveis Locais
+        #region Local objects/variables
 
         private const string PWD_SUFFIX = "RSft-RL-ATPD";
 

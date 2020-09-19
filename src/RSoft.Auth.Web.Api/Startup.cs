@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RSoft.Auth.Cross.IoC;
+using RSoft.Auth.Infra.Data.Extensions;
 using RSoft.Logs.Extensions;
 using RSoft.Logs.Middleware;
 
@@ -11,6 +12,7 @@ namespace RSoft.Auth.Web.Api
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -54,6 +56,9 @@ namespace RSoft.Auth.Web.Api
             {
                 endpoints.MapControllers();
             });
+
+            app.MigrateDatabase();
+
         }
     }
 }
