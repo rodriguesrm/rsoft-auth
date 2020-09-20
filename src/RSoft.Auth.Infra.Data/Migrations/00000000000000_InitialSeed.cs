@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Configuration;
 using RSoft.Auth.Infra.Data.Entities;
 using RSoft.Helpers.Security;
 
@@ -11,7 +12,32 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
         #region Local objects/variables
 
-        private const string PWD_SUFFIX = "LCxeuVg8bqXCaKxjGNmR7NWAmFH6GztX";
+        private readonly string _passwordSufix;
+        private readonly bool _isProd;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Create a new InitialSeed instance
+        /// </summary>
+        public InitialSeed() : base()
+        {
+
+            string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            _isProd = env.ToLower() == "production";
+
+            IConfigurationBuilder builder =
+                new ConfigurationBuilder()
+                    .SetBasePath(AppContext.BaseDirectory)
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables();
+
+            IConfiguration _configuration = builder.Build();
+            _passwordSufix = _configuration["Secutiry:Secret"];
+        }
 
         #endregion
 
@@ -34,7 +60,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
             Guid roleServiceId = new Guid("5d41c69f-276a-4b27-ab88-ebade519504d");
 
             Guid userId = new Guid("745991cc-c21f-4512-ba8f-9533435b64ab");
-            byte[] pwdBuffer = MD5.HashMD5($"master@soft|{PWD_SUFFIX}");
+            byte[] pwdBuffer = MD5.HashMD5($"master@soft|{_passwordSufix}");
             string password = MD5.ByteArrayToString(pwdBuffer);
 
             Guid serviceUserId = new Guid("03f66c4a-9f5a-45c3-afa3-de6801f5592e");
@@ -151,9 +177,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(UserCredential.UserId),
                     nameof(UserCredential.Username),
                     nameof(UserCredential.UserKey),
-                    nameof(UserCredential.Password)
+                    nameof(UserCredential.Password),
+                    nameof(UserCredential.ChangeCredentials)
                 },
-                new object[] { userId, "master", null, password }
+                new object[] { userId, "master", null, password, _isProd }
             );
 
             migrationBuilder.InsertData
@@ -164,9 +191,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(UserCredential.UserId),
                     nameof(UserCredential.Username),
                     nameof(UserCredential.UserKey),
-                    nameof(UserCredential.Password)
+                    nameof(UserCredential.Password),
+                    nameof(UserCredential.ChangeCredentials)
                 },
-                new object[] { serviceUserId, "services", userKey, null }
+                new object[] { serviceUserId, "services", userKey, null, _isProd }
             );
 
             // User-Scopes

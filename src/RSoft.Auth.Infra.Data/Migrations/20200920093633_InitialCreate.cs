@@ -77,7 +77,8 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     UserId = table.Column<Guid>(nullable: false),
                     Username = table.Column<string>(unicode: false, maxLength: 254, nullable: false),
                     UserKey = table.Column<Guid>(nullable: true),
-                    Password = table.Column<string>(unicode: false, maxLength: 32, nullable: true)
+                    Password = table.Column<string>(unicode: false, maxLength: 32, nullable: true),
+                    ChangeCredentials = table.Column<ulong>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

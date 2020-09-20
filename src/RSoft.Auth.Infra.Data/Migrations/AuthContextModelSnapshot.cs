@@ -224,6 +224,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.Property<Guid?>("UserId")
                         .HasColumnType("char(36)");
 
+                    b.Property<ulong>("ChangeCredentials")
+                        .HasColumnName("ChangeCredentials")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Password")
                         .HasColumnName("Password")
                         .HasColumnType("varchar(32) CHARACTER SET utf8mb4")

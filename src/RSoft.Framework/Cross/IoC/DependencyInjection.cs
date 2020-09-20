@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RSoft.Framework.Web.Options;
@@ -71,6 +72,11 @@ namespace RSoft.Framework.Cross.IoC
             services.Configure<JwtOptions>(options => configuration.GetSection("Jwt").Bind(options));
 
             services.AddScoped<IHttpLoggedUser<Guid>, HttpLoggedUser>();
+
+            services.Configure<ApiBehaviorOptions>(opt =>
+            {
+                opt.SuppressModelStateInvalidFilter = true;
+            });
 
             #endregion
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RSoft.Framework.Application.Dto;
-using RSoft.Framework.Web.Model;
+using RSoft.Framework.Web.Model.Response;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;

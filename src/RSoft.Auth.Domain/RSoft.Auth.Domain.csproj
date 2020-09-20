@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RSoft.Auth.Cross.Common\RSoft.Auth.Cross.Common.csproj" />
     <ProjectReference Include="..\RSoft.Framework\RSoft.Framework.csproj" />
   </ItemGroup>
 

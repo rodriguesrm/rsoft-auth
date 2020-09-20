@@ -44,7 +44,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     {
                         Username = table.Credential.Username,
                         UserKey = table.Credential.UserKey,
-                        Password = table.Credential.Password
+                        Password = table.Credential.Password,
+                        ChangeCredentials = table.Credential.ChangeCredentials
                     };
                 }
             }

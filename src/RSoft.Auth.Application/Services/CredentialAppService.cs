@@ -1,7 +1,10 @@
 ﻿using RSoft.Auth.Application.Model;
+using RSoft.Auth.Application.Model.Extensions;
+using RSoft.Auth.Domain.Entities;
 using RSoft.Auth.Domain.Services;
 using RSoft.Framework.Application.Model;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,42 +36,65 @@ namespace RSoft.Auth.Application.Services
         #region Public methods
 
         ///<inheritdoc/>
-        public Task<AuthenticateResult<UserDto>> AuthenticateAsync(string login, string password, CancellationToken cancellationToken = default)
+        public async Task<AuthenticateResult<UserDto>> AuthenticateAsync(string login, string password, CancellationToken cancellationToken = default)
+        {
+
+            bool success = false;
+            UserDto userDto = null;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            //TODO: RR - Parei AQUI
+            User user = await _userDomain.GetByLoginAsync(login, password, cancellationToken);
+            if (user != null)
+            {
+                if (user.IsActive)
+                {
+                    success = true;
+                    userDto = user.Map();
+                }
+                else
+                {
+                    errors.Add("Authenticate", "Inactive or blocked user");
+                }
+            }
+            else
+            {
+                errors.Add("Authenticate", "Invalid username and/or password!");
+            }
+
+            return new AuthenticateResult<UserDto>(success, userDto, errors);
+        }
+
+        ///<inheritdoc/>
+        public async Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccewss, CancellationToken cancellationToken = default)
         {
             //TODO: NotImplementedException
             throw new NotImplementedException();
         }
 
         ///<inheritdoc/>
-        public Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccewss, CancellationToken cancellationToken = default)
+        public async Task<PasswordProcessResult> FirstAccessAsync(string login, CancellationToken cancellationToken = default)
         {
             //TODO: NotImplementedException
             throw new NotImplementedException();
         }
 
         ///<inheritdoc/>
-        public Task<PasswordProcessResult> FirstAccessAsync(string login, CancellationToken cancellationToken = default)
+        public async Task<PasswordProcessResult> ResetPasswordAsync(string login, CancellationToken cancellationToken = default)
         {
             //TODO: NotImplementedException
             throw new NotImplementedException();
         }
 
         ///<inheritdoc/>
-        public Task<PasswordProcessResult> ResetPasswordAsync(string login, CancellationToken cancellationToken = default)
+        public async Task<SimpleOperationResult> ChangePasswordAsync(string authenticatedLogin, string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default)
         {
             //TODO: NotImplementedException
             throw new NotImplementedException();
         }
 
         ///<inheritdoc/>
-        public Task<SimpleOperationResult> ChangePasswordAsync(string authenticatedLogin, string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
-
-        ///<inheritdoc/>
-        public Task<SimpleOperationResult> IsRegistered(string login, string email, CancellationToken cancellationToken)
+        public async Task<SimpleOperationResult> IsRegistered(string login, string email, CancellationToken cancellationToken)
         {
             //TODO: NotImplementedException
             throw new NotImplementedException();

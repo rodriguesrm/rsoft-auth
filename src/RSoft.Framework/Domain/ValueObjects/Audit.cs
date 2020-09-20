@@ -58,7 +58,8 @@ namespace RSoft.Framework.Domain.ValueObjects
             if (CreatedAuthor == null)
                 AddNotification(nameof(CreatedAuthor), $"{nameof(CreatedAuthor)} is required");
             AddNotifications(CreatedAuthor?.Notifications);
-            AddNotifications(ChangedAuthor?.Notifications);
+            if (ChangedAuthor != null)
+                AddNotifications(ChangedAuthor.Notifications);
         }
 
         #endregion

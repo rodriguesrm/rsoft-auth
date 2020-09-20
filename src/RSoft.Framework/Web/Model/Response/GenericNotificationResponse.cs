@@ -1,4 +1,4 @@
-﻿namespace RSoft.Framework.Web.Model
+﻿namespace RSoft.Framework.Web.Model.Response
 {
 
     /// <summary>

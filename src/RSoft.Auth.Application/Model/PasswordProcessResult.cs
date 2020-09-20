@@ -1,7 +1,8 @@
-﻿using System;
+﻿using RSoft.Framework.Application.Model;
+using System;
 using System.Collections.Generic;
 
-namespace RSoft.Framework.Application.Model
+namespace RSoft.Auth.Application.Model
 {
 
     /// <summary>
@@ -20,7 +21,7 @@ namespace RSoft.Framework.Application.Model
         /// <param name="expiresIn">Token expiration date/time</param>
         /// <param name="errors">Errors list occurred in the operation</param>
         /// <param name="exception">Exception thrown</param>
-        public PasswordProcessResult(bool success, Guid? token, DateTime? expiresIn, IDictionary<string, string> errors, System.Exception exception) : base(success, errors)
+        public PasswordProcessResult(bool success, Guid? token, DateTime? expiresIn, IDictionary<string, string> errors, Exception exception) : base(success, errors)
         {
             Token = token;
             ExpirerIn = expiresIn;
@@ -49,7 +50,7 @@ namespace RSoft.Framework.Application.Model
         /// <summary>
         /// Exception thrown
         /// </summary>
-        public System.Exception Exception { get; set; }
+        public Exception Exception { get; set; }
 
         #endregion
 

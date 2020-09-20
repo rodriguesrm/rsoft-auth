@@ -1,6 +1,6 @@
 ﻿using RSoft.Framework.Application.Model;
 
-namespace RSoft.Auth.Application.Model
+namespace RSoft.Framework.Application.Dto
 {
 
     /// <summary>

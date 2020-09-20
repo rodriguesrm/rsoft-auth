@@ -7,6 +7,7 @@ using RSoft.Auth.Domain.Repositories;
 using RSoft.Auth.Domain.Services;
 using RSoft.Auth.Application.Services;
 using RSoft.Framework.Infra.Data;
+using RSoft.Auth.Cross.Common.Options;
 
 namespace RSoft.Auth.Cross.IoC
 {
@@ -29,6 +30,13 @@ namespace RSoft.Auth.Cross.IoC
             // Add Framework services
             services.AddRSoftRegister<AuthContext>(configuration, true);
 
+            #region Options
+
+            services.Configure<SecurityOptions>(options => configuration.GetSection("Security").Bind(options));
+
+
+            #endregion
+
             #region Infra
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -49,6 +57,7 @@ namespace RSoft.Auth.Cross.IoC
             #region Application
 
             services.AddScoped<IRoleAppService, RoleAppService>();
+            services.AddScoped<ICredentialAppService, CredentialAppService>();
 
             #endregion
 

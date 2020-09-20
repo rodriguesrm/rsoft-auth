@@ -51,6 +51,9 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// <param name="addAuthors">Indicate if add authors data in dto</param>
         public static ScopeDto Map(this Scope entity, bool addAuthors)
         {
+
+            if (entity == null)
+                return null;
             
             ScopeDto dto = new ScopeDto();
 

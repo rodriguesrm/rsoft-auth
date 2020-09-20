@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
+using RSoft.Framework.Web.Filters;
 using RSoft.Logs.Extensions;
 using RSoft.Logs.Middleware;
 
@@ -24,7 +25,9 @@ namespace RSoft.Auth.Web.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services
+                .AddControllers(opt => GlobalFilters.Configure(opt))
+                .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
             services.AddHttpContextAccessor();
             services.AddCors();
             services.AddResponseCaching();

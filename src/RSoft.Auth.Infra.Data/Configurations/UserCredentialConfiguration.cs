@@ -43,6 +43,11 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
+            builder.Property(c => c.ChangeCredentials)
+                .HasColumnName(nameof(UserCredential.ChangeCredentials))
+                .HasColumnType("bit")
+                .IsRequired();
+
             #endregion
 
             #region FKs

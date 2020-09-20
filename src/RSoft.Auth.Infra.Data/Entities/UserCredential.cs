@@ -32,6 +32,11 @@ namespace RSoft.Auth.Infra.Data.Entities
         /// </summary>
         public string Password { get; set; }
 
+        /// <summary>
+        /// Indicates that the user must change the password/access-key at the next login. Will be unable to use the system until
+        /// </summary>
+        public bool ChangeCredentials { get; set; }
+
         #endregion
 
         #region Navigation/Lazy

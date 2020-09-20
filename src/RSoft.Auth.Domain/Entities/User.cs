@@ -112,7 +112,8 @@ namespace RSoft.Auth.Domain.Entities
 
             //TODO: Globalization
             AddNotifications(CreatedAuthor?.Notifications);
-            AddNotifications(ChangedAuthor?.Notifications);
+            if (ChangedAuthor != null)
+                AddNotifications(ChangedAuthor.Notifications);
             AddNotifications(Name.Notifications);
             AddNotifications(Email.Notifications);
             AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);

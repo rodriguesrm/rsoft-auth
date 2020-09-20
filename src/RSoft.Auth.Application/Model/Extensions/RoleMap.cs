@@ -53,7 +53,10 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// <param name="addAuthors">Indicate if add authors data in dto</param>
         public static RoleDto Map(this Role entity, bool addAuthors)
         {
-            
+
+            if (entity == null)
+                return null;
+
             RoleDto dto = new RoleDto();
 
             if (entity.Valid)

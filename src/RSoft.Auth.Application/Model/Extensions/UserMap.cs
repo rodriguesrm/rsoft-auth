@@ -92,6 +92,9 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// <param name="loadChildren">Indicate if load children data in dto</param>
         public static UserDto Map(this User entity, bool addAuthors, bool loadChildren)
         {
+
+            if (entity == null)
+                return null;
             
             UserDto dto = new UserDto();
 

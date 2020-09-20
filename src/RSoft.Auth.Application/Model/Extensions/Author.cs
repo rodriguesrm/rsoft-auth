@@ -1,4 +1,5 @@
-﻿using RSoft.Framework.Application.Model;
+﻿using RSoft.Framework.Application.Dto;
+using RSoft.Framework.Application.Model;
 using RSoft.Framework.Domain.Entities;
 
 namespace RSoft.Auth.Application.Model.Extensions

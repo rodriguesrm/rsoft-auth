@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RSoft.Framework.Web.Model;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using RSoft.Framework.Web.Model.Response;
 using RSoft.Logs.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -49,19 +51,38 @@ namespace RSoft.Framework.Web.Api
         /// <param name="callback">Callback function operation</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected async Task<IActionResult> RunActionAsync(Task<IActionResult> callback, CancellationToken cancellationToken = default)
-            => await RunActionAsync(callback, false, cancellationToken);
+            => await RunActionAsync(callback, false, false, cancellationToken);
 
         /// <summary>
         /// Performs the base operation and calls the callback function
         /// </summary>
         /// <param name="callback">Callback function operation</param>
+        /// /// <param name="validateRequest">Indicates whether a request validation should be performed</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        protected async Task<IActionResult> RunActionAsync(Task<IActionResult> callback, bool validateRequest, CancellationToken cancellationToken = default)
+            => await RunActionAsync(callback, validateRequest, false, cancellationToken);
+
+        /// <summary>
+        /// Performs the base operation and calls the callback function
+        /// </summary>
+        /// <param name="callback">Callback function operation</param>
+        /// <param name="validateRequest">Indicates whether a request validation should be performed</param>
         /// <param name="catchException">Indicates whether to catch exceptions</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> RunActionAsync(Task<IActionResult> callback, bool catchException, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> RunActionAsync(Task<IActionResult> callback, bool validateRequest, bool catchException, CancellationToken cancellationToken = default)
         {
 
             try
             {
+
+                if (validateRequest)
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        IEnumerable<GenericNotificationResponse> msg = GetModelErrors(ModelState);
+                        return BadRequest(msg);
+                    }
+                }
 
                 return await Task.Run(() =>
                 {
@@ -79,6 +100,28 @@ namespace RSoft.Framework.Web.Api
                     throw;
 
             }
+
+        }
+
+        /// <summary>
+        /// Obtain requisition validation messages from model-request validation
+        /// </summary>
+        /// <param name="modelState">Dicionário de model-state</param>
+        protected IEnumerable<GenericNotificationResponse> GetModelErrors(ModelStateDictionary modelState)
+        {
+
+            IList<GenericNotificationResponse> result = new List<GenericNotificationResponse>();
+
+            foreach (var item in modelState)
+            {
+
+                string prop = string.IsNullOrWhiteSpace(item.Key) ? "body" : item.Key;
+                string errors = string.Join(" | ", item.Value.Errors.ToList().Select(x => x.ErrorMessage).ToList()).Trim();
+                if (!string.IsNullOrWhiteSpace(errors))
+                    result.Add(new GenericNotificationResponse(prop, errors));
+            }
+
+            return result;
 
         }
 

@@ -93,7 +93,8 @@ namespace RSoft.Auth.Domain.Entities
         {
             //TODO: Globalization
             AddNotifications(CreatedAuthor?.Notifications);
-            AddNotifications(ChangedAuthor?.Notifications);
+            if (ChangedAuthor != null)
+                AddNotifications(ChangedAuthor.Notifications);
             AddNotifications(new SimpleStringValidationContract(Name, nameof(Name), true, 3, 50).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Description, nameof(Description), true, 3, 150).Contract.Notifications);
         }
