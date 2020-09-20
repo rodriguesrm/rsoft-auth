@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RSoft.Framework.Application.Model;
+using RSoft.Framework.Application.Dto;
 using RSoft.Framework.Cross.Entities;
 
 namespace RSoft.Auth.Application.Model

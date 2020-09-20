@@ -1,5 +1,5 @@
 ﻿using System;
-using RSoft.Framework.Application.Model;
+using RSoft.Framework.Application.Dto;
 
 namespace RSoft.Auth.Application.Model
 {

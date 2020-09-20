@@ -1,4 +1,4 @@
-﻿namespace RSoft.Framework.Application.Model
+﻿namespace RSoft.Framework.Application.Dto
 {
 
     /// <summary>

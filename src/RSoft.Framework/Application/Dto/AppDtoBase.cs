@@ -1,8 +1,7 @@
 ﻿using FluentValidator;
-using RSoft.Framework.Application.Dto;
 using System.Linq;
 
-namespace RSoft.Framework.Application.Model
+namespace RSoft.Framework.Application.Dto
 {
 
     /// <summary>

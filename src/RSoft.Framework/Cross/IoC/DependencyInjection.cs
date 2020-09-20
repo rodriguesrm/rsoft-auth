@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RSoft.Framework.Web.Options;
+using System;
 
 namespace RSoft.Framework.Cross.IoC
 {
@@ -61,6 +63,14 @@ namespace RSoft.Framework.Cross.IoC
                 if (useLayzLoadingProxy)
                     opt.UseLazyLoadingProxies();
             });
+
+            #endregion
+
+            #region Services
+
+            services.Configure<JwtOptions>(options => configuration.GetSection("Jwt").Bind(options));
+
+            services.AddScoped<IHttpLoggedUser<Guid>, HttpLoggedUser>();
 
             #endregion
 

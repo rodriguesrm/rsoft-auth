@@ -11,7 +11,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
         #region Local objects/variables
 
-        private const string PWD_SUFFIX = "RSft-RL-ATPD";
+        private const string PWD_SUFFIX = "LCxeuVg8bqXCaKxjGNmR7NWAmFH6GztX";
 
         #endregion
 
