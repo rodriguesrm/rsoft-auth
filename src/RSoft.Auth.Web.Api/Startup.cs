@@ -27,6 +27,7 @@ namespace RSoft.Auth.Web.Api
 
             services
                 .AddControllers(opt => GlobalFilters.Configure(opt))
+                .AddJsonOptions(opt => opt.JsonSerializerOptions.IgnoreNullValues = true)
                 .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
             services.AddHttpContextAccessor();
             services.AddCors();

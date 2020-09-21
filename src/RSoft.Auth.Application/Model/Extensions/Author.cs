@@ -20,8 +20,10 @@ namespace RSoft.Auth.Application.Model.Extensions
             where TKey : struct
         {
 
-            AuditAuthor<TKey> createdBy = new AuditAuthor<TKey>(entity.CreatedOn, entity.CreatedAuthor.Id, entity.CreatedAuthor.Name);
+            AuditAuthor<TKey> createdBy = null;
             AuditAuthor<TKey> changedBy = null;
+            if (entity.CreatedAuthor != null)
+                createdBy = new AuditAuthor<TKey>(entity.CreatedOn, entity.CreatedAuthor.Id, entity.CreatedAuthor.Name);
             if (entity.ChangedAuthor != null)
                 changedBy = new AuditAuthor<TKey>(entity.ChangedOn.Value, entity.ChangedAuthor.Id.Value, entity.ChangedAuthor.Name);
             dto.CreatedBy = createdBy;

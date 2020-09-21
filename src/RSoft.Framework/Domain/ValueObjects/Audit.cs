@@ -57,9 +57,8 @@ namespace RSoft.Framework.Domain.ValueObjects
             //TODO: Globalization
             if (CreatedAuthor == null)
                 AddNotification(nameof(CreatedAuthor), $"{nameof(CreatedAuthor)} is required");
-            AddNotifications(CreatedAuthor?.Notifications);
-            if (ChangedAuthor != null)
-                AddNotifications(ChangedAuthor.Notifications);
+            if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);
+            if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
         }
 
         #endregion

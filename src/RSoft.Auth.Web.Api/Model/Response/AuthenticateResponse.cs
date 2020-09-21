@@ -18,13 +18,13 @@ namespace RSoft.Auth.Web.Api.Model.Response
         /// <param name="token">Generated token</param>
         /// <param name="expirationDate">Token expiration date/time</param>
         /// <param name="roles">Roles list</param>
-        /// <param name="userDetail">User details</param>
-        public AuthenticateResponse(string token, DateTime? expirationDate, IEnumerable<string> roles, UserResponse userDetail)
+        /// <param name="user">User details</param>
+        public AuthenticateResponse(string token, DateTime? expirationDate, IEnumerable<string> roles, UserResponse user)
         {
             Token = token;
             ExpirationDate = expirationDate;
             Roles = roles;
-            UserDetail = userDetail;
+            User = user;
         }
 
         #endregion
@@ -49,7 +49,7 @@ namespace RSoft.Auth.Web.Api.Model.Response
         /// <summary>
         /// User details
         /// </summary>
-        public UserResponse UserDetail { get; set; }
+        public UserResponse User { get; set; }
 
         #endregion
 

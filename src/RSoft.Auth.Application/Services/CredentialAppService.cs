@@ -43,18 +43,24 @@ namespace RSoft.Auth.Application.Services
             UserDto userDto = null;
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            //TODO: RR - Parei AQUI
             User user = await _userDomain.GetByLoginAsync(login, password, cancellationToken);
             if (user != null)
             {
-                if (user.IsActive)
+                if (user.Credential.ChangeCredentials)
                 {
-                    success = true;
-                    userDto = user.Map();
+                    errors.Add("Authenticate", "User must change password");
                 }
                 else
-                {
-                    errors.Add("Authenticate", "Inactive or blocked user");
+                { 
+                    if (user.IsActive)
+                    {
+                        success = true;
+                        userDto = user.Map();
+                    }
+                    else
+                    {
+                        errors.Add("Authenticate", "Inactive or blocked user");
+                    }
                 }
             }
             else

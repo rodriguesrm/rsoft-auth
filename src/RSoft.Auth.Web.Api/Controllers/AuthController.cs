@@ -61,8 +61,9 @@ namespace RSoft.Auth.Web.Api.Controllers
         /// Authenticate the user in the system and generate the access-key (token)
         /// </summary>
         /// <param name="request">Request data</param>
+        /// <param name="details">Indicates whether to return user details</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> AuthenticateAsync(AuthenticateRequest request, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> AuthenticateAsync(AuthenticateRequest request, bool details, CancellationToken cancellationToken = default)
         {
 
             AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(request.Login, request.Password, cancellationToken);
@@ -70,12 +71,18 @@ namespace RSoft.Auth.Web.Api.Controllers
             {
                 //TODO: GeneratedToken
                 string token = "TODO:GeneratedToken"; // GeraToken(authResult.Pessoa, out IList<string> perfis, out DateTime? validade);
-                UserResponse userDetail = new UserResponse(authResult.User.Id)
+                UserResponse userDetail = null;
+                IEnumerable<string> roles = null;
+                if (details)
                 {
-                    Name = authResult.User.Name,
-                    Email = authResult.User.Email
-                };
-                AuthenticateResponse result = new AuthenticateResponse(token, DateTime.Now.AddMinutes(10), new List<string> { "master" }, userDetail);
+                    userDetail = new UserResponse(authResult.User.Id)
+                    {
+                        Name = authResult.User.Name,
+                        Email = authResult.User.Email
+                    };
+                    roles = authResult.User.Roles.Select(r => r.Name);
+                }
+                AuthenticateResponse result = new AuthenticateResponse(token, DateTime.Now.AddMinutes(10), roles, userDetail);
                 return Ok(result);
             }
 
@@ -90,6 +97,7 @@ namespace RSoft.Auth.Web.Api.Controllers
         /// Authenticate user in the system-application / generate access token
         /// </summary>
         /// <param name="request">Request data information</param>
+        /// <param name="details">Indicates whether to return user details (default=false)</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Successfully authenticated</response>
         /// <response code="400">Invalid request, see details in response</response>
@@ -101,8 +109,8 @@ namespace RSoft.Auth.Web.Api.Controllers
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request, CancellationToken cancellationToken = default)
-            => await RunActionAsync(AuthenticateAsync(request, cancellationToken), cancellationToken);
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request, [FromQuery] bool detail, CancellationToken cancellationToken = default)
+            => await RunActionAsync(AuthenticateAsync(request, detail, cancellationToken), cancellationToken);
 
         #endregion
 
