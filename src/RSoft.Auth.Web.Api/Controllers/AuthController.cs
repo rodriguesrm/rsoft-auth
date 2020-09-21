@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -15,6 +17,7 @@ using RSoft.Auth.Web.Api.Model.Response;
 using RSoft.Framework.Application.Model;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Web.Api;
+using RSoft.Framework.Web.Api.Identity;
 using RSoft.Framework.Web.Model.Response;
 using RSoft.Framework.Web.Options;
 using RSoft.Logs.Model;
@@ -34,7 +37,7 @@ namespace RSoft.Auth.Web.Api.Controllers
 
         protected IHttpLoggedUser<Guid> _user;
         protected ICredentialAppService _appService;
-        protected readonly JwtOptions _jwtOptions;
+        protected readonly JwtTokenConfig _jwtTokenOptions;
 
         #endregion
 
@@ -45,17 +48,55 @@ namespace RSoft.Auth.Web.Api.Controllers
         (
             IHttpLoggedUser<Guid> user,
             ICredentialAppService appService,
-            IOptions<JwtOptions> jwtOptions
+            IOptions<JwtTokenConfig> jwtTokenOptions
         ) : base()
         {
             _user = user;
             _appService = appService;
-            _jwtOptions = jwtOptions?.Value;
+            _jwtTokenOptions = jwtTokenOptions?.Value;
         }
 
         #endregion
 
         #region Local methods
+
+        /// <summary>
+        /// Generate access token for authenticated user
+        /// </summary>
+        /// <param name="user">User data</param>
+        /// <param name="expiresIn">Date/date expiration token</param>
+        protected string GenerateToken(UserDto user, out DateTime? expiresIn)
+        {
+
+            IList<Claim> claimnsUsuario = new List<Claim>
+            {
+                new Claim(ClaimTypes.Hash, user.Id.ToString()),
+                new Claim(ClaimTypes.Surname, user.Email),
+                new Claim(ClaimTypes.Name, user.Name.GetFullName())
+            };
+
+            foreach (RoleDto p in user.Roles)
+            {
+                claimnsUsuario.Add(new Claim(ClaimTypes.Role, p.Name));
+            }
+
+            JwtSecurityToken jwt = new JwtSecurityToken
+            (
+                 issuer: _jwtTokenOptions.Issuer,
+                 audience: _jwtTokenOptions.Audience,
+                 claims: claimnsUsuario,
+                 notBefore: _jwtTokenOptions.NotBefore,
+                 expires: _jwtTokenOptions.Expiration,
+                 signingCredentials: _jwtTokenOptions.Credentials
+            );
+
+            string token = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            expiresIn = jwt.ValidTo;
+
+            return token;
+
+        }
 
         /// <summary>
         /// Authenticate the user in the system and generate the access-key (token)
@@ -69,8 +110,6 @@ namespace RSoft.Auth.Web.Api.Controllers
             AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(request.Login, request.Password, cancellationToken);
             if (authResult.Success)
             {
-                //TODO: GeneratedToken
-                string token = "TODO:GeneratedToken"; // GeraToken(authResult.Pessoa, out IList<string> perfis, out DateTime? validade);
                 UserResponse userDetail = null;
                 IEnumerable<string> roles = null;
                 if (details)
@@ -82,7 +121,10 @@ namespace RSoft.Auth.Web.Api.Controllers
                     };
                     roles = authResult.User.Roles.Select(r => r.Name);
                 }
-                AuthenticateResponse result = new AuthenticateResponse(token, DateTime.Now.AddMinutes(10), roles, userDetail);
+
+                string token = GenerateToken(authResult.User, out DateTime? expiresIn);
+
+                AuthenticateResponse result = new AuthenticateResponse(token, expiresIn, roles, userDetail);
                 return Ok(result);
             }
 
