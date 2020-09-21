@@ -44,8 +44,8 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="password">Password to convert</param>
         private string ConvertPassword(string password)
         {
-            MD5.HashMD5($"{password}|{_securityOptions.Secret}", out string senhaMD5);
-            return senhaMD5.ToLower();
+            MD5.HashMD5($"{password}|{_securityOptions.Secret}", out string pwdMD5);
+            return pwdMD5.ToLower();
         }
 
         #endregion

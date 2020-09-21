@@ -58,10 +58,10 @@ namespace RSoft.Auth.Web.Api.Controllers
         #region Local methods
 
         /// <summary>
-        /// Autenticar o usuário no sistema e gera a cha de acesso (token)
+        /// Authenticate the user in the system and generate the access-key (token)
         /// </summary>
-        /// <param name="request">Informações da requisição</param>
-        /// <param name="cancellationToken">Token de cancelamento</param>
+        /// <param name="request">Request data</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected async Task<IActionResult> AuthenticateAsync(AuthenticateRequest request, CancellationToken cancellationToken = default)
         {
 

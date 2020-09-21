@@ -36,7 +36,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     .AddEnvironmentVariables();
 
             IConfiguration _configuration = builder.Build();
-            _passwordSufix = _configuration["Secutiry:Secret"];
+            _passwordSufix = _configuration["Security:Secret"];
         }
 
         #endregion

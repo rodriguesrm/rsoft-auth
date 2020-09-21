@@ -1,4 +1,5 @@
 ﻿using RSoft.Framework.Domain.ValueObjects;
+using System.Linq;
 using dmn = RSoft.Auth.Domain.Entities;
 using tbl = RSoft.Auth.Infra.Data.Entities;
 
@@ -48,6 +49,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
                         ChangeCredentials = table.Credential.ChangeCredentials
                     };
                 }
+                result.Roles = table.Roles.Select(r => r.Role.Map(false)).ToList();
+                result.Scopes = table.Scopes.Select(s => s.Scope.Map(false)).ToList();
             }
 
             result.Validate();

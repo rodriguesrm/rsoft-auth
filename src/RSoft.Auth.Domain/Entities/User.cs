@@ -146,7 +146,7 @@ namespace RSoft.Auth.Domain.Entities
 
             if (!Roles.Any())
             {
-                AddNotification(nameof(Scopes), "The user must have at least one role");
+                AddNotification(nameof(Roles), "The user must have at least one role");
             }
             else
             {
