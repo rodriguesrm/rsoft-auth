@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Options;
 using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Services;
@@ -64,15 +65,18 @@ namespace RSoft.Auth.Web.Api.Controllers
         /// Generate access token for authenticated user
         /// </summary>
         /// <param name="user">User data</param>
+        /// <param name="login">User login</param>
         /// <param name="expiresIn">Date/date expiration token</param>
-        protected string GenerateToken(UserDto user, out DateTime? expiresIn)
+        protected string GenerateToken(UserDto user, string login, out DateTime? expiresIn)
         {
 
             IList<Claim> claimnsUsuario = new List<Claim>
             {
-                new Claim(ClaimTypes.Hash, user.Id.ToString()),
-                new Claim(ClaimTypes.Surname, user.Email),
-                new Claim(ClaimTypes.Name, user.Name.GetFullName())
+                new Claim(ClaimTypes.Sid, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Name.FirstName),
+                new Claim(ClaimTypes.Surname, user.Name.LastName),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, login)
             };
 
             foreach (RoleDto p in user.Roles)
@@ -122,7 +126,7 @@ namespace RSoft.Auth.Web.Api.Controllers
                     roles = authResult.User.Roles.Select(r => r.Name);
                 }
 
-                string token = GenerateToken(authResult.User, out DateTime? expiresIn);
+                string token = GenerateToken(authResult.User, request.Login, out DateTime? expiresIn);
 
                 AuthenticateResponse result = new AuthenticateResponse(token, expiresIn, roles, userDetail);
                 return Ok(result);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace RSoft.Framework.Cross
 {
@@ -17,14 +16,24 @@ namespace RSoft.Framework.Cross
         TKey? Id { get; }
 
         /// <summary>
-        /// User name
+        /// User first name
         /// </summary>
-        string Username { get; }
+        string FirstName { get; }
 
         /// <summary>
-        /// user login
+        /// User last name
+        /// </summary>
+        string LastName { get; }
+
+        /// <summary>
+        /// User login
         /// </summary>
         string Login { get; }
+
+        /// <summary>
+        /// User e-mail
+        /// </summary>
+        string Email { get; }
 
         /// <summary>
         /// User roles

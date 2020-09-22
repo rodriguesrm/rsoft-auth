@@ -42,7 +42,7 @@ namespace RSoft.Auth.Web.Api
 
             #region Jwt
 
-            JwtOptions jwtOptions = null;
+            JwtOptions jwtOptions = new JwtOptions();
             Configuration.GetSection("Jwt").Bind(jwtOptions);
 
             byte[] jwtHash = Encoding.ASCII.GetBytes(jwtOptions.Hash);

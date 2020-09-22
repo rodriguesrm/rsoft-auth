@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace RSoft.Framework.Cross
 {
@@ -33,9 +34,7 @@ namespace RSoft.Framework.Cross
 
         #region Properties
 
-        /// <summary>
-        /// User id
-        /// </summary>
+        ///<inheritdoc/>
         public Guid? Id
         {
             get
@@ -45,7 +44,7 @@ namespace RSoft.Framework.Cross
                         .HttpContext
                         .User
                         .Claims
-                        .Where(x => x.Type.ToLower().Contains("hash"))
+                        .Where(x => x.Type == ClaimTypes.Sid)
                         .Select(x => x.Value)
                         .FirstOrDefault();
 
@@ -56,39 +55,53 @@ namespace RSoft.Framework.Cross
             }
         }
 
-        /// <summary>
-        /// User name
-        /// </summary>
-        public string Username => 
+        ///<inheritdoc/>
+        public string FirstName =>
             _accessor
                 .HttpContext
                 .User
-                .Identity
-                .Name;
+                .Claims
+                .Where(x => x.Type == ClaimTypes.Name)
+                .Select(x => x.Value)
+                .FirstOrDefault();
 
-        /// <summary>
-        /// User login
-        /// </summary>
+        ///<inheritdoc/>
+        public string LastName =>
+            _accessor
+                .HttpContext
+                .User
+                .Claims
+                .Where(x => x.Type == ClaimTypes.Surname)
+                .Select(x => x.Value)
+                .FirstOrDefault();
+
+        ///<inheritdoc/>
         public string Login => 
             _accessor
                 .HttpContext
                 .User
                 .Claims
-                .Where(x => x.Type.ToLower()
-                .Contains("surname"))
+                .Where(x => x.Type == ClaimTypes.NameIdentifier)
                 .Select(x => x.Value)
                 .FirstOrDefault();
 
-        /// <summary>
-        /// User roles
-        /// </summary>
+        ///<inheritdoc/>
+        public string Email =>
+            _accessor
+                .HttpContext
+                .User
+                .Claims
+                .Where(x => x.Type == ClaimTypes.Email)
+                .Select(x => x.Value)
+                .FirstOrDefault();
+
+        ///<inheritdoc/>
         public IEnumerable<string> Roles => 
             _accessor
                 .HttpContext
                 .User
                 .Claims
-                .Where(x => x.Type.ToLower()
-                .Contains("role"))
+                .Where(x => x.Type == ClaimTypes.Role)
                 .Select(x => x.Value);
 
         #endregion
