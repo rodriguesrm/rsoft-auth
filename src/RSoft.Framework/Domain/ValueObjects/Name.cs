@@ -30,9 +30,11 @@ namespace RSoft.Framework.Domain.ValueObjects
         #region Properties
 
         ///<inheritdoc>
+        /// <example>Antony</example>
         public string FirstName { get; protected set; }
 
         ///<inheritdoc>
+        /// <example>Edward Stark</example>
         public string LastName { get; protected set; }
 
         ///<inheritdoc>

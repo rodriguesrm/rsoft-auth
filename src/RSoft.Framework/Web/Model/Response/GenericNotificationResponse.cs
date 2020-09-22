@@ -25,13 +25,15 @@
         #region Properties
 
         /// <summary>
-        /// Property/FIeld name
+        /// Property/Field name
         /// </summary>
+        /// <example>Name</example>
         public string Property { get; set; }
 
         /// <summary>
         /// Message detail
         /// </summary>
+        /// <example>The name field is required</example>
         public string Message { get; set; }
 
         #endregion

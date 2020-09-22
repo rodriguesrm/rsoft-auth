@@ -132,6 +132,38 @@ namespace RSoft.Auth.Web.Api.Controllers
             return Unauthorized(authResult.ErrorsMessage);
         }
 
+        /// <summary>
+        /// Request credentials for first access
+        /// </summary>
+        /// <param name="request">Request data information</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        protected async Task<IActionResult> FirstAccessAsync(PasswordRequest request, CancellationToken cancellationToken = default)
+        {
+            PasswordProcessResult result = await _appService.FirstAccessAsync(request.Login, cancellationToken);
+
+            if (result.Success)
+                return Ok("First access information sent to the user's email");
+
+            if (result.IsException)
+                return HandleException(500, result.Exception);
+
+            return BadRequest(new GenericNotificationResponse("FirstAccess", result.ErrorsMessage));
+        }
+
+        /// <summary>
+        /// Create the user credential (first access)
+        /// </summary>
+        /// <param name="request">Request data information</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        protected async Task<IActionResult> CreateCredentialAsync(CreateCredentialRequest request, CancellationToken cancellationToken = default)
+        {
+            SimpleOperationResult result = await _appService.CreateCredentialAsync(request.TokenId.Value, request.Password, true, cancellationToken);
+            if (result.Success)
+                return NoContent();
+            else
+                return BadRequest(new GenericNotificationResponse("CreateCredential", result.ErrorsMessage));
+        }
+
         #endregion
 
         #region Actions/Endpoints
@@ -154,6 +186,37 @@ namespace RSoft.Auth.Web.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request, [FromQuery] bool details, CancellationToken cancellationToken = default)
             => await RunActionAsync(AuthenticateAsync(request, details, cancellationToken), cancellationToken);
+
+        /// <summary>
+        /// Request credentials for first access
+        /// </summary>
+        /// <param name="request">Request data information</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="400">Invalid request, see details in response</response>
+        /// <response code="500">Request processing failed</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpPost("first-access")]
+        [AllowAnonymous]
+        public async Task<IActionResult> FirstAccess([FromBody] PasswordRequest request, CancellationToken cancellationToken)
+            => await RunActionAsync(FirstAccessAsync(request, cancellationToken), cancellationToken);
+
+        /// <summary>
+        /// Create the user credential (first access)
+        /// </summary>
+        /// <param name="request">Request data information</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="201">Credentials created successfully</response>
+        /// <response code="400">Invalid request, see details in response</response>
+        /// <response code="500">Request processing failed</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(GenericNotificationResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpPost("create-credential")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateCredential(CreateCredentialRequest request, CancellationToken cancellationToken)
+            => await RunActionAsync(CreateCredentialAsync(request, cancellationToken), cancellationToken);
 
         #endregion
 

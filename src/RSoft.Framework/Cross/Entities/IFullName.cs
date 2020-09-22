@@ -12,11 +12,13 @@
         /// <summary>
         /// First name
         /// </summary>
+        /// <example>Antony</example>
         string FirstName { get; }
 
         /// <summary>
         /// Last/Family name
         /// </summary>
+        /// <example>Edward Stark</example>
         string LastName { get; }
 
         #endregion

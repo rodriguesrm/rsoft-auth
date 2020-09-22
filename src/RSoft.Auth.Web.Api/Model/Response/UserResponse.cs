@@ -31,6 +31,7 @@ namespace RSoft.Auth.Web.Api.Model.Response
         /// <summary>
         /// User e-mail
         /// </summary>
+        /// <example>ironman@marvel.com</example>
         public string Email { get; set; }
 
         #endregion
