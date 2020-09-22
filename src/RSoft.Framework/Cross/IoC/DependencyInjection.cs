@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RSoft.Framework.Web.Options;
 using System;
 
 namespace RSoft.Framework.Cross.IoC
@@ -69,9 +68,8 @@ namespace RSoft.Framework.Cross.IoC
 
             #region Services
 
-            services.Configure<JwtOptions>(options => configuration.GetSection("Jwt").Bind(options));
-
             services.AddScoped<IHttpLoggedUser<Guid>, HttpLoggedUser>();
+            services.AddScoped<IAuthenticatedUser, HttpLoggedUser>();
 
             services.Configure<ApiBehaviorOptions>(opt =>
             {

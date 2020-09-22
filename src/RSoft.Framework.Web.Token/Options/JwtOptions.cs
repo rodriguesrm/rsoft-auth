@@ -1,4 +1,4 @@
-﻿namespace RSoft.Framework.Web.Options
+﻿namespace RSoft.Framework.Web.Token.Options
 {
 
     /// <summary>
@@ -13,7 +13,7 @@
         /// JWT token issuer
         /// </summary>
         public string Issuer { get; set; }
-        
+
         /// <summary>
         /// Jwt token hash key
         /// </summary>
@@ -23,7 +23,7 @@
         /// Token recipient, represents the application that will use it.
         /// </summary>
         public string Audience { get; set; }
-        
+
         /// <summary>
         /// Life time token minutes
         /// </summary>

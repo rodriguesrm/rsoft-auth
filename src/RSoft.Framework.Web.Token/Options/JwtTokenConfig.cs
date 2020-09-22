@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace RSoft.Framework.Web.Api.Identity
+namespace RSoft.Framework.Web.Token.Options
 {
 
     /// <summary>

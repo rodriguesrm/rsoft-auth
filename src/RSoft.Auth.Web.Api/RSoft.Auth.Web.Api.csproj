@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RSoft.Auth.Application\RSoft.Auth.Application.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Cross.IoC\RSoft.Auth.Cross.IoC.csproj" />
+    <ProjectReference Include="..\RSoft.Framework.Web.Token\RSoft.Framework.Web.Token.csproj" />
   </ItemGroup>
 
 

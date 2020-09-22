@@ -5,11 +5,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Options;
 using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Services;
@@ -18,9 +16,8 @@ using RSoft.Auth.Web.Api.Model.Response;
 using RSoft.Framework.Application.Model;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Web.Api;
-using RSoft.Framework.Web.Api.Identity;
 using RSoft.Framework.Web.Model.Response;
-using RSoft.Framework.Web.Options;
+using RSoft.Framework.Web.Token.Options;
 using RSoft.Logs.Model;
 
 namespace RSoft.Auth.Web.Api.Controllers

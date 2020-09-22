@@ -10,7 +10,7 @@ namespace RSoft.Framework.Cross
     /// <summary>
     /// Logged user object class
     /// </summary>
-    public class HttpLoggedUser : IHttpLoggedUser<Guid>
+    public class HttpLoggedUser : IHttpLoggedUser<Guid>, IAuthenticatedUser
     {
 
         #region Local objects/variables
