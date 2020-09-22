@@ -33,9 +33,9 @@ namespace RSoft.Auth.Web.Api.Controllers
 
         #region Local objects/variables
 
-        protected IHttpLoggedUser<Guid> _user;
-        protected ICredentialAppService _appService;
-        protected readonly JwtTokenConfig _jwtTokenOptions;
+        private IAuthenticatedUser _user;
+        private ICredentialAppService _appService;
+        private readonly JwtTokenConfig _jwtTokenOptions;
 
         #endregion
 
@@ -44,7 +44,7 @@ namespace RSoft.Auth.Web.Api.Controllers
         ///<inheritdoc/>
         public AuthController
         (
-            IHttpLoggedUser<Guid> user,
+            IAuthenticatedUser user,
             ICredentialAppService appService,
             IOptions<JwtTokenConfig> jwtTokenOptions
         ) : base()
@@ -152,8 +152,8 @@ namespace RSoft.Auth.Web.Api.Controllers
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request, [FromQuery] bool detail, CancellationToken cancellationToken = default)
-            => await RunActionAsync(AuthenticateAsync(request, detail, cancellationToken), cancellationToken);
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request, [FromQuery] bool details, CancellationToken cancellationToken = default)
+            => await RunActionAsync(AuthenticateAsync(request, details, cancellationToken), cancellationToken);
 
         #endregion
 

@@ -4,6 +4,10 @@ using System;
 
 namespace RSoft.Auth.Web.Api.Model.Response
 {
+    
+    /// <summary>
+    /// Simple user response model
+    /// </summary>
     public class UserResponse : EntityIdBaseResponse<Guid>
     {
 
