@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RSoft.Auth.Web.Api.Model.Response.v1
+namespace RSoft.Auth.Web.Api.Model.Response.v1_0
 {
 
     /// <summary>

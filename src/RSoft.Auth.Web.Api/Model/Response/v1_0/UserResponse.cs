@@ -2,7 +2,7 @@
 using RSoft.Framework.Web.Model.Response;
 using System;
 
-namespace RSoft.Auth.Web.Api.Model.Response.v1
+namespace RSoft.Auth.Web.Api.Model.Response.v1_0
 {
 
     /// <summary>
