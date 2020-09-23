@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using RSoft.Framework.Web.Token.Options;
+using RSoft.Framework.Web.Options;
 using System;
 using System.Text;
 
-namespace RSoft.Framework.Web.Token.Extensions
+namespace RSoft.Framework.Web.Extensions
 {
 
     /// <summary>

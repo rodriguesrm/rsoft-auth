@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace RSoft.Auth.Web.Api.Filters
+namespace RSoft.Framework.Web.Filters
 {
 
     /// <summary>

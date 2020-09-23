@@ -17,7 +17,7 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1
         public Guid? TokenId { get; set; }
 
         /// <summary>
-        /// Senha da pessoa
+        /// User password
         /// </summary>
         [Required(ErrorMessage = "Password is required")]
         [StringLength(maximumLength: 16, MinimumLength = 6, ErrorMessage = "The password must contain 6 to 16 characters")]

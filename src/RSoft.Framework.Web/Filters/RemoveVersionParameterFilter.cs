@@ -2,7 +2,7 @@
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
 
-namespace RSoft.Auth.Web.Api.Filters
+namespace RSoft.Framework.Web.Filters
 {
 
     /// <summary>

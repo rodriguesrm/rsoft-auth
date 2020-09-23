@@ -17,7 +17,7 @@ using RSoft.Framework.Application.Model;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Web.Api;
 using RSoft.Framework.Web.Model.Response;
-using RSoft.Framework.Web.Token.Options;
+using RSoft.Framework.Web.Options;
 using RSoft.Logs.Model;
 
 namespace RSoft.Auth.Web.Api.Controllers.v1_0

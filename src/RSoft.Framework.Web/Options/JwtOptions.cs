@@ -1,4 +1,4 @@
-﻿namespace RSoft.Framework.Web.Token.Options
+﻿namespace RSoft.Framework.Web.Options
 {
 
     /// <summary>
