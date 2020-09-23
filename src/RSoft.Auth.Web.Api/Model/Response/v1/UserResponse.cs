@@ -2,9 +2,9 @@
 using RSoft.Framework.Web.Model.Response;
 using System;
 
-namespace RSoft.Auth.Web.Api.Model.Response
+namespace RSoft.Auth.Web.Api.Model.Response.v1
 {
-    
+
     /// <summary>
     /// Simple user response model
     /// </summary>

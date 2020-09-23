@@ -26,24 +26,31 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// <param name="loadChildren">Load children data</param>
         public static dmn.Role Map(this tbl.Role table, bool loadChildren)
         {
-            dmn.Role result = new dmn.Role(table.Id)
-            {
-                Name = table.Name,
-                Description = table.Description,
-                CreatedOn = table.CreatedOn,
-                ChangedOn = table.ChangedOn,
-                IsActive = table.IsActive
-            };
+            dmn.Role result = null;
 
-            if (loadChildren)
+            if (table != null)
             {
-                result.MapAuthor(table);
-                if (table.Users?.Count > 0)
-                    result.Users = table.Users.Select(u => u.User.Map(false)).ToList();
-                result.Scope = table.Scope?.Map(false);
+
+                result = new dmn.Role(table.Id)
+                {
+                    Name = table.Name,
+                    Description = table.Description,
+                    CreatedOn = table.CreatedOn,
+                    ChangedOn = table.ChangedOn,
+                    IsActive = table.IsActive
+                };
+
+                if (loadChildren)
+                {
+                    result.MapAuthor(table);
+                    if (table.Users?.Count > 0)
+                        result.Users = table.Users.Select(u => u.User.Map(false)).ToList();
+                    result.Scope = table.Scope?.Map(false);
+                }
+
+                result.Validate();
+
             }
-
-            result.Validate();
 
             return result;
 
@@ -56,14 +63,19 @@ namespace RSoft.Auth.Infra.Data.Extensions
         public static tbl.Role Map(this dmn.Role entity)
         {
 
-            tbl.Role result = new tbl.Role(entity.Id)
+            tbl.Role result = null;
+
+            if (entity != null)
             {
-                Name = entity.Name,
-                Description = entity.Description,
-                CreatedOn = entity.CreatedOn,
-                CreatedBy = entity.CreatedAuthor.Id,
-                IsActive = entity.IsActive
-            };
+                result = new tbl.Role(entity.Id)
+                {
+                    Name = entity.Name,
+                    Description = entity.Description,
+                    CreatedOn = entity.CreatedOn,
+                    CreatedBy = entity.CreatedAuthor.Id,
+                    IsActive = entity.IsActive
+                };
+            }
 
             return result;
 
@@ -77,11 +89,14 @@ namespace RSoft.Auth.Infra.Data.Extensions
         public static tbl.Role Map(this dmn.Role entity, tbl.Role table)
         {
 
-            table.Name = entity.Name;
-            table.Description = entity.Description;
-            table.ChangedOn = entity.ChangedOn;
-            table.ChangedBy = entity.ChangedAuthor.Id;
-            table.IsActive = entity.IsActive;
+            if (entity != null && table != null)
+            {
+                table.Name = entity.Name;
+                table.Description = entity.Description;
+                table.ChangedOn = entity.ChangedOn;
+                table.ChangedBy = entity.ChangedAuthor.Id;
+                table.IsActive = entity.IsActive;
+            }
 
             return table;
 

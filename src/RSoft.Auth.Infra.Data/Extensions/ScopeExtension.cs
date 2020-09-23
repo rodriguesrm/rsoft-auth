@@ -26,24 +26,31 @@ namespace RSoft.Auth.Infra.Data.Extensions
         public static dmn.Scope Map(this tbl.Scope table, bool loadChildren)
         {
 
-            dmn.Scope result = new dmn.Scope(table.Id)
-            {
-                Name = table.Name,
-                CreatedOn = table.CreatedOn,
-                ChangedOn = table.ChangedOn,
-                IsActive = table.IsActive
-            };
+            dmn.Scope result = null;
 
-            if (loadChildren)
+            if (table != null)
             {
-                result.MapAuthor(table);
-                if (table.Users?.Count > 0)
-                    result.Users = table.Users.Select(u => u.User.Map(false)).ToList();
-                if (table.Roles?.Count > 0)
-                    result.Roles = table.Roles.Select(r => r.Map(false)).ToList();
+
+                result = new dmn.Scope(table.Id)
+                {
+                    Name = table.Name,
+                    CreatedOn = table.CreatedOn,
+                    ChangedOn = table.ChangedOn,
+                    IsActive = table.IsActive
+                };
+
+                if (loadChildren)
+                {
+                    result.MapAuthor(table);
+                    if (table.Users?.Count > 0)
+                        result.Users = table.Users.Select(u => u.User.Map(false)).ToList();
+                    if (table.Roles?.Count > 0)
+                        result.Roles = table.Roles.Select(r => r.Map(false)).ToList();
+                }
+
+                result.Validate();
+
             }
-
-            result.Validate();
 
             return result;
 
@@ -56,13 +63,18 @@ namespace RSoft.Auth.Infra.Data.Extensions
         public static tbl.Scope Map(this dmn.Scope entity)
         {
 
-            tbl.Scope result = new tbl.Scope(entity.Id)
+            tbl.Scope result = null;
+
+            if (entity != null)
             {
-                Name = entity.Name,
-                CreatedOn = entity.CreatedOn,
-                CreatedBy = entity.CreatedAuthor.Id,
-                IsActive = entity.IsActive
-            };
+                result = new tbl.Scope(entity.Id)
+                {
+                    Name = entity.Name,
+                    CreatedOn = entity.CreatedOn,
+                    CreatedBy = entity.CreatedAuthor.Id,
+                    IsActive = entity.IsActive
+                };
+            }
 
             return result;
 
@@ -76,10 +88,13 @@ namespace RSoft.Auth.Infra.Data.Extensions
         public static tbl.Scope Map(this dmn.Scope entity, tbl.Scope table)
         {
 
-            table.Name = entity.Name;
-            table.ChangedOn = entity.ChangedOn;
-            table.ChangedBy = entity.ChangedAuthor.Id;
-            table.IsActive = entity.IsActive;
+            if (entity != null && table != null)
+            {
+                table.Name = entity.Name;
+                table.ChangedOn = entity.ChangedOn;
+                table.ChangedBy = entity.ChangedAuthor.Id;
+                table.IsActive = entity.IsActive;
+            }
 
             return table;
 

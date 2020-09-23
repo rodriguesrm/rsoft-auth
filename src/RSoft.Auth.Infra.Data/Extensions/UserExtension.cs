@@ -27,33 +27,39 @@ namespace RSoft.Auth.Infra.Data.Extensions
         public static dmn.User Map(this tbl.User table, bool loadChildren)
         {
 
-            dmn.User result = new dmn.User(table.Id)
+            dmn.User result = null;
+            if (table != null)
             {
-                Name = new Name(table.FirstName, table.LastName),
-                BornDate = table.BornDate,
-                Email = new Email(table.Email),
-                CreatedOn = table.CreatedOn,
-                ChangedOn = table.ChangedOn
-            };
 
-            if (loadChildren)
-            {
-                result.MapAuthor(table);
-                if (table.Credential != null)
+                result = new dmn.User(table.Id)
                 {
-                    result.Credential = new dmn.UserCredential()
-                    {
-                        Username = table.Credential.Username,
-                        UserKey = table.Credential.UserKey,
-                        Password = table.Credential.Password,
-                        ChangeCredentials = table.Credential.ChangeCredentials
-                    };
-                }
-                result.Roles = table.Roles.Select(r => r.Role.Map(false)).ToList();
-                result.Scopes = table.Scopes.Select(s => s.Scope.Map(false)).ToList();
-            }
+                    Name = new Name(table.FirstName, table.LastName),
+                    BornDate = table.BornDate,
+                    Email = new Email(table.Email),
+                    CreatedOn = table.CreatedOn,
+                    ChangedOn = table.ChangedOn
+                };
 
-            result.Validate();
+                if (loadChildren)
+                {
+                    result.MapAuthor(table);
+                    if (table.Credential != null)
+                    {
+                        result.Credential = new dmn.UserCredential()
+                        {
+                            Username = table.Credential.Username,
+                            UserKey = table.Credential.UserKey,
+                            Password = table.Credential.Password,
+                            ChangeCredentials = table.Credential.ChangeCredentials
+                        };
+                    }
+                    result.Roles = table.Roles.Select(r => r.Role.Map(false)).ToList();
+                    result.Scopes = table.Scopes.Select(s => s.Scope.Map(false)).ToList();
+                }
+
+                result.Validate();
+
+            }
 
             return result;
 
@@ -66,15 +72,22 @@ namespace RSoft.Auth.Infra.Data.Extensions
         public static tbl.User Map(this dmn.User entity)
         {
 
-            tbl.User result = new tbl.User(entity.Id)
+            tbl.User result = null;
+
+            if (entity != null)
             {
-                FirstName = entity.Name.FirstName,
-                LastName = entity.Name.LastName,
-                BornDate = entity.BornDate,
-                Email = entity.Email.Address,
-                CreatedOn = entity.CreatedOn,
-                CreatedBy = entity.CreatedAuthor.Id
-            };
+
+                result = new tbl.User(entity.Id)
+                {
+                    FirstName = entity.Name.FirstName,
+                    LastName = entity.Name.LastName,
+                    BornDate = entity.BornDate,
+                    Email = entity.Email.Address,
+                    CreatedOn = entity.CreatedOn,
+                    CreatedBy = entity.CreatedAuthor.Id
+                };
+
+            }
 
             return result;
 
@@ -88,12 +101,17 @@ namespace RSoft.Auth.Infra.Data.Extensions
         public static tbl.User Map(this dmn.User entity, tbl.User table)
         {
 
-            table.FirstName = entity.Name.FirstName;
-            table.LastName = entity.Name.LastName;
-            table.BornDate = entity.BornDate;
-            table.Email = entity.Email.Address;
-            table.ChangedOn = entity.ChangedOn;
-            table.ChangedBy = entity.ChangedAuthor.Id;
+            if (entity != null && table != null)
+            {
+
+                table.FirstName = entity.Name.FirstName;
+                table.LastName = entity.Name.LastName;
+                table.BornDate = entity.BornDate;
+                table.Email = entity.Email.Address;
+                table.ChangedOn = entity.ChangedOn;
+                table.ChangedBy = entity.ChangedAuthor.Id;
+
+            }
 
             return table;
 

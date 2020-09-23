@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RSoft.Auth.Web.Api.Model.Request
+namespace RSoft.Auth.Web.Api.Model.Request.v1
 {
 
     /// <summary>

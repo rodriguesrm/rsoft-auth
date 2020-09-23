@@ -11,8 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Services;
-using RSoft.Auth.Web.Api.Model.Request;
-using RSoft.Auth.Web.Api.Model.Response;
+using RSoft.Auth.Web.Api.Model.Request.v1;
+using RSoft.Auth.Web.Api.Model.Response.v1;
 using RSoft.Framework.Application.Model;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Web.Api;
@@ -20,13 +20,14 @@ using RSoft.Framework.Web.Model.Response;
 using RSoft.Framework.Web.Token.Options;
 using RSoft.Logs.Model;
 
-namespace RSoft.Auth.Web.Api.Controllers
+namespace RSoft.Auth.Web.Api.Controllers.v1_0
 {
 
     /// <summary>
     /// API Authetication
     /// </summary>
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class AuthController : ApiBaseController
     {
@@ -183,6 +184,7 @@ namespace RSoft.Auth.Web.Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost]
+        [MapToApiVersion("1.0")]
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request, [FromQuery] bool details, CancellationToken cancellationToken = default)
             => await RunActionAsync(AuthenticateAsync(request, details, cancellationToken), cancellationToken);
@@ -198,6 +200,7 @@ namespace RSoft.Auth.Web.Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost("first-access")]
+        [MapToApiVersion("1.0")]
         [AllowAnonymous]
         public async Task<IActionResult> FirstAccess([FromBody] PasswordRequest request, CancellationToken cancellationToken)
             => await RunActionAsync(FirstAccessAsync(request, cancellationToken), cancellationToken);
@@ -213,7 +216,8 @@ namespace RSoft.Auth.Web.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(GenericNotificationResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
-        [HttpPost("create-credential")]
+        [HttpPost("credential")]
+        [MapToApiVersion("1.0")]
         [AllowAnonymous]
         public async Task<IActionResult> CreateCredential(CreateCredentialRequest request, CancellationToken cancellationToken)
             => await RunActionAsync(CreateCredentialAsync(request, cancellationToken), cancellationToken);

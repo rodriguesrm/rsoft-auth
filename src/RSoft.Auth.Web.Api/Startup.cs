@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
+using RSoft.Auth.Web.Api.Filters;
 using RSoft.Framework.Web.Filters;
 using RSoft.Framework.Web.Token.Extensions;
 using RSoft.Logs.Extensions;
@@ -51,6 +53,7 @@ namespace RSoft.Auth.Web.Api
                 .AddControllers(opt => GlobalFilters.Configure(opt))
                 .AddJsonOptions(opt => opt.JsonSerializerOptions.IgnoreNullValues = true)
                 .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
+            services.AddApiVersioning();
             services.AddHttpContextAccessor();
             services.AddCors();
             services.AddResponseCaching();
@@ -59,14 +62,24 @@ namespace RSoft.Auth.Web.Api
 
             #region Swagger
 
+            services.AddVersionedApiExplorer(p =>
+            {
+                p.GroupNameFormat = @"'v'VVVV";
+                p.SubstituteApiVersionInUrl = false;
+            });
             services.AddSwaggerGen(c =>
             {
 
-                c.SwaggerDoc("v1",
+                c.OperationFilter<RemoveVersionParameterFilter>();
+                c.DocumentFilter<ReplaceVersionWithExactValueInPathFilter>();
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                c.EnableAnnotations();
+
+                c.SwaggerDoc("v1.0",
                     new OpenApiInfo
                     {
                         Title = "RSoft Authentication API",
-                        Version = "v1",
+                        Version = "v1.0",
                         Description = "API for managing authentication and authorization roles.",
                         Contact = new OpenApiContact
                         {
@@ -123,7 +136,8 @@ namespace RSoft.Auth.Web.Api
         /// </summary>
         /// <param name="app">IApplicationBuilder object instance</param>
         /// <param name="env">IWebHostEnvironment object instance</param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        /// <param name="provider">IApiVersionDescriptionProvider object instance</param>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -131,11 +145,19 @@ namespace RSoft.Auth.Web.Api
                 app.UseHsts();
 
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(options =>
             {
-                c.RoutePrefix = string.Empty;
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Authentication v1.0");
-                //c.SupportedSubmitMethods(new SubmitMethod[] { });
+                options.RoutePrefix = string.Empty;
+
+                foreach (var description in provider.ApiVersionDescriptions)
+                {
+                    options.SwaggerEndpoint(
+                    $"/swagger/{description.GroupName}/swagger.json",
+                    description.GroupName.ToLowerInvariant());
+                }
+
+                options.DocExpansion(DocExpansion.List);
+
             });
 
             app.UseCors(c =>
