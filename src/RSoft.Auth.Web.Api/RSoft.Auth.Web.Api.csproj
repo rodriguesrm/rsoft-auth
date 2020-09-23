@@ -20,7 +20,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="RSoft.Logs" Version="1.0.0-rc1.1" />
+    <PackageReference Include="RSoft.Logs" Version="1.0.0-rc1.2" />
   </ItemGroup>
 
   <ItemGroup>

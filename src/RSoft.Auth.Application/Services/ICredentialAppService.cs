@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 namespace RSoft.Auth.Application.Services
 {
 
+    /// <summary>
+    /// Credential application service interface
+    /// </summary>
     public interface ICredentialAppService
     {
 
