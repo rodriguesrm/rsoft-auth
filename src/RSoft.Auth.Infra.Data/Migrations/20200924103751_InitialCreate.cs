@@ -16,7 +16,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     CreatedBy = table.Column<Guid>(nullable: false),
                     ChangedOn = table.Column<DateTime>(nullable: true),
                     ChangedBy = table.Column<Guid>(nullable: true),
-                    IsActive = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 1ul),
+                    IsActive = table.Column<ulong>(type: "bit", nullable: false),
                     IsDeleted = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 0ul),
                     FirstName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     LastName = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
@@ -50,7 +50,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     ChangedOn = table.Column<DateTime>(nullable: true),
                     ChangedBy = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    IsActive = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 1ul),
+                    IsActive = table.Column<ulong>(type: "bit", nullable: false),
                     IsDeleted = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 0ul)
                 },
                 constraints: table =>
@@ -92,6 +92,27 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserCredentialToken",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ExpiresOn = table.Column<DateTime>(nullable: false),
+                    FirstAccess = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCredentialToken", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserCredentialToken_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Role",
                 columns: table => new
                 {
@@ -101,7 +122,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     ChangedOn = table.Column<DateTime>(nullable: true),
                     ChangedBy = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    IsActive = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 1ul),
+                    IsActive = table.Column<ulong>(type: "bit", nullable: false),
                     IsDeleted = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 0ul),
                     Description = table.Column<string>(unicode: false, maxLength: 150, nullable: false),
                     ScopeId = table.Column<Guid>(nullable: false)
@@ -278,6 +299,11 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserCredentialToken_UserId",
+                table: "UserCredentialToken",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
@@ -295,6 +321,9 @@ namespace RSoft.Auth.Infra.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "UserCredential");
+
+            migrationBuilder.DropTable(
+                name: "UserCredentialToken");
 
             migrationBuilder.DropTable(
                 name: "UserRole");

@@ -43,9 +43,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<ulong>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(1ul);
+                        .HasColumnType("bit");
 
                     b.Property<ulong>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -105,9 +103,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<ulong>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(1ul);
+                        .HasColumnType("bit");
 
                     b.Property<ulong>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -179,9 +175,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<ulong>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(1ul);
+                        .HasColumnType("bit");
 
                     b.Property<ulong>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -256,6 +250,31 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasName("AK_UserCredential_Username");
 
                     b.ToTable("UserCredential");
+                });
+
+            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserCredentialToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpiresOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("FirstAccess")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserCredentialToken");
                 });
 
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserRole", b =>
@@ -353,6 +372,15 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .WithOne("Credential")
                         .HasForeignKey("RSoft.Auth.Infra.Data.Entities.UserCredential", "UserId")
                         .HasConstraintName("FK_UserCredential_User")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserCredentialToken", b =>
+                {
+                    b.HasOne("RSoft.Auth.Infra.Data.Entities.User", "User")
+                        .WithMany("Tokens")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

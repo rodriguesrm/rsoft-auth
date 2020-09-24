@@ -107,6 +107,11 @@ namespace RSoft.Auth.Infra.Data.Entities
         /// </summary>
         public virtual ICollection<UserScope> Scopes { get; set; }
 
+        /// <summary>
+        /// List of Tokens for creating or retrieving credentials
+        /// </summary>
+        public virtual ICollection<UserCredentialToken> Tokens { get; set; }
+
         #region Navigation Audit
 
         /// <summary>
@@ -145,11 +150,15 @@ namespace RSoft.Auth.Infra.Data.Entities
 
         #region Local Methods
 
+        /// <summary>
+        /// Iniatialize objects/properties/fields with default values
+        /// </summary>
         private void Initialize()
         {
             IsActive = true;
             Roles = new HashSet<UserRole>();
             Scopes = new HashSet<UserScope>();
+            Tokens = new HashSet<UserCredentialToken>();
             CreatedUsers = new HashSet<User>();
             ChangedUsers = new HashSet<User>();
             CreatedRoles = new HashSet<Role>();

@@ -96,6 +96,9 @@ namespace RSoft.Auth.Infra.Data.Entities
 
         #region Local Methods
 
+        /// <summary>
+        /// Iniatialize objects/properties/fields with default values
+        /// </summary>
         private void Initialize()
         {
             IsActive = true;

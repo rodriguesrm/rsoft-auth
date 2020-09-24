@@ -89,15 +89,24 @@ namespace RSoft.Auth.Domain.Entities
         /// </summary>
         public virtual ICollection<Scope> Scopes { get; set; }
 
+        /// <summary>
+        /// List of credential creation or retrieval tokens
+        /// </summary>
+        public virtual ICollection<UserCredentialToken> Tokens { get; set; }
+
         #endregion
 
         #region Local Methods
 
+        /// <summary>
+        /// Iniatialize objects/properties/fields with default values
+        /// </summary>
         private void Initialize()
         {
             IsActive = true;
             Roles = new HashSet<Role>();
             Scopes = new HashSet<Scope>();
+            Tokens = new HashSet<UserCredentialToken>();
         }
 
         #endregion
@@ -117,12 +126,7 @@ namespace RSoft.Auth.Domain.Entities
             AddNotifications(Email.Notifications);
             AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);
 
-            //TODO: Verificar na implementação das camadas superiores se a regra será essa ou vai gerar credencial automaticamente
-            if (Credential == null)
-            {
-                AddNotification(nameof(Credential), "Credential is required");
-            }
-            else
+            if (Credential != null)
             {
                 Credential.Validate();
                 AddNotifications(Credential.Notifications);

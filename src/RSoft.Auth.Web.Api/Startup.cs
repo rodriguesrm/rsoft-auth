@@ -82,6 +82,7 @@ namespace RSoft.Auth.Web.Api
             app.UseStaticFiles();
             app.UseResponseCaching();
 
+            //TODO: Add Middleware for additional permission/rules/restrictions checks
             app.UseMiddleware<RequestResponseLogging<Startup>>();
             app.UseSwaggerDocUI(provider);
 

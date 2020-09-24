@@ -159,7 +159,6 @@ namespace RSoft.Framework.Infra.Data
                modelBuilder.Entity(e.ClrType)
                    .Property<bool>(nameof(IActive.IsActive))
                    .HasColumnType("bit")
-                   .HasDefaultValue(true)
                    .IsRequired();
            });
         }

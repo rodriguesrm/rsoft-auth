@@ -1,4 +1,5 @@
-﻿using RSoft.Auth.Application.Model;
+﻿using Microsoft.EntityFrameworkCore.Scaffolding;
+using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Model.Extensions;
 using RSoft.Auth.Cross.Common.Model.Args;
 using RSoft.Auth.Cross.Common.Model.Results;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -27,10 +29,10 @@ namespace RSoft.Auth.Application.Services
         /// <summary>
         /// Create a new CredentialAppService instance
         /// </summary>
-        /// <param name="userDomain"></param>
-        public CredentialAppService(IUserDomainService userDomain)
+        /// <param name="provider">DIP Service provider</param>
+        public CredentialAppService(IServiceProvider provider)
         {
-            _userDomain = userDomain;
+            _userDomain = provider.GetService<IUserDomainService>();
         }
 
         #endregion
@@ -78,6 +80,7 @@ namespace RSoft.Auth.Application.Services
             //return new SimpleOperationResult(sucesso, erros);
             return await Task.Run(() =>
             {
+                Console.WriteLine($"TOKEN: {args.Token.ToString()}");
                 return new SimpleOperationResult(true, null);
             });
         }
