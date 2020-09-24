@@ -7,6 +7,9 @@ using Microsoft.Extensions.Options;
 using RSoft.Helpers.Security;
 using System.Threading.Tasks;
 using System.Threading;
+using RSoft.Auth.Cross.Common.Model.Results;
+using RSoft.Auth.Cross.Common.Model.Args;
+using RSoft.Framework.Application.Model;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -71,6 +74,13 @@ namespace RSoft.Auth.Domain.Services
                     user = null;
              }
             return user;
+        }
+
+        ///<inheritdoc/>
+        public Task<PasswordProcessResult> StartNewCredentialProcessAsync(string login, bool firstAccess, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
+        {
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
         }
 
         #endregion

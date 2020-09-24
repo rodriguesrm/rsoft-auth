@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Services;
+using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Framework.Application.Model;
 using RSoft.Framework.Cross;

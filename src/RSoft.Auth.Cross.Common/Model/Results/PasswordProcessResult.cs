@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace RSoft.Auth.Application.Model
+namespace RSoft.Auth.Cross.Common.Model.Results
 {
 
     /// <summary>
-    /// First access information request action result model
+    /// Credential information request action result model
     /// </summary>
     public class PasswordProcessResult : SimpleOperationResult
     {
@@ -14,17 +14,17 @@ namespace RSoft.Auth.Application.Model
         #region Constructors
 
         /// <summary>
-        /// Create a new PasswordProcessResult model
+        /// Creates a new object instance
         /// </summary>
         /// <param name="success">Indicates whether the operation was successful</param>
-        /// <param name="token">Token generated for the operation (create, reset ou forgot password)</param>
-        /// <param name="expiresIn">Token expiration date/time</param>
-        /// <param name="errors">Errors list occurred in the operation</param>
+        /// <param name="token">Token generated for the operation</param>
+        /// <param name="expirationDate">Token expiration date/time</param>
+        /// <param name="errors">List of errors occurred in the operation</param>
         /// <param name="exception">Exception thrown</param>
-        public PasswordProcessResult(bool success, Guid? token, DateTime? expiresIn, IDictionary<string, string> errors, Exception exception) : base(success, errors)
+        public PasswordProcessResult(bool success, Guid? token, DateTime? expirationDate, IDictionary<string, string> errors, Exception exception) : base(success, errors)
         {
             Token = token;
-            ExpirerIn = expiresIn;
+            ExpirationDate = expirationDate;
             Exception = exception;
         }
 
@@ -38,9 +38,9 @@ namespace RSoft.Auth.Application.Model
         public Guid? Token { get; protected set; }
 
         /// <summary>
-        /// Token expiration date/time
+        /// Token expiration date
         /// </summary>
-        public DateTime? ExpirerIn { get; protected set; }
+        public DateTime? ExpirationDate { get; protected set; }
 
         /// <summary>
         /// Indicates whether an exception has occurred

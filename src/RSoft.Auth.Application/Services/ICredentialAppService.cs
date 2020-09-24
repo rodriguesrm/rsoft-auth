@@ -1,4 +1,5 @@
 ﻿using RSoft.Auth.Application.Model;
+using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Framework.Application.Model;
 using System;
 using System.Threading;
