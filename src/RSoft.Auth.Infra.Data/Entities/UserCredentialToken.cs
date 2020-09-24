@@ -10,6 +10,38 @@ namespace RSoft.Auth.Infra.Data.Entities
     public class UserCredentialToken : TableIdBase<Guid, UserCredentialToken>
     {
 
+        #region Constructors
+
+        /// <summary>
+        /// Create a new UserCredentialToken instance
+        /// </summary>
+        public UserCredentialToken() : base(Guid.NewGuid())
+        {
+        }
+
+        /// <summary>
+        /// Create a new UserCredentialToken instance
+        /// </summary>
+        /// <param name="id">Token id value</param>
+        public UserCredentialToken(Guid id) : base(id)
+        {
+        }
+
+        /// <summary>
+        /// Create a new UserCredentialToken instance
+        /// </summary>
+        /// <param name="id">Token id text</param>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="System.FormatException"></exception>
+        /// <exception cref="System.OverflowException"></exception>
+        public UserCredentialToken(string id) : base()
+        {
+            Id = new Guid(id);
+        }
+
+        #endregion
+
+
         #region Properties
 
         /// <summary>

@@ -1,5 +1,4 @@
-﻿using RSoft.Framework.Cross.Entities;
-using RSoft.Framework.Web.Model.Response;
+﻿using RSoft.Framework.Web.Model.Response;
 using System;
 
 namespace RSoft.Auth.Web.Api.Model.Response.v1_0
@@ -26,7 +25,7 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         /// <summary>
         /// Full name
         /// </summary>
-        public IFullName Name { get; set; }
+        public FullNameResponse Name { get; set; }
 
         /// <summary>
         /// User e-mail

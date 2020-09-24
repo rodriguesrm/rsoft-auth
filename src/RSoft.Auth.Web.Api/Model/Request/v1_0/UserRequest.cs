@@ -14,7 +14,7 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
         /// <summary>
         /// Full name
         /// </summary>
-        public IFullName Name { get; set; }
+        public FullNameRequest Name { get; set; }
 
         /// <summary>
         /// User e-mail

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -34,6 +35,58 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// </summary>
         public UserController()
         {
+        }
+
+        #endregion
+
+        #region Local methods
+
+        protected override async Task<UserDto> AddAsync(UserDto dto, CancellationToken cancellationToken = default)
+        {
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
+        }
+
+        protected override async Task<IEnumerable<UserDto>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
+        }
+
+        protected override async Task<UserDto> GetByIdAsync(Guid key, CancellationToken cancellationToken = default)
+        {
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
+        }
+
+        protected override UserDto Map(UserRequest request)
+        {
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
+        }
+
+        protected override UserResponse Map(UserDto dto)
+        {
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
+        }
+
+        protected override object PrepareInsertResponse(UserDto dto)
+        {
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
+        }
+
+        protected override async Task RemoveAsync(Guid key, CancellationToken cancellationToken = default)
+        {
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
+        }
+
+        protected override async Task<UserDto> UpdateAsync(UserDto dto, CancellationToken cancellationToken = default)
+        {
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
         }
 
         #endregion

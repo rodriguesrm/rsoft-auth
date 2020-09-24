@@ -8,6 +8,7 @@ using RSoft.Auth.Domain.Services;
 using RSoft.Auth.Application.Services;
 using RSoft.Framework.Infra.Data;
 using RSoft.Auth.Cross.Common.Options;
+using System.Net.Security;
 
 namespace RSoft.Auth.Cross.IoC
 {
@@ -41,6 +42,7 @@ namespace RSoft.Auth.Cross.IoC
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserCredentialTokenRepository, UserCredentialTokenRepository>();
             services.AddScoped<IScopeRepository, ScopeRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 

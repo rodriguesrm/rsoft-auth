@@ -118,7 +118,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                 {
                     userDetail = new SimpleUserResponse(authResult.User.Id)
                     {
-                        Name = authResult.User.Name,
+                        Name = new FullNameResponse(authResult.User.Name.FirstName, authResult.User.Name.LastName),
                         Email = authResult.User.Email
                     };
                     roles = authResult.User.Roles.Select(r => r.Name);
