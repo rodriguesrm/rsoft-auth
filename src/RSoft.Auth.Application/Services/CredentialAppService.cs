@@ -45,7 +45,7 @@ namespace RSoft.Auth.Application.Services
         /// <param name="args">Call arguments</param>
         private async Task<SimpleOperationResult> SendMailTokenPasswordAsync(SendMailArgs args, CancellationToken cancellationToken = default)
         {
-            //TODO: Refatorar envio de e-mail
+            //TODO: SEND MAIL REFACTOR
 
             //SendGridClient client = new SendGridClient(Security.SendGridAppKey);
             //SendGridMessage msg = new SendGridMessage()

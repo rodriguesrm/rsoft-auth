@@ -1,14 +1,12 @@
-﻿using RSoft.Framework.Cross.Entities;
-using RSoft.Framework.Web.Model.Response;
-using System;
+﻿using System;
 
 namespace RSoft.Auth.Web.Api.Model.Response.v1_0
 {
 
     /// <summary>
-    /// Simple user response model
+    /// User response model
     /// </summary>
-    public class UserResponse : EntityIdBaseResponse<Guid>
+    public class UserResponse : SimpleUserResponse
     {
 
         #region Constructors
@@ -24,15 +22,9 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         #region Properties
 
         /// <summary>
-        /// Full name
+        /// User active status
         /// </summary>
-        public IFullName Name { get; set; }
-
-        /// <summary>
-        /// User e-mail
-        /// </summary>
-        /// <example>ironman@marvel.com</example>
-        public string Email { get; set; }
+        public bool IsActive { get; set; }
 
         #endregion
     }

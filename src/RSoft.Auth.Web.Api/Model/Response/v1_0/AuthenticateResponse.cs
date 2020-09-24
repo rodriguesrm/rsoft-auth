@@ -19,7 +19,7 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         /// <param name="expirationDate">Token expiration date/time</param>
         /// <param name="roles">Roles list</param>
         /// <param name="user">User details</param>
-        public AuthenticateResponse(string token, DateTime? expirationDate, IEnumerable<string> roles, UserResponse user)
+        public AuthenticateResponse(string token, DateTime? expirationDate, IEnumerable<string> roles, SimpleUserResponse user)
         {
             Token = token;
             ExpirationDate = expirationDate;
@@ -50,7 +50,7 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         /// <summary>
         /// User details
         /// </summary>
-        public UserResponse User { get; set; }
+        public SimpleUserResponse User { get; set; }
 
         #endregion
 

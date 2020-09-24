@@ -112,11 +112,11 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(request.Login, request.Password, cancellationToken);
             if (authResult.Success)
             {
-                UserResponse userDetail = null;
+                SimpleUserResponse userDetail = null;
                 IEnumerable<string> roles = null;
                 if (details)
                 {
-                    userDetail = new UserResponse(authResult.User.Id)
+                    userDetail = new SimpleUserResponse(authResult.User.Id)
                     {
                         Name = authResult.User.Name,
                         Email = authResult.User.Email
