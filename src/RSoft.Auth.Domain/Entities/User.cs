@@ -1,4 +1,5 @@
 ﻿using RSoft.Framework.Cross.Entities;
+using RSoft.Framework.Cross.Enums;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
 using RSoft.Framework.Domain.ValueObjects;
@@ -70,6 +71,11 @@ namespace RSoft.Auth.Domain.Entities
         /// </summary>
         public Email Email { get; set; }
 
+        /// <summary>
+        /// User type
+        /// </summary>
+        public UserType? Type { get; set; }
+
         #endregion
 
         #region Navigation Lazy
@@ -124,6 +130,8 @@ namespace RSoft.Auth.Domain.Entities
             if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
             AddNotifications(Name.Notifications);
             AddNotifications(Email.Notifications);
+            AddNotifications(new RequiredValidationContract<string>(Email?.Address, $"Email.{nameof(Email.Address)}", "Email is required").Contract.Notifications);
+            AddNotifications(new RequiredValidationContract<UserType?>(Type, nameof(Type), "User type is required").Contract.Notifications);
             AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);
 
             if (Credential != null)

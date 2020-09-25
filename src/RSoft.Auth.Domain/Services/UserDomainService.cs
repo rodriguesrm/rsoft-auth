@@ -13,6 +13,7 @@ using RSoft.Framework.Application.Model;
 using System.Collections.Generic;
 using RSoft.Framework.Infra.Data;
 using System.Linq;
+using RSoft.Framework.Cross;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -46,13 +47,14 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="securityOptions">Security options configuration</param>
         public UserDomainService
         (
+            IAuthenticatedUser authenticatedUser,
             IUnitOfWork uow, 
             IUserRepository repository, 
             IUserCredentialTokenRepository tokenRepository, 
             IScopeRepository scopeRepository,
             IRoleRepository roleRepository,
             IOptions<SecurityOptions> securityOptions
-        ) : base(repository)
+        ) : base(repository, authenticatedUser)
         {
             _uow = uow;
             _tokenRepository = tokenRepository;

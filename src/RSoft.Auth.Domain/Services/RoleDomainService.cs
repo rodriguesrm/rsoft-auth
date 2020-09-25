@@ -2,6 +2,7 @@
 using RSoft.Auth.Domain.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
+using RSoft.Framework.Cross;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -17,7 +18,9 @@ namespace RSoft.Auth.Domain.Services
         /// <summary>
         /// Create a new scopde domain service instance
         /// </summary>
-        public RoleDomainService(IRoleRepository repository) : base(repository)
+        /// <param name="repository">Role repository</param>
+        /// <param name="authenticatedUser">Authenticaed user</param>
+        public RoleDomainService(IRoleRepository repository, IAuthenticatedUser authenticatedUser) : base(repository, authenticatedUser)
         {
         }
 

@@ -18,14 +18,7 @@
         /// <param name="message">Critical message</param>
         public RequiredValidationContract(TObj obj, string field, string message) : base()
         {
-
-            //TODO: Globalization
-            Contract
-                .Requires()
-                .IsNotNull(obj, field, message)
-            ;
-
-
+            
             if (typeof(TObj) == typeof(string))
             {
                 string value = obj as string;
@@ -33,6 +26,12 @@
                 Contract
                     .Requires()
                     .IsNotNullOrEmpty(value, field, message);
+            }
+            else
+            {
+                Contract
+                    .Requires()
+                    .IsNotNull(obj, field, message);
             }
 
 

@@ -1,4 +1,5 @@
-﻿using RSoft.Framework.Domain.Entities;
+﻿using RSoft.Framework.Cross;
+using RSoft.Framework.Domain.Entities;
 using RSoft.Framework.Infra.Data;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace RSoft.Framework.Domain.Services
         #region Local objects/variables
 
         protected TRepository _repository;
+        protected IAuthenticatedUser _authenticatedUser;
 
         #endregion
 
@@ -31,9 +33,11 @@ namespace RSoft.Framework.Domain.Services
         /// Create a new domain service instance
         /// </summary>
         /// <param name="repository">Principal repository</param>
-        public DomainServiceBase(TRepository repository)
+        /// <param name="authenticatedUser">Authenticated user</param>
+        public DomainServiceBase(TRepository repository, IAuthenticatedUser authenticatedUser)
         {
             _repository = repository;
+            _authenticatedUser = authenticatedUser;
         }
 
         #endregion
@@ -49,6 +53,8 @@ namespace RSoft.Framework.Domain.Services
                 entity.AddNotification(entity.GetName(), "Operation was cancelled");
                 return entity;
             }
+            IAuditAuthor<TKey> audit = entity as IAuditAuthor<TKey>;
+            //TODO: **** PAREI AQUI ****
             return await _repository.AddAsync(entity, cancellationToken);
         }
 
@@ -92,6 +98,7 @@ namespace RSoft.Framework.Domain.Services
                 }
 
                 _repository = null;
+                _authenticatedUser = null;
 
                 disposedValue = true;
             }

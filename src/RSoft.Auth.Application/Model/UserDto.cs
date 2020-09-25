@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RSoft.Framework.Application.Dto;
 using RSoft.Framework.Cross.Entities;
+using RSoft.Framework.Cross.Enums;
 
 namespace RSoft.Auth.Application.Model
 {
@@ -33,6 +34,11 @@ namespace RSoft.Auth.Application.Model
         /// User e-mail
         /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// User type
+        /// </summary>
+        public UserType? Type { get; set; }
 
         #endregion
 

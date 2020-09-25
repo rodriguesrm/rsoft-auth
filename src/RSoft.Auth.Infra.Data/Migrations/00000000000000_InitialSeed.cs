@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using RSoft.Auth.Infra.Data.Entities;
+using RSoft.Framework.Cross.Enums;
 using RSoft.Helpers.Security;
 
 namespace RSoft.Auth.Infra.Data.Migrations
@@ -144,9 +145,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(User.FirstName), 
                     nameof(User.LastName), 
                     nameof(User.BornDate), 
-                    nameof(User.Email) 
+                    nameof(User.Email),
+                    nameof(User.Type)
                 },
-                new object[] { userId, now, userId, null, null, 1, 0, "MASTER", "RSOFT", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "master@server.com" }
+                new object[] { userId, now, userId, null, null, 1, 0, "MASTER", "RSOFT", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "master@server.com", (int)UserType.User }
             );
 
             migrationBuilder.InsertData
@@ -164,9 +166,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(User.FirstName),
                     nameof(User.LastName),
                     nameof(User.BornDate),
-                    nameof(User.Email)
+                    nameof(User.Email),
+                    nameof(User.Type)
                 },
-                new object[] { serviceUserId, now, userId, null, null, 1, 0, "SERVICES", "RSOFT", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "no-reply@server.com" }
+                new object[] { serviceUserId, now, userId, null, null, 1, 0, "SERVICES", "RSOFT", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "no-reply@server.com", (int)UserType.Service }
             );
 
             migrationBuilder.InsertData

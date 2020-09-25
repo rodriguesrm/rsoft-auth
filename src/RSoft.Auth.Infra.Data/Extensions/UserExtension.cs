@@ -36,6 +36,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     Name = new Name(table.FirstName, table.LastName),
                     BornDate = table.BornDate,
                     Email = new Email(table.Email),
+                    Type = table.Type,
                     CreatedOn = table.CreatedOn,
                     ChangedOn = table.ChangedOn
                 };
@@ -82,7 +83,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     FirstName = entity.Name.FirstName,
                     LastName = entity.Name.LastName,
                     BornDate = entity.BornDate,
-                    Email = entity.Email.Address,
+                    Email = entity.Email?.Address,
+                    Type = entity.Type.Value,
                     CreatedOn = entity.CreatedOn,
                     CreatedBy = entity.CreatedAuthor.Id
                 };
@@ -108,6 +110,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 table.LastName = entity.Name.LastName;
                 table.BornDate = entity.BornDate;
                 table.Email = entity.Email.Address;
+                table.Type = entity.Type.Value;
                 table.ChangedOn = entity.ChangedOn;
                 table.ChangedBy = entity.ChangedAuthor.Id;
 

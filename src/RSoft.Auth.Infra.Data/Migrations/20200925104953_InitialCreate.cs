@@ -21,7 +21,8 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     FirstName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     LastName = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
                     BornDate = table.Column<DateTime>(nullable: false),
-                    Email = table.Column<string>(unicode: false, maxLength: 254, nullable: false)
+                    Email = table.Column<string>(unicode: false, maxLength: 254, nullable: false),
+                    Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

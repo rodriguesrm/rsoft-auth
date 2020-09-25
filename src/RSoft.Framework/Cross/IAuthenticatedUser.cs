@@ -4,7 +4,7 @@ namespace RSoft.Framework.Cross
 {
 
     /// <summary>
-    /// /// Http logged application user interface
+    /// logged user/service interface
     /// </summary>
     public interface IAuthenticatedUser : IHttpLoggedUser<Guid>
     {

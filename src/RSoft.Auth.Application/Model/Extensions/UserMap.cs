@@ -43,6 +43,7 @@ namespace RSoft.Auth.Application.Model.Extensions
                 Name = new Name(dto.Name?.FirstName, dto.Name?.LastName),
                 BornDate = dto.BornDate,
                 Email = new Email(dto.Email),
+                Type = dto.Type,
                 IsActive = dto.IsActive,
                 Roles = roles,
                 Scopes = scopes
@@ -70,6 +71,7 @@ namespace RSoft.Auth.Application.Model.Extensions
                 entity.Name = new Name(dto.Name?.FirstName, dto.Name?.LastName);
                 entity.BornDate = dto.BornDate;
                 entity.Email = new Email(dto.Email);
+                entity.Type = dto.Type;
                 entity.IsActive = dto.IsActive;
                 if (loadChildren)
                     LoadChildren(entity, dto);

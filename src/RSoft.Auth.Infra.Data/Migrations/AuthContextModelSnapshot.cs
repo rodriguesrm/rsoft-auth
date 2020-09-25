@@ -189,6 +189,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasMaxLength(100)
                         .IsUnicode(false);
 
+                    b.Property<int>("Type")
+                        .HasColumnName("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChangedBy")

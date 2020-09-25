@@ -79,6 +79,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                     Name = request.Name,
                     BornDate = request.BornDate,
                     Email = request.Email,
+                    Type= request.Type,
                     IsActive = request.IsActive,
                     Scopes = request.Scopes.Select(s => new ScopeDto() { Id = s }).ToList(),
                     Roles = request.Roles.Select(r => new RoleDto() { Id = r }).ToList()

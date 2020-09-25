@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RSoft.Framework.Cross.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace RSoft.Auth.Web.Api.Model.Request.v1_0
@@ -27,6 +28,11 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
         /// </summary>
         /// <example>ironman@marvel.com</example>
         public string Email { get; set; }
+
+        /// <summary>
+        /// User type (1-Person | 2-Application/Service)
+        /// </summary>
+        public UserType? Type { get; set; }
 
         /// <summary>
         /// User active status

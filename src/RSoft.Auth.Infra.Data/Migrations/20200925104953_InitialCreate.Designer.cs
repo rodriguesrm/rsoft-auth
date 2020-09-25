@@ -9,7 +9,7 @@ using RSoft.Auth.Infra.Data;
 namespace RSoft.Auth.Infra.Data.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20200924103751_InitialCreate")]
+    [Migration("20200925104953_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -190,6 +190,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
                         .HasMaxLength(100)
                         .IsUnicode(false);
+
+                    b.Property<int>("Type")
+                        .HasColumnName("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

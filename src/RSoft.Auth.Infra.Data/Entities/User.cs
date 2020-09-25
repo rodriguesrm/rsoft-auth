@@ -1,4 +1,5 @@
 ﻿using RSoft.Framework.Cross.Entities;
+using RSoft.Framework.Cross.Enums;
 using RSoft.Framework.Infra.Data;
 using RSoft.Framework.Infra.Data.Tables;
 using System;
@@ -77,6 +78,11 @@ namespace RSoft.Auth.Infra.Data.Entities
         /// User e-mail
         /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// User type
+        /// </summary>
+        public UserType Type { get; set; }
 
         #endregion
 

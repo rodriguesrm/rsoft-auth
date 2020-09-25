@@ -49,6 +49,10 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .IsUnicode(false)
                 .IsRequired();
 
+            builder.Property(c => c.Type)
+                .HasColumnName(nameof(User.Type))
+                .IsRequired();
+
             #endregion
 
             #region FKs
