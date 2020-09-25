@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using RSoft.Auth.Domain.Services;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidator;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -97,6 +98,9 @@ namespace RSoft.Auth.Application.Services
                 if (scopes.FirstOrDefault(s => s.Id == role.Scope?.Id) == null)
                     dto.AddNotification("Roles", $"The {role.Name} role belongs to a scope to which the user is not assigned.");
             }
+
+            if (dto.Notifications.Count > 0)
+                return dto;
 
             dto.Scopes = scopes.Select(s => s.Map(false)).ToList();
             dto.Roles = roles.Select(r => r.Map(false)).ToList();
