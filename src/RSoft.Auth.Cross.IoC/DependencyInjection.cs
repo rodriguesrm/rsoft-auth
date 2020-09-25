@@ -58,8 +58,9 @@ namespace RSoft.Auth.Cross.IoC
 
             #region Application
 
-            services.AddScoped<IRoleAppService, RoleAppService>();
+            services.AddScoped<IUserAppService, UserAppService>();
             services.AddScoped<ICredentialAppService, CredentialAppService>();
+            services.AddScoped<IRoleAppService, RoleAppService>();
 
             #endregion
 

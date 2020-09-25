@@ -41,7 +41,7 @@ namespace RSoft.Framework.Domain.Services
         #region Public methods
 
         ///<inheritdoc/>
-        public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             if (entity.Invalid) return entity;
             if (cancellationToken.IsCancellationRequested)
@@ -54,22 +54,22 @@ namespace RSoft.Framework.Domain.Services
 
 
         ///<inheritdoc/>
-        public TEntity Update(TKey[] keys, TEntity entity)
+        public virtual TEntity Update(TKey[] keys, TEntity entity)
         {
             if (entity.Invalid) return entity;
             return _repository.Update(keys, entity);
         }
 
         ///<inheritdoc/>
-        public async Task<TEntity> GetByKeyAsync(TKey[] keys, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> GetByKeyAsync(TKey[] keys, CancellationToken cancellationToken = default)
             => await _repository.GetByKeyAsync(keys, cancellationToken);
 
         ///<inheritdoc/>
-        Task<IEnumerable<TEntity>> ICommonBase<TEntity, TKey>.GetAllAsync(CancellationToken cancellationToken)
-            => _repository.GetAllAsync(cancellationToken);
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+            => await _repository.GetAllAsync(cancellationToken);
 
         ///<inheritdoc/>
-        public void Delete(TKey[] keys)
+        public virtual void Delete(TKey[] keys)
             => _repository.Delete(keys);
 
         #endregion

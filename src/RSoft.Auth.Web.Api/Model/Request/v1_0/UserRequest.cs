@@ -1,4 +1,5 @@
-﻿using RSoft.Framework.Cross.Entities;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RSoft.Auth.Web.Api.Model.Request.v1_0
 {
@@ -17,6 +18,11 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
         public FullNameRequest Name { get; set; }
 
         /// <summary>
+        /// User's date of birth
+        /// </summary>
+        public DateTime? BornDate { get; set; }
+
+        /// <summary>
         /// User e-mail
         /// </summary>
         /// <example>ironman@marvel.com</example>
@@ -26,6 +32,16 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
         /// User active status
         /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// User roles ids
+        /// </summary>
+        public IEnumerable<Guid> Roles { get; set; }
+
+        /// <summary>
+        /// User scopes ids
+        /// </summary>
+        public IEnumerable<Guid> Scopes { get; set; }
 
         #endregion
 

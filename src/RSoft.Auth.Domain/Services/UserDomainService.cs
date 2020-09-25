@@ -28,6 +28,8 @@ namespace RSoft.Auth.Domain.Services
         private readonly SecurityOptions _securityOptions;
         private readonly IUnitOfWork _uow;
         private readonly IUserCredentialTokenRepository _tokenRepository;
+        private readonly IScopeRepository _scopeRepository;
+        private readonly IRoleRepository _roleRepository;
 
         #endregion
 
@@ -39,11 +41,23 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="uow">Unit of Work object</param>
         /// <param name="repository">User repository service</param>
         /// <param name="tokenRepository">User credential token repository service</param>
+        /// <param name="scopeRepository">Scope repository</param>
+        /// <param name="roleRepository">Role repository</param>
         /// <param name="securityOptions">Security options configuration</param>
-        public UserDomainService(IUnitOfWork uow, IUserRepository repository, IUserCredentialTokenRepository tokenRepository, IOptions<SecurityOptions> securityOptions) : base(repository)
+        public UserDomainService
+        (
+            IUnitOfWork uow, 
+            IUserRepository repository, 
+            IUserCredentialTokenRepository tokenRepository, 
+            IScopeRepository scopeRepository,
+            IRoleRepository roleRepository,
+            IOptions<SecurityOptions> securityOptions
+        ) : base(repository)
         {
             _uow = uow;
             _tokenRepository = tokenRepository;
+            _scopeRepository = scopeRepository;
+            _roleRepository = roleRepository;
             _securityOptions = securityOptions?.Value;
         }
 
@@ -178,6 +192,49 @@ namespace RSoft.Auth.Domain.Services
             return new PasswordProcessResult(success, token, expiresOn, errors, exception);
 
         }
+
+        #endregion
+
+        #region Public methods
+
+        /////<inheritdoc/>
+        //public override async Task<User> AddAsync(User entity, CancellationToken cancellationToken = default)
+        //{
+
+        //    IList<Scope> scopes = new List<Scope>();
+        //    IList<Role> roles = new List<Role>();
+
+        //    foreach (Scope item in entity.Scopes)
+        //    {
+        //        Guid[] keys = new Guid[] { item.Id };
+        //        Scope scope = await _scopeRepository.GetByKeyAsync(keys, cancellationToken);
+        //        if (scope == null)
+        //            entity.AddNotification("Scopes", $"Scope '{item.Id}' not found");
+        //        else
+        //            scopes.Add(scope);
+        //    }
+
+        //    foreach (var item in entity.Roles)
+        //    {
+        //        Guid[] keys = new Guid[] { item.Id };
+        //        Role role = await _roleRepository.GetByKeyAsync(keys, cancellationToken);
+        //        if (role == null)
+        //            entity.AddNotification("Roles", $"Role '{item.Id}' not found");
+        //        else
+        //            roles.Add(role);
+        //    }
+
+        //    foreach (var role in roles)
+        //    {
+        //        if (scopes.FirstOrDefault(s => s.Id == role.Scope?.Id) == null)
+        //            entity.AddNotification("Roles", $"The {role.Name} role belongs to a scope to which the user is not assigned.");
+        //    }
+
+        //    entity.Scopes = scopes;
+        //    entity.Roles = roles;
+
+        //    return await base.AddAsync(entity, cancellationToken);
+        //}
 
         #endregion
 
