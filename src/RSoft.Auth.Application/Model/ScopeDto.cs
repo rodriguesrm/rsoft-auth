@@ -22,6 +22,11 @@ namespace RSoft.Auth.Application.Model
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Scope prefix to concate in roles
+        /// </summary>
+        public string Prefix { get; set; }
+
         #endregion
 
     }

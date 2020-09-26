@@ -95,6 +95,17 @@ namespace RSoft.Framework.Cross
                 .Select(x => x.Value)
                 .FirstOrDefault();
 
+        /// <summary>
+        /// User scopes
+        /// </summary>
+        public IEnumerable<string> Scopes =>
+            _accessor
+            .HttpContext
+            .User
+            .Claims
+            .Where(x => x.Type == ClaimTypes.GroupSid)
+            .Select(x => x.Value);
+
         ///<inheritdoc/>
         public IEnumerable<string> Roles => 
             _accessor

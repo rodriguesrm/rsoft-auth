@@ -58,6 +58,11 @@ namespace RSoft.Auth.Infra.Data.Entities
         /// </summary>
         public bool IsDeleted { get; set; }
 
+        /// <summary>
+        /// Scope prefix to concate in roles
+        /// </summary>
+        public string Prefix { get; set; }
+
         #endregion
 
         #region Navigation Lazy

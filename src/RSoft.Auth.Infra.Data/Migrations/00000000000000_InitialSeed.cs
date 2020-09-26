@@ -57,6 +57,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
             DateTime now = DateTime.UtcNow;
 
             Guid scopeId = new Guid("92a4ce2a-26ed-4ae2-9813-b7e5e6a8678d");
+            string authPrefix = "AUTH";
             Guid roleId = new Guid("6e60ea33-244c-452a-ba49-d745729f8aa4");
             Guid roleServiceId = new Guid("5d41c69f-276a-4b27-ab88-ebade519504d");
 
@@ -82,10 +83,11 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Scope.ChangedOn),
                     nameof(Scope.ChangedBy),
                     nameof(Scope.Name),
+                    nameof(Scope.Prefix),
                     nameof(Scope.IsActive),
                     nameof(Scope.IsDeleted)
                 },
-                new object[] { scopeId, now, userId, null, null, "Authentication", 1, 0 }
+                new object[] { scopeId, now, userId, null, null, "Authentication", authPrefix, 1, 0 }
             );
 
             // Roles
@@ -106,7 +108,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Role.Description),
                     nameof(Role.ScopeId)
                 },
-                new object[] { roleId, now, userId, null, null, "master", 1, 0, "Master privileges, has access granted to all resources", scopeId }
+                new object[] { roleId, now, userId, null, null, $"{authPrefix}master", 1, 0, "Master privileges, has access granted to all resources", scopeId }
             );
 
             migrationBuilder.InsertData
@@ -125,7 +127,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Role.Description),
                     nameof(Role.ScopeId)
                 },
-                new object[] { roleServiceId, now, userId, null, null, "service", 1, 0, "Service privileges, has access granted to all operations to be performed in the background", scopeId }
+                new object[] { roleServiceId, now, userId, null, null, $"{authPrefix}service", 1, 0, "Service privileges, has access granted to all operations to be performed in the background", scopeId }
             );
 
             // Users / Credentials
@@ -148,7 +150,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(User.Email),
                     nameof(User.Type)
                 },
-                new object[] { userId, now, userId, null, null, 1, 0, "MASTER", "RSOFT", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "master@server.com", (int)UserType.User }
+                new object[] { userId, now, userId, null, null, 1, 0, "Master", "RSoft", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "master@server.com", (int)UserType.User }
             );
 
             migrationBuilder.InsertData
@@ -169,7 +171,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(User.Email),
                     nameof(User.Type)
                 },
-                new object[] { serviceUserId, now, userId, null, null, 1, 0, "SERVICES", "RSOFT", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "no-reply@server.com", (int)UserType.Service }
+                new object[] { serviceUserId, now, userId, null, null, 1, 0, "Master", "RSoft", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "no-reply@server.com", (int)UserType.Service }
             );
 
             migrationBuilder.InsertData

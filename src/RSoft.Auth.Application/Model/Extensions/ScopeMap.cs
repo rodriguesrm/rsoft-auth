@@ -32,6 +32,7 @@ namespace RSoft.Auth.Application.Model.Extensions
                 entity = new Scope();
 
             entity.Name = dto.Name;
+            entity.Prefix = dto.Prefix;
             entity.IsActive = dto.IsActive;
 
             return entity;
@@ -47,6 +48,7 @@ namespace RSoft.Auth.Application.Model.Extensions
             if (dto != null)
             {
                 entity.Name = dto.Name;
+                entity.Prefix = dto.Prefix;
                 entity.IsActive = dto.IsActive;
             }
             return entity;
@@ -86,6 +88,7 @@ namespace RSoft.Auth.Application.Model.Extensions
             }
 
             dto.Name = entity.Name;
+            dto.Prefix = entity.Prefix;
             dto.IsActive = entity.IsActive;
 
             return dto;

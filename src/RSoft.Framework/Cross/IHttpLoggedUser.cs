@@ -36,6 +36,11 @@ namespace RSoft.Framework.Cross
         string Email { get; }
 
         /// <summary>
+        /// User scopes
+        /// </summary>
+        IEnumerable<string> Scopes { get; }
+
+        /// <summary>
         /// User roles
         /// </summary>
         IEnumerable<string> Roles { get; }

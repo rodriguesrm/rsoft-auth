@@ -9,7 +9,7 @@ using RSoft.Auth.Infra.Data;
 namespace RSoft.Auth.Infra.Data.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20200925104953_InitialCreate")]
+    [Migration("20200926103838_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,6 +119,13 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
+                    b.Property<string>("Prefix")
+                        .IsRequired()
+                        .HasColumnName("Prefix")
+                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
+                        .HasMaxLength(10)
+                        .IsUnicode(false);
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChangedBy")
@@ -136,6 +143,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique()
                         .HasName("AK_Scope_Name");
+
+                    b.HasIndex("Prefix")
+                        .IsUnique()
+                        .HasName("AK_Scope_Prefix");
 
                     b.ToTable("Scope");
                 });

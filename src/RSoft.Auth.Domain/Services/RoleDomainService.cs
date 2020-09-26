@@ -4,8 +4,6 @@ using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Domain.ValueObjects;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -38,6 +36,7 @@ namespace RSoft.Auth.Domain.Services
                 entity.ChangedAuthor = new AuthorNullable<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
             else
                 entity.CreatedAuthor = new Author<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
+            entity.Name = entity.Name.ToLower();
         }
 
         #endregion

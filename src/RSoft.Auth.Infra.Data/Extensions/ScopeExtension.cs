@@ -34,6 +34,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 result = new dmn.Scope(table.Id)
                 {
                     Name = table.Name,
+                    Prefix = table.Prefix,
                     CreatedOn = table.CreatedOn,
                     ChangedOn = table.ChangedOn,
                     IsActive = table.IsActive
@@ -70,6 +71,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 result = new tbl.Scope(entity.Id)
                 {
                     Name = entity.Name,
+                    Prefix = entity.Prefix,
                     CreatedOn = entity.CreatedOn,
                     CreatedBy = entity.CreatedAuthor.Id,
                     IsActive = entity.IsActive
@@ -91,6 +93,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
             if (entity != null && table != null)
             {
                 table.Name = entity.Name;
+                table.Prefix = entity.Prefix;
                 table.ChangedOn = entity.ChangedOn;
                 table.ChangedBy = entity.ChangedAuthor.Id;
                 table.IsActive = entity.IsActive;

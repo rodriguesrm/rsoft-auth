@@ -53,6 +53,11 @@ namespace RSoft.Auth.Domain.Entities
         /// </summary>
         public bool IsActive { get; set; }
 
+        /// <summary>
+        /// Scope prefix to concate in roles
+        /// </summary>
+        public string Prefix { get; set; }
+
         #endregion
 
         #region Navigation Lazy
@@ -93,7 +98,8 @@ namespace RSoft.Auth.Domain.Entities
             //TODO: Globalization
             if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);
             if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
-            AddNotifications(new SimpleStringValidationContract(this.Name, nameof(Name), true, 3, 80).Contract.Notifications);
+            AddNotifications(new SimpleStringValidationContract(Name, nameof(Name), true, 3, 80).Contract.Notifications);
+            AddNotifications(new SimpleStringValidationContract(Prefix, nameof(Prefix), true, "^[A-Za-z]{3,10}+$", 3, 10).Contract.Notifications);
         }
 
         #endregion

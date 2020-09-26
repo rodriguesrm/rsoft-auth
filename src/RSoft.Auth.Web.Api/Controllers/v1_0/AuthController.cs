@@ -68,7 +68,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         protected string GenerateToken(UserDto user, string login, out DateTime? expiresIn)
         {
 
-            IList<Claim> claimnsUsuario = new List<Claim>
+            IList<Claim> userClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Sid, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Name.FirstName),
@@ -77,16 +77,21 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                 new Claim(ClaimTypes.NameIdentifier, login)
             };
 
-            foreach (RoleDto p in user.Roles)
+            foreach (RoleDto role in user.Roles)
             {
-                claimnsUsuario.Add(new Claim(ClaimTypes.Role, p.Name));
+                userClaims.Add(new Claim(ClaimTypes.Role, role.Name));
+            }
+
+            foreach (ScopeDto scope in user.Scopes)
+            {
+                userClaims.Add(new Claim(ClaimTypes.GroupSid, scope.Prefix));
             }
 
             JwtSecurityToken jwt = new JwtSecurityToken
             (
                  issuer: _jwtTokenOptions.Issuer,
                  audience: _jwtTokenOptions.Audience,
-                 claims: claimnsUsuario,
+                 claims: userClaims,
                  notBefore: _jwtTokenOptions.NotBefore,
                  expires: _jwtTokenOptions.Expiration,
                  signingCredentials: _jwtTokenOptions.Credentials
