@@ -13,6 +13,11 @@ namespace RSoft.Auth.Application.Model
         #region Properties
 
         /// <summary>
+        /// Application access key word
+        /// </summary>
+        public Guid Key { get; set; }
+
+        /// <summary>
         /// Indicate if entity is active
         /// </summary>
         public bool IsActive { get; set; }
@@ -21,11 +26,6 @@ namespace RSoft.Auth.Application.Model
         /// Entity name value
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// Scope prefix to concate in roles
-        /// </summary>
-        public string Prefix { get; set; }
 
         #endregion
 

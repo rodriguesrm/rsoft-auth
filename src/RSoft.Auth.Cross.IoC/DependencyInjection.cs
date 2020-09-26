@@ -35,7 +35,6 @@ namespace RSoft.Auth.Cross.IoC
 
             services.Configure<SecurityOptions>(options => configuration.GetSection("Security").Bind(options));
 
-
             #endregion
 
             #region Infra

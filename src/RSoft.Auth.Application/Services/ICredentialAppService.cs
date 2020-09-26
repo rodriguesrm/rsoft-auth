@@ -17,10 +17,11 @@ namespace RSoft.Auth.Application.Services
         /// <summary>
         /// Authenticate user
         /// </summary>
+        /// <param name="scopeId">Authentication scope id</param>
         /// <param name="login">User login/param>
         /// <param name="password">User password</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<AuthenticateResult<UserDto>> AuthenticateAsync(string login, string password, CancellationToken cancellationToken = default);
+        Task<AuthenticateResult<UserDto>> AuthenticateAsync(Guid scopeId, string login, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates user credentials

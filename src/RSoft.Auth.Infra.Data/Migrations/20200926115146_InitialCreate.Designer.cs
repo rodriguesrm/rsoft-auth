@@ -9,7 +9,7 @@ using RSoft.Auth.Infra.Data;
 namespace RSoft.Auth.Infra.Data.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20200926103838_InitialCreate")]
+    [Migration("20200926115146_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,18 +112,15 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(0ul);
 
+                    b.Property<Guid>("Key")
+                        .HasColumnName("Key")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("Name")
                         .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("Prefix")
-                        .IsRequired()
-                        .HasColumnName("Prefix")
-                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
-                        .HasMaxLength(10)
                         .IsUnicode(false);
 
                     b.HasKey("Id");
@@ -140,13 +137,13 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.HasIndex("CreatedOn")
                         .HasName("IX_Scope_CreatedOn");
 
+                    b.HasIndex("Key")
+                        .IsUnique()
+                        .HasName("AK_Scope_Key");
+
                     b.HasIndex("Name")
                         .IsUnique()
                         .HasName("AK_Scope_Name");
-
-                    b.HasIndex("Prefix")
-                        .IsUnique()
-                        .HasName("AK_Scope_Prefix");
 
                     b.ToTable("Scope");
                 });

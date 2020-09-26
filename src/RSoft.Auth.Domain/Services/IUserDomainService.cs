@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RSoft.Framework.Application.Model;
 using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Cross.Common.Model.Args;
+using System.Collections.Generic;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -19,10 +20,11 @@ namespace RSoft.Auth.Domain.Services
         /// <summary>
         /// Get user by login and password
         /// </summary>
+        /// <param name="scopeId">Authentication scope id</param>
         /// <param name="login">User login</param>
         /// <param name="password">User passoword</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<User> GetByLoginAsync(string login, string password, CancellationToken cancellationToken = default);
+        Task<User> GetByLoginAsync(Guid scopeId, string login, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Create token for generating password credentials (first access/reset password) and send by email
@@ -32,6 +34,13 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="sendMailCallBack">Callback function for sending e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<PasswordProcessResult> StartNewCredentialProcessAsync(string login, bool firstAccess, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get all user roles in a specific scope
+        /// </summary>
+        /// <param name="scopeId">Scope id key value</param>
+        /// <param name="userId">User id key value</param>
+        ICollection<Role> GetRolesByUserAsync(Guid scopeId, Guid userId);
 
     }
 

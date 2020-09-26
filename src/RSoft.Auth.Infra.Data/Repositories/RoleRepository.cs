@@ -4,6 +4,9 @@ using tbl = RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Auth.Infra.Data.Extensions;
+using System.Collections.Generic;
+using System.Linq;
+using RSoft.Auth.Infra.Data.Entities;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {
@@ -34,6 +37,25 @@ namespace RSoft.Auth.Infra.Data.Repositories
         ///<inheritdoc/>
         protected override tbl.Role MapForUpdate(dmn.Role entity, tbl.Role table)
             => entity.Map(table);
+
+        #endregion
+
+        #region Public methods
+
+        ///<inheritdoc/>
+        public ICollection<dmn.Role> GetRolesByUser(Guid scopeId, Guid userId)
+        {
+
+            ICollection<dmn.Role> result = _ctx
+                .Set<UserRole>()
+                .Where(x => x.Role.ScopeId == scopeId && x.UserId == userId)
+                .ToList()
+                .Select(s => s.Role.Map())
+                .ToList();
+
+            return result;
+
+        }
 
         #endregion
 

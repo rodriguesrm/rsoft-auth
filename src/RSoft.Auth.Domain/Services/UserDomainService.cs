@@ -95,13 +95,8 @@ namespace RSoft.Auth.Domain.Services
 
         #region Public methods
 
-        /// <summary>
-        /// Get user by login and password
-        /// </summary>
-        /// <param name="login">User login</param>
-        /// <param name="password">User passoword</param>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        public async Task<User> GetByLoginAsync(string login, string password, CancellationToken cancellationToken = default)
+        ///<inheritdoc/>
+        public async Task<User> GetByLoginAsync(Guid scopeId, string login, string password, CancellationToken cancellationToken = default)
         {
             
             //BACKLOG: Add LDAP Authenticate
@@ -112,6 +107,13 @@ namespace RSoft.Auth.Domain.Services
             {
                 if (user.Credential.Password != ConvertPassword(password))
                     user = null;
+
+                Scope scopeCheck = user.Scopes.FirstOrDefault(x => x.Id == scopeId);
+                if (scopeCheck == null)
+                    user = null;
+                else
+                    user.Roles = GetRolesByUserAsync(scopeId, user.Id);
+
              }
             return user;
         }
@@ -207,6 +209,13 @@ namespace RSoft.Auth.Domain.Services
 
             return new PasswordProcessResult(success, token, expiresOn, errors, exception);
 
+        }
+
+        ///<inheritdoc/>
+        public ICollection<Role> GetRolesByUserAsync(Guid scopeId, Guid userId)
+        {
+            ICollection<Role> result = _roleRepository.GetRolesByUser(scopeId, userId);
+            return result;
         }
 
         #endregion

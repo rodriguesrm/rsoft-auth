@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RSoft.Auth.Cross.Common.Options;
 using System;
 
 namespace RSoft.Framework.Cross.IoC
@@ -63,6 +64,12 @@ namespace RSoft.Framework.Cross.IoC
                 if (useLayzLoadingProxy)
                     opt.UseLazyLoadingProxies();
             });
+
+            #endregion
+
+            #region Options
+
+            services.Configure<ScopeOptions>(options => configuration.GetSection("Scope").Bind(options));
 
             #endregion
 

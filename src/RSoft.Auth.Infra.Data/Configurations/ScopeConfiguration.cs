@@ -34,10 +34,8 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .IsUnicode(false)
                 .IsRequired();
 
-            builder.Property(c => c.Prefix)
-                .HasColumnName(nameof(Scope.Prefix))
-                .HasMaxLength(10)
-                .IsUnicode(false)
+            builder.Property(c => c.Key)
+                .HasColumnName(nameof(Scope.Key))
                 .IsRequired();
 
             #endregion
@@ -64,8 +62,8 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .HasName($"AK_{nameof(Scope)}_{nameof(Scope.Name)}")
                 .IsUnique();
 
-            builder.HasIndex(i => i.Prefix)
-                .HasName($"AK_{nameof(Scope)}_{nameof(Scope.Prefix)}")
+            builder.HasIndex(i => i.Key)
+                .HasName($"AK_{nameof(Scope)}_{nameof(Scope.Key)}")
                 .IsUnique();
 
             #endregion

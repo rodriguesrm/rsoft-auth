@@ -84,7 +84,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
             foreach (ScopeDto scope in user.Scopes)
             {
-                userClaims.Add(new Claim(ClaimTypes.GroupSid, scope.Prefix));
+                userClaims.Add(new Claim(ClaimTypes.GroupSid, scope.Name));
             }
 
             JwtSecurityToken jwt = new JwtSecurityToken
@@ -108,13 +108,17 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Authenticate the user in the system and generate the access-key (token)
         /// </summary>
+        /// <param name="scope">Authentication scope id</param>
         /// <param name="request">Request data</param>
         /// <param name="details">Indicates whether to return user details</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> AuthenticateAsync(AuthenticateRequest request, bool details, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> AuthenticateAsync(string scope, AuthenticateRequest request, bool details, CancellationToken cancellationToken = default)
         {
 
-            AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(request.Login, request.Password, cancellationToken);
+            if (!Guid.TryParse(scope, out Guid scopeId))
+                return Unauthorized("Scope not defined or invalid");
+
+            AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(scopeId, request.Login, request.Password, cancellationToken);
             if (authResult.Success)
             {
                 SimpleUserResponse userDetail = null;
@@ -145,6 +149,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Authenticate user in the system-application / generate access token
         /// </summary>
+        /// <param name="scope">Authentication scope id (by header)</param>
         /// <param name="request">Request data information</param>
         /// <param name="details">Indicates whether to return user details (default=false)</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
@@ -159,8 +164,9 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [HttpPost]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request, [FromQuery] bool details, CancellationToken cancellationToken = default)
-            => await RunActionAsync(AuthenticateAsync(request, details, cancellationToken), cancellationToken);
+        public async Task<IActionResult> Authenticate([FromHeader] string scope, [FromBody] AuthenticateRequest request, [FromQuery] bool details, CancellationToken cancellationToken = default)
+            => await RunActionAsync(AuthenticateAsync(scope, request, details, cancellationToken), cancellationToken);
+        //TODO: Add application authentication (ScopeId + ScopeKey)
 
         #endregion
 

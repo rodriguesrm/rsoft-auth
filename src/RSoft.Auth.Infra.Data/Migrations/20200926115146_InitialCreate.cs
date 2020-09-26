@@ -51,9 +51,9 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     ChangedOn = table.Column<DateTime>(nullable: true),
                     ChangedBy = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
+                    Key = table.Column<Guid>(nullable: false),
                     IsActive = table.Column<ulong>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 0ul),
-                    Prefix = table.Column<string>(unicode: false, maxLength: 10, nullable: false)
+                    IsDeleted = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 0ul)
                 },
                 constraints: table =>
                 {
@@ -252,15 +252,15 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 column: "CreatedOn");
 
             migrationBuilder.CreateIndex(
-                name: "AK_Scope_Name",
+                name: "AK_Scope_Key",
                 table: "Scope",
-                column: "Name",
+                column: "Key",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "AK_Scope_Prefix",
+                name: "AK_Scope_Name",
                 table: "Scope",
-                column: "Prefix",
+                column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
