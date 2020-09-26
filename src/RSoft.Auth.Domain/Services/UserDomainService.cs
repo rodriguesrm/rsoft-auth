@@ -96,7 +96,7 @@ namespace RSoft.Auth.Domain.Services
         #region Public methods
 
         ///<inheritdoc/>
-        public async Task<User> GetByLoginAsync(Guid scopeId, Guid scopeKey, string login, string password, CancellationToken cancellationToken = default)
+        public async Task<User> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default)
         {
             
             //BACKLOG: Add LDAP Authenticate
@@ -108,11 +108,11 @@ namespace RSoft.Auth.Domain.Services
                 if (user.Credential.Password != ConvertPassword(password))
                     user = null;
 
-                Scope scopeCheck = user.Scopes.FirstOrDefault(x => x.Id == scopeId && x.AccessKey == scopeKey);
+                Scope scopeCheck = user.Scopes.FirstOrDefault(x => x.Id == appKey && x.AccessKey == appAccess);
                 if (scopeCheck == null)
                     user = null;
                 else
-                    user.Roles = GetRolesByUserAsync(scopeId, user.Id);
+                    user.Roles = GetRolesByUserAsync(appKey, user.Id);
 
              }
             return user;

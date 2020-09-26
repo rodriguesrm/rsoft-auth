@@ -22,6 +22,10 @@ namespace RSoft.Framework.Web.Api
     public abstract class ApiBaseController : ControllerBase, IDisposable
     {
 
+        #region Local objects/variables
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -31,7 +35,38 @@ namespace RSoft.Framework.Web.Api
 
         #endregion
 
-        #region Local methods
+        #region Local Properties
+
+        /// <summary>
+        /// Application id passed in the request header
+        protected Guid? AppKey
+        {
+            get
+            {
+                var headerInfo = Request?.Headers["app-key"];
+                if (!Guid.TryParse(headerInfo, out Guid result))
+                    return null;
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Application access key passed in the request header
+        /// </summary>
+        protected Guid? AppAccess
+        {
+            get
+            {
+                var headerInfo = Request?.Headers["app-access"];
+                if (!Guid.TryParse(headerInfo, out Guid result))
+                    return null;
+                return result;
+            }
+        }
+
+        #endregion
+
+        #region Local Methods
 
         /// <summary>
         /// Handles exception

@@ -108,18 +108,16 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Authenticate the user in the system and generate the access-key (token)
         /// </summary>
-        /// <param name="scopeId">Authentication scope id</param>
-        /// <param name="scopeKey">Authenticato scope key access</param>
         /// <param name="request">Request data</param>
         /// <param name="details">Indicates whether to return user details</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> AuthenticateAsync(Guid? scopeId, Guid? scopeKey, AuthenticateRequest request, bool details, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> AuthenticateAsync(AuthenticateRequest request, bool details, CancellationToken cancellationToken = default)
         {
 
-            if (!scopeId.HasValue || !scopeKey.HasValue)
+            if (!AppKey.HasValue || !AppAccess.HasValue)
                 return Unauthorized("Scope not defined or invalid");
 
-            AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(scopeId.Value,scopeKey.Value, request.Login, request.Password, cancellationToken);
+            AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(AppKey.Value, AppAccess.Value, request.Login, request.Password, cancellationToken);
             if (authResult.Success)
             {
                 SimpleUserResponse userDetail = null;
@@ -166,14 +164,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [HttpPost]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate
-        (
-            [FromHeader] Guid? appKey,
-            [FromHeader] Guid? appAcess,
-            [FromBody] AuthenticateRequest request,
-            [FromQuery] bool details,
-            CancellationToken cancellationToken = default
-        ) => await RunActionAsync(AuthenticateAsync(appKey, appAcess, request, details, cancellationToken), cancellationToken);
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request, [FromQuery] bool details, CancellationToken cancellationToken = default)
+            => await RunActionAsync(AuthenticateAsync(request, details, cancellationToken), cancellationToken);
 
         //TODO: Add application authentication (ScopeId + ScopeKey)
 
