@@ -14,6 +14,11 @@ namespace RSoft.Auth.Domain.Entities
         #region Properties
 
         /// <summary>
+        /// User id
+        /// </summary>
+        public Guid? UserId { get; set; }
+
+        /// <summary>
         /// User name/Login (for persons)
         /// </summary>
         public string Username { get; set; }
@@ -55,6 +60,7 @@ namespace RSoft.Auth.Domain.Entities
             if (UserKey.HasValue && !string.IsNullOrWhiteSpace(Password))
                 AddNotification("Key/Password", "Only the key or password must be informed, never both");
 
+            AddNotifications(new RequiredValidationContract<Guid?>(UserId, nameof(UserId), "User id is required").Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Username, nameof(Username), false, 2, 254).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Password, nameof(Password), true, 32, 32).Contract.Notifications);
 

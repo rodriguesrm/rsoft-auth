@@ -46,13 +46,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     result.MapAuthor(table);
                     if (table.Credential != null)
                     {
-                        result.Credential = new dmn.UserCredential()
-                        {
-                            Username = table.Credential.Username,
-                            UserKey = table.Credential.UserKey,
-                            Password = table.Credential.Password,
-                            ChangeCredentials = table.Credential.ChangeCredentials
-                        };
+                        result.Credential = table.Credential.Map();
                     }
                     result.Roles = table.Roles.Select(r => r.Role.Map(false)).ToList();
                     result.Scopes = table.Scopes.Select(s => s.Scope.Map(false)).ToList();

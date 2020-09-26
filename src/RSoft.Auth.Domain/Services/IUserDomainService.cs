@@ -43,6 +43,14 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="userId">User id key value</param>
         ICollection<Role> GetRolesByUserAsync(Guid scopeId, Guid userId);
 
+        /// <summary>
+        /// Creates user credentials
+        /// </summary>
+        /// <param name="tokenId">Token id value</param>
+        /// <param name="password">User password</param>
+        /// <param name="firstAccess">Indicates whether the operation is first access</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccess, CancellationToken cancellationToken);
     }
 
 }

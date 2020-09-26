@@ -88,6 +88,12 @@ namespace RSoft.Auth.Domain.Entities
                 AddNotification("Dates", "The expiration date must not be the token creation date before");
         }
 
+        /// <summary>
+        /// Indicates whether the token is valid
+        /// </summary>
+        public bool Expired()
+            => ExpiresOn < DateTime.UtcNow;
+
         #endregion
 
     }

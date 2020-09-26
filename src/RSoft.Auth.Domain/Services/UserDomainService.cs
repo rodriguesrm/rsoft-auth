@@ -29,6 +29,7 @@ namespace RSoft.Auth.Domain.Services
 
         private readonly SecurityOptions _securityOptions;
         private readonly IUnitOfWork _uow;
+        private readonly IUserCredentialRepository _credentialRepository;
         private readonly IUserCredentialTokenRepository _tokenRepository;
         private readonly IScopeRepository _scopeRepository;
         private readonly IRoleRepository _roleRepository;
@@ -50,7 +51,8 @@ namespace RSoft.Auth.Domain.Services
         (
             IAuthenticatedUser authenticatedUser,
             IUnitOfWork uow, 
-            IUserRepository repository, 
+            IUserRepository repository,
+            IUserCredentialRepository credentialRepository,
             IUserCredentialTokenRepository tokenRepository, 
             IScopeRepository scopeRepository,
             IRoleRepository roleRepository,
@@ -58,6 +60,7 @@ namespace RSoft.Auth.Domain.Services
         ) : base(repository, authenticatedUser)
         {
             _uow = uow;
+            _credentialRepository = credentialRepository;
             _tokenRepository = tokenRepository;
             _scopeRepository = scopeRepository;
             _roleRepository = roleRepository;
@@ -147,7 +150,8 @@ namespace RSoft.Auth.Domain.Services
                     {
 
                         //TODO: Create options-configuration for 'ExpiresOn'
-                        UserCredentialToken userCredentialToken = new UserCredentialToken()
+                        Guid tokenKey = Guid.NewGuid();
+                        UserCredentialToken userCredentialToken = new UserCredentialToken(tokenKey)
                         {
                             UserId = user.Id,
                             FirstAccess = firstAccess,
@@ -216,6 +220,109 @@ namespace RSoft.Auth.Domain.Services
         {
             ICollection<Role> result = _roleRepository.GetRolesByUser(scopeId, userId);
             return result;
+        }
+
+        ///<inheritdoc/>
+        public async Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccess, CancellationToken cancellationToken)
+        {
+
+            bool success = false;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                errors.Add("CreateCredential", "Operation was canceled");
+            }
+            else
+            {
+
+                string convertedPassword = ConvertPassword(password);
+
+                if (string.IsNullOrWhiteSpace(convertedPassword))
+                {
+                    errors.Add("Credential", "Password is required");
+                }
+                else
+                {
+
+                    UserCredentialToken credentialToken = await _tokenRepository.GetByKeyAsync(tokenId, cancellationToken);
+                    if (credentialToken == null)
+                    {
+                        errors.Add("Credential", "Token is invalid");
+                    }
+                    else
+                    {
+
+                        if (credentialToken.Expired())
+                        {
+                            errors.Add("Credential", "Expired token");
+                        }
+                        else
+                        {
+
+                            if (credentialToken.FirstAccess != firstAccess)
+                            {
+                                errors.Add("Credential", "Invalid token for this operation");
+                                _tokenRepository.Delete(credentialToken.Id);
+                                await _uow.SaveChangesAsync(cancellationToken);
+                            }
+                            else
+                            {
+
+                                User user = credentialToken.User;
+                                if (user.Credential != null && firstAccess)
+                                {
+                                    errors.Add("Credential", "Credentials already exist");
+                                    _tokenRepository.Delete(credentialToken.Id);
+                                    await _uow.SaveChangesAsync(cancellationToken);
+                                }
+                                else
+                                {
+
+                                    await _uow.BeginTransactionAsync(cancellationToken);
+
+                                    if (firstAccess)
+                                    {
+                                        UserCredential credential = new UserCredential()
+                                        {
+                                            UserId = user.Id,
+                                            Username = user.Email.Address,
+                                            Password = convertedPassword
+                                        };
+                                        await _credentialRepository.AddAsync(credential, cancellationToken);
+                                    }
+                                    else
+                                    {
+                                        user.Credential.Password = convertedPassword;
+                                        _credentialRepository.Update(user.Id, user.Credential);
+                                    }
+                                    _tokenRepository.Delete(credentialToken.Id);
+                                    await _uow.SaveChangesAsync(cancellationToken);
+
+                                    if (cancellationToken.IsCancellationRequested)
+                                    {
+                                        await _uow.RollBackAsync(default);
+                                        errors.Add("CreateCredential", "Operation was canceled");
+                                    }
+                                    else
+                                    {
+                                        await _uow.CommitAsync(cancellationToken);
+                                        success = true;
+                                    }
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return new SimpleOperationResult(success, errors);
+
         }
 
         #endregion

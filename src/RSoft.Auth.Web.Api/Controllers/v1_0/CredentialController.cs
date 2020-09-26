@@ -9,6 +9,7 @@ using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Framework.Application.Model;
 using RSoft.Framework.Cross;
+using RSoft.Framework.Domain.ValueObjects;
 using RSoft.Framework.Web.Api;
 using RSoft.Framework.Web.Model.Response;
 using RSoft.Logs.Model;
@@ -52,11 +53,16 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Request credentials for first access
         /// </summary>
-        /// <param name="request">Request data information</param>
+        /// <param name="email">User e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> FirstAccessAsync(PasswordRequest request, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> FirstAccessAsync(string email, CancellationToken cancellationToken = default)
         {
-            PasswordProcessResult result = await _appService.FirstAccessAsync(request.Login, cancellationToken);
+
+            Email checkedEmail = new Email(email);
+            if (string.IsNullOrWhiteSpace(email) || checkedEmail.Invalid)
+                return BadRequest("E-mail is invalid or empty");
+
+            PasswordProcessResult result = await _appService.FirstAccessAsync(email, cancellationToken);
 
             if (result.Success)
                 return Ok("First access information sent to the user's email");
@@ -74,7 +80,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected async Task<IActionResult> CreateCredentialAsync(CreateCredentialRequest request, CancellationToken cancellationToken = default)
         {
-            SimpleOperationResult result = await _appService.CreateCredentialAsync(request.TokenId.Value, request.Password, true, cancellationToken);
+            SimpleOperationResult result = await _appService.CreateCredentialAsync(request.Token.Value, request.Password, true, cancellationToken);
             if (result.Success)
                 return NoContent();
             else
@@ -108,7 +114,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected async Task<IActionResult> ResetCredentialAsync(ResetPasswordRequest request, CancellationToken cancellationToken = default)
         {
-            SimpleOperationResult result = await _appService.CreateCredentialAsync(request.TokenId.Value, request.Password, false, cancellationToken);
+            SimpleOperationResult result = await _appService.CreateCredentialAsync(request.Token.Value, request.Password, false, cancellationToken);
             if (result.Success)
                 return NoContent();
             else
@@ -136,7 +142,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Request credentials for first access
         /// </summary>
-        /// <param name="request">Request data information</param>
+        /// <param name="email">User e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Success in processing the request</response>
         /// <response code="400">Invalid request, see details in response</response>
@@ -144,11 +150,11 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
-        [HttpPost("first")]
+        [HttpGet("first")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
-        public async Task<IActionResult> FirstAccess([FromBody] PasswordRequest request, CancellationToken cancellationToken)
-            => await RunActionAsync(FirstAccessAsync(request, cancellationToken), cancellationToken);
+        public async Task<IActionResult> FirstAccess([FromQuery] string email, CancellationToken cancellationToken)
+            => await RunActionAsync(FirstAccessAsync(email, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Create the user credential (first access)
@@ -161,7 +167,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(GenericNotificationResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
-        [HttpPut("first")]
+        [HttpPost("first")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
         public async Task<IActionResult> CreateCredential(CreateCredentialRequest request, CancellationToken cancellationToken)

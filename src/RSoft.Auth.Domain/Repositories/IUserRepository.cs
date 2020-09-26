@@ -14,9 +14,9 @@ namespace RSoft.Auth.Domain.Repositories
     {
 
         /// <summary>
-        /// Get user by login
+        /// Get user by login or e-mail
         /// </summary>
-        /// <param name="login">User login</param>
+        /// <param name="login">User login or e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<User> GetByLoginAsync(string login, CancellationToken cancellationToken);
 

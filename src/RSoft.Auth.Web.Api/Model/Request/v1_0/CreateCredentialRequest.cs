@@ -11,10 +11,10 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
     {
 
         /// <summary>
-        /// Token id
+        /// Generated token to create credentials
         /// </summary>
-        [Required(ErrorMessage = "Token id is required")]
-        public Guid? TokenId { get; set; }
+        [Required(ErrorMessage = "Token is required")]
+        public Guid? Token { get; set; }
 
         /// <summary>
         /// User password

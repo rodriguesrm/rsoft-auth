@@ -41,6 +41,7 @@ namespace RSoft.Auth.Cross.IoC
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserCredentialRepository, UserCredentialRepository>();
             services.AddScoped<IUserCredentialTokenRepository, UserCredentialTokenRepository>();
             services.AddScoped<IScopeRepository, ScopeRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();

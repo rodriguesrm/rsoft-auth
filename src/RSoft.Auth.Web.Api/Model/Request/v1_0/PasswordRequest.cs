@@ -10,7 +10,7 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
     {
 
         /// <summary>
-        /// User login
+        /// User login (email
         /// </summary>
         [Required(ErrorMessage = "Login is required")]
         [MaxLength(254, ErrorMessage = "Login must contain a maximum of 254 characters")]

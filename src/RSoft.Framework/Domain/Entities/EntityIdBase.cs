@@ -1,4 +1,6 @@
-﻿namespace RSoft.Framework.Domain.Entities
+﻿using System;
+
+namespace RSoft.Framework.Domain.Entities
 {
 
     /// <summary>

@@ -51,7 +51,7 @@ namespace RSoft.Auth.Infra.Data.Repositories
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         public async Task<dmn.User> GetByLoginAsync(string login, CancellationToken cancellationToken)
         {
-            tbl.User table = await _dbSet.FirstOrDefaultAsync(u => u.Credential.Username == login);
+            tbl.User table = await _dbSet.FirstOrDefaultAsync(u => u.Credential.Username == login || u.Email == login);
             return table.Map();
         }
 

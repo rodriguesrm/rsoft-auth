@@ -126,11 +126,8 @@ namespace RSoft.Auth.Application.Services
         }
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccewss, CancellationToken cancellationToken = default)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+        public async Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccess, CancellationToken cancellationToken = default)
+            => await _userDomain.CreateCredentialAsync(tokenId, password, firstAccess, cancellationToken);
 
         ///<inheritdoc/>
         public async Task<PasswordProcessResult> FirstAccessAsync(string login, CancellationToken cancellationToken = default)

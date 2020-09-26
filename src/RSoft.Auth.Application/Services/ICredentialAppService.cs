@@ -29,9 +29,9 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="tokenId">Token id value</param>
         /// <param name="password">User password</param>
-        /// <param name="firstAccewss">Indicates whether the operation is first access</param>
+        /// <param name="firstAccess">Indicates whether the operation is first access</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccewss, CancellationToken cancellationToken = default);
+        Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccess, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Create token for password generation (first access) and send by email
