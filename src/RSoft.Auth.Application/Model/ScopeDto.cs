@@ -13,9 +13,9 @@ namespace RSoft.Auth.Application.Model
         #region Properties
 
         /// <summary>
-        /// Application access key word
+        /// Application access key
         /// </summary>
-        public Guid Key { get; set; }
+        public Guid AccessKey { get; set; }
 
         /// <summary>
         /// Indicate if entity is active

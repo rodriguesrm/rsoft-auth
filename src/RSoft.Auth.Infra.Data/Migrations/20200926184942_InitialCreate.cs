@@ -51,7 +51,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     ChangedOn = table.Column<DateTime>(nullable: true),
                     ChangedBy = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    Key = table.Column<Guid>(nullable: false),
+                    AccessKey = table.Column<Guid>(nullable: false),
                     IsActive = table.Column<ulong>(type: "bit", nullable: false),
                     IsDeleted = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 0ul)
                 },
@@ -232,6 +232,12 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 column: "ScopeId");
 
             migrationBuilder.CreateIndex(
+                name: "AK_Scope_AccessKey",
+                table: "Scope",
+                column: "AccessKey",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Scope_ChangedBy",
                 table: "Scope",
                 column: "ChangedBy");
@@ -250,12 +256,6 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 name: "IX_Scope_CreatedOn",
                 table: "Scope",
                 column: "CreatedOn");
-
-            migrationBuilder.CreateIndex(
-                name: "AK_Scope_Key",
-                table: "Scope",
-                column: "Key",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "AK_Scope_Name",

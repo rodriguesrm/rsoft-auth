@@ -78,7 +78,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 new string[]
                 {
                     nameof(Scope.Id),
-                    nameof(Scope.Key),
+                    nameof(Scope.AccessKey),
                     nameof(Scope.CreatedOn),
                     nameof(Scope.CreatedBy),
                     nameof(Scope.ChangedOn),

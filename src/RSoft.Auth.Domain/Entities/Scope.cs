@@ -51,7 +51,7 @@ namespace RSoft.Auth.Domain.Entities
         /// <summary>
         /// Application access key word
         /// </summary>
-        public Guid Key { get; set; }
+        public Guid AccessKey { get; set; }
 
         /// <summary>
         /// Indicate if entity is active

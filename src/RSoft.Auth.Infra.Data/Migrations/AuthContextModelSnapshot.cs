@@ -90,6 +90,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid>("AccessKey")
+                        .HasColumnName("AccessKey")
+                        .HasColumnType("char(36)");
+
                     b.Property<Guid?>("ChangedBy")
                         .HasColumnType("char(36)");
 
@@ -110,10 +114,6 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(0ul);
 
-                    b.Property<Guid>("Key")
-                        .HasColumnName("Key")
-                        .HasColumnType("char(36)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("Name")
@@ -122,6 +122,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .IsUnicode(false);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccessKey")
+                        .IsUnique()
+                        .HasName("AK_Scope_AccessKey");
 
                     b.HasIndex("ChangedBy")
                         .HasName("IX_Scope_ChangedBy");
@@ -134,10 +138,6 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.HasIndex("CreatedOn")
                         .HasName("IX_Scope_CreatedOn");
-
-                    b.HasIndex("Key")
-                        .IsUnique()
-                        .HasName("AK_Scope_Key");
 
                     b.HasIndex("Name")
                         .IsUnique()

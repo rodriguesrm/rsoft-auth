@@ -19,10 +19,5 @@ namespace RSoft.Auth.Cross.Common.Options
         /// </summary>
         public Guid Key { get; set; }
 
-        /// <summary>
-        /// Application scope name
-        /// </summary>
-        public string Name { get; set; }
-
     }
 }

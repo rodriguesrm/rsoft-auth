@@ -20,11 +20,12 @@ namespace RSoft.Auth.Domain.Services
         /// <summary>
         /// Get user by login and password
         /// </summary>
-        /// <param name="scopeId">Authentication scope id</param>
+        /// <param name="scopeId">Authentication scope id value</param>
+        /// <param name="scopeKey">Authentication scope key access</param>
         /// <param name="login">User login</param>
         /// <param name="password">User passoword</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<User> GetByLoginAsync(Guid scopeId, string login, string password, CancellationToken cancellationToken = default);
+        Task<User> GetByLoginAsync(Guid scopeId, Guid scopeKey, string login, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Create token for generating password credentials (first access/reset password) and send by email
