@@ -26,10 +26,10 @@ namespace RSoft.Framework.Application.Services
         /// <summary>
         /// Update entity in context
         /// </summary>
-        /// <param name="keys">The values of the primary key for the entity to be found</param>
+        /// <param name="key">The values of the primary key for the entity to be found</param>
         /// <param name="dto">Instância do dto</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<TDto> UpdateAsync(TKey[] keys, TDto dto, CancellationToken cancellationToken = default);
+        Task<TDto> UpdateAsync(TKey key, TDto dto, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get all rows
@@ -42,14 +42,14 @@ namespace RSoft.Framework.Application.Services
         /// </summary>
         /// <param name="keys">The values of the primary key for the entity to be found</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<TDto> GetByKeyAsync(TKey[] keys, CancellationToken cancellationToken = default);
+        Task<TDto> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Remove entity from context
         /// </summary>
-        /// <param name="keys">The values of the primary key for the entity to be found</param>
+        /// <param name="key">The values of the primary key for the entity to be found</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task DeleteAsync(TKey[] keys, CancellationToken cancellationToken = default);
+        Task DeleteAsync(TKey key, CancellationToken cancellationToken = default);
 
     }
 

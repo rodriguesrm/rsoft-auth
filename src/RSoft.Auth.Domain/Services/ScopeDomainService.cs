@@ -40,13 +40,6 @@ namespace RSoft.Auth.Domain.Services
                 entity.CreatedAuthor = new Author<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
         }
 
-        ///<inheritdoc/>
-        protected override async Task<Scope> FindAsync(Scope entity, CancellationToken cancellationToken = default)
-        {
-            Guid[] keys = new Guid[] { entity.Id };
-            return await GetByKeyAsync(keys, cancellationToken);
-        }
-
         #endregion
 
     }

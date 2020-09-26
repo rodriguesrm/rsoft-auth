@@ -14,13 +14,29 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// </summary>
         /// <param name="dto">Object to extension</param>
         public static Role Map(this RoleDto dto)
+            => Map(dto, false);
+
+        /// <summary>
+        /// Map dto to entity
+        /// </summary>
+        /// <param name="dto">Object to extension</param>
+        /// <param name="setId">Set dto id into entity</param>
+        public static Role Map(this RoleDto dto, bool setId)
         {
-            return new Role()
-            {
-                Name = dto.Name,
-                Description = dto.Description,
-                IsActive = dto.IsActive
-            };
+
+            Role entity;
+
+            if (setId)
+                entity = new Role(dto.Id);
+            else
+                entity = new Role();
+            
+            entity.Name = dto.Name;
+            entity.Description = dto.Description;
+            entity.IsActive = dto.IsActive;
+
+            return entity;
+
         }
 
         /// <summary>

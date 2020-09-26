@@ -51,13 +51,6 @@ namespace RSoft.Framework.Domain.Services
         /// <param name="isUpdate">Flag to indicate update action</param>
         public abstract void PrepareSave(TEntity entity, bool isUpdate);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="entity">Entity to find</param>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected abstract Task<TEntity> FindAsync(TEntity entity, CancellationToken cancellationToken = default);
-
         #endregion
 
         #region Public methods
@@ -73,32 +66,30 @@ namespace RSoft.Framework.Domain.Services
             }
             PrepareSave(entity, false);
             TEntity savedEntity = await _repository.AddAsync(entity, cancellationToken);
-            savedEntity = await FindAsync(savedEntity, cancellationToken);
             return savedEntity;
         }
 
 
         ///<inheritdoc/>
-        public virtual TEntity Update(TKey[] keys, TEntity entity)
+        public virtual TEntity Update(TKey key, TEntity entity)
         {
             if (entity.Invalid) return entity;
             PrepareSave(entity, true);
-            TEntity savedEntity = _repository.Update(keys, entity);
-            savedEntity = FindAsync(savedEntity, default).GetAwaiter().GetResult();
+            TEntity savedEntity = _repository.Update(key, entity);
             return savedEntity;
         }
 
         ///<inheritdoc/>
-        public virtual async Task<TEntity> GetByKeyAsync(TKey[] keys, CancellationToken cancellationToken = default)
-            => await _repository.GetByKeyAsync(keys, cancellationToken);
+        public virtual async Task<TEntity> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default)
+            => await _repository.GetByKeyAsync(key, cancellationToken);
 
         ///<inheritdoc/>
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
             => await _repository.GetAllAsync(cancellationToken);
 
         ///<inheritdoc/>
-        public virtual void Delete(TKey[] keys)
-            => _repository.Delete(keys);
+        public virtual void Delete(TKey key)
+            => _repository.Delete(key);
 
         #endregion
 

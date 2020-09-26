@@ -48,7 +48,7 @@ namespace RSoft.Auth.Application.Services
 
         ///<inheritdoc/>
         protected override async Task<User> GetEntityByKeyAsync(UserDto dto, CancellationToken cancellationToken = default)
-            => await _dmn.GetByKeyAsync(new Guid[] { dto.Id }, cancellationToken);
+            => await _dmn.GetByKeyAsync(dto.Id, cancellationToken);
 
         ///<inheritdoc/>
         protected override UserDto MapToDto(User entity)
@@ -75,8 +75,7 @@ namespace RSoft.Auth.Application.Services
 
             foreach (ScopeDto item in dto.Scopes)
             {
-                Guid[] keys = new Guid[] { item.Id };
-                Scope scope = await _scopeDomain.GetByKeyAsync(keys, cancellationToken);
+                Scope scope = await _scopeDomain.GetByKeyAsync(item.Id, cancellationToken);
                 if (scope == null)
                     dto.AddNotification("Scopes", $"Scope '{item.Id}' not found");
                 else
@@ -85,8 +84,7 @@ namespace RSoft.Auth.Application.Services
 
             foreach (RoleDto item in dto.Roles)
             {
-                Guid[] keys = new Guid[] { item.Id };
-                Role role = await _roleDomain.GetByKeyAsync(keys, cancellationToken);
+                Role role = await _roleDomain.GetByKeyAsync(item.Id, cancellationToken);
                 if (role == null)
                     dto.AddNotification("Roles", $"Role '{item.Id}' not found");
                 else

@@ -14,12 +14,27 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// </summary>
         /// <param name="dto">Object to extension</param>
         public static Scope Map(this ScopeDto dto)
+            => Map(dto, false);
+
+        /// <summary>
+        /// Map dto to entity
+        /// </summary>
+        /// <param name="dto">Object to extension</param>
+        /// <param name="setId">Set dto id into entity</param>
+        public static Scope Map(this ScopeDto dto, bool setId)
         {
-            return new Scope()
-            {
-                Name = dto.Name,
-                IsActive = dto.IsActive
-            };
+
+            Scope entity;
+
+            if (setId)
+                entity = new Scope(dto.Id);
+            else
+                entity = new Scope();
+
+            entity.Name = dto.Name;
+            entity.IsActive = dto.IsActive;
+
+            return entity;
         }
 
         /// <summary>

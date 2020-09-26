@@ -36,8 +36,8 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// <param name="dto">Object to extension</param>
         public static User Map(this UserDto dto)
         {
-            ICollection<Role> roles = dto.Roles?.Select(r => r.Map()).ToList();
-            ICollection<Scope> scopes = dto.Scopes?.Select(s => s.Map()).ToList();
+            ICollection<Role> roles = dto.Roles?.Select(r => r.Map(true)).ToList();
+            ICollection<Scope> scopes = dto.Scopes?.Select(s => s.Map(true)).ToList();
             return new User()
             {
                 Name = new Name(dto.Name?.FirstName, dto.Name?.LastName),

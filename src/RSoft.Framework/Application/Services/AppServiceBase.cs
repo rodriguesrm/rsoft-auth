@@ -120,7 +120,7 @@ namespace RSoft.Framework.Application.Services
         }
 
         ///<inheritdoc/>
-        public virtual async Task<TDto> UpdateAsync(TKey[] keys, TDto dto, CancellationToken cancellationToken = default)
+        public virtual async Task<TDto> UpdateAsync(TKey key, TDto dto, CancellationToken cancellationToken = default)
         {
 
             bool usarTransacao = !_uow.TransactionStarted;
@@ -134,7 +134,7 @@ namespace RSoft.Framework.Application.Services
             {
                 if (usarTransacao) await _uow.BeginTransactionAsync(cancellationToken);
 
-                TEntity dmnResult = _dmn.Update(keys, entity);
+                TEntity dmnResult = _dmn.Update(key, entity);
                 await _uow.SaveChangesAsync(cancellationToken);
                 result = MapToDto(dmnResult);
 
@@ -164,9 +164,9 @@ namespace RSoft.Framework.Application.Services
         }
 
         ///<inheritdoc/>
-        public virtual async Task<TDto> GetByKeyAsync(TKey[] keys, CancellationToken cancellationToken = default)
+        public virtual async Task<TDto> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default)
         {
-            TEntity entity = await _dmn.GetByKeyAsync(keys, cancellationToken);
+            TEntity entity = await _dmn.GetByKeyAsync(key, cancellationToken);
             if (entity == null)
                 return default;
             TDto result = MapToDto(entity);
@@ -174,12 +174,12 @@ namespace RSoft.Framework.Application.Services
         }
 
         ///<inheritdoc/>
-        public virtual async Task DeleteAsync(TKey[] keys, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(TKey key, CancellationToken cancellationToken = default)
         {
 
             bool useTransaction = !_uow.TransactionStarted;
             if (useTransaction) await _uow.BeginTransactionAsync(cancellationToken);
-            _dmn.Delete(keys);
+            _dmn.Delete(key);
             await _uow.SaveChangesAsync(cancellationToken);
             if (useTransaction) await _uow.CommitAsync(cancellationToken);
 
