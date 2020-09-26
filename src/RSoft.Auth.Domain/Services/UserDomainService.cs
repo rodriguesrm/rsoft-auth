@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using RSoft.Framework.Infra.Data;
 using System.Linq;
 using RSoft.Framework.Cross;
+using RSoft.Framework.Domain.ValueObjects;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -75,6 +76,26 @@ namespace RSoft.Auth.Domain.Services
         {
             MD5.HashMD5($"{password}|{_securityOptions.Secret}", out string pwdMD5);
             return pwdMD5.ToLower();
+        }
+
+        #endregion
+
+        #region Overrides
+
+        ///<inheritdoc/>
+        public override void PrepareSave(User entity, bool isUpdate)
+        {
+            if (isUpdate)
+                entity.ChangedAuthor = new AuthorNullable<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
+            else
+                entity.CreatedAuthor = new Author<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
+        }
+
+        ///<inheritdoc/>
+        protected override async Task<User> FindAsync(User entity, CancellationToken cancellationToken = default)
+        {
+            Guid[] keys = new Guid[] { entity.Id };
+            return await GetByKeyAsync(keys, cancellationToken);
         }
 
         #endregion
@@ -194,49 +215,6 @@ namespace RSoft.Auth.Domain.Services
             return new PasswordProcessResult(success, token, expiresOn, errors, exception);
 
         }
-
-        #endregion
-
-        #region Public methods
-
-        /////<inheritdoc/>
-        //public override async Task<User> AddAsync(User entity, CancellationToken cancellationToken = default)
-        //{
-
-        //    IList<Scope> scopes = new List<Scope>();
-        //    IList<Role> roles = new List<Role>();
-
-        //    foreach (Scope item in entity.Scopes)
-        //    {
-        //        Guid[] keys = new Guid[] { item.Id };
-        //        Scope scope = await _scopeRepository.GetByKeyAsync(keys, cancellationToken);
-        //        if (scope == null)
-        //            entity.AddNotification("Scopes", $"Scope '{item.Id}' not found");
-        //        else
-        //            scopes.Add(scope);
-        //    }
-
-        //    foreach (var item in entity.Roles)
-        //    {
-        //        Guid[] keys = new Guid[] { item.Id };
-        //        Role role = await _roleRepository.GetByKeyAsync(keys, cancellationToken);
-        //        if (role == null)
-        //            entity.AddNotification("Roles", $"Role '{item.Id}' not found");
-        //        else
-        //            roles.Add(role);
-        //    }
-
-        //    foreach (var role in roles)
-        //    {
-        //        if (scopes.FirstOrDefault(s => s.Id == role.Scope?.Id) == null)
-        //            entity.AddNotification("Roles", $"The {role.Name} role belongs to a scope to which the user is not assigned.");
-        //    }
-
-        //    entity.Scopes = scopes;
-        //    entity.Roles = roles;
-
-        //    return await base.AddAsync(entity, cancellationToken);
-        //}
 
         #endregion
 

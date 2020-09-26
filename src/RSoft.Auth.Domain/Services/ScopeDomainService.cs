@@ -3,6 +3,9 @@ using RSoft.Auth.Domain.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Framework.Cross;
+using RSoft.Framework.Domain.ValueObjects;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -22,6 +25,26 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="authenticatedUser">Authenticated user</param>
         public ScopeDomainService(IScopeRepository repository, IAuthenticatedUser authenticatedUser) : base(repository, authenticatedUser)
         {
+        }
+
+        #endregion
+
+        #region Overrides
+
+        ///<inheritdoc/>
+        public override void PrepareSave(Scope entity, bool isUpdate)
+        {
+            if (isUpdate)
+                entity.ChangedAuthor = new AuthorNullable<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
+            else
+                entity.CreatedAuthor = new Author<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
+        }
+
+        ///<inheritdoc/>
+        protected override async Task<Scope> FindAsync(Scope entity, CancellationToken cancellationToken = default)
+        {
+            Guid[] keys = new Guid[] { entity.Id };
+            return await GetByKeyAsync(keys, cancellationToken);
         }
 
         #endregion

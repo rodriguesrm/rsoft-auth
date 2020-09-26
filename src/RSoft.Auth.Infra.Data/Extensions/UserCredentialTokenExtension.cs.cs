@@ -43,7 +43,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     result.User = table.User?.Map(false);
                 }
 
-                result.Validate();
+                //result.Validate();
 
             }
 

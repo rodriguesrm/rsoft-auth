@@ -48,7 +48,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     result.Scope = table.Scope?.Map(false);
                 }
 
-                result.Validate();
+                //result.Validate();
 
             }
 

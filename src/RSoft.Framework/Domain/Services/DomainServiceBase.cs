@@ -42,6 +42,24 @@ namespace RSoft.Framework.Domain.Services
 
         #endregion
 
+        #region Abstract methods
+
+        /// <summary>
+        /// Prepare save
+        /// </summary>
+        /// <param name="entity">Entity to save</param>
+        /// <param name="isUpdate">Flag to indicate update action</param>
+        public abstract void PrepareSave(TEntity entity, bool isUpdate);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity">Entity to find</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        protected abstract Task<TEntity> FindAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+        #endregion
+
         #region Public methods
 
         ///<inheritdoc/>
@@ -53,9 +71,10 @@ namespace RSoft.Framework.Domain.Services
                 entity.AddNotification(entity.GetName(), "Operation was cancelled");
                 return entity;
             }
-            IAuditAuthor<TKey> audit = entity as IAuditAuthor<TKey>;
-            //TODO: **** PAREI AQUI ****
-            return await _repository.AddAsync(entity, cancellationToken);
+            PrepareSave(entity, false);
+            TEntity savedEntity = await _repository.AddAsync(entity, cancellationToken);
+            savedEntity = await FindAsync(savedEntity, cancellationToken);
+            return savedEntity;
         }
 
 
@@ -63,7 +82,10 @@ namespace RSoft.Framework.Domain.Services
         public virtual TEntity Update(TKey[] keys, TEntity entity)
         {
             if (entity.Invalid) return entity;
-            return _repository.Update(keys, entity);
+            PrepareSave(entity, true);
+            TEntity savedEntity = _repository.Update(keys, entity);
+            savedEntity = FindAsync(savedEntity, default).GetAwaiter().GetResult();
+            return savedEntity;
         }
 
         ///<inheritdoc/>

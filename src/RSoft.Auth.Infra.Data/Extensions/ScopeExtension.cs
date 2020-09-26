@@ -48,7 +48,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                         result.Roles = table.Roles.Select(r => r.Map(false)).ToList();
                 }
 
-                result.Validate();
+                //result.Validate();
 
             }
 

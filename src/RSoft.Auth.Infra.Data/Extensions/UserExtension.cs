@@ -58,7 +58,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     result.Scopes = table.Scopes.Select(s => s.Scope.Map(false)).ToList();
                 }
 
-                result.Validate();
+                //result.Validate();
 
             }
 
@@ -71,6 +71,14 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
         public static tbl.User Map(this dmn.User entity)
+            => Map(entity, true);
+
+        /// <summary>
+        /// Maps entity to table
+        /// </summary>
+        /// <param name="entity">Domain entity to map</param>
+        /// <param name="loadChildren">Load children data</param>
+        public static tbl.User Map(this dmn.User entity, bool loadChildren)
         {
 
             tbl.User result = null;
@@ -88,6 +96,13 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     CreatedOn = entity.CreatedOn,
                     CreatedBy = entity.CreatedAuthor.Id
                 };
+
+                if (loadChildren)
+                {
+                    result.Scopes = entity.Scopes.Select(s => new tbl.UserScope() { ScopeId = s.Id, UserId = entity.Id }).ToList();
+                    result.Roles = entity.Roles.Select(r => new tbl.UserRole() { RoleId = r.Id, UserId = entity.Id }).ToList();
+                }
+
 
             }
 
