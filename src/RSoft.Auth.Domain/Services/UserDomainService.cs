@@ -82,31 +82,6 @@ namespace RSoft.Auth.Domain.Services
         }
 
         /// <summary>
-        /// Checks if the informed login is available
-        /// </summary>
-        /// <param name="userId">User id key</param>
-        /// <param name="login">User login/User name</param>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        private async Task<bool> LoginIsAvailable(Guid userId, string login, CancellationToken cancellationToken = default)
-        {
-
-            IEnumerable<User> users = await _repository.ListByLoginAsync(login, cancellationToken);
-            bool found = false;
-
-            foreach (var user in users)
-            {
-                if ((user.Email.Address == login || user.Credential.Login == login) && user.Id != userId)
-                {
-                    found = true;
-                    break;
-                }
-            }
-
-            return !found;
-            
-        }
-
-        /// <summary>
         /// Create or reset user credentials and password
         /// </summary>
         /// <param name="login"></param>
@@ -131,7 +106,7 @@ namespace RSoft.Auth.Domain.Services
 
                 if (string.IsNullOrWhiteSpace(convertedPassword))
                 {
-                    errors.Add("Credential", "Password is required");
+                    errors.Add("Password", "Password is required");
                 }
                 else
                 {
@@ -139,28 +114,28 @@ namespace RSoft.Auth.Domain.Services
                     UserCredentialToken credentialToken = await _tokenRepository.GetByKeyAsync(tokenId, cancellationToken);
                     if (credentialToken == null)
                     {
-                        errors.Add("Credential", "Token is invalid");
+                        errors.Add("Token", "Token is invalid");
                     }
                     else
                     {
 
                         if (credentialToken.Expired())
                         {
-                            errors.Add("Credential", "Expired token");
+                            errors.Add("Token", "Expired token");
                         }
                         else
                         {
 
                             if (credentialToken.FirstAccess != firstAccess)
                             {
-                                errors.Add("Credential", "Invalid token for this operation");
+                                errors.Add("Token", "Invalid token for this operation");
                                 _tokenRepository.Delete(credentialToken.Id);
                                 await _uow.SaveChangesAsync(cancellationToken);
                             }
                             else
                             {
 
-                                User user = credentialToken.User;
+                                User user = await _repository.GetByKeyAsync(credentialToken.User.Id, cancellationToken);
                                 if (user.Credential != null && firstAccess)
                                 {
                                     errors.Add("Credential", "Credentials already exist");
@@ -172,7 +147,7 @@ namespace RSoft.Auth.Domain.Services
 
                                     if (firstAccess && (!(await LoginIsAvailable(user.Id, login, cancellationToken))))
                                     {
-                                        errors.Add("Credentials", "Login already in use");
+                                        errors.Add("Login", "Login already in use");
                                     }
                                     else
                                     {
@@ -344,6 +319,26 @@ namespace RSoft.Auth.Domain.Services
         #region Public methods
 
         ///<inheritdoc/>
+        public async Task<bool> LoginIsAvailable(Guid userId, string login, CancellationToken cancellationToken = default)
+        {
+
+            IEnumerable<User> users = await _repository.ListByLoginAsync(login, cancellationToken);
+            bool found = false;
+
+            foreach (var user in users)
+            {
+                if ((user.Email.Address == login || user.Credential.Login == login) && user.Id != userId)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            return !found;
+
+        }
+
+        ///<inheritdoc/>
         public async Task<User> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default)
         {
             
@@ -380,6 +375,12 @@ namespace RSoft.Auth.Domain.Services
         ///<inheritdoc/>
         public async Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string login, string password, CancellationToken cancellationToken)
             => await SaveCredentialAsync(tokenId, login, password, true, cancellationToken);
+
+        public async Task<PasswordProcessResult> GetResetAccessAsync(string email, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
+            => await RequestNewCredentials(email, false, sendMailCallBack, cancellationToken);
+
+        public async Task<SimpleOperationResult> SetRecoveryAccessAsync(Guid tokenId, string password, CancellationToken cancellationToken = default)
+            => await SaveCredentialAsync(tokenId, null, password, false, cancellationToken);
 
         #endregion
 

@@ -64,6 +64,13 @@ namespace RSoft.Framework.Web.Api
             }
         }
 
+        /// <summary>
+        /// Convert a dictionary into a GenericNotificationResponse list
+        /// </summary>
+        /// <param name="dictionary">Notifications dictionary(string, string)</param>
+        protected IEnumerable<GenericNotificationResponse> PrepareNotifications(IDictionary<string, string> dictionary)
+            => dictionary.Select(itm => new GenericNotificationResponse(itm.Key, itm.Value));
+
         #endregion
 
         #region Local Methods

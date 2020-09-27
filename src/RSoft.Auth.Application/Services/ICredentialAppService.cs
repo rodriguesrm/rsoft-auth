@@ -25,6 +25,13 @@ namespace RSoft.Auth.Application.Services
         Task<AuthenticateResult<UserDto>> AuthenticateAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Create token for password generation (first access) and send by email
+        /// </summary>
+        /// <param name="email">User e-mail</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<PasswordProcessResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Creates user credentials
         /// </summary>
         /// <param name="tokenId">Token id value</param>
@@ -34,18 +41,19 @@ namespace RSoft.Auth.Application.Services
         Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string login, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Create token for password generation (first access) and send by email
-        /// </summary>
-        /// <param name="email">User e-mail</param>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<PasswordProcessResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Create token for generating new password and send by email
         /// </summary>
-        /// <param name="login">User login</param>
+        /// <param name="loginOrEmail">User login or email</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<PasswordProcessResult> ResetPasswordAsync(string login, CancellationToken cancellationToken = default);
+        Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Save new password for recovery access
+        /// </summary>
+        /// <param name="tokenId">Token id value</param>
+        /// <param name="password">User password</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<SimpleOperationResult> SetRecoveryAccessAsync(Guid tokenId, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Change user password

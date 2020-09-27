@@ -28,7 +28,15 @@ namespace RSoft.Auth.Domain.Services
         Task<User> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Create token for generating password credentials (first access/reset password) and send by email
+        /// Checks if the informed login is available
+        /// </summary>
+        /// <param name="userId">User id key</param>
+        /// <param name="login">User login/User name</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<bool> LoginIsAvailable(Guid userId, string login, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Create token for generating password credentials and send by email
         /// </summary>
         /// <param name="email">User e-mail</param>
         /// <param name="sendMailCallBack">Callback function for sending e-mail</param>
@@ -46,10 +54,28 @@ namespace RSoft.Auth.Domain.Services
         /// Creates user credentials
         /// </summary>
         /// <param name="tokenId">Token id value</param>
-        /// <param name="login">Login/User name</param>
+        /// <param name="loginOrEmail">User login or e-mail</param>
         /// <param name="password">User password</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string login, string password, CancellationToken cancellationToken);
+        Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string loginOrEmail, string password, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Create token for reset password credentials and send by email
+        /// </summary>
+        /// <param name="email">User e-mail</param>
+        /// <param name="sendMailCallBack">Callback function for sending e-mail</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<PasswordProcessResult> GetResetAccessAsync(string email, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Save new password for recovery access
+        /// </summary>
+        /// <param name="tokenId">Token id value</param>
+        /// <param name="password">User password</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<SimpleOperationResult> SetRecoveryAccessAsync(Guid tokenId, string password, CancellationToken cancellationToken = default);
+
+
 
     }
 

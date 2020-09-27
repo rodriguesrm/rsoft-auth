@@ -126,19 +126,21 @@ namespace RSoft.Auth.Application.Services
         }
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string login, string password, CancellationToken cancellationToken = default)
-            => await _userDomain.CreateFirstAccessAsync(tokenId, login, password, cancellationToken);
-
-        ///<inheritdoc/>
         public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default)
             => await _userDomain.GetFirstAccessAsync(email, (args) => SendMailTokenPasswordAsync(args, cancellationToken).Result, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<PasswordProcessResult> ResetPasswordAsync(string login, CancellationToken cancellationToken = default)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+        public async Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string login, string password, CancellationToken cancellationToken = default)
+            => await _userDomain.CreateFirstAccessAsync(tokenId, login, password, cancellationToken);
+
+        ///<inheritdoc/>
+        public async Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, CancellationToken cancellationToken = default)
+            => await _userDomain.GetResetAccessAsync(loginOrEmail, (args) => SendMailTokenPasswordAsync(args, cancellationToken).Result, cancellationToken);
+
+
+        ///<inheritdoc/>
+        public async Task<SimpleOperationResult> SetRecoveryAccessAsync(Guid tokenId, string password, CancellationToken cancellationToken = default)
+            => await _userDomain.SetRecoveryAccessAsync(tokenId, password, cancellationToken);
 
         ///<inheritdoc/>
         public async Task<SimpleOperationResult> ChangePasswordAsync(string authenticatedLogin, string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default)

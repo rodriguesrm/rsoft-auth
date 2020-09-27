@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -70,7 +71,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             if (result.IsException)
                 return HandleException(500, result.Exception);
 
-            return BadRequest(new GenericNotificationResponse("FirstAccess", result.ErrorsMessage));
+            return BadRequest(PrepareNotifications(result.Errors));
         }
 
         /// <summary>
@@ -78,13 +79,13 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// </summary>
         /// <param name="request">Request data information</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> CreateFristAccessAsync(CreateCredentialRequest request, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> CreateFirstAccessAsync(CreateCredentialRequest request, CancellationToken cancellationToken = default)
         {
             SimpleOperationResult result = await _appService.CreateFirstAccessAsync(request.Token.Value, request.Login, request.Password, cancellationToken);
             if (result.Success)
                 return NoContent();
             else
-                return BadRequest(new GenericNotificationResponse("CreateCredential", result.ErrorsMessage));
+                return BadRequest(PrepareNotifications(result.Errors));
         }
 
         /// <summary>
@@ -92,13 +93,13 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// </summary>
         /// <param name="login">User login or e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> ResetPasswordAsync(string login, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> GetRecoveryAccessAsync(string login, CancellationToken cancellationToken = default)
         {
 
             if (string.IsNullOrWhiteSpace(login))
                 return BadRequest("Login is required");
 
-            PasswordProcessResult result = await _appService.ResetPasswordAsync(login, cancellationToken);
+            PasswordProcessResult result = await _appService.GetResetAccessAsync(login, cancellationToken);
 
             if (result.Success)
                 return Ok("Recover access information sent to the user's email");
@@ -106,7 +107,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             if (result.IsException)
                 return HandleException(500, result.Exception);
 
-            return BadRequest(new GenericNotificationResponse("ResetPassword", result.ErrorsMessage));
+            return BadRequest(PrepareNotifications(result.Errors));
 
         }
 
@@ -115,15 +116,13 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// </summary>
         /// <param name="request">Request data information</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> ResetCredentialAsync(ResetPasswordRequest request, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> SetRecoveryAccessAsync(ResetPasswordRequest request, CancellationToken cancellationToken = default)
         {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-            //SimpleOperationResult result = await _appService.CreateCredentialAsync(request.Token.Value, request.Login, request.Password, false, cancellationToken);
-            //if (result.Success)
-            //    return NoContent();
-            //else
-            //    return BadRequest(new GenericNotificationResponse("ResetCredential", result.ErrorsMessage));
+            SimpleOperationResult result = await _appService.SetRecoveryAccessAsync(request.Token.Value, request.Password, cancellationToken);
+            if (result.Success)
+                return NoContent();
+            else
+                return BadRequest(PrepareNotifications(result.Errors));
         }
 
         /// <summary>
@@ -137,7 +136,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             if (result.Success)
                 return NoContent();
             else
-                return BadRequest(new GenericNotificationResponse("ChangePassword", result.ErrorsMessage));
+                return BadRequest(PrepareNotifications(result.Errors));
         }
 
         #endregion
@@ -153,7 +152,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="400">Invalid request, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("first")]
         [MapToApiVersion("1.0")]
@@ -170,13 +169,13 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="400">Invalid request, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(GenericNotificationResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost("first")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
         public async Task<IActionResult> FirstAccess(CreateCredentialRequest request, CancellationToken cancellationToken)
-            => await RunActionAsync(CreateFristAccessAsync(request, cancellationToken), cancellationToken);
+            => await RunActionAsync(CreateFirstAccessAsync(request, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Request new access credentials
@@ -187,13 +186,13 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="400">Invalid request, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("recovery")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
         public async Task<IActionResult> RecoveryAccess([FromQuery] string login, CancellationToken cancellationToken)
-            => await RunActionAsync(ResetPasswordAsync(login, cancellationToken), cancellationToken);
+            => await RunActionAsync(GetRecoveryAccessAsync(login, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Reset user credentials (I forgot my password...
@@ -204,13 +203,13 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="400">Invalid request, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(GenericNotificationResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPut("recovery")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
         public async Task<IActionResult> RecoveryAccess([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken)
-            => await RunActionAsync(ResetCredentialAsync(request, cancellationToken), cancellationToken);
+            => await RunActionAsync(SetRecoveryAccessAsync(request, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Change user password
@@ -222,7 +221,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="403">The informed credential does not have access to this resource</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
