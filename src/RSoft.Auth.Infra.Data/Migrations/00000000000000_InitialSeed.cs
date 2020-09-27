@@ -180,8 +180,8 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 new string[]
                 {
                     nameof(UserCredential.UserId),
-                    nameof(UserCredential.Username),
-                    nameof(UserCredential.UserKey),
+                    nameof(UserCredential.Login),
+                    nameof(UserCredential.Key),
                     nameof(UserCredential.Password),
                     nameof(UserCredential.ChangeCredentials)
                 },
@@ -194,8 +194,8 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 new string[]
                 {
                     nameof(UserCredential.UserId),
-                    nameof(UserCredential.Username),
-                    nameof(UserCredential.UserKey),
+                    nameof(UserCredential.Login),
+                    nameof(UserCredential.Key),
                     nameof(UserCredential.Password),
                     nameof(UserCredential.ChangeCredentials)
                 },

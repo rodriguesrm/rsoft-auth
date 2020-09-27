@@ -1,9 +1,9 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Services;
 using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
@@ -28,8 +28,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         #region Local objects/variables
 
-        private IAuthenticatedUser _user;
-        private ICredentialAppService _appService;
+        private readonly IAuthenticatedUser _user;
+        private readonly ICredentialAppService _appService;
 
         #endregion
 
@@ -55,14 +55,14 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// </summary>
         /// <param name="email">User e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> FirstAccessAsync(string email, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default)
         {
 
             Email checkedEmail = new Email(email);
             if (string.IsNullOrWhiteSpace(email) || checkedEmail.Invalid)
                 return BadRequest("E-mail is invalid or empty");
 
-            PasswordProcessResult result = await _appService.FirstAccessAsync(email, cancellationToken);
+            PasswordProcessResult result = await _appService.GetFirstAccessAsync(email, cancellationToken);
 
             if (result.Success)
                 return Ok("First access information sent to the user's email");
@@ -78,9 +78,9 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// </summary>
         /// <param name="request">Request data information</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> CreateCredentialAsync(CreateCredentialRequest request, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> CreateFristAccessAsync(CreateCredentialRequest request, CancellationToken cancellationToken = default)
         {
-            SimpleOperationResult result = await _appService.CreateCredentialAsync(request.Token.Value, request.Password, true, cancellationToken);
+            SimpleOperationResult result = await _appService.CreateFirstAccessAsync(request.Token.Value, request.Login, request.Password, cancellationToken);
             if (result.Success)
                 return NoContent();
             else
@@ -90,12 +90,15 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Request new access credentials
         /// </summary>
-        /// <param name="request">Request data information</param>
+        /// <param name="login">User login or e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> ResetPasswordAsync(PasswordRequest request, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> ResetPasswordAsync(string login, CancellationToken cancellationToken = default)
         {
 
-            PasswordProcessResult result = await _appService.ResetPasswordAsync(request.Login, cancellationToken);
+            if (string.IsNullOrWhiteSpace(login))
+                return BadRequest("Login is required");
+
+            PasswordProcessResult result = await _appService.ResetPasswordAsync(login, cancellationToken);
 
             if (result.Success)
                 return Ok("Recover access information sent to the user's email");
@@ -114,11 +117,13 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected async Task<IActionResult> ResetCredentialAsync(ResetPasswordRequest request, CancellationToken cancellationToken = default)
         {
-            SimpleOperationResult result = await _appService.CreateCredentialAsync(request.Token.Value, request.Password, false, cancellationToken);
-            if (result.Success)
-                return NoContent();
-            else
-                return BadRequest(new GenericNotificationResponse("ResetCredential", result.ErrorsMessage));
+            //TODO: NotImplementedException
+            throw new NotImplementedException();
+            //SimpleOperationResult result = await _appService.CreateCredentialAsync(request.Token.Value, request.Login, request.Password, false, cancellationToken);
+            //if (result.Success)
+            //    return NoContent();
+            //else
+            //    return BadRequest(new GenericNotificationResponse("ResetCredential", result.ErrorsMessage));
         }
 
         /// <summary>
@@ -154,7 +159,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
         public async Task<IActionResult> FirstAccess([FromQuery] string email, CancellationToken cancellationToken)
-            => await RunActionAsync(FirstAccessAsync(email, cancellationToken), cancellationToken);
+            => await RunActionAsync(GetFirstAccessAsync(email, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Create the user credential (first access)
@@ -170,13 +175,13 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [HttpPost("first")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
-        public async Task<IActionResult> CreateCredential(CreateCredentialRequest request, CancellationToken cancellationToken)
-            => await RunActionAsync(CreateCredentialAsync(request, cancellationToken), cancellationToken);
+        public async Task<IActionResult> FirstAccess(CreateCredentialRequest request, CancellationToken cancellationToken)
+            => await RunActionAsync(CreateFristAccessAsync(request, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Request new access credentials
         /// </summary>
-        /// <param name="request">Request data information</param>
+        /// <param name="login">User login or e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Success in processing the request</response>
         /// <response code="400">Invalid request, see details in response</response>
@@ -184,11 +189,11 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
-        [HttpPost("recovery")]
+        [HttpGet("recovery")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
-        public async Task<IActionResult> ResetPassword([FromBody] PasswordRequest request, CancellationToken cancellationToken)
-            => await RunActionAsync(ResetPasswordAsync(request, cancellationToken), cancellationToken);
+        public async Task<IActionResult> RecoveryAccess([FromQuery] string login, CancellationToken cancellationToken)
+            => await RunActionAsync(ResetPasswordAsync(login, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Reset user credentials (I forgot my password...
@@ -204,7 +209,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [HttpPut("recovery")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
-        public async Task<IActionResult> ResetCredential([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> RecoveryAccess([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken)
             => await RunActionAsync(ResetCredentialAsync(request, cancellationToken), cancellationToken);
 
         /// <summary>

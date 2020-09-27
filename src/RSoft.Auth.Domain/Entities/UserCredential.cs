@@ -19,14 +19,14 @@ namespace RSoft.Auth.Domain.Entities
         public Guid? UserId { get; set; }
 
         /// <summary>
-        /// User name/Login (for persons)
+        /// User Login (for persons)
         /// </summary>
-        public string Username { get; set; }
+        public string Login { get; set; }
 
         /// <summary>
         /// User acess key (for applications)
         /// </summary>
-        public Guid? UserKey { get; set; }
+        public Guid? Key { get; set; }
 
         /// <summary>
         /// User password login
@@ -55,13 +55,13 @@ namespace RSoft.Auth.Domain.Entities
         public override void Validate()
         {
 
-            if (!UserKey.HasValue && string.IsNullOrWhiteSpace(Password))
+            if (!Key.HasValue && string.IsNullOrWhiteSpace(Password))
                 AddNotification("Key/Password", "A key or password must be provided");
-            if (UserKey.HasValue && !string.IsNullOrWhiteSpace(Password))
+            if (Key.HasValue && !string.IsNullOrWhiteSpace(Password))
                 AddNotification("Key/Password", "Only the key or password must be informed, never both");
 
             AddNotifications(new RequiredValidationContract<Guid?>(UserId, nameof(UserId), "User id is required").Contract.Notifications);
-            AddNotifications(new SimpleStringValidationContract(Username, nameof(Username), false, 2, 254).Contract.Notifications);
+            AddNotifications(new SimpleStringValidationContract(Login, nameof(Login), false, 2, 254).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Password, nameof(Password), true, 32, 32).Contract.Notifications);
 
         }

@@ -24,8 +24,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 result = new dmn.UserCredential()
                 {
                     UserId = table.UserId,
-                    Username = table.Username,
-                    UserKey = table.UserKey,
+                    Login = table.Login,
+                    Key = table.Key,
                     Password = table.Password,
                     ChangeCredentials = table.ChangeCredentials
                 };
@@ -50,8 +50,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 result = new tbl.UserCredential()
                 {
                     UserId = entity.UserId,
-                    Username = entity.Username,
-                    UserKey = entity.UserKey,
+                    Login = entity.Login,
+                    Key = entity.Key,
                     Password = entity.Password,
                     ChangeCredentials = entity.ChangeCredentials
                 };
@@ -72,8 +72,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
             if (entity != null && table != null)
             {
                 table.UserId = entity.UserId;
-                table.Username = entity.Username;
-                table.UserKey = entity.UserKey;
+                table.Login = entity.Login;
+                table.Key = entity.Key;
                 table.Password = entity.Password;
                 table.ChangeCredentials = entity.ChangeCredentials;
             }

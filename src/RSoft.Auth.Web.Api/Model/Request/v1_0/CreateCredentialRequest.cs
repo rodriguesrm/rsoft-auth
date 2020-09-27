@@ -7,21 +7,15 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
     /// <summary>
     /// Credential creation model (first access)
     /// </summary>
-    public class CreateCredentialRequest
+    public class CreateCredentialRequest : ResetPasswordRequest
     {
 
         /// <summary>
-        /// Generated token to create credentials
+        /// Login / user name
         /// </summary>
-        [Required(ErrorMessage = "Token is required")]
-        public Guid? Token { get; set; }
-
-        /// <summary>
-        /// User password
-        /// </summary>
-        [Required(ErrorMessage = "Password is required")]
-        [StringLength(maximumLength: 16, MinimumLength = 6, ErrorMessage = "The password must contain 6 to 16 characters")]
-        public string Password { get; set; }
+        [Required(ErrorMessage = "Login is required")]
+        [MaxLength(ErrorMessage = "Login must contain a maximum of 254 characters")]
+        public string Login { get; set; }
 
     }
 

@@ -29,14 +29,14 @@ namespace RSoft.Auth.Infra.Data.Configurations
 
             #region Columns
 
-            builder.Property(c => c.Username)
-                .HasColumnName(nameof(UserCredential.Username))
+            builder.Property(c => c.Login)
+                .HasColumnName(nameof(UserCredential.Login))
                 .HasMaxLength(254)
                 .IsUnicode(false)
                 .IsRequired();
 
-            builder.Property(c => c.UserKey)
-                .HasColumnName(nameof(UserCredential.UserKey));
+            builder.Property(c => c.Key)
+                .HasColumnName(nameof(UserCredential.Key));
 
             builder.Property(c => c.Password)
                 .HasColumnName(nameof(UserCredential.Password))
@@ -62,12 +62,12 @@ namespace RSoft.Auth.Infra.Data.Configurations
 
             #region Indexes
 
-            builder.HasIndex(c => c.Username)
-                .HasName($"AK_{nameof(UserCredential)}_{nameof(UserCredential.Username)}")
+            builder.HasIndex(c => c.Login)
+                .HasName($"AK_{nameof(UserCredential)}_{nameof(UserCredential.Login)}")
                 .IsUnique();
 
-            builder.HasIndex(c => c.UserKey)
-                .HasName($"AK_{nameof(UserCredential)}_{nameof(UserCredential.UserKey)}")
+            builder.HasIndex(c => c.Key)
+                .HasName($"AK_{nameof(UserCredential)}_{nameof(UserCredential.Key)}")
                 .IsUnique();
 
             #endregion

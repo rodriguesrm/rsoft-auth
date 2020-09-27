@@ -30,11 +30,10 @@ namespace RSoft.Auth.Domain.Services
         /// <summary>
         /// Create token for generating password credentials (first access/reset password) and send by email
         /// </summary>
-        /// <param name="login">User login</param>
-        /// <param name="firstAccess">Indicates whether the operation is first access</param>
+        /// <param name="email">User e-mail</param>
         /// <param name="sendMailCallBack">Callback function for sending e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<PasswordProcessResult> StartNewCredentialProcessAsync(string login, bool firstAccess, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default);
+        Task<PasswordProcessResult> GetFirstAccessAsync(string email, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get all user roles in a specific scope
@@ -47,10 +46,11 @@ namespace RSoft.Auth.Domain.Services
         /// Creates user credentials
         /// </summary>
         /// <param name="tokenId">Token id value</param>
+        /// <param name="login">Login/User name</param>
         /// <param name="password">User password</param>
-        /// <param name="firstAccess">Indicates whether the operation is first access</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccess, CancellationToken cancellationToken);
+        Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string login, string password, CancellationToken cancellationToken);
+
     }
 
 }

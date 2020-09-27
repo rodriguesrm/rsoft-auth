@@ -126,12 +126,12 @@ namespace RSoft.Auth.Application.Services
         }
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccess, CancellationToken cancellationToken = default)
-            => await _userDomain.CreateCredentialAsync(tokenId, password, firstAccess, cancellationToken);
+        public async Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string login, string password, CancellationToken cancellationToken = default)
+            => await _userDomain.CreateFirstAccessAsync(tokenId, login, password, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<PasswordProcessResult> FirstAccessAsync(string login, CancellationToken cancellationToken = default)
-            => await _userDomain.StartNewCredentialProcessAsync(login, true, (args) => SendMailTokenPasswordAsync(args, cancellationToken).Result, cancellationToken);
+        public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default)
+            => await _userDomain.GetFirstAccessAsync(email, (args) => SendMailTokenPasswordAsync(args, cancellationToken).Result, cancellationToken);
 
         ///<inheritdoc/>
         public async Task<PasswordProcessResult> ResetPasswordAsync(string login, CancellationToken cancellationToken = default)

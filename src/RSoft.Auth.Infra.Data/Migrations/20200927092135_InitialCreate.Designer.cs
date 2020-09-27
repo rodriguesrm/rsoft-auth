@@ -9,7 +9,7 @@ using RSoft.Auth.Infra.Data;
 namespace RSoft.Auth.Infra.Data.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20200926184942_InitialCreate")]
+    [Migration("20200927092135_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -236,32 +236,32 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasColumnName("ChangeCredentials")
                         .HasColumnType("bit");
 
+                    b.Property<Guid?>("Key")
+                        .HasColumnName("Key")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnName("Login")
+                        .HasColumnType("varchar(254) CHARACTER SET utf8mb4")
+                        .HasMaxLength(254)
+                        .IsUnicode(false);
+
                     b.Property<string>("Password")
                         .HasColumnName("Password")
                         .HasColumnType("varchar(32) CHARACTER SET utf8mb4")
                         .HasMaxLength(32)
                         .IsUnicode(false);
 
-                    b.Property<Guid?>("UserKey")
-                        .HasColumnName("UserKey")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnName("Username")
-                        .HasColumnType("varchar(254) CHARACTER SET utf8mb4")
-                        .HasMaxLength(254)
-                        .IsUnicode(false);
-
                     b.HasKey("UserId");
 
-                    b.HasIndex("UserKey")
+                    b.HasIndex("Key")
                         .IsUnique()
-                        .HasName("AK_UserCredential_UserKey");
+                        .HasName("AK_UserCredential_Key");
 
-                    b.HasIndex("Username")
+                    b.HasIndex("Login")
                         .IsUnique()
-                        .HasName("AK_UserCredential_Username");
+                        .HasName("AK_UserCredential_Login");
 
                     b.ToTable("UserCredential");
                 });

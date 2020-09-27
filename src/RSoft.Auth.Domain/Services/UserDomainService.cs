@@ -81,48 +81,159 @@ namespace RSoft.Auth.Domain.Services
             return pwdMD5.ToLower();
         }
 
-        #endregion
-
-        #region Overrides
-
-        ///<inheritdoc/>
-        public override void PrepareSave(User entity, bool isUpdate)
+        /// <summary>
+        /// Checks if the informed login is available
+        /// </summary>
+        /// <param name="userId">User id key</param>
+        /// <param name="login">User login/User name</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<bool> LoginIsAvailable(Guid userId, string login, CancellationToken cancellationToken = default)
         {
-            if (isUpdate)
-                entity.ChangedAuthor = new AuthorNullable<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
-            else
-                entity.CreatedAuthor = new Author<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
-        }
 
-        #endregion
+            IEnumerable<User> users = await _repository.ListByLoginAsync(login, cancellationToken);
+            bool found = false;
 
-        #region Public methods
-
-        ///<inheritdoc/>
-        public async Task<User> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default)
-        {
-            
-            //BACKLOG: Add LDAP Authenticate
-
-            if (cancellationToken.IsCancellationRequested) return null;
-            User user = await _repository.GetByLoginAsync(login, cancellationToken);
-            if (user != null)
+            foreach (var user in users)
             {
-                if (user.Credential.Password != ConvertPassword(password))
-                    user = null;
+                if ((user.Email.Address == login || user.Credential.Login == login) && user.Id != userId)
+                {
+                    found = true;
+                    break;
+                }
+            }
 
-                Scope scopeCheck = user.Scopes.FirstOrDefault(x => x.Id == appKey && x.AccessKey == appAccess);
-                if (scopeCheck == null)
-                    user = null;
-                else
-                    user.Roles = GetRolesByUserAsync(appKey, user.Id);
-
-             }
-            return user;
+            return !found;
+            
         }
 
-        ///<inheritdoc/>
-        public async Task<PasswordProcessResult> StartNewCredentialProcessAsync(string login, bool firstAccess, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Create or reset user credentials and password
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="firstAccess"></param>
+        /// <param name="sendMailCallBack"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        private async Task<SimpleOperationResult> SaveCredentialAsync(Guid tokenId, string login, string password, bool firstAccess, CancellationToken cancellationToken)
+        {
+
+            bool success = false;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                errors.Add("CreateCredential", "Operation was canceled");
+            }
+            else
+            {
+
+                string convertedPassword = ConvertPassword(password);
+
+                if (string.IsNullOrWhiteSpace(convertedPassword))
+                {
+                    errors.Add("Credential", "Password is required");
+                }
+                else
+                {
+
+                    UserCredentialToken credentialToken = await _tokenRepository.GetByKeyAsync(tokenId, cancellationToken);
+                    if (credentialToken == null)
+                    {
+                        errors.Add("Credential", "Token is invalid");
+                    }
+                    else
+                    {
+
+                        if (credentialToken.Expired())
+                        {
+                            errors.Add("Credential", "Expired token");
+                        }
+                        else
+                        {
+
+                            if (credentialToken.FirstAccess != firstAccess)
+                            {
+                                errors.Add("Credential", "Invalid token for this operation");
+                                _tokenRepository.Delete(credentialToken.Id);
+                                await _uow.SaveChangesAsync(cancellationToken);
+                            }
+                            else
+                            {
+
+                                User user = credentialToken.User;
+                                if (user.Credential != null && firstAccess)
+                                {
+                                    errors.Add("Credential", "Credentials already exist");
+                                    _tokenRepository.Delete(credentialToken.Id);
+                                    await _uow.SaveChangesAsync(cancellationToken);
+                                }
+                                else
+                                {
+
+                                    if (firstAccess && (!(await LoginIsAvailable(user.Id, login, cancellationToken))))
+                                    {
+                                        errors.Add("Credentials", "Login already in use");
+                                    }
+                                    else
+                                    {
+
+                                        await _uow.BeginTransactionAsync(cancellationToken);
+
+                                        if (firstAccess)
+                                        {
+                                            UserCredential credential = new UserCredential()
+                                            {
+                                                UserId = user.Id,
+                                                Login = login,
+                                                Password = convertedPassword
+                                            };
+                                            await _credentialRepository.AddAsync(credential, cancellationToken);
+                                        }
+                                        else
+                                        {
+                                            user.Credential.Password = convertedPassword;
+                                            _credentialRepository.Update(user.Id, user.Credential);
+                                        }
+                                        _tokenRepository.Delete(credentialToken.Id);
+                                        await _uow.SaveChangesAsync(cancellationToken);
+
+                                        if (cancellationToken.IsCancellationRequested)
+                                        {
+                                            await _uow.RollBackAsync(default);
+                                            errors.Add("CreateCredential", "Operation was canceled");
+                                        }
+                                        else
+                                        {
+                                            await _uow.CommitAsync(cancellationToken);
+                                            success = true;
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return new SimpleOperationResult(success, errors);
+        }
+
+        /// <summary>
+        /// Starts the process of obtaining credentials for first access or retrieving credentials.
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="firstAccess"></param>
+        /// <param name="sendMailCallBack"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        private async Task<PasswordProcessResult> RequestNewCredentials(string login, bool firstAccess, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
         {
 
             bool success = false;
@@ -215,6 +326,50 @@ namespace RSoft.Auth.Domain.Services
 
         }
 
+        #endregion
+
+        #region Overrides
+
+        ///<inheritdoc/>
+        public override void PrepareSave(User entity, bool isUpdate)
+        {
+            if (isUpdate)
+                entity.ChangedAuthor = new AuthorNullable<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
+            else
+                entity.CreatedAuthor = new Author<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
+        }
+
+        #endregion
+
+        #region Public methods
+
+        ///<inheritdoc/>
+        public async Task<User> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default)
+        {
+            
+            //BACKLOG: Add LDAP Authenticate
+
+            if (cancellationToken.IsCancellationRequested) return null;
+            User user = await _repository.GetByLoginAsync(login, cancellationToken);
+            if (user != null)
+            {
+                if (user.Credential.Password != ConvertPassword(password))
+                    user = null;
+
+                Scope scopeCheck = user.Scopes.FirstOrDefault(x => x.Id == appKey && x.AccessKey == appAccess);
+                if (scopeCheck == null)
+                    user = null;
+                else
+                    user.Roles = GetRolesByUserAsync(appKey, user.Id);
+
+             }
+            return user;
+        }
+
+        ///<inheritdoc/>
+        public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
+            => await RequestNewCredentials(email, true, sendMailCallBack, cancellationToken);
+
         ///<inheritdoc/>
         public ICollection<Role> GetRolesByUserAsync(Guid scopeId, Guid userId)
         {
@@ -223,107 +378,8 @@ namespace RSoft.Auth.Domain.Services
         }
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> CreateCredentialAsync(Guid tokenId, string password, bool firstAccess, CancellationToken cancellationToken)
-        {
-
-            bool success = false;
-            IDictionary<string, string> errors = new Dictionary<string, string>();
-
-            if (cancellationToken.IsCancellationRequested)
-            {
-                errors.Add("CreateCredential", "Operation was canceled");
-            }
-            else
-            {
-
-                string convertedPassword = ConvertPassword(password);
-
-                if (string.IsNullOrWhiteSpace(convertedPassword))
-                {
-                    errors.Add("Credential", "Password is required");
-                }
-                else
-                {
-
-                    UserCredentialToken credentialToken = await _tokenRepository.GetByKeyAsync(tokenId, cancellationToken);
-                    if (credentialToken == null)
-                    {
-                        errors.Add("Credential", "Token is invalid");
-                    }
-                    else
-                    {
-
-                        if (credentialToken.Expired())
-                        {
-                            errors.Add("Credential", "Expired token");
-                        }
-                        else
-                        {
-
-                            if (credentialToken.FirstAccess != firstAccess)
-                            {
-                                errors.Add("Credential", "Invalid token for this operation");
-                                _tokenRepository.Delete(credentialToken.Id);
-                                await _uow.SaveChangesAsync(cancellationToken);
-                            }
-                            else
-                            {
-
-                                User user = credentialToken.User;
-                                if (user.Credential != null && firstAccess)
-                                {
-                                    errors.Add("Credential", "Credentials already exist");
-                                    _tokenRepository.Delete(credentialToken.Id);
-                                    await _uow.SaveChangesAsync(cancellationToken);
-                                }
-                                else
-                                {
-
-                                    await _uow.BeginTransactionAsync(cancellationToken);
-
-                                    if (firstAccess)
-                                    {
-                                        UserCredential credential = new UserCredential()
-                                        {
-                                            UserId = user.Id,
-                                            Username = user.Email.Address,
-                                            Password = convertedPassword
-                                        };
-                                        await _credentialRepository.AddAsync(credential, cancellationToken);
-                                    }
-                                    else
-                                    {
-                                        user.Credential.Password = convertedPassword;
-                                        _credentialRepository.Update(user.Id, user.Credential);
-                                    }
-                                    _tokenRepository.Delete(credentialToken.Id);
-                                    await _uow.SaveChangesAsync(cancellationToken);
-
-                                    if (cancellationToken.IsCancellationRequested)
-                                    {
-                                        await _uow.RollBackAsync(default);
-                                        errors.Add("CreateCredential", "Operation was canceled");
-                                    }
-                                    else
-                                    {
-                                        await _uow.CommitAsync(cancellationToken);
-                                        success = true;
-                                    }
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-            return new SimpleOperationResult(success, errors);
-
-        }
+        public async Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string login, string password, CancellationToken cancellationToken)
+            => await SaveCredentialAsync(tokenId, login, password, true, cancellationToken);
 
         #endregion
 

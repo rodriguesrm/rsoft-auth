@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {
@@ -44,15 +45,20 @@ namespace RSoft.Auth.Infra.Data.Repositories
 
         #region Public methods
 
-        /// <summary>
-        /// Get user by login
-        /// </summary>
-        /// <param name="login">User login</param>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        ///<inheritdoc/>
         public async Task<dmn.User> GetByLoginAsync(string login, CancellationToken cancellationToken)
         {
-            tbl.User table = await _dbSet.FirstOrDefaultAsync(u => u.Credential.Username == login || u.Email == login);
+            tbl.User table = await _dbSet.FirstOrDefaultAsync(u => u.Credential.Login == login || u.Email == login);
             return table.Map();
+        }
+
+        ///<inheritdoc/>
+        public async Task<IEnumerable<dmn.User>> ListByLoginAsync(string login, CancellationToken cancellationToken)
+        {
+            IEnumerable<tbl.User> tableUsers = await _dbSet.Where(u => u.Credential.Login == login || u.Email == login).ToListAsync(cancellationToken);
+            IEnumerable<dmn.User> users = tableUsers
+                .Select(u => u.Map(true));
+            return users;
         }
 
         #endregion
