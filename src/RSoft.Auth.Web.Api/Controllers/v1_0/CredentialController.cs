@@ -132,7 +132,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected async Task<IActionResult> ChangePasswordAsync(ChangePasswordRequest request, CancellationToken cancellationToken = default)
         {
-            SimpleOperationResult result = await _appService.ChangePasswordAsync(_user.Login, request.Login, request.CurrentPassword, request.NewPasword, cancellationToken);
+            SimpleOperationResult result = await _appService.ChangePasswordAsync(request.Login, request.CurrentPassword, request.NewPasword, cancellationToken);
             if (result.Success)
                 return NoContent();
             else

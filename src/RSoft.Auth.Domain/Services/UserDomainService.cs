@@ -50,10 +50,10 @@ namespace RSoft.Auth.Domain.Services
         public UserDomainService
         (
             IAuthenticatedUser authenticatedUser,
-            IUnitOfWork uow, 
+            IUnitOfWork uow,
             IUserRepository repository,
             IUserCredentialRepository credentialRepository,
-            IUserCredentialTokenRepository tokenRepository, 
+            IUserCredentialTokenRepository tokenRepository,
             IScopeRepository scopeRepository,
             IRoleRepository roleRepository,
             IOptions<SecurityOptions> securityOptions
@@ -341,7 +341,7 @@ namespace RSoft.Auth.Domain.Services
         ///<inheritdoc/>
         public async Task<User> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default)
         {
-            
+
             //BACKLOG: Add LDAP Authenticate
 
             if (cancellationToken.IsCancellationRequested) return null;
@@ -357,7 +357,7 @@ namespace RSoft.Auth.Domain.Services
                 else
                     user.Roles = GetRolesByUserAsync(appKey, user.Id);
 
-             }
+            }
             return user;
         }
 
@@ -376,11 +376,53 @@ namespace RSoft.Auth.Domain.Services
         public async Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string login, string password, CancellationToken cancellationToken)
             => await SaveCredentialAsync(tokenId, login, password, true, cancellationToken);
 
+        ///<inheritdoc/>
         public async Task<PasswordProcessResult> GetResetAccessAsync(string email, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
             => await RequestNewCredentials(email, false, sendMailCallBack, cancellationToken);
 
+        ///<inheritdoc/>
         public async Task<SimpleOperationResult> SetRecoveryAccessAsync(Guid tokenId, string password, CancellationToken cancellationToken = default)
             => await SaveCredentialAsync(tokenId, null, password, false, cancellationToken);
+
+        ///<inheritdoc/>
+        public async Task<SimpleOperationResult> ChangePasswordAsync(string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default)
+        {
+
+            bool success = false;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+            string hashCurrentPassword = ConvertPassword(currentPassword);
+            string hashNewPassword = ConvertPassword(newPassword);
+
+            User user = await _repository.GetByLoginAsync(login, cancellationToken);
+            if (user != null && user.Credential.Password == hashCurrentPassword)
+            {
+                if (_authenticatedUser.Login != user.Credential.Login)
+                {
+                    errors.Add("ChangePassword", "Informed user is different from authenticated");
+                }
+                else
+                {
+
+                    if (user.IsActive)
+                    {
+                        user.Credential.Password = ConvertPassword(hashNewPassword);
+                        _credentialRepository.Update(user.Credential.UserId.Value, user.Credential);
+                        await _uow.SaveChangesAsync(cancellationToken);
+                        success = true;
+                    }
+                    else
+                    {
+                        errors.Add("ChangePassword", "User is inactive or blocked");
+                    }
+                }
+            }
+            else
+            {
+                errors.Add("ChangePassword", "Invalid username or password");
+            }
+            return new SimpleOperationResult(success, errors);
+
+        }
 
         #endregion
 

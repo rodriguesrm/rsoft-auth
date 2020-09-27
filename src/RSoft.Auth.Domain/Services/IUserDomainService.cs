@@ -75,7 +75,14 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<SimpleOperationResult> SetRecoveryAccessAsync(Guid tokenId, string password, CancellationToken cancellationToken = default);
 
-
+        /// <summary>
+        /// Change user password
+        /// </summary>
+        /// <param name="login">Informed user login</param>
+        /// <param name="currentPassword">Current user password</param>
+        /// <param name="newPassword">New user password</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<SimpleOperationResult> ChangePasswordAsync(string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default);
 
     }
 

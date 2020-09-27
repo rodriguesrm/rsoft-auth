@@ -58,12 +58,11 @@ namespace RSoft.Auth.Application.Services
         /// <summary>
         /// Change user password
         /// </summary>
-        /// <param name="authenticatedLogin">Authenticated user login</param>
         /// <param name="login">Informed user login</param>
         /// <param name="currentPassword">Current user password</param>
         /// <param name="newPassword">New user password</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> ChangePasswordAsync(string authenticatedLogin, string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default);
+        Task<SimpleOperationResult> ChangePasswordAsync(string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Checks whether the informed user exists

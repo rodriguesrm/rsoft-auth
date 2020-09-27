@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using RSoft.Framework.Cross.Enums;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -100,21 +101,31 @@ namespace RSoft.Auth.Application.Services
             User user = await _userDomain.GetByLoginAsync(appKey, appAccess, login, password, cancellationToken);
             if (user != null)
             {
-                if (user.Credential.ChangeCredentials)
+
+                if (user.Type == UserType.User)
                 {
-                    errors.Add("Authenticate", "User must change password");
-                }
-                else
-                { 
-                    if (user.IsActive)
+
+                    if (user.Credential.ChangeCredentials)
                     {
-                        success = true;
-                        userDto = user.Map();
+                        errors.Add("Authenticate", "User must change password");
                     }
                     else
                     {
-                        errors.Add("Authenticate", "Inactive or blocked user");
+                        if (user.IsActive)
+                        {
+                            success = true;
+                            userDto = user.Map();
+                        }
+                        else
+                        {
+                            errors.Add("Authenticate", "Inactive or blocked user");
+                        }
                     }
+
+                }
+                else
+                {
+                    errors.Add("Authenticate", "Service user cannot authenticate as a regular user");
                 }
             }
             else
@@ -143,11 +154,8 @@ namespace RSoft.Auth.Application.Services
             => await _userDomain.SetRecoveryAccessAsync(tokenId, password, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> ChangePasswordAsync(string authenticatedLogin, string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+        public async Task<SimpleOperationResult> ChangePasswordAsync(string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default)
+            => await _userDomain.ChangePasswordAsync(login, currentPassword, newPassword, cancellationToken);
 
         ///<inheritdoc/>
         public async Task<SimpleOperationResult> IsRegistered(string login, string email, CancellationToken cancellationToken)
