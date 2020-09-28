@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RSoft.Framework.Cross.Enums;
+using System;
 
 namespace RSoft.Auth.Web.Api.Model.Response.v1_0
 {
@@ -25,6 +26,16 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         /// User active status
         /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// User's date of birth
+        /// </summary>
+        public DateTime? BornDate { get; set; }
+
+        /// <summary>
+        /// User type
+        /// </summary>
+        public UserType? Type { get; set; }
 
         #endregion
     }

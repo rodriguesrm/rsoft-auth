@@ -29,7 +29,6 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         #region Local objects/variables
 
-        private readonly IAuthenticatedUser _user;
         private readonly ICredentialAppService _appService;
 
         #endregion
@@ -37,13 +36,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         #region Constructors
 
         ///<inheritdoc/>
-        public CredentialController
-        (
-            IAuthenticatedUser user,
-            ICredentialAppService appService
-        ) : base()
+        public CredentialController(ICredentialAppService appService) : base()
         {
-            _user = user;
             _appService = appService;
         }
 
@@ -58,10 +52,6 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected async Task<IActionResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default)
         {
-
-            Email checkedEmail = new Email(email);
-            if (string.IsNullOrWhiteSpace(email) || checkedEmail.Invalid)
-                return BadRequest("E-mail is invalid or empty");
 
             PasswordProcessResult result = await _appService.GetFirstAccessAsync(email, cancellationToken);
 
@@ -95,9 +85,6 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected async Task<IActionResult> GetRecoveryAccessAsync(string login, CancellationToken cancellationToken = default)
         {
-
-            if (string.IsNullOrWhiteSpace(login))
-                return BadRequest("Login is required");
 
             PasswordProcessResult result = await _appService.GetResetAccessAsync(login, cancellationToken);
 
@@ -135,6 +122,21 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             SimpleOperationResult result = await _appService.ChangePasswordAsync(request.Login, request.CurrentPassword, request.NewPasword, cancellationToken);
             if (result.Success)
                 return NoContent();
+            else
+                return BadRequest(PrepareNotifications(result.Errors));
+        }
+
+        /// <summary>
+        /// Checks whether the informed login is available
+        /// </summary>
+        /// <param name="login">User login</param>
+        /// <param name="userId">User id</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        protected async Task<IActionResult> LoginIsAvailableAsync(string login, Guid? userId, CancellationToken cancellationToken)
+        {
+            SimpleOperationResult result = await _appService.LoginIsAvailableAsync(login, userId, cancellationToken);
+            if (result.Errors.Count == 0)
+                return Ok(result.Success);
             else
                 return BadRequest(PrepareNotifications(result.Errors));
         }
@@ -229,6 +231,27 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> ChangePassword(ChangePasswordRequest request, CancellationToken cancellationToken)
             => await RunActionAsync(ChangePasswordAsync(request, cancellationToken), cancellationToken);
+
+        /// <summary>
+        /// Checks whether the informed login is available
+        /// </summary>
+        /// <param name="login">User login (required)</param>
+        /// <param name="userId">User id (optional)</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="200">Process successfully executed, see details of the response body</response>
+        /// <response code="401">Invalid or unreported credentials</response>
+        /// <response code="403">The informed credential does not have access to this resource</response>
+        /// <response code="500">Request processing failed</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpGet("login-available")]
+        [MapToApiVersion("1.0")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginIsAvailable([FromQuery] string login, [FromQuery] Guid? userId, CancellationToken cancellationToken)
+            => await RunActionAsync(LoginIsAvailableAsync(login, userId, cancellationToken), cancellationToken);
 
         #endregion
 

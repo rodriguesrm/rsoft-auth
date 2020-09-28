@@ -33,7 +33,7 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="userId">User id key</param>
         /// <param name="login">User login/User name</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<bool> LoginIsAvailable(Guid userId, string login, CancellationToken cancellationToken = default);
+        Task<bool> LoginIsAvailableAsync(Guid userId, string login, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Create token for generating password credentials and send by email

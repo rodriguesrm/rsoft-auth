@@ -15,6 +15,14 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="table">Table entity to map</param>
         public static dmn.UserCredential Map(this tbl.UserCredential table)
+            => Map(table, true);
+
+        /// <summary>
+        /// Maps table to entity
+        /// </summary>
+        /// <param name="table">Table entity to map</param>
+        /// <param name="loadChildren">Indicate load children data flag</param>
+        public static dmn.UserCredential Map(this tbl.UserCredential table, bool loadChildren)
         {
             dmn.UserCredential result = null;
 

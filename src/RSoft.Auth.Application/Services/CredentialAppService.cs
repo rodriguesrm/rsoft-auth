@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using RSoft.Framework.Cross.Enums;
+using RSoft.Framework.Domain.ValueObjects;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -138,7 +139,24 @@ namespace RSoft.Auth.Application.Services
 
         ///<inheritdoc/>
         public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default)
-            => await _userDomain.GetFirstAccessAsync(email, (args) => SendMailTokenPasswordAsync(args, cancellationToken).Result, cancellationToken);
+        {
+
+            PasswordProcessResult result = null;
+            Email checkedEmail = new Email(email);
+            if (string.IsNullOrWhiteSpace(email) || checkedEmail.Invalid)
+            {
+                IDictionary<string, string> errors = new Dictionary<string, string>
+                {
+                    { "Email", "E-mail is invalid or empty" }
+                };
+                result = new PasswordProcessResult(false, null, null, errors, null);
+            }
+            else
+            {
+                result = await _userDomain.GetFirstAccessAsync(email, (args) => SendMailTokenPasswordAsync(args, cancellationToken).Result, cancellationToken);
+            }
+            return result;
+        }
 
         ///<inheritdoc/>
         public async Task<SimpleOperationResult> CreateFirstAccessAsync(Guid tokenId, string login, string password, CancellationToken cancellationToken = default)
@@ -146,7 +164,24 @@ namespace RSoft.Auth.Application.Services
 
         ///<inheritdoc/>
         public async Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, CancellationToken cancellationToken = default)
-            => await _userDomain.GetResetAccessAsync(loginOrEmail, (args) => SendMailTokenPasswordAsync(args, cancellationToken).Result, cancellationToken);
+        {
+
+            PasswordProcessResult result = null;
+            if (string.IsNullOrWhiteSpace(loginOrEmail))
+            {
+                IDictionary<string, string> errors = new Dictionary<string, string>
+                {
+                    { "Login", "Login is required" }
+                };
+                result = new PasswordProcessResult(false, null, null, errors, null);
+            }
+            else
+            {
+                result = await _userDomain.GetResetAccessAsync(loginOrEmail, (args) => SendMailTokenPasswordAsync(args, cancellationToken).Result, cancellationToken);
+            }
+
+            return result;
+        }
 
 
         ///<inheritdoc/>
@@ -158,10 +193,21 @@ namespace RSoft.Auth.Application.Services
             => await _userDomain.ChangePasswordAsync(login, currentPassword, newPassword, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> IsRegistered(string login, string email, CancellationToken cancellationToken)
+        public async Task<SimpleOperationResult> LoginIsAvailableAsync(string login, Guid? userId, CancellationToken cancellationToken)
         {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
+            bool success = false;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            if (string.IsNullOrEmpty(login))
+            {
+                errors.Add("Login", "Login is required");
+            }
+            else
+            {
+                success = await _userDomain.LoginIsAvailableAsync(userId ?? Guid.Empty, login, cancellationToken);
+            }
+
+            return new SimpleOperationResult(success, errors);
         }
 
         #endregion

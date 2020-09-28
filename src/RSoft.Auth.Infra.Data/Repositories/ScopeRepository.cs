@@ -24,8 +24,8 @@ namespace RSoft.Auth.Infra.Data.Repositories
         #region Overrides
 
         ///<inheritdoc/>
-        protected override dmn.Scope Map(tbl.Scope table)
-            => table.Map();
+        protected override dmn.Scope Map(tbl.Scope table, bool loadChildren)
+            => table.Map(loadChildren);
 
         ///<inheritdoc/>
         protected override tbl.Scope MapForAdd(dmn.Scope entity)

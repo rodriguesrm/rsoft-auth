@@ -23,7 +23,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize(Roles = "master, admin")]
+    [Authorize(Roles = "master, service")]
     public class UserController : ApiCrudBaseController<Guid, UserDto, UserRequest, UserResponse>
     {
 
@@ -54,10 +54,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         ///<inheritdoc/>
         protected override async Task<IEnumerable<UserDto>> GetAllAsync(CancellationToken cancellationToken = default)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+            => await _userAppService.GetAllAsync(cancellationToken);
 
         ///<inheritdoc/>
         protected override async Task<UserDto> GetByIdAsync(Guid key, CancellationToken cancellationToken = default)
@@ -89,8 +86,15 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         ///<inheritdoc/>
         protected override UserResponse Map(UserDto dto)
         {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
+            UserResponse response = new UserResponse(dto.Id)
+            {
+                Name = new FullNameResponse(dto.Name.FirstName, dto.Name.LastName),
+                Email = dto.Email,
+                BornDate = dto.BornDate,
+                Type = dto.Type,
+                IsActive = dto.IsActive
+            };
+            return response;
         }
 
         ///<inheritdoc/>
@@ -118,7 +122,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Add a new user
         /// </summary>
-        /// <param name="request">Request data information</param>
+        /// <param name="request">*Request data information</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="201">User added successfully</response>
         /// <response code="400">Invalid request, see details in response</response>
@@ -131,8 +135,22 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public new async Task<IActionResult> InsertAsync([FromBody] UserRequest request, CancellationToken cancellationToken)
+        [MapToApiVersion("1.0")]
+        public async Task<IActionResult> CreateUser([FromBody] UserRequest request, CancellationToken cancellationToken)
             => await base.InsertAsync(request, cancellationToken);
+
+        /// <summary>
+        /// Lista all users
+        /// </summary>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="200">Successful request processing, returns list of users</response>
+        /// <response code="401">Credentials is invalid or empty</response>
+        /// <response code="403">The informed credential does not have access privileges to this resource</response>
+        /// <response code="500">Request processing failed</response>
+        [HttpGet]
+        [MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetAllUser(CancellationToken cancellationToken)
+            => await base.ListAsync(cancellationToken);
 
         #endregion
 

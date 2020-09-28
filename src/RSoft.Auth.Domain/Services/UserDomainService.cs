@@ -145,7 +145,7 @@ namespace RSoft.Auth.Domain.Services
                                 else
                                 {
 
-                                    if (firstAccess && (!(await LoginIsAvailable(user.Id, login, cancellationToken))))
+                                    if (firstAccess && (!(await LoginIsAvailableAsync(user.Id, login, cancellationToken))))
                                     {
                                         errors.Add("Login", "Login already in use");
                                     }
@@ -319,7 +319,7 @@ namespace RSoft.Auth.Domain.Services
         #region Public methods
 
         ///<inheritdoc/>
-        public async Task<bool> LoginIsAvailable(Guid userId, string login, CancellationToken cancellationToken = default)
+        public async Task<bool> LoginIsAvailableAsync(Guid userId, string login, CancellationToken cancellationToken = default)
         {
 
             IEnumerable<User> users = await _repository.ListByLoginAsync(login, cancellationToken);
@@ -349,13 +349,17 @@ namespace RSoft.Auth.Domain.Services
             if (user != null)
             {
                 if (user.Credential.Password != ConvertPassword(password))
+                {
                     user = null;
-
-                Scope scopeCheck = user.Scopes.FirstOrDefault(x => x.Id == appKey && x.AccessKey == appAccess);
-                if (scopeCheck == null)
-                    user = null;
+                }
                 else
-                    user.Roles = GetRolesByUserAsync(appKey, user.Id);
+                {
+                    Scope scopeCheck = user.Scopes.FirstOrDefault(x => x.Id == appKey && x.AccessKey == appAccess);
+                    if (scopeCheck == null)
+                        user = null;
+                    else
+                        user.Roles = GetRolesByUserAsync(appKey, user.Id);
+                }
 
             }
             return user;

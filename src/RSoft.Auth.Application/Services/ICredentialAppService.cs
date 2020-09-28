@@ -65,12 +65,12 @@ namespace RSoft.Auth.Application.Services
         Task<SimpleOperationResult> ChangePasswordAsync(string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Checks whether the informed user exists
+        /// Checks whether the informed login is available
         /// </summary>
         /// <param name="login">User login</param>
-        /// <param name="email">User E-mail</param>
+        /// <param name="userId">User id</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> IsRegistered(string login, string email, CancellationToken cancellationToken);
+        Task<SimpleOperationResult> LoginIsAvailableAsync(string login, Guid? userId,CancellationToken cancellationToken);
 
     }
 
