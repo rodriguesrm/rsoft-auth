@@ -24,8 +24,8 @@ namespace RSoft.Auth.Infra.Data.Repositories
         #region Overrides
 
         ///<inheritdoc/>
-        protected override dmn.UserCredential Map(tbl.UserCredential table, bool loadChildren)
-            => table.Map(loadChildren);
+        protected override dmn.UserCredential Map(tbl.UserCredential table)
+            => table.Map();
 
         ///<inheritdoc/>
         protected override tbl.UserCredential MapForAdd(dmn.UserCredential entity)

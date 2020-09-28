@@ -52,8 +52,7 @@ namespace RSoft.Framework.Infra.Data
         /// Map table to entity
         /// </summary>
         /// <param name="table">Table object</param>
-        /// <param name="loadChildren">Indicate load children data flag</param>
-        protected abstract TEntity Map(TTable table, bool loadChildren);
+        protected abstract TEntity Map(TTable table);
 
         /// <summary>
         /// Map entity to table for add action
@@ -80,7 +79,7 @@ namespace RSoft.Framework.Infra.Data
                 throw new InvalidEntityException(nameof(entity));
             TTable table = MapForAdd(entity);
             EntityEntry<TTable> tsk = await _dbSet.AddAsync(table, cancellationToken).AsTask();
-            entity = Map(tsk.Entity, true);
+            entity = Map(tsk.Entity);
             return entity;
         }
 
@@ -98,7 +97,7 @@ namespace RSoft.Framework.Infra.Data
             table = MapForUpdate(entity, table);
             table = _dbSet.Update(table).Entity;
 
-            entity = Map(table, false);
+            entity = Map(table);
             return entity;
         }
 
@@ -110,7 +109,7 @@ namespace RSoft.Framework.Infra.Data
                 return null;
 
             TTable table = await Task.Run(() => _dbSet.Find(key));
-            TEntity entity = Map(table, true);
+            TEntity entity = Map(table);
 
             if (cancellationToken.IsCancellationRequested)
                 return null;
@@ -127,7 +126,7 @@ namespace RSoft.Framework.Infra.Data
                 return null;
 
             IEnumerable<TTable> rows = await _dbSet.ToListAsync(cancellationToken);
-            IEnumerable<TEntity> entities = rows.Select(r => Map(r, false)).ToList();
+            IEnumerable<TEntity> entities = rows.Select(r => Map(r)).ToList();
 
             if (cancellationToken.IsCancellationRequested)
                 return null;

@@ -29,8 +29,8 @@ namespace RSoft.Auth.Infra.Data.Repositories
         #region Overrides
 
         ///<inheritdoc/>
-        protected override dmn.User Map(tbl.User table, bool loadChildren)
-            => table.Map(loadChildren);
+        protected override dmn.User Map(tbl.User table)
+            => table.Map();
 
         ///<inheritdoc/>
         protected override tbl.User MapForAdd(dmn.User entity)
