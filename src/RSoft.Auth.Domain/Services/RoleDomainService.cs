@@ -33,9 +33,15 @@ namespace RSoft.Auth.Domain.Services
         public override void PrepareSave(Role entity, bool isUpdate)
         {
             if (isUpdate)
+            {
                 entity.ChangedAuthor = new AuthorNullable<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
+                entity.ChangedOn = DateTime.UtcNow;
+            }
             else
+            {
                 entity.CreatedAuthor = new Author<Guid>(_authenticatedUser.Id.Value, $"{_authenticatedUser.FirstName} {_authenticatedUser.LastName}");
+                entity.CreatedOn = DateTime.UtcNow;
+            }
             entity.Name = entity.Name.ToLower();
         }
 

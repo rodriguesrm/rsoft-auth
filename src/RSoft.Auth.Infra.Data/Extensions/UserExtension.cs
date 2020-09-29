@@ -37,6 +37,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     BornDate = table.BornDate,
                     Email = new Email(table.Email),
                     Type = table.Type,
+                    IsActive = table.IsActive,
                     CreatedOn = table.CreatedOn,
                     ChangedOn = table.ChangedOn
                 };
@@ -120,6 +121,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 table.BornDate = entity.BornDate;
                 table.Email = entity.Email.Address;
                 table.Type = entity.Type.Value;
+                table.IsActive = entity.IsActive;
                 table.ChangedOn = entity.ChangedOn;
                 table.ChangedBy = entity.ChangedAuthor.Id;
 

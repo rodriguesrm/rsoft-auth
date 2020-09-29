@@ -272,6 +272,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpPut("{key:guid}")]
+        [MapToApiVersion("1.0")]
         public async Task<IActionResult> UpdateUser(Guid key, UserUpdateRequest request, CancellationToken cancellationToken)
             => await RunActionAsync(RunUpdateUserAsync(key, request, cancellationToken), cancellationToken);
 
