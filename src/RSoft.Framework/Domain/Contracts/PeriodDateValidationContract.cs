@@ -20,7 +20,7 @@ namespace RSoft.Framework.Domain.Contracts
         public PeriodDateValidationContract(DateTime? startDate, DateTime? endDate, string field) : base()
         {
 
-            //TODO: Globalization
+            //BACKLOG: Globalization
             Contract
                 .IsNotNull(startDate, field, $"[{field}] Invalid start date")
                 .IsNotNull(endDate, field, $"[{field}] Invalid end date")

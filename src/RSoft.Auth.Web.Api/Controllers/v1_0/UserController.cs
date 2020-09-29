@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RSoft.Auth.Application.Model;
+using RSoft.Auth.Application.Model.Extensions;
 using RSoft.Auth.Application.Services;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Auth.Web.Api.Model.Response.v1_0;
@@ -87,15 +89,58 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         }
 
         /// <summary>
+        /// Map request to dto object
+        /// </summary>
+        /// <param name="id">User id</param>
+        /// <param name="request">Request data</param>
+        private UserDto MapUpdateToDto(Guid id, UserUpdateRequest request)
+        {
+            return new UserDto()
+            {
+                Id = id,
+                Name = new FullNameResponse(request.Name.FirstName, request.Name.LastName),
+                Email = request.Email,
+                BornDate = request.BornDate,
+                Type = request.Type,
+                IsActive = request.IsActive
+            };
+        }
+
+        /// <summary>
         /// List all entity
         /// </summary>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         private async Task<IActionResult> RunUserListAsync(CancellationToken cancellationToken = default)
         {
-            //TODO: List user only application
             IEnumerable<UserDto> result = await _userAppService.GetAllAsync(AppKey.Value, cancellationToken);
             IEnumerable<UserListResponse> resp = result.Select(dto => MapToResponse<UserListResponse>(dto));
             return Ok(resp);
+        }
+
+        /// <summary>
+        /// Update user data
+        /// </summary>
+        /// <param name="key">User id key value</param>
+        /// <param name="request">Update user request data</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<IActionResult> RunUpdateUserAsync(Guid key, UserUpdateRequest request, CancellationToken cancellationToken)
+        {
+
+            UserDto dto = await GetByIdAsync(key, cancellationToken);
+            if (dto == null)
+                return NotFound("Data not found");
+
+            dto = MapUpdateToDto(key, request);
+            dto = await UpdateAsync(dto, cancellationToken);
+
+            if (dto.Invalid)
+            {
+                IEnumerable<GenericNotificationResponse> msg = GetNotificationsErrors(dto.Notifications);
+                return BadRequest(msg);
+            }
+
+            return NoContent();
+
         }
 
         #endregion
@@ -145,17 +190,11 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         ///<inheritdoc/>
         protected override async Task RemoveAsync(Guid key, CancellationToken cancellationToken = default)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+            => await _userAppService.DeleteAsync(key, cancellationToken);
 
         ///<inheritdoc/>
         protected override async Task<UserDto> UpdateAsync(UserDto dto, CancellationToken cancellationToken = default)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+            => await _userAppService.UpdateAsync(dto.Id, dto, cancellationToken);
 
         #endregion
 
@@ -169,7 +208,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="201">User added successfully</response>
         /// <response code="400">Invalid request, see details in response</response>
         /// <response code="401">Credentials is invalid or empty</response>
-        /// <response code="403">The informed credential does not have access privileges to this resource</response>
+        /// <response code="403">The use credential does not have access to this resource</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(typeof(GenericInsertResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
@@ -180,6 +219,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> CreateUser([FromBody] UserRequest request, CancellationToken cancellationToken)
             => await base.InsertAsync(request, cancellationToken);
+        //TODO: RR - Fazer tratamento de scopo de inclusão de registros, somente quem tem acesso ao Authentication pode adicionar scopos, os demais somente do escopo que pertence
 
         /// <summary>
         /// List all users
@@ -187,7 +227,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Successful request processing, returns list of users</response>
         /// <response code="401">Credentials is invalid or empty</response>
-        /// <response code="403">The informed credential does not have access privileges to this resource</response>
+        /// <response code="403">The use credential does not have access to this resource</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(typeof(UserListResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
@@ -205,11 +245,35 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Successful request processing, returns user detail</response>
         /// <response code="401">Credentials is invalid or empty</response>
-        /// <response code="403">The informed credential does not have access privileges to this resource</response>
+        /// <response code="403">The use credential does not have access to this resource</response>
         /// <response code="500">Request processing failed</response>
+        [ProducesResponseType(typeof(UserDetailResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("{key:guid}")]
-        public async Task<IActionResult> GetUserByKey(Guid key, CancellationToken cancellationToken)
+        [MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetUserByKey([FromRoute] Guid key, CancellationToken cancellationToken)
             => await base.GetAsync(key, cancellationToken);
+
+        /// <summary>
+        /// Update user
+        /// </summary>
+        /// <param name="key">User id key value</param>
+        /// <param name="request">User data details</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="204">Successful request processing</response>
+        /// <response code="400">Invalid request, see details in response</response>
+        /// <response code="401">Credentials is invalid or empty</response>
+        /// <response code="403">The use credential does not have access to this resource</response>
+        /// <response code="500">Request processing failed</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateUser(Guid key, UserUpdateRequest request, CancellationToken cancellationToken)
+            => await RunActionAsync(RunUpdateUserAsync(key, request, cancellationToken), cancellationToken);
 
         #endregion
 

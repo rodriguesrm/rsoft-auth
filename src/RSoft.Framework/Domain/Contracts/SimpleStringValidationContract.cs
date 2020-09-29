@@ -51,7 +51,7 @@
             if (expression != null)
                 expression = expression.Trim();
 
-            //TODO: Globalization
+            //BACKLOG: Globalization
             if (required)
                 Contract
                     .Requires()

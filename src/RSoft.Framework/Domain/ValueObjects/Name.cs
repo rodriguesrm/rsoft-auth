@@ -48,7 +48,7 @@ namespace RSoft.Framework.Domain.ValueObjects
         ///<inheritdoc/>
         protected override void Validate()
         {
-            //TODO: Globalization
+            //BACKLOG: Globalization
             AddNotifications(new FullNameValidationContract(this).Contract.Notifications);
         }
 

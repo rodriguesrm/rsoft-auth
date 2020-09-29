@@ -82,7 +82,7 @@ namespace RSoft.Auth.Domain.Entities
         ///<inheritdoc/>
         public override void Validate()
         {
-            //TODO: Globalization
+            //BACKLOG: Globalization
             AddNotifications(new RequiredValidationContract<Guid?>(UserId, nameof(UserId), "UserId is required").Contract.Notifications);
             if (ExpiresOn <= CreatedAt)
                 AddNotification("Dates", "The expiration date must not be the token creation date before");

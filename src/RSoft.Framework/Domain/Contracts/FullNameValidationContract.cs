@@ -35,7 +35,7 @@ namespace RSoft.Framework.Domain.Contracts
             // Regular expression for all characteres name (global)
             // ^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$
 
-            //TODO: Globalization
+            //BACKLOG: Globalization
             if (string.IsNullOrWhiteSpace(name.FirstName))
             {
                 Contract.IsNotNullOrEmpty(name.FirstName, "First name", "First name is required");

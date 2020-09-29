@@ -20,7 +20,7 @@ namespace RSoft.Framework.Domain.Contracts
         public DateValidationContract(DateTime? date, string field, string message) : base()
         {
 
-            //TODO: Globalization
+            //BACKLOG: Globalization
             Contract
                 .IsNotNull(date, field, message)
             ;

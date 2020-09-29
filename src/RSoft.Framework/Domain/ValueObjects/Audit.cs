@@ -54,7 +54,7 @@ namespace RSoft.Framework.Domain.ValueObjects
         ///<inheritdoc/>
         protected override void Validate()
         {
-            //TODO: Globalization
+            //BACKLOG: Globalization
             if (CreatedAuthor == null)
                 AddNotification(nameof(CreatedAuthor), $"{nameof(CreatedAuthor)} is required");
             if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);

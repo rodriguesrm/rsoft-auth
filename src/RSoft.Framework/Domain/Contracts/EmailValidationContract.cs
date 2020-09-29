@@ -22,7 +22,7 @@
         /// <param name="required">Indicates whether email is required (default true)</param>
         public EmailValidationContract(string email, bool required) : base()
         {
-            //TODO: Globalization
+            //BACKLOG: Globalization
             if (required)
                 Contract.Requires();
             Contract

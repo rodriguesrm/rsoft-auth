@@ -164,9 +164,7 @@ namespace RSoft.Framework.Web.Api
                 return BadRequest(msg);
             }
 
-            TResponse resp = Map(dto);
-
-            return Ok(resp);
+            return NoContent();
 
         }
 

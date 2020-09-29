@@ -25,7 +25,7 @@ namespace RSoft.Framework.Domain.Contracts
         public AddressValidationContract(IAddress address)
         {
 
-            //TODO: Globalization
+            //BACKLOG: Globalization
             //(names and messages)
             Contract
                 .Requires()

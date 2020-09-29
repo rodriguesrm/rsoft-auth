@@ -42,7 +42,7 @@ namespace RSoft.Framework.Domain.ValueObjects
         ///<inheritdoc/>
         protected override void Validate()
         {
-            //TODO: Globalization
+            //BACKLOG: Globalization
             AddNotifications(new RequiredValidationContract<TKey>(Id, nameof(Id), "Id is required").Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Name, nameof(Name), true, 2, 150).Contract.Notifications);
         }

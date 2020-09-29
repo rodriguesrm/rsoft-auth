@@ -20,7 +20,7 @@ namespace RSoft.Framework.Domain.Contracts
         public FutureDateValidationContract(DateTime? date, string field, string message) : base()
         {
 
-            //TODO: Globalization
+            //BACKLOG: Globalization
             Contract
                 .IsNotNull(date, field, message)
                 .IsGreaterOrEqualsThan(date.Value, DateTime.UtcNow, field, $"The '{field}' must be greater than the current date")

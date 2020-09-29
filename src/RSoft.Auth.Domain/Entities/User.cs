@@ -127,7 +127,7 @@ namespace RSoft.Auth.Domain.Entities
         public override void Validate()
         {
 
-            //TODO: Globalization
+            //BACKLOG: Globalization
             if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);
             if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
             AddNotifications(Name.Notifications);
