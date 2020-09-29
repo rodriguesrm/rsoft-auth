@@ -22,14 +22,9 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         #region Properties
 
         /// <summary>
-        /// User Login (for persons)
+        /// User credential information
         /// </summary>
-        public string Login { get; set; }
-
-        /// <summary>
-        /// User application/service access key
-        /// </summary>
-        public Guid? AppAccess { get; set; }
+        public SimpleUserCredentialResponse Credential { get; set; }
 
         #endregion
     }

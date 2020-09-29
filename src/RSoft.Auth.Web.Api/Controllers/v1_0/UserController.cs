@@ -71,8 +71,15 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             UserDetailResponse userDetail = result as UserDetailResponse;
             if (userDetail != null)
             {
-                userDetail.Login = dto.Credential?.Login;
-                userDetail.AppAccess = dto.Credential?.AppAccess;
+                if (dto.Credential != null)
+                {
+                    userDetail.Credential = new SimpleUserCredentialResponse()
+                    {
+                        Login = dto.Credential.Login,
+                        AppAccess = dto.Credential.AppAccess,
+                        ChangeCredentials = dto.Credential.ChangeCredentials
+                    };
+                }
             }
 
             return result;
@@ -105,10 +112,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         ///<inheritdoc/>
         protected override async Task<UserDto> GetByIdAsync(Guid key, CancellationToken cancellationToken = default)
-        {
-            //TODO: NotImplementedException
-            throw new NotImplementedException();
-        }
+            => await _userAppService.GetByKeyAsync(key, cancellationToken);
+        //TODO: Add filter to AppKey
 
         ///<inheritdoc/>
         protected override UserDto Map(UserRequest request)
@@ -132,17 +137,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         ///<inheritdoc/>
         protected override UserDetailResponse Map(UserDto dto)
-        {
-            UserDetailResponse response = new UserDetailResponse(dto.Id)
-            {
-                Name = new FullNameResponse(dto.Name.FirstName, dto.Name.LastName),
-                Email = dto.Email,
-                BornDate = dto.BornDate,
-                Type = dto.Type,
-                IsActive = dto.IsActive
-            };
-            return response;
-        }
+            => MapToResponse<UserDetailResponse>(dto);
 
         ///<inheritdoc/>
         protected override object PrepareInsertResponse(UserDto dto)
@@ -187,7 +182,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             => await base.InsertAsync(request, cancellationToken);
 
         /// <summary>
-        /// Lista all users
+        /// List all users
         /// </summary>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Successful request processing, returns list of users</response>
@@ -203,6 +198,18 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         public async Task<IActionResult> GetAllUser(CancellationToken cancellationToken)
             => await RunActionAsync(RunUserListAsync(cancellationToken), cancellationToken);
 
+        /// <summary>
+        /// Get user by key id
+        /// </summary>
+        /// <param name="key">User id key value</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="200">Successful request processing, returns user detail</response>
+        /// <response code="401">Credentials is invalid or empty</response>
+        /// <response code="403">The informed credential does not have access privileges to this resource</response>
+        /// <response code="500">Request processing failed</response>
+        [HttpGet("{key:guid}")]
+        public async Task<IActionResult> GetUserByKey(Guid key, CancellationToken cancellationToken)
+            => await base.GetAsync(key, cancellationToken);
 
         #endregion
 
