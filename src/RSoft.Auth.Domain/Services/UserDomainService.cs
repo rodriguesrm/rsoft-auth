@@ -167,6 +167,7 @@ namespace RSoft.Auth.Domain.Services
                                         else
                                         {
                                             user.Credential.Password = convertedPassword;
+                                            user.Credential.ChangeCredentials = false;
                                             _credentialRepository.Update(user.Id, user.Credential);
                                         }
                                         _tokenRepository.Delete(credentialToken.Id);
@@ -406,13 +407,20 @@ namespace RSoft.Auth.Domain.Services
                 }
                 else
                 {
-
                     if (user.IsActive)
                     {
-                        user.Credential.Password = ConvertPassword(hashNewPassword);
-                        _credentialRepository.Update(user.Credential.UserId.Value, user.Credential);
-                        await _uow.SaveChangesAsync(cancellationToken);
-                        success = true;
+                        if (currentPassword == newPassword)
+                        {
+                            errors.Add("ChangePassword", "The new password cannot be the same as the current password");
+                        }
+                        else
+                        {
+                            user.Credential.Password = ConvertPassword(hashNewPassword);
+                            user.Credential.ChangeCredentials = false;
+                            _credentialRepository.Update(user.Credential.UserId.Value, user.Credential);
+                            await _uow.SaveChangesAsync(cancellationToken);
+                            success = true;
+                        }
                     }
                     else
                     {

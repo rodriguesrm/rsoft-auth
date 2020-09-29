@@ -22,8 +22,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        /// <param name="loadChildren">Load children data</param>
-        public static dmn.Scope Map(this tbl.Scope table, bool loadChildren)
+        /// <param name="useLazy">Load related data</param>
+        public static dmn.Scope Map(this tbl.Scope table, bool useLazy)
         {
 
             dmn.Scope result = null;
@@ -40,7 +40,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     IsActive = table.IsActive
                 };
 
-                if (loadChildren)
+                if (useLazy)
                 {
                     result.MapAuthor(table);
                     if (table.Users?.Count > 0)

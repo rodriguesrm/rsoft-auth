@@ -66,7 +66,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
             string password = MD5.ByteArrayToString(pwdBuffer);
 
             Guid serviceUserId = new Guid("03f66c4a-9f5a-45c3-afa3-de6801f5592e");
-            string userKey = "nP8s6QyEhqfSuGsTRqbg8MpNTFxb3SQn";
+            Guid userKey = new Guid("3f8dc146-01e1-11eb-bffd-f4ec38809f52");
 
             migrationBuilder.Sql("set foreign_key_checks=0");
 

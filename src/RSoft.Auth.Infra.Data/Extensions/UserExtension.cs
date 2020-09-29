@@ -23,8 +23,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        /// <param name="loadChildren">Load children data</param>
-        public static dmn.User Map(this tbl.User table, bool loadChildren)
+        /// <param name="useLazy">Load related data</param>
+        public static dmn.User Map(this tbl.User table, bool useLazy)
         {
 
             dmn.User result = null;
@@ -41,7 +41,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     ChangedOn = table.ChangedOn
                 };
 
-                if (loadChildren)
+                if (useLazy)
                 {
                     result.MapAuthor(table);
                     if (table.Credential != null)
@@ -71,8 +71,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps entity to table
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
-        /// <param name="loadChildren">Load children data</param>
-        public static tbl.User Map(this dmn.User entity, bool loadChildren)
+        /// <param name="useLazy">Load related data</param>
+        public static tbl.User Map(this dmn.User entity, bool useLazy)
         {
 
             tbl.User result = null;
@@ -91,7 +91,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     CreatedBy = entity.CreatedAuthor.Id
                 };
 
-                if (loadChildren)
+                if (useLazy)
                 {
                     result.Scopes = entity.Scopes.Select(s => new tbl.UserScope() { ScopeId = s.Id, UserId = entity.Id }).ToList();
                     result.Roles = entity.Roles.Select(r => new tbl.UserRole() { RoleId = r.Id, UserId = entity.Id }).ToList();

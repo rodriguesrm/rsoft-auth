@@ -21,8 +21,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        /// <param name="loadChildren">Indicate load children data flag</param>
-        public static dmn.UserCredential Map(this tbl.UserCredential table, bool loadChildren)
+        /// <param name="useLazy">Indicate load related data flag</param>
+        public static dmn.UserCredential Map(this tbl.UserCredential table, bool useLazy)
         {
             dmn.UserCredential result = null;
 

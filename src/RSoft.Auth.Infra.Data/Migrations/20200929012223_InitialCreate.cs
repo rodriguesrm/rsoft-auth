@@ -101,13 +101,13 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     UserId = table.Column<Guid>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ExpiresOn = table.Column<DateTime>(nullable: false),
-                    FirstAccess = table.Column<bool>(nullable: false)
+                    FirstAccess = table.Column<ulong>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserCredentialToken", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserCredentialToken_User_UserId",
+                        name: "FK_UserCredentialToken_User",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",

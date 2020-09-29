@@ -32,6 +32,7 @@ namespace RSoft.Auth.Infra.Data
             modelBuilder.ApplyConfiguration(new ScopeConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new UserCredentialConfiguration());
+            modelBuilder.ApplyConfiguration(new UserCredentialTokenConfiguration());
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserScopeConfiguration());
         }
@@ -39,11 +40,6 @@ namespace RSoft.Auth.Infra.Data
         #endregion
 
         #region DbSets
-
-        /// <summary>
-        /// Users dbset
-        /// </summary>
-        public virtual DbSet<User> Users { get; set; }
 
         /// <summary>
         /// Roles dbset
@@ -54,6 +50,21 @@ namespace RSoft.Auth.Infra.Data
         /// Scopes dbset
         /// </summary>
         public virtual DbSet<Scope> Scopes { get; set; }
+
+        /// <summary>
+        /// Users dbset
+        /// </summary>
+        public virtual DbSet<User> Users { get; set; }
+
+        /// <summary>
+        /// User credentials dbset
+        /// </summary>
+        public virtual DbSet<UserCredential> Credentials { get; set; }
+
+        /// <summary>
+        /// User credential tokens dbset
+        /// </summary>
+        public virtual DbSet<UserCredentialToken> CredentialTokens { get; set; }
 
         /// <summary>
         /// User roles dbset

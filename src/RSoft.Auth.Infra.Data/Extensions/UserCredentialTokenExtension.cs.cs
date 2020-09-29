@@ -22,8 +22,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        /// <param name="loadChildren">Load children data</param>
-        public static dmn.UserCredentialToken Map(this tbl.UserCredentialToken table, bool loadChildren)
+        /// <param name="useLazy">Load related data data</param>
+        public static dmn.UserCredentialToken Map(this tbl.UserCredentialToken table, bool useLazy)
         {
             dmn.UserCredentialToken result = null;
 
@@ -38,7 +38,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     FirstAccess =table.FirstAccess
                 };
 
-                if (loadChildren)
+                if (useLazy)
                 {
                     result.User = table.User?.Map(false);
                 }

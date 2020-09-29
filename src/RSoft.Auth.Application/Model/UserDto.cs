@@ -42,7 +42,7 @@ namespace RSoft.Auth.Application.Model
 
         #endregion
 
-        #region Children data
+        #region Related data
 
         /// <summary>
         /// User roles

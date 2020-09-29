@@ -9,6 +9,7 @@ using System.Threading;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using RSoft.Auth.Domain.Entities;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {

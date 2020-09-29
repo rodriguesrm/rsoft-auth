@@ -271,20 +271,25 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("CreatedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("ExpiresOn")
+                        .HasColumnName("ExpiresOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("FirstAccess")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<ulong>("FirstAccess")
+                        .HasColumnName("FirstAccess")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("UserId")
+                        .HasColumnName("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasName("IX_UserCredentialToken_UserId");
 
                     b.ToTable("UserCredentialToken");
                 });
@@ -393,6 +398,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.HasOne("RSoft.Auth.Infra.Data.Entities.User", "User")
                         .WithMany("Tokens")
                         .HasForeignKey("UserId")
+                        .HasConstraintName("FK_UserCredentialToken_User")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

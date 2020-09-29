@@ -13,11 +13,11 @@ namespace RSoft.Auth.Application.Model.Extensions
     {
 
         /// <summary>
-        /// Map children data from entity to dto
+        /// Map related data from entity to dto
         /// </summary>
         /// <param name="entity">Entity object</param>
         /// <param name="dto">Dto object</param>
-        private static void LoadChildren(User entity, UserDto dto)
+        private static void LoadLazy(User entity, UserDto dto)
         {
             ICollection<RoleDto> roles = null;
             ICollection<ScopeDto> scopes = null;
@@ -63,8 +63,8 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// </summary>
         /// <param name="entity">Object to extension</param>
         /// <param name="dto">User Dto object</param>
-        /// <param name="loadChildren">Indicate if load children data in dto</param>
-        public static User Map(this User entity, UserDto dto, bool loadChildren)
+        /// <param name="useLazy">Indicate if load related data in dto</param>
+        public static User Map(this User entity, UserDto dto, bool useLazy)
         {
             if (dto != null)
             {
@@ -73,8 +73,8 @@ namespace RSoft.Auth.Application.Model.Extensions
                 entity.Email = new Email(dto.Email);
                 entity.Type = dto.Type;
                 entity.IsActive = dto.IsActive;
-                if (loadChildren)
-                    LoadChildren(entity, dto);
+                if (useLazy)
+                    LoadLazy(entity, dto);
             }
             return entity;
         }
@@ -91,8 +91,8 @@ namespace RSoft.Auth.Application.Model.Extensions
         /// </summary>
         /// <param name="entity">Object to extension</param>
         /// <param name="addAuthors">Indicate if add authors data in dto</param>
-        /// <param name="loadChildren">Indicate if load children data in dto</param>
-        public static UserDto Map(this User entity, bool addAuthors, bool loadChildren)
+        /// <param name="useLazy">Indicate if load related data in dto</param>
+        public static UserDto Map(this User entity, bool addAuthors, bool useLazy)
         {
 
             if (entity == null)
@@ -117,9 +117,10 @@ namespace RSoft.Auth.Application.Model.Extensions
             dto.BornDate = entity.BornDate;
             dto.Email = entity.Email.Address;
             dto.IsActive = entity.IsActive;
+            dto.Type = entity.Type;
 
-            if (loadChildren)
-                LoadChildren(entity, dto);
+            if (useLazy)
+                LoadLazy(entity, dto);
 
             return dto;
 
