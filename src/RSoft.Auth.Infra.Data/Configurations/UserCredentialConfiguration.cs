@@ -35,8 +35,8 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .IsUnicode(false)
                 .IsRequired();
 
-            builder.Property(c => c.Key)
-                .HasColumnName(nameof(UserCredential.Key));
+            builder.Property(c => c.AppAccess)
+                .HasColumnName(nameof(UserCredential.AppAccess));
 
             builder.Property(c => c.Password)
                 .HasColumnName(nameof(UserCredential.Password))
@@ -66,8 +66,8 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .HasName($"AK_{nameof(UserCredential)}_{nameof(UserCredential.Login)}")
                 .IsUnique();
 
-            builder.HasIndex(c => c.Key)
-                .HasName($"AK_{nameof(UserCredential)}_{nameof(UserCredential.Key)}")
+            builder.HasIndex(c => c.AppAccess)
+                .HasName($"AK_{nameof(UserCredential)}_{nameof(UserCredential.AppAccess)}")
                 .IsUnique();
 
             #endregion

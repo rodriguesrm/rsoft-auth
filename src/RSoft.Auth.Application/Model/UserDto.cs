@@ -45,6 +45,11 @@ namespace RSoft.Auth.Application.Model
         #region Related data
 
         /// <summary>
+        /// User credential data
+        /// </summary>
+        public UserCredentialDto Credential { get; set; }
+
+        /// <summary>
         /// User roles
         /// </summary>
         public ICollection<RoleDto> Roles { get; set; }

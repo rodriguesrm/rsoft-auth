@@ -7,7 +7,7 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
     /// <summary>
     /// User response model
     /// </summary>
-    public class UserResponse : SimpleUserResponse
+    public class UserListResponse : SimpleUserResponse
     {
 
         #region Constructors
@@ -16,7 +16,7 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         /// Create a new UserResponse instance
         /// </summary>
         /// <param name="id">User id key value</param>
-        public UserResponse(Guid id) : base(id) { }
+        public UserListResponse(Guid id) : base(id) { }
 
         #endregion
 

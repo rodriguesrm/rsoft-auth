@@ -181,7 +181,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 {
                     nameof(UserCredential.UserId),
                     nameof(UserCredential.Login),
-                    nameof(UserCredential.Key),
+                    nameof(UserCredential.AppAccess),
                     nameof(UserCredential.Password),
                     nameof(UserCredential.ChangeCredentials)
                 },
@@ -195,7 +195,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 {
                     nameof(UserCredential.UserId),
                     nameof(UserCredential.Login),
-                    nameof(UserCredential.Key),
+                    nameof(UserCredential.AppAccess),
                     nameof(UserCredential.Password),
                     nameof(UserCredential.ChangeCredentials)
                 },

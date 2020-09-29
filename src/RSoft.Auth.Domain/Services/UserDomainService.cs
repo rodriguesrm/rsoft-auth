@@ -29,6 +29,7 @@ namespace RSoft.Auth.Domain.Services
 
         private readonly SecurityOptions _securityOptions;
         private readonly IUnitOfWork _uow;
+        private new readonly IUserRepository _repository;
         private readonly IUserCredentialRepository _credentialRepository;
         private readonly IUserCredentialTokenRepository _tokenRepository;
         private readonly IScopeRepository _scopeRepository;
@@ -60,6 +61,7 @@ namespace RSoft.Auth.Domain.Services
         ) : base(repository, authenticatedUser)
         {
             _uow = uow;
+            _repository = repository;
             _credentialRepository = credentialRepository;
             _tokenRepository = tokenRepository;
             _scopeRepository = scopeRepository;
@@ -435,6 +437,10 @@ namespace RSoft.Auth.Domain.Services
             return new SimpleOperationResult(success, errors);
 
         }
+
+        ///<inheritdoc/>
+        public async Task<IEnumerable<User>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default)
+            => await _repository.GetAllAsync(scopeId, cancellationToken);
 
         #endregion
 

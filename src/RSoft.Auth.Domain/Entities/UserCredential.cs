@@ -24,9 +24,9 @@ namespace RSoft.Auth.Domain.Entities
         public string Login { get; set; }
 
         /// <summary>
-        /// User acess key (for applications)
+        /// User application/service access key (for applications)
         /// </summary>
-        public Guid? Key { get; set; }
+        public Guid? AppAccess { get; set; }
 
         /// <summary>
         /// User password login
@@ -55,9 +55,9 @@ namespace RSoft.Auth.Domain.Entities
         public override void Validate()
         {
 
-            if (!Key.HasValue && string.IsNullOrWhiteSpace(Password))
+            if (!AppAccess.HasValue && string.IsNullOrWhiteSpace(Password))
                 AddNotification("Key/Password", "A key or password must be provided");
-            if (Key.HasValue && !string.IsNullOrWhiteSpace(Password))
+            if (AppAccess.HasValue && !string.IsNullOrWhiteSpace(Password))
                 AddNotification("Key/Password", "Only the key or password must be informed, never both");
 
             AddNotifications(new RequiredValidationContract<Guid?>(UserId, nameof(UserId), "User id is required").Contract.Notifications);

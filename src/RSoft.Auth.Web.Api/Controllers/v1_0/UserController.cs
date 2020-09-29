@@ -24,7 +24,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(Roles = "master, service")]
-    public class UserController : ApiCrudBaseController<Guid, UserDto, UserRequest, UserResponse>
+    public class UserController : ApiCrudBaseController<Guid, UserDto, UserRequest, UserDetailResponse>
     {
 
         #region Local objects/variables
@@ -47,6 +47,53 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         #endregion
 
         #region Local methods
+
+        /// <summary>
+        /// Map dto to
+        /// </summary>
+        /// <typeparam name="T">Response type</typeparam>
+        /// <param name="dto">User dto object instance</param>
+        private T MapToResponse<T>(UserDto dto)
+            where T : UserListResponse
+        {
+
+            if (dto == null)
+                return null;
+
+            T result = (T)Activator.CreateInstance(typeof(T), args: dto.Id);
+
+            result.Name = new FullNameResponse(dto.Name.FirstName, dto.Name.LastName);
+            result.Email = dto.Email;
+            result.BornDate = dto.BornDate;
+            result.Type = dto.Type;
+            result.IsActive = dto.IsActive;
+
+            UserDetailResponse userDetail = result as UserDetailResponse;
+            if (userDetail != null)
+            {
+                userDetail.Login = dto.Credential?.Login;
+                userDetail.AppAccess = dto.Credential?.AppAccess;
+            }
+
+            return result;
+
+        }
+
+        /// <summary>
+        /// List all entity
+        /// </summary>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<IActionResult> RunUserListAsync(CancellationToken cancellationToken = default)
+        {
+            //TODO: List user only application
+            IEnumerable<UserDto> result = await _userAppService.GetAllAsync(AppKey.Value, cancellationToken);
+            IEnumerable<UserListResponse> resp = result.Select(dto => MapToResponse<UserListResponse>(dto));
+            return Ok(resp);
+        }
+
+        #endregion
+
+        #region Overrides
 
         ///<inheritdoc/>
         protected override async Task<UserDto> AddAsync(UserDto dto, CancellationToken cancellationToken = default)
@@ -84,9 +131,9 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         }
 
         ///<inheritdoc/>
-        protected override UserResponse Map(UserDto dto)
+        protected override UserDetailResponse Map(UserDto dto)
         {
-            UserResponse response = new UserResponse(dto.Id)
+            UserDetailResponse response = new UserDetailResponse(dto.Id)
             {
                 Name = new FullNameResponse(dto.Name.FirstName, dto.Name.LastName),
                 Email = dto.Email,
@@ -147,10 +194,15 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="401">Credentials is invalid or empty</response>
         /// <response code="403">The informed credential does not have access privileges to this resource</response>
         /// <response code="500">Request processing failed</response>
+        [ProducesResponseType(typeof(UserListResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> GetAllUser(CancellationToken cancellationToken)
-            => await base.ListAsync(cancellationToken);
+            => await RunActionAsync(RunUserListAsync(cancellationToken), cancellationToken);
+
 
         #endregion
 

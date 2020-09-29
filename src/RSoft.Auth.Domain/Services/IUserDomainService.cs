@@ -84,6 +84,13 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<SimpleOperationResult> ChangePasswordAsync(string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Get all rows
+        /// </summary>
+        /// <param name="scopeId">Scope application id</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<IEnumerable<User>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default);
+
     }
 
 }

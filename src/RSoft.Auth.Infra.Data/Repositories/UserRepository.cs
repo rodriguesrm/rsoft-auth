@@ -57,8 +57,15 @@ namespace RSoft.Auth.Infra.Data.Repositories
         public async Task<IEnumerable<dmn.User>> ListByLoginAsync(string login, CancellationToken cancellationToken)
         {
             IEnumerable<tbl.User> tableUsers = await _dbSet.Where(u => u.Credential.Login == login || u.Email == login).ToListAsync(cancellationToken);
-            IEnumerable<dmn.User> users = tableUsers
-                .Select(u => u.Map(true));
+            IEnumerable<User> users = tableUsers.Select(u => u.Map(true));
+            return users;
+        }
+
+        ///<inheritdoc/>
+        public async Task<IEnumerable<User>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default)
+        {
+            IEnumerable<tbl.User> tableUsers = await _dbSet.Where(x => x.Scopes.Any(s => s.ScopeId == scopeId)).ToListAsync(cancellationToken);
+            IEnumerable<User> users = tableUsers.Select(u => u.Map(true));
             return users;
         }
 

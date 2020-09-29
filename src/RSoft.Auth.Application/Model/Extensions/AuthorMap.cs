@@ -8,7 +8,7 @@ namespace RSoft.Auth.Application.Model.Extensions
     /// <summary>
     /// Provides methods to map author data from entity to dto
     /// </summary>
-    public static class Author
+    public static class AuthorMap
     {
 
         /// <summary>

@@ -230,13 +230,13 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.Property<Guid?>("UserId")
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid?>("AppAccess")
+                        .HasColumnName("AppAccess")
+                        .HasColumnType("char(36)");
+
                     b.Property<ulong>("ChangeCredentials")
                         .HasColumnName("ChangeCredentials")
                         .HasColumnType("bit");
-
-                    b.Property<Guid?>("Key")
-                        .HasColumnName("Key")
-                        .HasColumnType("char(36)");
 
                     b.Property<string>("Login")
                         .IsRequired()
@@ -253,9 +253,9 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("Key")
+                    b.HasIndex("AppAccess")
                         .IsUnique()
-                        .HasName("AK_UserCredential_Key");
+                        .HasName("AK_UserCredential_AppAccess");
 
                     b.HasIndex("Login")
                         .IsUnique()

@@ -78,7 +78,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 {
                     UserId = table.Column<Guid>(nullable: false),
                     Login = table.Column<string>(unicode: false, maxLength: 254, nullable: false),
-                    Key = table.Column<Guid>(nullable: true),
+                    AppAccess = table.Column<Guid>(nullable: true),
                     Password = table.Column<string>(unicode: false, maxLength: 32, nullable: true),
                     ChangeCredentials = table.Column<ulong>(type: "bit", nullable: false)
                 },
@@ -295,9 +295,9 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 columns: new[] { "FirstName", "LastName" });
 
             migrationBuilder.CreateIndex(
-                name: "AK_UserCredential_Key",
+                name: "AK_UserCredential_AppAccess",
                 table: "UserCredential",
-                column: "Key",
+                column: "AppAccess",
                 unique: true);
 
             migrationBuilder.CreateIndex(

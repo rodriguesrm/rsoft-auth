@@ -9,7 +9,7 @@ using RSoft.Auth.Infra.Data;
 namespace RSoft.Auth.Infra.Data.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20200929012223_InitialCreate")]
+    [Migration("20200929093610_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -232,13 +232,13 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.Property<Guid?>("UserId")
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid?>("AppAccess")
+                        .HasColumnName("AppAccess")
+                        .HasColumnType("char(36)");
+
                     b.Property<ulong>("ChangeCredentials")
                         .HasColumnName("ChangeCredentials")
                         .HasColumnType("bit");
-
-                    b.Property<Guid?>("Key")
-                        .HasColumnName("Key")
-                        .HasColumnType("char(36)");
 
                     b.Property<string>("Login")
                         .IsRequired()
@@ -255,9 +255,9 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("Key")
+                    b.HasIndex("AppAccess")
                         .IsUnique()
-                        .HasName("AK_UserCredential_Key");
+                        .HasName("AK_UserCredential_AppAccess");
 
                     b.HasIndex("Login")
                         .IsUnique()

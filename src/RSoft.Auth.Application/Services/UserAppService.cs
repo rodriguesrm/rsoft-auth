@@ -24,6 +24,7 @@ namespace RSoft.Auth.Application.Services
 
         private readonly IScopeDomainService _scopeDomain;
         private readonly IRoleDomainService _roleDomain;
+        private new readonly IUserDomainService _dmn;
 
         #endregion
 
@@ -40,6 +41,7 @@ namespace RSoft.Auth.Application.Services
         {
             _scopeDomain = scopeDomain;
             _roleDomain = roleDomain;
+            _dmn = dmn;
         }
 
         #endregion
@@ -104,6 +106,14 @@ namespace RSoft.Auth.Application.Services
             dto.Roles = roles.Select(r => r.Map(false)).ToList();
 
             return await base.AddAsync(dto, cancellationToken);
+        }
+
+        ///<inheritdoc/>
+        public async Task<IEnumerable<UserDto>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default)
+        {
+            IEnumerable<User> users = await _dmn.GetAllAsync(scopeId, cancellationToken);
+            IEnumerable<UserDto> dtos = users.Select(u => u.Map());
+            return dtos;
         }
 
         #endregion

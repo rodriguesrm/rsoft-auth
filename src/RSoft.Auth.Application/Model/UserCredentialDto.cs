@@ -1,13 +1,13 @@
-﻿using RSoft.Framework.Infra.Data.Tables;
+﻿using RSoft.Framework.Application.Dto;
 using System;
 
-namespace RSoft.Auth.Infra.Data.Entities
+namespace RSoft.Auth.Application.Model
 {
 
     /// <summary>
-    /// User credential data entity
+    /// User credential data transport object
     /// </summary>
-    public class UserCredential : TableBase<UserCredential>, ITable
+    public class UserCredentialDto : AppDtoBase
     {
 
         #region Properties
@@ -36,15 +36,6 @@ namespace RSoft.Auth.Infra.Data.Entities
         /// Indicates that the user must change the password/access-key at the next login. Will be unable to use the system until
         /// </summary>
         public bool ChangeCredentials { get; set; }
-
-        #endregion
-
-        #region Navigation/Lazy
-
-        /// <summary>
-        /// User data
-        /// </summary>
-        public virtual User User { get; set; }
 
         #endregion
 

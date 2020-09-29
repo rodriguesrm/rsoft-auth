@@ -80,7 +80,7 @@ namespace RSoft.Auth.Application.Model.Extensions
 
                 dto.Id = entity.Id;
                 if (addAuthors)
-                    Author.Map(dto, entity);
+                    AuthorMap.Map(dto, entity);
 
             }
             else
