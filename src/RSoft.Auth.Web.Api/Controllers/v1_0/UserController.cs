@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Model.Extensions;
 using RSoft.Auth.Application.Services;
+using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Web.Api.Extensions;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Auth.Web.Api.Model.Response.v1_0;
-using RSoft.Framework.Application.Model;
 using RSoft.Framework.Web.Api;
 using RSoft.Framework.Web.Model.Response;
 using RSoft.Logs.Model;
@@ -33,6 +34,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         #region Local objects/variables
 
         private readonly IUserAppService _userAppService;
+        private readonly ScopeOptions _scopeOptions;
 
         #endregion
 
@@ -42,9 +44,11 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// Create a new UserController instance
         /// </summary>
         /// <param name="userAppService">User application service</param>
-        public UserController(IUserAppService userAppService)
+        /// <param name="options">Scope options parameters</param>
+        public UserController(IUserAppService userAppService, IOptions<ScopeOptions> options)
         {
             _userAppService = userAppService;
+            _scopeOptions = options?.Value;
         }
 
         #endregion
@@ -70,6 +74,21 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         }
 
         /// <summary>
+        /// Add new user
+        /// </summary>
+        /// <param name="request">*Request data information</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<IActionResult> RunUserAddAsync(UserRequest request, CancellationToken cancellationToken = default)
+        {
+            //BUG: RR - Fazer tratamento de scopo de inclusão de registros, somente quem tem acesso ao Authentication pode adicionar scopos, os demais somente do escopo que pertence
+            if (AppKey != _scopeOptions.Key)
+            {
+
+            }
+            return await base.InsertAsync(request, cancellationToken);
+        }
+
+        /// <summary>
         /// List all entity
         /// </summary>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
@@ -86,8 +105,11 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="key">User id key value</param>
         /// <param name="request">Update user request data</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        private async Task<IActionResult> RunUpdateUserAsync(Guid key, UserUpdateRequest request, CancellationToken cancellationToken)
+        private async Task<IActionResult> RunUpdateUserAsync(Guid key, UserUpdateRequest request, CancellationToken cancellationToken = default)
         {
+
+            if (AppKey != _scopeOptions.Key)
+                return Forbid("Credentials provided do not have user change privileges");
 
             UserDto dto = await GetByIdAsync(key, cancellationToken);
             if (dto == null)
@@ -106,6 +128,27 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         }
 
+        /// <summary>
+        /// Perform delete user
+        /// </summary>
+        private async Task<IActionResult> RunDeleteUserAsync(Guid key, CancellationToken cancellationToken = default)
+        {
+
+            if (AppKey != _scopeOptions.Key)
+                return Forbid("Credentials provided do not have user exclusion privileges");
+
+            UserDto dto = await GetByIdAsync(key, cancellationToken);
+            if (dto == null)
+            {
+                return NotFound("Data not found");
+            }
+            else
+            {
+                await RemoveAsync(key, cancellationToken);
+                return NoContent();
+            }
+        }
+
         #endregion
 
         #region Overrides
@@ -120,8 +163,12 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         ///<inheritdoc/>
         protected override async Task<UserDto> GetByIdAsync(Guid key, CancellationToken cancellationToken = default)
-            => await _userAppService.GetByKeyAsync(key, cancellationToken);
-        //BUG: Add filter to AppKey
+        {
+            UserDto dto = await _userAppService.GetByKeyAsync(key, cancellationToken);
+            if (dto != null && AppKey != _scopeOptions.Key && !dto.Scopes.Any(s => s.Id == AppKey))
+                dto = null;
+            return dto;
+        }
 
         ///<inheritdoc/>
         protected override UserDto Map(UserRequest request)
@@ -164,9 +211,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> CreateUser([FromBody] UserRequest request, CancellationToken cancellationToken)
-            => await base.InsertAsync(request, cancellationToken);
-        //BUG: RR - Fazer tratamento de scopo de inclusão de registros, somente quem tem acesso ao Authentication pode adicionar scopos, os demais somente do escopo que pertence
+        public async Task<IActionResult> CreateUser([FromBody] UserRequest request, CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunUserAddAsync(request, cancellationToken), cancellationToken);
 
         /// <summary>
         /// List all users
@@ -182,7 +228,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetAllUser(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllUser(CancellationToken cancellationToken = default)
             => await RunActionAsync(RunUserListAsync(cancellationToken), cancellationToken);
 
         /// <summary>
@@ -200,7 +246,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("{key:guid}")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetUserByKey([FromRoute] Guid key, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetUserByKey([FromRoute] Guid key, CancellationToken cancellationToken = default)
             => await base.GetAsync(key, cancellationToken);
 
         /// <summary>
@@ -221,9 +267,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPut("{key:guid}")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> UpdateUser([FromRoute] Guid key, UserUpdateRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateUser([FromRoute] Guid key, UserUpdateRequest request, CancellationToken cancellationToken = default)
             => await RunActionAsync(RunUpdateUserAsync(key, request, cancellationToken), cancellationToken);
-        //BUG: Update scope restrict
 
         /// <summary>
         /// Delete user
@@ -240,9 +285,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpDelete("{key:guid}")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> DeleteUser([FromRoute] Guid key, CancellationToken cancellationToken)
-            => await base.DeleteAsync(key, cancellationToken);
-        //BUG: RR - Delete scope restrict
+        public async Task<IActionResult> DeleteUser([FromRoute] Guid key, CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunDeleteUserAsync(key, cancellationToken), cancellationToken);
 
         #endregion
 
