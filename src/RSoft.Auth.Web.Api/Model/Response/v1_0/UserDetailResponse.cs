@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RSoft.Auth.Web.Api.Model.Response.v1_0
 {
@@ -25,6 +26,11 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         /// User credential information
         /// </summary>
         public SimpleUserCredentialResponse Credential { get; set; }
+
+        /// <summary>
+        /// User rights and permissions list
+        /// </summary>
+        public IEnumerable<UserScopesRolesResponse> Permissions { get; set; }
 
         #endregion
     }

@@ -16,7 +16,7 @@
         public SimpleIdentification(TKey? id, string name)
         {
             Id = id;
-            Nome = name;
+            Name = name;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@
         /// <summary>
         /// Full name
         /// </summary>
-        public string Nome { get; set; }
+        public string Name { get; set; }
 
     }
 

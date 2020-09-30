@@ -47,6 +47,10 @@ namespace RSoft.Auth.Infra.Data.Extensions
                         result.Users = table.Users.Select(u => u.User.Map(false)).ToList();
                     result.Scope = table.Scope?.Map(false);
                 }
+                else
+                {
+                    result.Scope = new dmn.Scope(table.ScopeId);
+                }
 
                 //result.Validate();
 

@@ -27,6 +27,11 @@ namespace RSoft.Auth.Application.Model
         /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Scope id key value
+        /// </summary>
+        public Guid? ScopeId { get; set; }
+
         #endregion
 
     }
