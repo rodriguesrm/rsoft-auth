@@ -121,7 +121,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         ///<inheritdoc/>
         protected override async Task<UserDto> GetByIdAsync(Guid key, CancellationToken cancellationToken = default)
             => await _userAppService.GetByKeyAsync(key, cancellationToken);
-        //TODO: Add filter to AppKey
+        //BUG: Add filter to AppKey
 
         ///<inheritdoc/>
         protected override UserDto Map(UserRequest request)
@@ -166,7 +166,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> CreateUser([FromBody] UserRequest request, CancellationToken cancellationToken)
             => await base.InsertAsync(request, cancellationToken);
-        //TODO: RR - Fazer tratamento de scopo de inclusão de registros, somente quem tem acesso ao Authentication pode adicionar scopos, os demais somente do escopo que pertence
+        //BUG: RR - Fazer tratamento de scopo de inclusão de registros, somente quem tem acesso ao Authentication pode adicionar scopos, os demais somente do escopo que pertence
 
         /// <summary>
         /// List all users
@@ -221,8 +221,28 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPut("{key:guid}")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> UpdateUser(Guid key, UserUpdateRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateUser([FromRoute] Guid key, UserUpdateRequest request, CancellationToken cancellationToken)
             => await RunActionAsync(RunUpdateUserAsync(key, request, cancellationToken), cancellationToken);
+        //BUG: Update scope restrict
+
+        /// <summary>
+        /// Delete user
+        /// </summary>
+        /// <param name="key">User id key value</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="204">Successful request processing</response>
+        /// <response code="401">Credentials is invalid or empty</response>
+        /// <response code="403">The use credential does not have access to this resource</response>
+        /// <response code="500">Request processing failed</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpDelete("{key:guid}")]
+        [MapToApiVersion("1.0")]
+        public async Task<IActionResult> DeleteUser([FromRoute] Guid key, CancellationToken cancellationToken)
+            => await base.DeleteAsync(key, cancellationToken);
+        //BUG: RR - Delete scope restrict
 
         #endregion
 

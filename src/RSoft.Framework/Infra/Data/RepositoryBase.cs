@@ -139,7 +139,14 @@ namespace RSoft.Framework.Infra.Data
         public virtual void Delete(TKey key)
         {
             TTable table = _dbSet.Find(key);
-            _dbSet.Remove(table);
+            if (table is ISoftDeletion deletion)
+            {
+                deletion.IsDeleted = true;
+            }
+            else
+            {
+                _dbSet.Remove(table);
+            }
         }
 
         #endregion
