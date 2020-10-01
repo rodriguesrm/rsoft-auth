@@ -168,6 +168,13 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasColumnName("Document")
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
+                        .HasMaxLength(20)
+                        .IsUnicode(false);
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnName("Email")
@@ -214,6 +221,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.HasIndex("CreatedOn")
                         .HasName("IX_User_CreatedOn");
+
+                    b.HasIndex("Document")
+                        .IsUnique()
+                        .HasName("AK_User_Document");
 
                     b.HasIndex("Email")
                         .IsUnique()

@@ -57,6 +57,11 @@ namespace RSoft.Auth.Domain.Entities
         public bool IsActive { get; set; }
 
         /// <summary>
+        /// Document number (withou mask)
+        /// </summary>
+        public string Document { get; set; }
+
+        /// <summary>
         /// User full name
         /// </summary>
         public Name Name { get; set; }
@@ -130,6 +135,10 @@ namespace RSoft.Auth.Domain.Entities
             //BACKLOG: Globalization
             if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);
             if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
+
+            // TODO: Add parameter to specify document type, like BR Document -> CPF and also validation/notification
+            AddNotifications(new SimpleStringValidationContract(Document, nameof(Document), true, 11, 11).Contract.Notifications);
+            
             AddNotifications(Name.Notifications);
             AddNotifications(Email.Notifications);
             AddNotifications(new RequiredValidationContract<string>(Email?.Address, $"Email.{nameof(Email.Address)}", "Email is required").Contract.Notifications);
@@ -157,11 +166,7 @@ namespace RSoft.Auth.Domain.Entities
                     });
             }
 
-            if (!Roles.Any())
-            {
-                AddNotification(nameof(Roles), "The user must have at least one role");
-            }
-            else
+            if (Roles != null && !Roles.Any())
             {
                 Roles
                     .ToList()

@@ -129,7 +129,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                         Name = new FullNameResponse(authResult.User.Name.FirstName, authResult.User.Name.LastName),
                         Email = authResult.User.Email
                     };
-                    roles = authResult.User.Roles.Select(r => r.Name);
+                    roles = authResult.User.Roles?.Select(r => r.Name);
                 }
 
                 string token = GenerateToken(authResult.User, request.Login, out DateTime? expiresIn);

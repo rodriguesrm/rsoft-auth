@@ -18,6 +18,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     ChangedBy = table.Column<Guid>(nullable: true),
                     IsActive = table.Column<ulong>(type: "bit", nullable: false),
                     IsDeleted = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 0ul),
+                    Document = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
                     FirstName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     LastName = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
                     BornDate = table.Column<DateTime>(nullable: false),
@@ -282,6 +283,12 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 name: "IX_User_CreatedOn",
                 table: "User",
                 column: "CreatedOn");
+
+            migrationBuilder.CreateIndex(
+                name: "AK_User_Document",
+                table: "User",
+                column: "Document",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "AK_User_Email",

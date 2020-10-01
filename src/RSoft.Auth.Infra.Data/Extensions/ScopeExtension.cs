@@ -46,7 +46,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     if (table.Users?.Count > 0)
                         result.Users = table.Users.Select(u => u.User.Map(false)).ToList();
                     if (table.Roles?.Count > 0)
-                        result.Roles = table.Roles.Select(r => r.Map(false)).ToList();
+                        result.Roles = table.Roles?.Select(r => r.Map(false)).ToList();
                 }
 
                 //result.Validate();

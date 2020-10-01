@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RSoft.Auth.Infra.Data.Entities;
 using System;
+using System.Reflection.Metadata;
 
 namespace RSoft.Auth.Infra.Data.Configurations
 {
@@ -27,6 +28,12 @@ namespace RSoft.Auth.Infra.Data.Configurations
             #endregion
 
             #region Columns
+
+            builder.Property(c => c.Document)
+                .HasColumnName(nameof(User.Document))
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .IsRequired();
 
             builder.Property(c => c.FirstName)
                 .HasColumnName(nameof(User.FirstName))
@@ -72,6 +79,10 @@ namespace RSoft.Auth.Infra.Data.Configurations
             #endregion
 
             #region Indexes
+
+            builder.HasIndex(i => i.Document)
+                .HasName($"AK_{nameof(User)}_{nameof(User.Document)}")
+                .IsUnique();
 
             builder.HasIndex(i => i.Email)
                 .HasName($"AK_{nameof(User)}_{nameof(User.Email)}")

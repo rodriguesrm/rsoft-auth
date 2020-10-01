@@ -21,6 +21,11 @@ namespace RSoft.Auth.Application.Model
         public bool IsActive { get; set; }
 
         /// <summary>
+        /// Document number (withou mask)
+        /// </summary>
+        public string Document { get; set; }
+
+        /// <summary>
         /// Full name
         /// </summary>
         public IFullName Name { get; set; }

@@ -29,6 +29,7 @@ namespace RSoft.Auth.Web.Api.Extensions
 
             T result = (T)Activator.CreateInstance(typeof(T), args: dto.Id);
 
+            result.Document = dto.Document;
             result.Name = new FullNameResponse(dto.Name.FirstName, dto.Name.LastName);
             result.Email = dto.Email;
             result.BornDate = dto.BornDate;
@@ -58,12 +59,12 @@ namespace RSoft.Auth.Web.Api.Extensions
 
                 foreach (SimpleIdentification<Guid> scope in scopes)
                 {
-                    IEnumerable<RoleDto> roles = dto.Roles.Where(x => x.ScopeId == scope.Id).ToList();
+                    IEnumerable<RoleDto> roles = dto.Roles?.Where(x => x.ScopeId == scope.Id).ToList();
                     UserScopesRolesResponse permission = new UserScopesRolesResponse()
                     {
                         Id = scope.Id.Value,
                         Name = scope.Name,
-                        Roles = roles.Select(r => r.MapSimple())
+                        Roles = roles?.Select(r => r.MapSimple())
                     };
                     permissions.Add(permission);
                 }
@@ -80,7 +81,8 @@ namespace RSoft.Auth.Web.Api.Extensions
         /// Map user-request to user-dto
         /// </summary>
         /// <param name="request">User request object</param>
-        public static UserDto Map(this UserRequest request)
+        /// <param name="scopeId">Scope id key value</param>
+        public static UserDto Map(this UserRequest request, Guid? scopeId)
         {
 
             UserDto dto = null;
@@ -88,13 +90,13 @@ namespace RSoft.Auth.Web.Api.Extensions
             {
                 dto = new UserDto()
                 {
+                    Document = request.Document,
                     Name = request.Name,
                     BornDate = request.BornDate,
                     Email = request.Email,
                     Type = request.Type,
                     IsActive = request.IsActive,
-                    Scopes = request.Scopes.Select(s => new ScopeDto() { Id = s }).ToList(),
-                    Roles = request.Roles.Select(r => new RoleDto() { Id = r }).ToList()
+                    Scopes = scopeId.HasValue ? new List<ScopeDto>() { new ScopeDto() { Id = scopeId.Value } } : null
                 };
             }
             return dto;

@@ -10,6 +10,7 @@ using RSoft.Framework.Web.Extensions;
 using RSoft.Framework.Web.Filters;
 using RSoft.Logs.Extensions;
 using RSoft.Logs.Middleware;
+using System;
 using System.Reflection;
 
 namespace RSoft.Auth.Web.Api
@@ -44,7 +45,11 @@ namespace RSoft.Auth.Web.Api
             
             services
                 .AddControllers(opt => GlobalFilters.Configure(opt))
-                .AddJsonOptions(opt => opt.JsonSerializerOptions.IgnoreNullValues = true)
+                .AddJsonOptions(opt =>
+                {
+                    opt.JsonSerializerOptions.IgnoreNullValues = true;
+                    opt.JsonSerializerOptions.WriteIndented = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development;
+                })
                 .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
             services.AddApiVersioning();
             services.AddHttpContextAccessor();

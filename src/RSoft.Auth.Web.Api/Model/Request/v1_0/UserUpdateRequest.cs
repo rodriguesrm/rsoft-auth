@@ -13,6 +13,11 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
         #region Properties
 
         /// <summary>
+        /// Document number (withou mask)
+        /// </summary>
+        public string Document { get; set; }
+
+        /// <summary>
         /// Full name
         /// </summary>
         public FullNameRequest Name { get; set; }

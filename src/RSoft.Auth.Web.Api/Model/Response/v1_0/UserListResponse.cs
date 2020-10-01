@@ -28,6 +28,11 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         public bool IsActive { get; set; }
 
         /// <summary>
+        /// User document number
+        /// </summary>
+        public string Document { get; set; }
+
+        /// <summary>
         /// User's date of birth
         /// </summary>
         public DateTime? BornDate { get; set; }

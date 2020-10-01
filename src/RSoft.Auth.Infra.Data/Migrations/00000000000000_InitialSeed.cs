@@ -108,7 +108,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Role.Description),
                     nameof(Role.ScopeId)
                 },
-                new object[] { roleId, now, userId, null, null, "master", 1, 0, "Master privileges, has access granted to all resources", scopeId }
+                new object[] { roleId, now, userId, null, null, "admin", 1, 0, "Administrator privileges, has access granted to all resources", scopeId }
             );
 
             migrationBuilder.InsertData
@@ -144,13 +144,14 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(User.ChangedBy), 
                     nameof(User.IsActive), 
                     nameof(User.IsDeleted), 
+                    nameof(User.Document),
                     nameof(User.FirstName), 
                     nameof(User.LastName), 
                     nameof(User.BornDate), 
                     nameof(User.Email),
                     nameof(User.Type)
                 },
-                new object[] { userId, now, userId, null, null, 1, 0, "Master", "RSoft", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "master@server.com", (int)UserType.User }
+                new object[] { userId, now, userId, null, null, 1, 0, "11111111111", "Admin", "RSoft", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "master@server.com", (int)UserType.User }
             );
 
             migrationBuilder.InsertData
@@ -165,13 +166,14 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(User.ChangedBy),
                     nameof(User.IsActive),
                     nameof(User.IsDeleted),
+                    nameof(User.Document),
                     nameof(User.FirstName),
                     nameof(User.LastName),
                     nameof(User.BornDate),
                     nameof(User.Email),
                     nameof(User.Type)
                 },
-                new object[] { serviceUserId, now, userId, null, null, 1, 0, "Master", "RSoft", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "no-reply@server.com", (int)UserType.Service }
+                new object[] { serviceUserId, now, userId, null, null, 1, 0, "22222222222", "Service", "RSoft", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "no-reply@server.com", (int)UserType.Service }
             );
 
             migrationBuilder.InsertData
@@ -185,7 +187,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(UserCredential.Password),
                     nameof(UserCredential.ChangeCredentials)
                 },
-                new object[] { userId, "master", null, password, _isProd }
+                new object[] { userId, "admin", null, password, _isProd }
             );
 
             migrationBuilder.InsertData

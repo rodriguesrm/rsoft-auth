@@ -73,7 +73,7 @@ namespace RSoft.Auth.Application.Services
         {
 
             IList<Scope> scopes = new List<Scope>();
-            IList<Role> roles = new List<Role>();
+            //IList<Role> roles = new List<Role>();
 
             foreach (ScopeDto item in dto.Scopes)
             {
@@ -84,26 +84,26 @@ namespace RSoft.Auth.Application.Services
                     scopes.Add(scope);
             }
 
-            foreach (RoleDto item in dto.Roles)
-            {
-                Role role = await _roleDomain.GetByKeyAsync(item.Id, cancellationToken);
-                if (role == null)
-                    dto.AddNotification("Roles", $"Role '{item.Id}' not found");
-                else
-                    roles.Add(role);
-            }
+            //foreach (RoleDto item in dto.Roles)
+            //{
+            //    Role role = await _roleDomain.GetByKeyAsync(item.Id, cancellationToken);
+            //    if (role == null)
+            //        dto.AddNotification("Roles", $"Role '{item.Id}' not found");
+            //    else
+            //        roles.Add(role);
+            //}
 
-            foreach (Role role in roles)
-            {
-                if (scopes.FirstOrDefault(s => s.Id == role.Scope?.Id) == null)
-                    dto.AddNotification("Roles", $"The {role.Name} role belongs to a scope to which the user is not assigned.");
-            }
+            //foreach (Role role in roles)
+            //{
+            //    if (scopes.FirstOrDefault(s => s.Id == role.Scope?.Id) == null)
+            //        dto.AddNotification("Roles", $"The {role.Name} role belongs to a scope to which the user is not assigned.");
+            //}
 
             if (dto.Notifications.Count > 0)
                 return dto;
 
             dto.Scopes = scopes.Select(s => s.Map(false)).ToList();
-            dto.Roles = roles.Select(r => r.Map(false)).ToList();
+            //dto.Roles = roles.Select(r => r.Map(false)).ToList();
 
             return await base.AddAsync(dto, cancellationToken);
         }

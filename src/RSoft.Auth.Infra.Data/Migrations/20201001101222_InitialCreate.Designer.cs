@@ -9,7 +9,7 @@ using RSoft.Auth.Infra.Data;
 namespace RSoft.Auth.Infra.Data.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20200929093610_InitialCreate")]
+    [Migration("20201001101222_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,6 +170,13 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasColumnName("Document")
+                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
+                        .HasMaxLength(20)
+                        .IsUnicode(false);
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnName("Email")
@@ -216,6 +223,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.HasIndex("CreatedOn")
                         .HasName("IX_User_CreatedOn");
+
+                    b.HasIndex("Document")
+                        .IsUnique()
+                        .HasName("AK_User_Document");
 
                     b.HasIndex("Email")
                         .IsUnique()

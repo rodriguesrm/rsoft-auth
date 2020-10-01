@@ -27,7 +27,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize(Roles = "master, service")]
+    [Authorize(Roles = "admin, service")]
     public class UserController : ApiCrudBaseController<Guid, UserDto, UserRequest, UserDetailResponse>
     {
 
@@ -65,6 +65,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             return new UserDto()
             {
                 Id = id,
+                Document = request.Document,
                 Name = new FullNameResponse(request.Name.FirstName, request.Name.LastName),
                 Email = request.Email,
                 BornDate = request.BornDate,
@@ -172,7 +173,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         ///<inheritdoc/>
         protected override UserDto Map(UserRequest request)
-            => request.Map();
+            => request.Map(AppKey);
 
         ///<inheritdoc/>
         protected override UserDetailResponse Map(UserDto dto)

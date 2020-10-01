@@ -60,6 +60,11 @@ namespace RSoft.Auth.Infra.Data.Entities
         public bool IsDeleted { get; set; }
 
         /// <summary>
+        /// Document number (withou mask)
+        /// </summary>
+        public string Document { get; set; }
+
+        /// <summary>
         /// First name
         /// </summary>
         public string FirstName { get; set; }

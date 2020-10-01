@@ -33,6 +33,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
 
                 result = new dmn.User(table.Id)
                 {
+                    Document = table.Document,
                     Name = new Name(table.FirstName, table.LastName),
                     BornDate = table.BornDate,
                     Email = new Email(table.Email),
@@ -49,8 +50,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     {
                         result.Credential = table.Credential.Map();
                     }
-                    result.Roles = table.Roles.Select(r => r.Role.Map(false)).ToList();
                     result.Scopes = table.Scopes.Select(s => s.Scope.Map(false)).ToList();
+                    result.Roles = table.Roles?.Select(r => r.Role.Map(false)).ToList();
                 }
 
                 //result.Validate();
@@ -83,6 +84,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
 
                 result = new tbl.User(entity.Id)
                 {
+                    Document = entity.Document,
                     FirstName = entity.Name.FirstName,
                     LastName = entity.Name.LastName,
                     BornDate = entity.BornDate,
@@ -95,7 +97,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 if (useLazy)
                 {
                     result.Scopes = entity.Scopes.Select(s => new tbl.UserScope() { ScopeId = s.Id, UserId = entity.Id }).ToList();
-                    result.Roles = entity.Roles.Select(r => new tbl.UserRole() { RoleId = r.Id, UserId = entity.Id }).ToList();
+                    result.Roles = entity.Roles?.Select(r => new tbl.UserRole() { RoleId = r.Id, UserId = entity.Id }).ToList();
                 }
 
 
@@ -116,6 +118,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
             if (entity != null && table != null)
             {
 
+                table.Document = entity.Document;
                 table.FirstName = entity.Name.FirstName;
                 table.LastName = entity.Name.LastName;
                 table.BornDate = entity.BornDate;
