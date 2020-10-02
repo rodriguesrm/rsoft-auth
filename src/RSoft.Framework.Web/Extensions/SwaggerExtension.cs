@@ -58,8 +58,9 @@ namespace RSoft.Framework.Web.Extensions
             services.AddSwaggerGen(c =>
             {
 
-                c.OperationFilter<RemoveVersionParameterFilter>();
                 c.DocumentFilter<ReplaceVersionWithExactValueInPathFilter>();
+                c.OperationFilter<RemoveVersionParameterFilter>();
+                c.OperationFilter<AddAppKeyHeaderParameter>();
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
                 c.EnableAnnotations();
 
