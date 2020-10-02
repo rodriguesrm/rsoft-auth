@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 
 namespace RSoft.Framework.Web.Filters
@@ -17,6 +19,7 @@ namespace RSoft.Framework.Web.Filters
 
         private readonly string _appKey;
         private readonly string _appAccess;
+        private readonly bool _isProd;
 
         #endregion
 
@@ -24,6 +27,7 @@ namespace RSoft.Framework.Web.Filters
 
         public AddAppKeyHeaderParameter(IConfiguration configuration)
         {
+            _isProd = (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Production);
             _appKey = configuration["Scope:Key"];
             _appAccess = configuration["Scope:Access"];
         }
@@ -41,12 +45,13 @@ namespace RSoft.Framework.Web.Filters
             operation.Parameters.Add(new OpenApiParameter
             {
                 Name = "app-key",
+                Description = "Application key id",
                 In = ParameterLocation.Header,
                 Required = false,
                 Schema = new OpenApiSchema
                 {
                     Type = "String",
-                    Default = new OpenApiString(_appKey)
+                    Default = !_isProd ? new OpenApiString(_appKey) : null
                 },
                 
             });
@@ -54,12 +59,13 @@ namespace RSoft.Framework.Web.Filters
             operation.Parameters.Add(new OpenApiParameter
             {
                 Name = "app-access",
+                Description = "Application key access",
                 In = ParameterLocation.Header,
                 Required = false,
                 Schema = new OpenApiSchema
                 {
                     Type = "String",
-                    Default = new OpenApiString(_appAccess)
+                    Default = !_isProd ? new OpenApiString(_appAccess) : null
                 },
 
             });

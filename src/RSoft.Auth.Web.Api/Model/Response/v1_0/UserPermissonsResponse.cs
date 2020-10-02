@@ -1,8 +1,6 @@
 ﻿using RSoft.Framework.Application.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RSoft.Auth.Web.Api.Model.Response.v1_0
 {
@@ -10,7 +8,7 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
     /// <summary>
     /// User rights and permissions data model
     /// </summary>
-    public class UserScopesRolesResponse
+    public class UserPermissonsResponse
     {
 
         /// <summary>

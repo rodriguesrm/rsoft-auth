@@ -55,12 +55,12 @@ namespace RSoft.Auth.Web.Api.Extensions
                     .Distinct()
                     .ToList();
 
-                IList<UserScopesRolesResponse> permissions = new List<UserScopesRolesResponse>();
+                IList<UserPermissonsResponse> permissions = new List<UserPermissonsResponse>();
 
                 foreach (SimpleIdentification<Guid> scope in scopes)
                 {
                     IEnumerable<RoleDto> roles = dto.Roles?.Where(x => x.ScopeId == scope.Id).ToList();
-                    UserScopesRolesResponse permission = new UserScopesRolesResponse()
+                    UserPermissonsResponse permission = new UserPermissonsResponse()
                     {
                         Id = scope.Id.Value,
                         Name = scope.Name,

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using RSoft.Framework.Web.Filters;
@@ -45,6 +46,8 @@ namespace RSoft.Framework.Web.Extensions
         public static IServiceCollection AddSwaggerGenerator(this IServiceCollection services, IConfiguration configuration, string assemblyName, params string[] versions)
         {
 
+            bool isProd = (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Production);
+
             services.Configure<SwaggerOptions>(options => configuration.GetSection("Swagger").Bind(options));
 
             SwaggerOptions swaggerOptions = new SwaggerOptions();
@@ -80,20 +83,24 @@ namespace RSoft.Framework.Web.Extensions
                     });
                 }
 
-                if (swaggerOptions.EnableTryOut && swaggerOptions.EnableJwtTokenAuthentication)
+
+                if (!isProd)
                 {
-                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+
+                    if (swaggerOptions.EnableTryOut && swaggerOptions.EnableJwtTokenAuthentication)
                     {
-                        Description = @"JWT Authorization header using the Bearer scheme. 
+                        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                        {
+                            Description = @"JWT Authorization header using the Bearer scheme. 
                                     <br>Enter 'Bearer' [space] and then your token in the text input below.
                                     <br>Example: 'Bearer 12345abcdef'",
-                        Name = "Authorization",
-                        In = ParameterLocation.Header,
-                        Type = SecuritySchemeType.ApiKey,
-                        Scheme = "Bearer"
-                    });
+                            Name = "Authorization",
+                            In = ParameterLocation.Header,
+                            Type = SecuritySchemeType.ApiKey,
+                            Scheme = "Bearer"
+                        });
 
-                    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                        c.AddSecurityRequirement(new OpenApiSecurityRequirement()
                     {
                         {
                         new OpenApiSecurityScheme
@@ -111,6 +118,8 @@ namespace RSoft.Framework.Web.Extensions
                             new List<string>()
                         }
                     });
+                    }
+
                 }
 
                 var xmlFile = $"{assemblyName}.xml";
@@ -131,6 +140,8 @@ namespace RSoft.Framework.Web.Extensions
         public static IApplicationBuilder UseSwaggerDocUI(this IApplicationBuilder app, IApiVersionDescriptionProvider provider)
         {
 
+            bool isProd = (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Production);
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -138,9 +149,13 @@ namespace RSoft.Framework.Web.Extensions
 
                 foreach (var description in provider.ApiVersionDescriptions)
                 {
-                    options.SwaggerEndpoint(
-                    $"/swagger/{description.GroupName}/swagger.json",
-                    description.GroupName.ToLowerInvariant());
+                    options.SwaggerEndpoint
+                    (
+                        $"/swagger/{description.GroupName}/swagger.json",
+                        description.GroupName.ToLowerInvariant()
+                    );
+                    if (isProd)
+                        options.SupportedSubmitMethods(new SubmitMethod[] { });
                 }
 
                 options.DocExpansion(DocExpansion.List);

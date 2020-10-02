@@ -30,7 +30,7 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         /// <summary>
         /// User rights and permissions list
         /// </summary>
-        public IEnumerable<UserScopesRolesResponse> Permissions { get; set; }
+        public IEnumerable<UserPermissonsResponse> Permissions { get; set; }
 
         #endregion
     }
