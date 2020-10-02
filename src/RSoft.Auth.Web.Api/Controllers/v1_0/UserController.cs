@@ -82,10 +82,6 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         private async Task<IActionResult> RunUserAddAsync(UserRequest request, CancellationToken cancellationToken = default)
         {
             //BUG: RR - Fazer tratamento de scopo de inclusão de registros, somente quem tem acesso ao Authentication pode adicionar scopos, os demais somente do escopo que pertence
-            if (AppKey != _scopeOptions.Key)
-            {
-
-            }
             return await base.InsertAsync(request, cancellationToken);
         }
 
@@ -288,6 +284,30 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> DeleteUser([FromRoute] Guid key, CancellationToken cancellationToken = default)
             => await RunActionAsync(RunDeleteUserAsync(key, cancellationToken), cancellationToken);
+
+        /// <summary>
+        /// Adds a scope to the user
+        /// </summary>
+        /// <param name="key">User id key</param>
+        /// <param name="scopeKey">Scope id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="204">Successful request processing</response>
+        /// <response code="400">Invalid request, see details in response</response>
+        /// <response code="401">Credentials is invalid or empty</response>
+        /// <response code="403">The use credential does not have access to this resource</response>
+        /// <response code="500">Request processing failed</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpPost("{key:guid}/scope/{scopeKey:guid}")]
+        [MapToApiVersion("1.0")]
+        public async Task<IActionResult> AddScopeUser([FromRoute] Guid key, [FromRoute] Guid scopeKey, CancellationToken cancellationToken = default)
+        {
+            //BUG: NotImplementedException
+            throw new NotImplementedException();
+        }
 
         #endregion
 
