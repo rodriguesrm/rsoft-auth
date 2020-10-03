@@ -46,24 +46,6 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         #region Overrides
 
         ///<inheritdoc/>
-        protected override Task<ScopeDto> AddAsync(ScopeDto dto, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        ///<inheritdoc/>
-        protected override Task<IEnumerable<ScopeDto>> GetAllAsync(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        ///<inheritdoc/>
-        protected override Task<ScopeDto> GetByIdAsync(Guid key, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        ///<inheritdoc/>
         protected override ScopeDto Map(ScopeRequest request)
         {
             throw new NotImplementedException();
@@ -82,13 +64,32 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         }
 
         ///<inheritdoc/>
-        protected override Task RemoveAsync(Guid key, CancellationToken cancellationToken = default)
+        protected override Task<ScopeDto> AddAsync(ScopeDto dto, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
         ///<inheritdoc/>
+        protected override Task<IEnumerable<ScopeDto>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<inheritdoc/>
+        protected override Task<ScopeDto> GetByIdAsync(Guid key, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        
+        ///<inheritdoc/>
         protected override Task<ScopeDto> UpdateAsync(ScopeDto dto, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        ///<inheritdoc/>
+        protected override Task RemoveAsync(Guid key, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
