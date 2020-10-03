@@ -1,12 +1,14 @@
 ﻿using RSoft.Framework.Infra.Data;
-using dmn = RSoft.Auth.Domain.Entities;
-using tbl = RSoft.Auth.Infra.Data.Entities;
+using RoleDomain = RSoft.Auth.Domain.Entities.Role;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Auth.Infra.Data.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using RSoft.Auth.Infra.Data.Entities;
+using System.Threading.Tasks;
+using System.Threading;
+using Microsoft.EntityFrameworkCore;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {
@@ -14,7 +16,7 @@ namespace RSoft.Auth.Infra.Data.Repositories
     /// <summary>
     /// Role repository
     /// </summary>
-    public class RoleRepository : RepositoryBase<dmn.Role, tbl.Role, Guid>, IRoleRepository
+    public class RoleRepository : RepositoryBase<RoleDomain, Role, Guid>, IRoleRepository
     {
 
         #region Constructors
@@ -27,15 +29,15 @@ namespace RSoft.Auth.Infra.Data.Repositories
         #region Overrides
 
         ///<inheritdoc/>
-        protected override dmn.Role Map(tbl.Role table)
+        protected override RoleDomain Map(Role table)
             => table.Map();
 
         ///<inheritdoc/>
-        protected override tbl.Role MapForAdd(dmn.Role entity)
+        protected override Role MapForAdd(RoleDomain entity)
             => entity.Map();
 
         ///<inheritdoc/>
-        protected override tbl.Role MapForUpdate(dmn.Role entity, tbl.Role table)
+        protected override Role MapForUpdate(RoleDomain entity, Role table)
             => entity.Map(table);
 
         #endregion
@@ -43,10 +45,10 @@ namespace RSoft.Auth.Infra.Data.Repositories
         #region Public methods
 
         ///<inheritdoc/>
-        public ICollection<dmn.Role> GetRolesByUser(Guid scopeId, Guid userId)
+        public ICollection<RoleDomain> GetRolesByUser(Guid scopeId, Guid userId)
         {
 
-            ICollection<dmn.Role> result = _ctx
+            ICollection<RoleDomain> result = _ctx
                 .Set<UserRole>()
                 .Where(x => x.Role.ScopeId == scopeId && x.UserId == userId)
                 .ToList()
@@ -55,6 +57,14 @@ namespace RSoft.Auth.Infra.Data.Repositories
 
             return result;
 
+        }
+
+        ///<inheritdoc/>
+        public async Task<RoleDomain> GetByNameAsync(Guid scopeId, string roleName, CancellationToken cancellationToken = default)
+        {
+            Role table = await _dbSet.FirstOrDefaultAsync(x => x.ScopeId == scopeId && x.Name == roleName, cancellationToken);
+            RoleDomain entity = table.Map();
+            return entity;
         }
 
         #endregion

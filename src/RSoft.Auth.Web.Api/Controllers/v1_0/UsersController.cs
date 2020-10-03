@@ -29,7 +29,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(Roles = "admin, service")]
-    public class UserController : ApiCrudBaseController<Guid, UserDto, UserRequest, UserDetailResponse>
+    public class UsersController : ApiCrudBaseController<Guid, UserDto, UserRequest, UserDetailResponse>
     {
 
         #region Local objects/variables
@@ -46,7 +46,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// </summary>
         /// <param name="userAppService">User application service</param>
         /// <param name="options">Scope options parameters</param>
-        public UserController(IUserAppService userAppService, IOptions<ScopeOptions> options)
+        public UsersController(IUserAppService userAppService, IOptions<ScopeOptions> options)
         {
             _userAppService = userAppService;
             _scopeOptions = options?.Value;
@@ -147,6 +147,21 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         private async Task<IActionResult> RunAddScopeUserAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
         {
             SimpleOperationResult result = await _userAppService.AddScopeAsync(userId, scopeId);
+            if (result.Success)
+                return NoContent();
+            else
+                return BadRequest(PrepareNotifications(result.Errors));
+        }
+        
+        /// <summary>
+        /// Perform add roles for user
+        /// </summary>
+        /// <param name="key">User id key</param>
+        /// <param name="roles">List of role names</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<IActionResult> RunAddRoleUserAsync(Guid key, IEnumerable<string> roles, CancellationToken cancellationToken)
+        {
+            SimpleOperationResult result = await _userAppService.AddRoleAsync(AppKey ?? Guid.Empty, key, roles, cancellationToken);
             if (result.Success)
                 return NoContent();
             else
@@ -308,10 +323,31 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
-        [HttpPost("{key:guid}/scope/{scopeKey:guid}")]
+        [HttpPost("{key:guid}/scopes/{scopeKey:guid}")]
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> AddScopeUser([FromRoute] Guid key, [FromRoute] Guid scopeKey, CancellationToken cancellationToken = default)
             => await RunActionAsync(RunAddScopeUserAsync(key, scopeKey, cancellationToken), cancellationToken);
+
+        /// <summary>
+        /// Adds roles to the user
+        /// </summary>
+        /// <param name="key">User id key</param>
+        /// <param name="roles">List of role names</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="204">Successful request processing</response>
+        /// <response code="400">Invalid request, see details in response</response>
+        /// <response code="401">Credentials is invalid or empty</response>
+        /// <response code="403">The use credential does not have access to this resource</response>
+        /// <response code="500">Request processing failed</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpPost("{key:guid}/roles")]
+        [MapToApiVersion("1.0")]
+        public async Task<IActionResult> AddRoleUser([FromRoute] Guid key, [FromBody] IEnumerable<string> roles, CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunAddRoleUserAsync(key, roles, cancellationToken), cancellationToken);
 
         #endregion
 

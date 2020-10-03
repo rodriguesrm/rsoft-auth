@@ -4,6 +4,8 @@ using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Domain.ValueObjects;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -44,6 +46,19 @@ namespace RSoft.Auth.Domain.Services
             }
             entity.Name = entity.Name.ToLower();
         }
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Find role in the scope by name
+        /// </summary>
+        /// <param name="scopeId">Scope id key</param>
+        /// <param name="roleName">Role name</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        public async Task<Role> GetByNameAsync(Guid scopeId, string roleName, CancellationToken cancellationToken = default)
+            => await _repository.GetByNameAsync(scopeId, roleName, cancellationToken);
 
         #endregion
 

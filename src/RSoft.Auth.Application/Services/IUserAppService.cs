@@ -25,10 +25,19 @@ namespace RSoft.Auth.Application.Services
         /// <summary>
         /// Add scope for user
         /// </summary>
-        /// <param name="userId">User</param>
-        /// <param name="scopeId"></param>
+        /// <param name="userId">User id key</param>
+        /// <param name="scopeId">Scope id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Adds roles for user
+        /// </summary>
+        /// <param name="scopeId">Scope id key</param>
+        /// <param name="userId">User id key</param>
+        /// <param name="roles">List of role name</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<SimpleOperationResult> AddRoleAsync(Guid scopeId, Guid userId, IEnumerable<string> roles, CancellationToken cancellationToken);
     }
 
 }

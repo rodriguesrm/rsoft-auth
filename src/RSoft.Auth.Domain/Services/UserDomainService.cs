@@ -497,6 +497,44 @@ namespace RSoft.Auth.Domain.Services
 
         }
 
+        ///<inheritdoc/>
+        public async Task<SimpleOperationResult> AddRoleAsync(Guid userId, IEnumerable<Role> roles, CancellationToken cancellationToken)
+        {
+
+            bool success = false;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            User user = await _repository.GetByKeyAsync(userId, cancellationToken);
+            if (user != null)
+            {
+                IList<Guid> ids = new List<Guid>();
+                foreach (Role role in roles)
+                {
+                    if (user.Roles.FirstOrDefault(x => x.Id == role.Id) == null)
+                    {
+                        ids.Add(role.Id);
+                    }
+                    else
+                    {
+                        errors.Add(role.Name, $"The user already has this role");
+                    }
+                }
+                if (errors.Count == 0)
+                {
+                    await _repository.AddUserRoleAsync(userId, ids, cancellationToken);
+                    await _uow.SaveChangesAsync(cancellationToken);
+                    success = true;
+                }
+            }
+            else
+            {
+                errors.Add("User", "User not found");
+            }
+
+            return new SimpleOperationResult(success, errors);
+
+        }
+
         #endregion
 
     }

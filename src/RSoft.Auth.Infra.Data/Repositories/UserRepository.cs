@@ -1,6 +1,6 @@
 ﻿using RSoft.Framework.Infra.Data;
-using dmn = RSoft.Auth.Domain.Entities;
-using tbl = RSoft.Auth.Infra.Data.Entities;
+using UserDomain = RSoft.Auth.Domain.Entities.User;
+using RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Auth.Infra.Data.Extensions;
@@ -9,7 +9,6 @@ using System.Threading;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using RSoft.Auth.Domain.Entities;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {
@@ -17,7 +16,7 @@ namespace RSoft.Auth.Infra.Data.Repositories
     /// <summary>
     /// User repository
     /// </summary>
-    public class UserRepository : RepositoryBase<dmn.User, tbl.User, Guid>, IUserRepository
+    public class UserRepository : RepositoryBase<UserDomain, User, Guid>, IUserRepository
     {
 
         #region Constructors
@@ -30,15 +29,15 @@ namespace RSoft.Auth.Infra.Data.Repositories
         #region Overrides
 
         ///<inheritdoc/>
-        protected override dmn.User Map(tbl.User table)
+        protected override UserDomain Map(User table)
             => table.Map();
 
         ///<inheritdoc/>
-        protected override tbl.User MapForAdd(dmn.User entity)
+        protected override User MapForAdd(UserDomain entity)
             => entity.Map();
 
         ///<inheritdoc/>
-        protected override tbl.User MapForUpdate(dmn.User entity, tbl.User table)
+        protected override User MapForUpdate(UserDomain entity, User table)
             => entity.Map(table);
 
 
@@ -47,38 +46,61 @@ namespace RSoft.Auth.Infra.Data.Repositories
         #region Public methods
 
         ///<inheritdoc/>
-        public async Task<dmn.User> GetByLoginAsync(string login, CancellationToken cancellationToken)
+        public async Task<UserDomain> GetByLoginAsync(string login, CancellationToken cancellationToken)
         {
-            tbl.User table = await _dbSet.FirstOrDefaultAsync(u => u.Credential.Login == login || u.Email == login);
+            User table = await _dbSet.FirstOrDefaultAsync(u => u.Credential.Login == login || u.Email == login);
             return table.Map();
         }
 
         ///<inheritdoc/>
-        public async Task<IEnumerable<dmn.User>> ListByLoginAsync(string login, CancellationToken cancellationToken)
+        public async Task<IEnumerable<UserDomain>> ListByLoginAsync(string login, CancellationToken cancellationToken)
         {
-            IEnumerable<tbl.User> tableUsers = await _dbSet.Where(u => u.Credential.Login == login || u.Email == login).ToListAsync(cancellationToken);
-            IEnumerable<User> users = tableUsers.Select(u => u.Map(true));
+            IEnumerable<User> tableUsers = await _dbSet.Where(u => u.Credential.Login == login || u.Email == login).ToListAsync(cancellationToken);
+            IEnumerable<UserDomain> users = tableUsers.Select(u => u.Map(true));
             return users;
         }
 
         ///<inheritdoc/>
-        public async Task<IEnumerable<User>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<UserDomain>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default)
         {
-            IEnumerable<tbl.User> tableUsers = await _dbSet.Where(x => x.Scopes.Any(s => s.ScopeId == scopeId)).ToListAsync(cancellationToken);
-            IEnumerable<User> users = tableUsers.Select(u => u.Map(true));
+            IEnumerable<User> tableUsers = await _dbSet.Where(x => x.Scopes.Any(s => s.ScopeId == scopeId)).ToListAsync(cancellationToken);
+            IEnumerable<UserDomain> users = tableUsers.Select(u => u.Map(true));
             return users;
         }
 
         ///<inheritdoc/>
         public async Task AddUserScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
         {
-            DbSet<tbl.UserScope> dbSet = _ctx.Set<tbl.UserScope>();
-            tbl.UserScope userScope = new tbl.UserScope()
+            DbSet<UserScope> dbSet = _ctx.Set<UserScope>();
+            UserScope userScope = new UserScope()
             {
                 UserId = userId,
                 ScopeId = scopeId
             };
             await dbSet.AddAsync(userScope, cancellationToken);
+        }
+
+        ///<inheritdoc/>
+        public async Task AddUserRoleAsync(Guid userId, IEnumerable<Guid> roles, CancellationToken cancellationToken = default)
+        {
+
+            if (roles?.Count() > 0)
+            {
+
+                DbSet<UserRole> dbSet = _ctx.Set<UserRole>();
+
+                IList<UserRole> userRoles = new List<UserRole>();
+                foreach (Guid item in roles)
+                {
+                    userRoles.Add(new UserRole()
+                    {
+                        UserId = userId,
+                        RoleId = item
+                    });
+                }
+                await dbSet.AddRangeAsync(userRoles, cancellationToken);
+
+            }
         }
 
         #endregion

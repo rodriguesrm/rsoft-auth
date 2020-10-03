@@ -27,7 +27,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(Policy = PolicyNames.OnlyThisApplication)]
-    public class ScopeController : ApiCrudBaseController<Guid, ScopeDto, ScopeRequest, ScopeResponse>
+    public class ScopesController : ApiCrudBaseController<Guid, ScopeDto, ScopeRequest, ScopeResponse>
     {
 
         #region Local objects/variables
@@ -42,7 +42,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Create a new Scope API instance
         /// </summary>
-        public ScopeController(IScopeAppService scopeAppService, IOptions<ScopeOptions> options)
+        public ScopesController(IScopeAppService scopeAppService, IOptions<ScopeOptions> options)
         {
             _scopeAppService = scopeAppService;
             _scopeOptions = options?.Value;

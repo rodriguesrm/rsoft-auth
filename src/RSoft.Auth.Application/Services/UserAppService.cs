@@ -121,6 +121,62 @@ namespace RSoft.Auth.Application.Services
         public async Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
             => await _dmn.AddScopeAsync(userId, scopeId);
 
+        ///<inheritdoc/>
+        public async Task<SimpleOperationResult> AddRoleAsync(Guid scopeId, Guid userId, IEnumerable<string> roles, CancellationToken cancellationToken)
+        {
+
+            bool success = false;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            if (roles?.Count() > 0)
+            {
+
+                if (roles.Distinct().Count() == roles.Count())
+                {
+
+                    IList<Role> rolesList = new List<Role>();
+
+                    foreach (string item in roles)
+                    {
+                        if (!string.IsNullOrWhiteSpace(item))
+                        {
+
+                            Role role = await _roleDomain.GetByNameAsync(scopeId, item, cancellationToken);
+                            if (role != null)
+                            {
+                                rolesList.Add(role);
+                            }
+                            else
+                            {
+                                errors.Add(item, "Role not found");
+                            }
+                        }
+                        else
+                        {
+                            errors.Add(item, "Role invalid or empty");
+                        }
+                    }
+
+                    if (errors.Count == 0)
+                    {
+                        return await _dmn.AddRoleAsync(userId, rolesList, cancellationToken);
+                    }
+
+                }
+                else
+                {
+                    errors.Add("Roles", "Duplicated roles in list");
+                }
+
+            }
+            else
+            {
+                errors.Add("Roles", "List of role names is required");
+            }
+
+            return new SimpleOperationResult(success, errors);
+        }
+
         #endregion
 
     }
