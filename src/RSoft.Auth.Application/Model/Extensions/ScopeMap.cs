@@ -1,4 +1,5 @@
 ﻿using RSoft.Auth.Domain.Entities;
+using System;
 
 namespace RSoft.Auth.Application.Model.Extensions
 {
@@ -48,7 +49,7 @@ namespace RSoft.Auth.Application.Model.Extensions
             if (dto != null)
             {
                 entity.Name = dto.Name;
-                entity.AccessKey = dto.AccessKey;
+                entity.AccessKey = dto.AccessKey != Guid.Empty ? dto.AccessKey : entity.AccessKey;
                 entity.IsActive = dto.IsActive;
             }
             return entity;

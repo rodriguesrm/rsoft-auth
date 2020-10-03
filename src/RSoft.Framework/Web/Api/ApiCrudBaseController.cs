@@ -67,7 +67,7 @@ namespace RSoft.Framework.Web.Api
         /// </summary>
         /// <param name="dto">Dto object instance</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected abstract Task<TDto> UpdateAsync(TDto dto, CancellationToken cancellationToken = default);
+        protected abstract Task<TDto> SaveUpdateAsync(TDto dto, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes an entity
@@ -156,7 +156,7 @@ namespace RSoft.Framework.Web.Api
 
             dto = Map(request);
             dto.Id = key;
-            dto = await UpdateAsync(dto, cancellationToken);
+            dto = await SaveUpdateAsync(dto, cancellationToken);
 
             if (dto.Invalid)
             {

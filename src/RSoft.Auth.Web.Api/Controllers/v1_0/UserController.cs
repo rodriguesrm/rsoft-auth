@@ -113,7 +113,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                 return NotFound("Data not found");
 
             dto = MapUpdateToDto(key, request);
-            dto = await UpdateAsync(dto, cancellationToken);
+            dto = await SaveUpdateAsync(dto, cancellationToken);
 
             if (dto.Invalid)
             {
@@ -184,7 +184,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             => await _userAppService.DeleteAsync(key, cancellationToken);
 
         ///<inheritdoc/>
-        protected override async Task<UserDto> UpdateAsync(UserDto dto, CancellationToken cancellationToken = default)
+        protected override async Task<UserDto> SaveUpdateAsync(UserDto dto, CancellationToken cancellationToken = default)
             => await _userAppService.UpdateAsync(dto.Id, dto, cancellationToken);
 
         #endregion

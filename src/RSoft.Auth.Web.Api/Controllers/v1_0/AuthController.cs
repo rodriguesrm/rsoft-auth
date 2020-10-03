@@ -148,8 +148,6 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Authenticate user in the system-application / generate access token
         /// </summary>
-        /// <param name="appKey">Authentication scope id (by header)</param>
-        /// <param name="appAcess">Authentication scope key access (by header)</param>
         /// <param name="request">Request data information</param>
         /// <param name="details">Indicates whether to return user details (default=false)</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
