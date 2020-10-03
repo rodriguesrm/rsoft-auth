@@ -24,7 +24,7 @@ namespace RSoft.Framework.Cross
         /// <summary>
         /// Create a new LoggedUser instance
         /// </summary>
-        /// <param name="accessor"></param>
+        /// <param name="accessor">Http context acessor object</param>
         public HttpLoggedUser(IHttpContextAccessor accessor)
         {
             _accessor = accessor;

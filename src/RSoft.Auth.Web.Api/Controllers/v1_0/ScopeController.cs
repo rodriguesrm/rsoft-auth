@@ -12,6 +12,7 @@ using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Web.Api.Extensions;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Auth.Web.Api.Model.Response.v1_0;
+using RSoft.Auth.Web.Api.Policies;
 using RSoft.Framework.Web.Api;
 using RSoft.Framework.Web.Model.Response;
 using RSoft.Logs.Model;
@@ -25,7 +26,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin, service")]
+    [Authorize(Policy = PolicyNames.OnlyThisApplication)]
     public class ScopeController : ApiCrudBaseController<Guid, ScopeDto, ScopeRequest, ScopeResponse>
     {
 

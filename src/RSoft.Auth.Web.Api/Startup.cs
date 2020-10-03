@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
+using RSoft.Auth.Web.Api.Policies;
 using RSoft.Framework.Web.Extensions;
 using RSoft.Framework.Web.Filters;
 using RSoft.Logs.Extensions;
@@ -60,6 +61,7 @@ namespace RSoft.Auth.Web.Api
             services.AddJwtToken(Configuration);
             services.AddSwaggerGenerator(Configuration, assemblyName);
             services.AddAuthRegister(Configuration);
+            services.AddAppPolicies(Configuration);
             services.AddMiddlewareLoggingOption(Configuration);
 
         }

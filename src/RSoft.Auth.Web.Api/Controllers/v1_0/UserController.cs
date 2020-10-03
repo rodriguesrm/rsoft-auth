@@ -75,17 +75,6 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         }
 
         /// <summary>
-        /// Add new user
-        /// </summary>
-        /// <param name="request">*Request data information</param>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        private async Task<IActionResult> RunUserAddAsync(UserRequest request, CancellationToken cancellationToken = default)
-        {
-            //BUG: RR - Fazer tratamento de scopo de inclusão de registros, somente quem tem acesso ao Authentication pode adicionar scopos, os demais somente do escopo que pertence
-            return await base.InsertAsync(request, cancellationToken);
-        }
-
-        /// <summary>
         /// List all entity
         /// </summary>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
@@ -209,7 +198,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [HttpPost]
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> CreateUser([FromBody] UserRequest request, CancellationToken cancellationToken = default)
-            => await RunActionAsync(RunUserAddAsync(request, cancellationToken), cancellationToken);
+            => await base.InsertAsync(request, cancellationToken);
 
         /// <summary>
         /// List all users
