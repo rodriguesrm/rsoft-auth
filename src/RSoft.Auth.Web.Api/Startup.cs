@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
 using RSoft.Auth.Web.Api.Policies;
@@ -72,7 +73,8 @@ namespace RSoft.Auth.Web.Api
         /// <param name="app">IApplicationBuilder object instance</param>
         /// <param name="env">IWebHostEnvironment object instance</param>
         /// <param name="provider">IApiVersionDescriptionProvider object instance</param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
+        /// <param name="factory">Logger factory</param>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory factory)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -89,7 +91,6 @@ namespace RSoft.Auth.Web.Api
             app.UseStaticFiles();
             app.UseResponseCaching();
 
-            //TODO: Add Middleware for additional permission/rules/restrictions checks
             app.UseMiddleware<RequestResponseLogging<Startup>>();
             app.UseSwaggerDocUI(provider);
 
@@ -103,7 +104,8 @@ namespace RSoft.Auth.Web.Api
                 endpoints.MapControllers();
             });
 
-            app.MigrateDatabase();
+            ILogger logger = factory.CreateLogger("Microsoft.Hosting.Lifetime");
+            app.MigrateDatabase(logger);
 
         }
     }

@@ -1,10 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Logging;
 
 namespace RSoft.Auth.Infra.Data.Migrations
 {
     public partial class InitialCreate : InitialSeed
     {
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -79,7 +81,6 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 {
                     UserId = table.Column<Guid>(nullable: false),
                     Login = table.Column<string>(unicode: false, maxLength: 254, nullable: false),
-                    AppAccess = table.Column<Guid>(nullable: true),
                     Password = table.Column<string>(unicode: false, maxLength: 32, nullable: true),
                     ChangeCredentials = table.Column<ulong>(type: "bit", nullable: false)
                 },
@@ -300,12 +301,6 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 name: "IX_User_FullName",
                 table: "User",
                 columns: new[] { "FirstName", "LastName" });
-
-            migrationBuilder.CreateIndex(
-                name: "AK_UserCredential_AppAccess",
-                table: "UserCredential",
-                column: "AppAccess",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "AK_UserCredential_Login",

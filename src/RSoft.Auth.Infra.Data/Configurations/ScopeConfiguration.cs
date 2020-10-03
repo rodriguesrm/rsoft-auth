@@ -11,6 +11,7 @@ namespace RSoft.Auth.Infra.Data.Configurations
     /// </summary>
     public class ScopeConfiguration : IEntityTypeConfiguration<Scope>
     {
+        
         ///<inheritdoc/>
         public void Configure(EntityTypeBuilder<Scope> builder)
         {

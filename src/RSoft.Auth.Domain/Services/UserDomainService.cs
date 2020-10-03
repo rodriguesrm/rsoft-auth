@@ -15,6 +15,7 @@ using RSoft.Framework.Infra.Data;
 using System.Linq;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Domain.ValueObjects;
+using Microsoft.Extensions.Configuration;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -28,12 +29,15 @@ namespace RSoft.Auth.Domain.Services
         #region Local objects/variables
 
         private readonly SecurityOptions _securityOptions;
+        private readonly int _jwtTimeLife;
         private readonly IUnitOfWork _uow;
         private new readonly IUserRepository _repository;
         private readonly IUserCredentialRepository _credentialRepository;
         private readonly IUserCredentialTokenRepository _tokenRepository;
         private readonly IScopeRepository _scopeRepository;
         private readonly IRoleRepository _roleRepository;
+        
+        private const int MINUTES_TIME_LIFE = 30;
 
         #endregion
 
@@ -57,7 +61,7 @@ namespace RSoft.Auth.Domain.Services
             IUserCredentialTokenRepository tokenRepository,
             IScopeRepository scopeRepository,
             IRoleRepository roleRepository,
-            IOptions<SecurityOptions> securityOptions
+            IConfiguration configuration
         ) : base(repository, authenticatedUser)
         {
             _uow = uow;
@@ -66,7 +70,11 @@ namespace RSoft.Auth.Domain.Services
             _tokenRepository = tokenRepository;
             _scopeRepository = scopeRepository;
             _roleRepository = roleRepository;
-            _securityOptions = securityOptions?.Value;
+
+            _securityOptions = new SecurityOptions();
+            configuration.GetSection("Security").Bind(_securityOptions);
+            if (!int.TryParse(configuration["Jwt:TimeLife"], out _jwtTimeLife))
+                _jwtTimeLife = MINUTES_TIME_LIFE;
         }
 
         #endregion
@@ -238,13 +246,12 @@ namespace RSoft.Auth.Domain.Services
                     if (user.Credential == null || !firstAccess)
                     {
 
-                        //TODO: Create options-configuration for 'ExpiresOn'
                         Guid tokenKey = Guid.NewGuid();
                         UserCredentialToken userCredentialToken = new UserCredentialToken(tokenKey)
                         {
                             UserId = user.Id,
                             FirstAccess = firstAccess,
-                            ExpiresOn = DateTime.UtcNow.AddMinutes(30)
+                            ExpiresOn = DateTime.UtcNow.AddMinutes(_jwtTimeLife)
                         };
 
                         if (userCredentialToken.Valid)
@@ -447,6 +454,48 @@ namespace RSoft.Auth.Domain.Services
         ///<inheritdoc/>
         public async Task<IEnumerable<User>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default)
             => await _repository.GetAllAsync(scopeId, cancellationToken);
+
+        ///<inheritdoc/>
+        public async Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+        {
+
+            bool success = false;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            
+            Scope scope = await _scopeRepository.GetByKeyAsync(scopeId, cancellationToken);
+            if (scope != null)
+            {
+
+                User user = await _repository.GetByKeyAsync(userId, cancellationToken);
+                if (user != null)
+                {
+                    
+                    if (!user.Scopes.Any(s => s.Id == scopeId))
+                    {
+                        await _repository.AddUserScopeAsync(userId, scopeId, cancellationToken);
+                        await _uow.SaveChangesAsync(cancellationToken);
+                        success = true;
+                    }
+                    else
+                    {
+                        errors.Add("UserScope", "User is already authorized for this scope");
+                    }
+                }
+                else
+                {
+                    errors.Add("User", "User not found");
+                }
+
+            }
+            else
+            {
+                errors.Add("Scope", "Scope not found");
+            }
+
+            return new SimpleOperationResult(success, errors);
+
+        }
 
         #endregion
 

@@ -19,7 +19,6 @@ namespace RSoft.Auth.Application.Model.Extensions
             {
                 UserId = dto.UserId,
                 Login = dto.Login,
-                AppAccess = dto.AppAccess,
                 Password = dto.Password,
                 ChangeCredentials = dto.ChangeCredentials
             };
@@ -36,9 +35,7 @@ namespace RSoft.Auth.Application.Model.Extensions
             {
                 entity.UserId = dto.UserId;
                 entity.Login = dto.Login;
-                entity.AppAccess = dto.AppAccess;
                 //Password => NEVER MAP THIS FIELD HERE
-                entity.AppAccess = dto.AppAccess;
                 entity.ChangeCredentials = dto.ChangeCredentials;
             }
             return entity;
@@ -57,9 +54,7 @@ namespace RSoft.Auth.Application.Model.Extensions
 
             dto.UserId = entity.UserId;
             dto.Login = entity.Login;
-            dto.AppAccess = entity.AppAccess;
             //Password => NEVER MAP THIS FIELD HERE
-            dto.AppAccess = entity.AppAccess;
             dto.ChangeCredentials = entity.ChangeCredentials;
 
             return dto;

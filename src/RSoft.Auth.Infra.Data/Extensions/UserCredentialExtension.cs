@@ -33,7 +33,6 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 {
                     UserId = table.UserId,
                     Login = table.Login,
-                    AppAccess = table.AppAccess,
                     Password = table.Password,
                     ChangeCredentials = table.ChangeCredentials
                 };
@@ -59,7 +58,6 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 {
                     UserId = entity.UserId,
                     Login = entity.Login,
-                    AppAccess = entity.AppAccess,
                     Password = entity.Password,
                     ChangeCredentials = entity.ChangeCredentials
                 };
@@ -81,7 +79,6 @@ namespace RSoft.Auth.Infra.Data.Extensions
             {
                 table.UserId = entity.UserId;
                 table.Login = entity.Login;
-                table.AppAccess = entity.AppAccess;
                 table.Password = entity.Password;
                 table.ChangeCredentials = entity.ChangeCredentials;
             }

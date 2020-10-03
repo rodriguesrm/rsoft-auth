@@ -15,11 +15,6 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         public string Login { get; set; }
 
         /// <summary>
-        /// User application/service access key
-        /// </summary>
-        public Guid? AppAccess { get; set; }
-
-        /// <summary>
         /// Indicates that the user must change the password/access-key at the next login. Will be unable to use the system until
         /// </summary>
         public bool ChangeCredentials { get; set; }

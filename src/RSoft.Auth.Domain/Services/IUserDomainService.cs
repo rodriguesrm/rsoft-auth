@@ -91,6 +91,14 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<IEnumerable<User>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Add scope for user
+        /// </summary>
+        /// <param name="userId">User</param>
+        /// <param name="scopeId"></param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
+
     }
 
 }

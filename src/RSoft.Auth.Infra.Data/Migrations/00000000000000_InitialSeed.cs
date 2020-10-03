@@ -183,25 +183,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 {
                     nameof(UserCredential.UserId),
                     nameof(UserCredential.Login),
-                    nameof(UserCredential.AppAccess),
                     nameof(UserCredential.Password),
                     nameof(UserCredential.ChangeCredentials)
                 },
-                new object[] { userId, "admin", null, password, _isProd }
-            );
-
-            migrationBuilder.InsertData
-            (
-                nameof(UserCredential),
-                new string[]
-                {
-                    nameof(UserCredential.UserId),
-                    nameof(UserCredential.Login),
-                    nameof(UserCredential.AppAccess),
-                    nameof(UserCredential.Password),
-                    nameof(UserCredential.ChangeCredentials)
-                },
-                new object[] { serviceUserId, "services", userKey, null, _isProd }
+                new object[] { userId, "admin", password, _isProd }
             );
 
             // User-Scopes

@@ -23,11 +23,6 @@ namespace RSoft.Auth.Infra.Data.Entities
         public string Login { get; set; }
 
         /// <summary>
-        /// User application/service access key
-        /// </summary>
-        public Guid? AppAccess { get; set; }
-
-        /// <summary>
         /// User password login
         /// </summary>
         public string Password { get; set; }

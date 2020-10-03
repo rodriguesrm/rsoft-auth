@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using RSoft.Auth.Web.Api.Policies.Requirements;
 using System;
 using System.Threading.Tasks;
 
-namespace RSoft.Auth.Web.Api.Policies
+namespace RSoft.Auth.Web.Api.Policies.Handlers
 {
 
     /// <summary>

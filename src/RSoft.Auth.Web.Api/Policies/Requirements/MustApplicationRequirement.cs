@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System;
 
-namespace RSoft.Auth.Web.Api.Policies
+namespace RSoft.Auth.Web.Api.Policies.Requirements
 {
 
     /// <summary>

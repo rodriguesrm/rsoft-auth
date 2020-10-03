@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace RSoft.Auth.Infra.Data.Extensions
 {
@@ -15,7 +16,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Create/Update database by migration tool
         /// </summary>
         /// <param name="app">Application builder object instance</param>
-        public static IApplicationBuilder MigrateDatabase(this IApplicationBuilder app)
+        public static IApplicationBuilder MigrateDatabase(this IApplicationBuilder app, ILogger logger)
         {
             using (var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
@@ -23,7 +24,9 @@ namespace RSoft.Auth.Infra.Data.Extensions
             {
                 using (var context = serviceScope.ServiceProvider.GetService<AuthContext>())
                 {
+                    logger.LogInformation($"Migrating database {nameof(AuthContext)}");
                     context.Database.Migrate();
+                    logger.LogInformation($"Database migrated");
                 }
             }
 

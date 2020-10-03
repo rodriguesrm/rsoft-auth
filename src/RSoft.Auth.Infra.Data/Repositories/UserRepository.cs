@@ -69,6 +69,18 @@ namespace RSoft.Auth.Infra.Data.Repositories
             return users;
         }
 
+        ///<inheritdoc/>
+        public async Task AddUserScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+        {
+            DbSet<tbl.UserScope> dbSet = _ctx.Set<tbl.UserScope>();
+            tbl.UserScope userScope = new tbl.UserScope()
+            {
+                UserId = userId,
+                ScopeId = scopeId
+            };
+            await dbSet.AddAsync(userScope, cancellationToken);
+        }
+
         #endregion
 
     }

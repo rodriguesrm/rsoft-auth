@@ -1,4 +1,5 @@
 ﻿using RSoft.Auth.Application.Model;
+using RSoft.Framework.Application.Model;
 using RSoft.Framework.Application.Services;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,13 @@ namespace RSoft.Auth.Application.Services
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<IEnumerable<UserDto>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Add scope for user
+        /// </summary>
+        /// <param name="userId">User</param>
+        /// <param name="scopeId"></param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
     }
 
 }

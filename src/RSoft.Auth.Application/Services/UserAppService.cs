@@ -10,6 +10,7 @@ using RSoft.Auth.Domain.Services;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidator;
+using RSoft.Framework.Application.Model;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -115,6 +116,10 @@ namespace RSoft.Auth.Application.Services
             IEnumerable<UserDto> dtos = users.Select(u => u.Map());
             return dtos;
         }
+
+        ///<inheritdoc/>
+        public async Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+            => await _dmn.AddScopeAsync(userId, scopeId);
 
         #endregion
 

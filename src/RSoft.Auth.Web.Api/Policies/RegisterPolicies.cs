@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RSoft.Auth.Cross.Common.Options;
+using RSoft.Auth.Web.Api.Policies.Handlers;
+using RSoft.Auth.Web.Api.Policies.Requirements;
 
 namespace RSoft.Auth.Web.Api.Policies
 {

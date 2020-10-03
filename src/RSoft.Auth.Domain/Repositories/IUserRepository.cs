@@ -35,6 +35,14 @@ namespace RSoft.Auth.Domain.Repositories
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<IEnumerable<User>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="scopeId"></param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task AddUserScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
+
     }
 
 }

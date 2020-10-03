@@ -14,6 +14,7 @@ using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Web.Api.Extensions;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Auth.Web.Api.Model.Response.v1_0;
+using RSoft.Framework.Application.Model;
 using RSoft.Framework.Web.Api;
 using RSoft.Framework.Web.Model.Response;
 using RSoft.Logs.Model;
@@ -117,6 +118,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Perform delete user
         /// </summary>
+        /// <param name="key">User id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         private async Task<IActionResult> RunDeleteUserAsync(Guid key, CancellationToken cancellationToken = default)
         {
 
@@ -133,6 +136,21 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                 await RemoveAsync(key, cancellationToken);
                 return NoContent();
             }
+        }
+
+        /// <summary>
+        /// Perform add scope for user
+        /// </summary>
+        /// <param name="userId">User id key</param>
+        /// <param name="scopeId">Scope id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<IActionResult> RunAddScopeUserAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+        {
+            SimpleOperationResult result = await _userAppService.AddScopeAsync(userId, scopeId);
+            if (result.Success)
+                return NoContent();
+            else
+                return BadRequest(PrepareNotifications(result.Errors));
         }
 
         #endregion
@@ -293,10 +311,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [HttpPost("{key:guid}/scope/{scopeKey:guid}")]
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> AddScopeUser([FromRoute] Guid key, [FromRoute] Guid scopeKey, CancellationToken cancellationToken = default)
-        {
-            //BUG: NotImplementedException
-            throw new NotImplementedException();
-        }
+            => await RunActionAsync(RunAddScopeUserAsync(key, scopeKey, cancellationToken), cancellationToken);
 
         #endregion
 

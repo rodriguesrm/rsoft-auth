@@ -44,7 +44,6 @@ namespace RSoft.Auth.Web.Api.Extensions
                     userDetail.Credential = new SimpleUserCredentialResponse()
                     {
                         Login = dto.Credential.Login,
-                        AppAccess = dto.Credential.AppAccess,
                         ChangeCredentials = dto.Credential.ChangeCredentials
                     };
                 }

@@ -74,7 +74,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                 new Claim(ClaimTypes.Name, user.Name.FirstName),
                 new Claim(ClaimTypes.Surname, user.Name.LastName),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, login)
+                new Claim(ClaimTypes.NameIdentifier, login),
+                new Claim(ClaimTypes.UserData, user.Type?.ToString())
             };
 
             foreach (RoleDto role in user.Roles)

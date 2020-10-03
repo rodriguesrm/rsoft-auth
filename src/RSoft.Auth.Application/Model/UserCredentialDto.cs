@@ -23,17 +23,12 @@ namespace RSoft.Auth.Application.Model
         public string Login { get; set; }
 
         /// <summary>
-        /// User application/service access key
-        /// </summary>
-        public Guid? AppAccess { get; set; }
-
-        /// <summary>
         /// User password login
         /// </summary>
         public string Password { get; set; }
 
         /// <summary>
-        /// Indicates that the user must change the password/access-key at the next login. Will be unable to use the system until
+        /// Indicates that the user must change the password at the next login. Will be unable to use the system until
         /// </summary>
         public bool ChangeCredentials { get; set; }
 
