@@ -104,6 +104,10 @@ namespace RSoft.Auth.Application.Services
             => await _dmn.AddScopeAsync(userId, scopeId);
 
         ///<inheritdoc/>
+        public async Task<SimpleOperationResult> RemoveScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+            => await _dmn.RemoveScopeAsync(userId, scopeId, cancellationToken);
+
+        ///<inheritdoc/>
         public async Task<SimpleOperationResult> AddRoleAsync(Guid scopeId, Guid userId, IEnumerable<Guid> roles, CancellationToken cancellationToken)
         {
 

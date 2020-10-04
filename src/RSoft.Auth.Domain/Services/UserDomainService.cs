@@ -489,6 +489,33 @@ namespace RSoft.Auth.Domain.Services
         }
 
         ///<inheritdoc/>
+        public async Task<SimpleOperationResult> RemoveScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+        {
+
+            bool success = false;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            User user = await _repository.GetByKeyAsync(userId, cancellationToken);
+            if (user != null)
+            {
+
+                if (user.Scopes.Any(s => s.Id == scopeId))
+                {
+                    await _repository.RemoveUserScopeAsync(userId, scopeId, cancellationToken);
+                    await _uow.SaveChangesAsync(cancellationToken);
+                    success = true;
+                }
+                else
+                    errors.Add("UserScope", "User does not have access to this scope or scope not exists");
+            }
+            else
+                errors.Add("User", "User not found");
+
+            return new SimpleOperationResult(success, errors);
+
+        }
+
+        ///<inheritdoc/>
         public async Task<SimpleOperationResult> AddRoleAsync(Guid userId, IEnumerable<Role> roles, CancellationToken cancellationToken)
         {
 

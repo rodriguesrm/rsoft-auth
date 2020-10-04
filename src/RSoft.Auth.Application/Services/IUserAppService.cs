@@ -31,6 +31,14 @@ namespace RSoft.Auth.Application.Services
         Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Remove scope for user
+        /// </summary>
+        /// <param name="userId">User id key</param>
+        /// <param name="scopeId">Scope id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<SimpleOperationResult> RemoveScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Adds roles for user
         /// </summary>
         /// <param name="scopeId">Scope id key</param>
