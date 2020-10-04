@@ -97,6 +97,7 @@ namespace RSoft.Auth.Domain.Entities
             //BACKLOG: Globalization
             if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);
             if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
+            AddNotifications(new RequiredValidationContract<Guid?>(Scope?.Id, nameof(Scope), "Scope id is required").Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Name, nameof(Name), true, 3, 50).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Description, nameof(Description), true, 3, 150).Contract.Notifications);
         }

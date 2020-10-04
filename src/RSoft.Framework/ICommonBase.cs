@@ -30,7 +30,7 @@ namespace RSoft.Framework
         TEntity Update(TKey key, TEntity entity);
 
         /// <summary>
-        /// Get row by key values
+        /// Get row by key value
         /// </summary>
         /// <param name="key">The values of the primary key for the entity to be found</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>

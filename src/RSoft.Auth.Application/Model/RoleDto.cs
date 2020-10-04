@@ -1,5 +1,6 @@
 ﻿using System;
 using RSoft.Framework.Application.Dto;
+using RSoft.Framework.Application.Model;
 
 namespace RSoft.Auth.Application.Model
 {
@@ -28,9 +29,9 @@ namespace RSoft.Auth.Application.Model
         public string Description { get; set; }
 
         /// <summary>
-        /// Scope id key value
+        /// Scope data information
         /// </summary>
-        public Guid? ScopeId { get; set; }
+        public SimpleIdentification<Guid> Scope { get; set; }
 
         #endregion
 

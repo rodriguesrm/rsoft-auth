@@ -1,6 +1,7 @@
 ﻿using System.Linq;
-using dmn = RSoft.Auth.Domain.Entities;
-using tbl = RSoft.Auth.Infra.Data.Entities;
+using ScopeDomain = RSoft.Auth.Domain.Entities.Scope;
+using RoleDomain = RSoft.Auth.Domain.Entities.Role;
+using RSoft.Auth.Infra.Data.Entities;
 
 namespace RSoft.Auth.Infra.Data.Extensions
 {
@@ -16,7 +17,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        public static dmn.Role Map(this tbl.Role table)
+        public static RoleDomain Map(this Role table)
             => Map(table, true);
 
         /// <summary>
@@ -24,14 +25,14 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="table">Table entity to map</param>
         /// <param name="useLazy">Load related data</param>
-        public static dmn.Role Map(this tbl.Role table, bool useLazy)
+        public static RoleDomain Map(this Role table, bool useLazy)
         {
-            dmn.Role result = null;
+            RoleDomain result = null;
 
             if (table != null)
             {
 
-                result = new dmn.Role(table.Id)
+                result = new RoleDomain(table.Id)
                 {
                     Name = table.Name,
                     Description = table.Description,
@@ -49,7 +50,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 }
                 else
                 {
-                    result.Scope = new dmn.Scope(table.ScopeId);
+                    result.Scope = new ScopeDomain(table.ScopeId);
                 }
 
                 //result.Validate();
@@ -64,15 +65,16 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps entity to table
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
-        public static tbl.Role Map(this dmn.Role entity)
+        public static Role Map(this RoleDomain entity)
         {
 
-            tbl.Role result = null;
+            Role result = null;
 
             if (entity != null)
             {
-                result = new tbl.Role(entity.Id)
+                result = new Role(entity.Id)
                 {
+                    ScopeId = entity.Scope.Id,
                     Name = entity.Name,
                     Description = entity.Description,
                     CreatedOn = entity.CreatedOn,
@@ -90,7 +92,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
         /// <param name="table">Instance of existing table entity</param>
-        public static tbl.Role Map(this dmn.Role entity, tbl.Role table)
+        public static Role Map(this RoleDomain entity, Role table)
         {
 
             if (entity != null && table != null)

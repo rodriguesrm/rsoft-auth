@@ -1,4 +1,6 @@
 ﻿using RSoft.Auth.Domain.Entities;
+using RSoft.Framework.Application.Model;
+using System;
 
 namespace RSoft.Auth.Application.Model.Extensions
 {
@@ -34,7 +36,7 @@ namespace RSoft.Auth.Application.Model.Extensions
             entity.Name = dto.Name;
             entity.Description = dto.Description;
             entity.IsActive = dto.IsActive;
-            entity.Scope = dto.ScopeId != null ? new Scope(dto.ScopeId.Value) : null;
+            entity.Scope = (dto.Scope?.Id) != null ? new Scope(id: dto.Scope.Id.Value) : null;
 
             return entity;
 
@@ -52,7 +54,7 @@ namespace RSoft.Auth.Application.Model.Extensions
                 entity.Name = dto.Name;
                 entity.Description = dto.Description;
                 entity.IsActive = dto.IsActive;
-                entity.Scope = dto.ScopeId != null ? new Scope(dto.ScopeId.Value) : null;
+                entity.Scope = dto.Scope?.Id != null ? new Scope(dto.Scope.Id.Value) : null;
             }
             return entity;
         }
@@ -92,7 +94,7 @@ namespace RSoft.Auth.Application.Model.Extensions
 
             dto.Name = entity.Name;
             dto.Description = entity.Description;
-            dto.ScopeId = entity.Scope?.Id;
+            dto.Scope = new SimpleIdentification<Guid>(entity.Scope?.Id, entity.Scope?.Name);
             dto.IsActive = entity.IsActive;
 
             return dto;

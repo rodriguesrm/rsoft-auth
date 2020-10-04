@@ -17,6 +17,12 @@ namespace RSoft.Auth.Application.Services
     public class RoleAppService : AppServiceBase<RoleDto, Role, Guid>, IRoleAppService
     {
 
+        #region Local objects/variables
+
+        private readonly IScopeDomainService _scopeDomain;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -24,7 +30,11 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="uow">Unit of work object</param>
         /// <param name="dmn">Role domain service object</param>
-        public RoleAppService(IUnitOfWork uow, IRoleDomainService dmn) : base(uow, dmn) { }
+        /// <param name="scopeDomain">Scope domain service object</param>
+        public RoleAppService(IUnitOfWork uow, IRoleDomainService dmn, IScopeDomainService scopeDomain) : base(uow, dmn) 
+        {
+            _scopeDomain = scopeDomain;
+        }
 
         #endregion
 
@@ -45,6 +55,21 @@ namespace RSoft.Auth.Application.Services
         ///<inheritdoc/>
         protected override Role MapToEntity(RoleDto dto)
             => dto.Map();
+
+        #endregion
+
+        #region Overrides
+
+        ///<inheritdoc/>
+        protected override void ValidateEntity(Role entity)
+        {
+            base.ValidateEntity(entity);
+            if (entity.Valid)
+            {
+                if (_scopeDomain.GetByKeyAsync(entity.Scope.Id).GetAwaiter().GetResult() == null)
+                    entity.AddNotification("Scope", "Scope not found");
+            }
+        }
 
         #endregion
 

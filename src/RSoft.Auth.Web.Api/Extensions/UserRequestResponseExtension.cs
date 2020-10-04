@@ -58,7 +58,7 @@ namespace RSoft.Auth.Web.Api.Extensions
 
                 foreach (SimpleIdentification<Guid> scope in scopes)
                 {
-                    IEnumerable<RoleDto> roles = dto.Roles?.Where(x => x.ScopeId == scope.Id).ToList();
+                    IEnumerable<RoleDto> roles = dto.Roles?.Where(x => x.Scope.Id == scope.Id).ToList();
                     UserPermissonsResponse permission = new UserPermissonsResponse()
                     {
                         Id = scope.Id.Value,

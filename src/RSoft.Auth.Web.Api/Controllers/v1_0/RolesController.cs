@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -21,84 +22,106 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 {
 
     /// <summary>
-    /// API Scope administration
+    /// API Role administration
     /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(Policy = PolicyNames.OnlyThisApplication)]
-    public class ScopesController : ApiCrudBaseController<Guid, ScopeDto, ScopeRequest, ScopeResponse>
+    public class RolesController : ApiCrudBaseController<Guid, RoleDto, RoleRequest, RoleResponse>
     {
 
         #region Local objects/variables
 
-        private readonly IScopeAppService _scopeAppService;
-        private readonly ScopeOptions _scopeOptions;
+        private readonly IRoleAppService _roleAppService;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Create a new Scope API instance
+        /// Create a new Role API instance
         /// </summary>
-        public ScopesController(IScopeAppService scopeAppService, IOptions<ScopeOptions> options)
+        public RolesController(IRoleAppService roleAppService)
         {
-            _scopeAppService = scopeAppService;
-            _scopeOptions = options?.Value;
+            _roleAppService = roleAppService;
         }
 
         #endregion
 
         #region Local methods
 
+        /// <summary>
+        /// List all roles
+        /// </summary>
+        /// <param name="scopeId">Scope id to filter</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<IActionResult> RunGetAllAsync(Guid? scopeId, CancellationToken cancellationToken)
+        {
+
+            IEnumerable<RoleResponse> result = 
+                (await _roleAppService.GetAllAsync(cancellationToken))
+                .Select(r => r.Map());
+
+            if ((scopeId ?? Guid.Empty) != Guid.Empty)
+                result = result.Where(r => r.Scope.Id == scopeId);
+
+            result = result
+                .OrderBy(o => o.Scope.Name)
+                .ThenBy(o => o.Name)
+                .ToList();
+
+            return Ok(result);
+
+        }
+
         #endregion
 
         #region Overrides
 
         ///<inheritdoc/>
-        protected override ScopeDto Map(ScopeRequest request)
+        protected override RoleDto Map(RoleRequest request)
             => request.Map();
 
         ///<inheritdoc/>
-        protected override ScopeResponse Map(ScopeDto dto)
+        protected override RoleResponse Map(RoleDto dto)
             => dto.Map();
 
         ///<inheritdoc/>
-        protected override object PrepareInsertResponse(ScopeDto dto)
-            => new { dto.Id, dto.AccessKey };
+        protected override object PrepareInsertResponse(RoleDto dto)
+            => dto.Id;
 
         ///<inheritdoc/>
-        protected override async Task<ScopeDto> AddAsync(ScopeDto dto, CancellationToken cancellationToken = default)
-            => await _scopeAppService.AddAsync(dto, cancellationToken);
+        protected override async Task<RoleDto> AddAsync(RoleDto dto, CancellationToken cancellationToken = default)
+            => await _roleAppService.AddAsync(dto, cancellationToken);
 
         ///<inheritdoc/>
-        protected override async Task<IEnumerable<ScopeDto>> GetAllAsync(CancellationToken cancellationToken = default)
-            => await _scopeAppService.GetAllAsync(cancellationToken);
+        protected override async Task<IEnumerable<RoleDto>> GetAllAsync(CancellationToken cancellationToken = default)
+            => await _roleAppService.GetAllAsync(cancellationToken);
 
         ///<inheritdoc/>
-        protected override async Task<ScopeDto> GetByIdAsync(Guid key, CancellationToken cancellationToken = default)
-            => await _scopeAppService.GetByKeyAsync(key, cancellationToken);
+        protected override async Task<RoleDto> GetByIdAsync(Guid key, CancellationToken cancellationToken = default)
+            => await _roleAppService.GetByKeyAsync(key, cancellationToken);
 
 
         ///<inheritdoc/>
-        protected override async Task<ScopeDto> SaveUpdateAsync(ScopeDto dto, CancellationToken cancellationToken = default)
-            => await _scopeAppService.UpdateAsync(dto.Id, dto, cancellationToken);
+        protected override async Task<RoleDto> SaveUpdateAsync(RoleDto dto, CancellationToken cancellationToken = default)
+            => await _roleAppService.UpdateAsync(dto.Id, dto, cancellationToken);
 
         ///<inheritdoc/>
         protected override async Task RemoveAsync(Guid key, CancellationToken cancellationToken = default)
-            => await _scopeAppService.DeleteAsync(key, cancellationToken);
+            => await _roleAppService.DeleteAsync(key, cancellationToken);
 
         #endregion
 
         #region Actions/Endpoints
 
         /// <summary>
-        /// Add a new scope
+        /// Add a new role
         /// </summary>
-        /// <param name="request">*Request data information</param>
+        /// <param name="request">Request data information</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        /// <response code="201">Scope added successfully</response>
+        /// <response code="201">Role added successfully</response>
         /// <response code="400">Invalid request, see details in response</response>
         /// <response code="401">Credentials is invalid or empty</response>
         /// <response code="403">The use credential does not have access to this resource</response>
@@ -110,49 +133,51 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> CreateScope([FromBody] ScopeRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateRole([FromBody] RoleRequest request, CancellationToken cancellationToken = default)
             => await base.InsertAsync(request, cancellationToken);
+            //=> await RunActionAsync(RunInsertAsync(request, cancellationToken), true, true, cancellationToken);
 
         /// <summary>
-        /// List all scopes
+        /// List all roles
         /// </summary>
+        /// <param name="scope">Scope id to filter</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        /// <response code="200">Successful request processing, returns list of scopes</response>
+        /// <response code="200">Successful request processing, returns list of roles</response>
         /// <response code="401">Credentials is invalid or empty</response>
         /// <response code="403">The use credential does not have access to this resource</response>
         /// <response code="500">Request processing failed</response>
-        [ProducesResponseType(typeof(IEnumerable<ScopeResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<RoleResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetAllScope(CancellationToken cancellationToken = default)
-            => await base.ListAsync(cancellationToken);
+        public async Task<IActionResult> GetAllRole([FromQuery] Guid? scope, CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunGetAllAsync(scope, cancellationToken), cancellationToken);
 
         /// <summary>
-        /// Get scope by key id
+        /// Get role by key id
         /// </summary>
-        /// <param name="key">Scope id key value</param>
+        /// <param name="key">Role id key value</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        /// <response code="200">Successful request processing, returns scope detail</response>
+        /// <response code="200">Successful request processing, returns role detail</response>
         /// <response code="401">Credentials is invalid or empty</response>
         /// <response code="403">The use credential does not have access to this resource</response>
         /// <response code="500">Request processing failed</response>
-        [ProducesResponseType(typeof(ScopeResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RoleResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("{key:guid}")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetScopeByKey([FromRoute] Guid key, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetRoleByKey([FromRoute] Guid key, CancellationToken cancellationToken = default)
             => await base.GetAsync(key, cancellationToken);
 
         /// <summary>
-        /// Update scope
+        /// Update role
         /// </summary>
-        /// <param name="key">Scope id key value</param>
-        /// <param name="request">Scope data details</param>
+        /// <param name="key">Role id key value</param>
+        /// <param name="request">Role data details</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="204">Successful request processing</response>
         /// <response code="400">Invalid request, see details in response</response>
@@ -166,13 +191,13 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPut("{key:guid}")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> UpdateScope([FromRoute] Guid key, ScopeRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> UpdateRole([FromRoute] Guid key, RoleRequest request, CancellationToken cancellationToken = default)
             => await base.UpdateAsync(key, request, cancellationToken);
 
         /// <summary>
-        /// Delete scope
+        /// Delete role
         /// </summary>
-        /// <param name="key">Scope id key value</param>
+        /// <param name="key">Role id key value</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="204">Successful request processing</response>
         /// <response code="401">Credentials is invalid or empty</response>
@@ -184,7 +209,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpDelete("{key:guid}")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> DeleteScope([FromRoute] Guid key, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> DeleteRole([FromRoute] Guid key, CancellationToken cancellationToken = default)
             => await base.DeleteAsync(key, cancellationToken);
 
         #endregion

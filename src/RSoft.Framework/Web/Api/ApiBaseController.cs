@@ -82,6 +82,7 @@ namespace RSoft.Framework.Web.Api
         /// <param name="ex">Exception object</param>
         protected IActionResult HandleException(int code, System.Exception ex)
         {
+            //TODO: Catch MySql exceptions to display friendly message
             string msg = ex.GetBaseException().Message;
             string traceId = Request.HttpContext.TraceIdentifier;
             return StatusCode(code, new GerericExceptionResponse(code.ToString(), msg, traceId));
