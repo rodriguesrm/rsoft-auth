@@ -66,6 +66,14 @@ namespace RSoft.Auth.Domain.Repositories
         /// <param name="roleId">Role id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task RemoveUserRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get user by document number
+        /// </summary>
+        /// <param name="document">Document number</param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<User> GetByDocumentAsync(string document, CancellationToken cancellationToken = default);
     }
 
 }

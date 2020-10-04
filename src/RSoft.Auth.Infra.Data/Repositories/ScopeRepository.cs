@@ -1,6 +1,6 @@
 ﻿using RSoft.Framework.Infra.Data;
-using dmn = RSoft.Auth.Domain.Entities;
-using tbl = RSoft.Auth.Infra.Data.Entities;
+using ScopeDomain = RSoft.Auth.Domain.Entities.Scope;
+using RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Auth.Infra.Data.Extensions;
@@ -11,7 +11,7 @@ namespace RSoft.Auth.Infra.Data.Repositories
     /// <summary>
     /// Scope repository
     /// </summary>
-    public class ScopeRepository : RepositoryBase<dmn.Scope, tbl.Scope, Guid>, IScopeRepository
+    public class ScopeRepository : RepositoryBase<ScopeDomain, Scope, Guid>, IScopeRepository
     {
 
         #region Constructors
@@ -24,15 +24,15 @@ namespace RSoft.Auth.Infra.Data.Repositories
         #region Overrides
 
         ///<inheritdoc/>
-        protected override dmn.Scope Map(tbl.Scope table)
+        protected override ScopeDomain Map(Scope table)
             => table.Map();
 
         ///<inheritdoc/>
-        protected override tbl.Scope MapForAdd(dmn.Scope entity)
+        protected override Scope MapForAdd(ScopeDomain entity)
             => entity.Map();
 
         ///<inheritdoc/>
-        protected override tbl.Scope MapForUpdate(dmn.Scope entity, tbl.Scope table)
+        protected override Scope MapForUpdate(ScopeDomain entity, Scope table)
             => entity.Map(table);
 
         #endregion

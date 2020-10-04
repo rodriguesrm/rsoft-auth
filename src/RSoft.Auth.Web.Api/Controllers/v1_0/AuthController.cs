@@ -166,7 +166,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request, [FromQuery] bool details, CancellationToken cancellationToken = default)
             => await RunActionAsync(AuthenticateAsync(request, details, cancellationToken), cancellationToken);
 
-        //TODO: Add application authentication (ScopeId + ScopeKey)
+        //BACKLOG: Add application authentication (ScopeId + ScopeKey)
 
         #endregion
 

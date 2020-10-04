@@ -1,6 +1,6 @@
 ﻿using RSoft.Framework.Infra.Data;
-using dmn = RSoft.Auth.Domain.Entities;
-using tbl = RSoft.Auth.Infra.Data.Entities;
+using UserCredentialTokenDomain = RSoft.Auth.Domain.Entities.UserCredentialToken;
+using RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Auth.Infra.Data.Extensions;
@@ -11,7 +11,7 @@ namespace RSoft.Auth.Infra.Data.Repositories
     /// <summary>
     /// UserCredentialToken repository
     /// </summary>
-    public class UserCredentialTokenRepository : RepositoryBase<dmn.UserCredentialToken, tbl.UserCredentialToken, Guid>, IUserCredentialTokenRepository
+    public class UserCredentialTokenRepository : RepositoryBase<UserCredentialTokenDomain, UserCredentialToken, Guid>, IUserCredentialTokenRepository
     {
 
         #region Constructors
@@ -24,15 +24,15 @@ namespace RSoft.Auth.Infra.Data.Repositories
         #region Overrides
 
         ///<inheritdoc/>
-        protected override dmn.UserCredentialToken Map(tbl.UserCredentialToken table)
+        protected override UserCredentialTokenDomain Map(UserCredentialToken table)
             => table.Map();
 
         ///<inheritdoc/>
-        protected override tbl.UserCredentialToken MapForAdd(dmn.UserCredentialToken entity)
+        protected override UserCredentialToken MapForAdd(UserCredentialTokenDomain entity)
             => entity.Map();
 
         ///<inheritdoc/>
-        protected override tbl.UserCredentialToken MapForUpdate(dmn.UserCredentialToken entity, tbl.UserCredentialToken table)
+        protected override UserCredentialToken MapForUpdate(UserCredentialTokenDomain entity, UserCredentialToken table)
             => entity.Map(table);
 
         #endregion

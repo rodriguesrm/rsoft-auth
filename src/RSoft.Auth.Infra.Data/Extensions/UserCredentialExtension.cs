@@ -1,5 +1,5 @@
-﻿using dmn = RSoft.Auth.Domain.Entities;
-using tbl = RSoft.Auth.Infra.Data.Entities;
+﻿using UserCredentialDomain = RSoft.Auth.Domain.Entities.UserCredential;
+using RSoft.Auth.Infra.Data.Entities;
 
 namespace RSoft.Auth.Infra.Data.Extensions
 {
@@ -14,7 +14,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        public static dmn.UserCredential Map(this tbl.UserCredential table)
+        public static UserCredentialDomain Map(this UserCredential table)
             => Map(table, true);
 
         /// <summary>
@@ -22,14 +22,14 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="table">Table entity to map</param>
         /// <param name="useLazy">Indicate load related data flag</param>
-        public static dmn.UserCredential Map(this tbl.UserCredential table, bool useLazy)
+        public static UserCredentialDomain Map(this UserCredential table, bool useLazy)
         {
-            dmn.UserCredential result = null;
+            UserCredentialDomain result = null;
 
             if (table != null)
             {
 
-                result = new dmn.UserCredential()
+                result = new UserCredentialDomain()
                 {
                     UserId = table.UserId,
                     Login = table.Login,
@@ -47,14 +47,14 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps entity to table
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
-        public static tbl.UserCredential Map(this dmn.UserCredential entity)
+        public static UserCredential Map(this UserCredentialDomain entity)
         {
 
-            tbl.UserCredential result = null;
+            UserCredential result = null;
 
             if (entity != null)
             {
-                result = new tbl.UserCredential()
+                result = new UserCredential()
                 {
                     UserId = entity.UserId,
                     Login = entity.Login,
@@ -72,7 +72,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
         /// <param name="table">Instance of existing table entity</param>
-        public static tbl.UserCredential Map(this dmn.UserCredential entity, tbl.UserCredential table)
+        public static UserCredential Map(this UserCredentialDomain entity, UserCredential table)
         {
 
             if (entity != null && table != null)

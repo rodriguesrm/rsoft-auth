@@ -1,7 +1,7 @@
 ﻿using RSoft.Framework.Domain.ValueObjects;
 using System.Linq;
-using dmn = RSoft.Auth.Domain.Entities;
-using tbl = RSoft.Auth.Infra.Data.Entities;
+using UserDomain = RSoft.Auth.Domain.Entities.User;
+using RSoft.Auth.Infra.Data.Entities;
 
 namespace RSoft.Auth.Infra.Data.Extensions
 {
@@ -16,7 +16,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        public static dmn.User Map(this tbl.User table)
+        public static UserDomain Map(this User table)
             => Map(table, true);
 
         /// <summary>
@@ -24,14 +24,14 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="table">Table entity to map</param>
         /// <param name="useLazy">Load related data</param>
-        public static dmn.User Map(this tbl.User table, bool useLazy)
+        public static UserDomain Map(this User table, bool useLazy)
         {
 
-            dmn.User result = null;
+            UserDomain result = null;
             if (table != null)
             {
 
-                result = new dmn.User(table.Id)
+                result = new UserDomain(table.Id)
                 {
                     Document = table.Document,
                     Name = new Name(table.FirstName, table.LastName),
@@ -66,7 +66,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps entity to table
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
-        public static tbl.User Map(this dmn.User entity)
+        public static User Map(this UserDomain entity)
             => Map(entity, true);
 
         /// <summary>
@@ -74,15 +74,15 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
         /// <param name="useLazy">Load related data</param>
-        public static tbl.User Map(this dmn.User entity, bool useLazy)
+        public static User Map(this UserDomain entity, bool useLazy)
         {
 
-            tbl.User result = null;
+            User result = null;
 
             if (entity != null)
             {
 
-                result = new tbl.User(entity.Id)
+                result = new User(entity.Id)
                 {
                     Document = entity.Document,
                     FirstName = entity.Name.FirstName,
@@ -96,8 +96,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
 
                 if (useLazy)
                 {
-                    result.Scopes = entity.Scopes.Select(s => new tbl.UserScope() { ScopeId = s.Id, UserId = entity.Id }).ToList();
-                    result.Roles = entity.Roles?.Select(r => new tbl.UserRole() { RoleId = r.Id, UserId = entity.Id }).ToList();
+                    result.Scopes = entity.Scopes.Select(s => new UserScope() { ScopeId = s.Id, UserId = entity.Id }).ToList();
+                    result.Roles = entity.Roles?.Select(r => new UserRole() { RoleId = r.Id, UserId = entity.Id }).ToList();
                 }
 
 
@@ -112,7 +112,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
         /// <param name="table">Instance of existing table entity</param>
-        public static tbl.User Map(this dmn.User entity, tbl.User table)
+        public static User Map(this UserDomain entity, User table)
         {
 
             if (entity != null && table != null)

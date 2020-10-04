@@ -15,6 +15,7 @@ using System.Linq;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Domain.ValueObjects;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -487,6 +488,10 @@ namespace RSoft.Auth.Domain.Services
             return new SimpleOperationResult(success, errors);
 
         }
+
+        ///<inheritdoc/>
+        public async Task<User> GetByDocumentAsync(string document, CancellationToken cancellationToken = default)
+            => await _repository.GetByDocumentAsync(document, cancellationToken);
 
         ///<inheritdoc/>
         public async Task<SimpleOperationResult> RemoveScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)

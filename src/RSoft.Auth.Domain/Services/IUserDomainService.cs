@@ -68,6 +68,14 @@ namespace RSoft.Auth.Domain.Services
         Task<PasswordProcessResult> GetResetAccessAsync(string email, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Get user by document number
+        /// </summary>
+        /// <param name="document">Document number</param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<User> GetByDocumentAsync(string document, CancellationToken cancellationToken = default); 
+
+        /// <summary>
         /// Save new password for recovery access
         /// </summary>
         /// <param name="tokenId">Token id value</param>

@@ -53,8 +53,6 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     result.Scope = new ScopeDomain(table.ScopeId);
                 }
 
-                //result.Validate();
-
             }
 
             return result;

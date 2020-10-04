@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using dmn = RSoft.Auth.Domain.Entities;
-using tbl = RSoft.Auth.Infra.Data.Entities;
+using ScopeDomain = RSoft.Auth.Domain.Entities.Scope;
+using RSoft.Auth.Infra.Data.Entities;
 
 namespace RSoft.Auth.Infra.Data.Extensions
 {
@@ -15,7 +15,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        public static dmn.Scope Map(this tbl.Scope table)
+        public static ScopeDomain Map(this Scope table)
             => Map(table, true);
 
         /// <summary>
@@ -23,15 +23,15 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="table">Table entity to map</param>
         /// <param name="useLazy">Load related data</param>
-        public static dmn.Scope Map(this tbl.Scope table, bool useLazy)
+        public static ScopeDomain Map(this Scope table, bool useLazy)
         {
 
-            dmn.Scope result = null;
+            ScopeDomain result = null;
 
             if (table != null)
             {
 
-                result = new dmn.Scope(table.Id)
+                result = new ScopeDomain(table.Id)
                 {
                     Name = table.Name,
                     AccessKey = table.AccessKey,
@@ -49,8 +49,6 @@ namespace RSoft.Auth.Infra.Data.Extensions
                         result.Roles = table.Roles?.Select(r => r.Map(false)).ToList();
                 }
 
-                //result.Validate();
-
             }
 
             return result;
@@ -61,14 +59,14 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps entity to table
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
-        public static tbl.Scope Map(this dmn.Scope entity)
+        public static Scope Map(this ScopeDomain entity)
         {
 
-            tbl.Scope result = null;
+            Scope result = null;
 
             if (entity != null)
             {
-                result = new tbl.Scope(entity.Id)
+                result = new Scope(entity.Id)
                 {
                     Name = entity.Name,
                     AccessKey = entity.AccessKey,
@@ -87,7 +85,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
         /// <param name="table">Instance of existing table entity</param>
-        public static tbl.Scope Map(this dmn.Scope entity, tbl.Scope table)
+        public static Scope Map(this ScopeDomain entity, Scope table)
         {
 
             if (entity != null && table != null)

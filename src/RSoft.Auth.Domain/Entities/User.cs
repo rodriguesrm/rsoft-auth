@@ -135,10 +135,7 @@ namespace RSoft.Auth.Domain.Entities
             //BACKLOG: Globalization
             if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);
             if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
-
-            // TODO: Add parameter to specify document type, like BR Document -> CPF and also validation/notification
-            AddNotifications(new SimpleStringValidationContract(Document, nameof(Document), true, 11, 11).Contract.Notifications);
-            
+            AddNotifications(new BrasilianCpfValidationContract(Document, nameof(Document), true).Contract.Notifications);
             AddNotifications(Name.Notifications);
             AddNotifications(Email.Notifications);
             AddNotifications(new RequiredValidationContract<string>(Email?.Address, $"Email.{nameof(Email.Address)}", "Email is required").Contract.Notifications);

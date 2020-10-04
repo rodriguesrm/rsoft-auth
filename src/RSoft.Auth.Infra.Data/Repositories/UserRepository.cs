@@ -127,6 +127,13 @@ namespace RSoft.Auth.Infra.Data.Repositories
             });
         }
 
+        ///<inheritdoc/>
+        public async Task<UserDomain> GetByDocumentAsync(string document, CancellationToken cancellationToken = default)
+        {
+            User user = await _dbSet.FirstOrDefaultAsync(x => x.Document == document, cancellationToken);
+            return user.Map();
+        }
+
         #endregion
 
     }

@@ -66,6 +66,21 @@ namespace RSoft.Auth.Application.Services
 
         #endregion
 
+        #region Overrides
+
+        ///<inheritdoc/>
+        protected override void ValidateEntity(User entity)
+        {
+            base.ValidateEntity(entity);
+            if (entity.Valid)
+            {
+                if (_dmn.GetByDocumentAsync(entity.Document, default).GetAwaiter().GetResult() != null)
+                    entity.AddNotification(nameof(User.Document), $"{nameof(User.Document)} alredy exists");
+            }
+        }
+
+        #endregion
+
         #region Public methods
 
         ///<inheritdoc/>
