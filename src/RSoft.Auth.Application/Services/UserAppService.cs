@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using RSoft.Auth.Domain.Services;
 using System.Collections.Generic;
 using System.Linq;
-using FluentValidator;
 using RSoft.Framework.Application.Model;
 
 namespace RSoft.Auth.Application.Services
@@ -74,7 +73,6 @@ namespace RSoft.Auth.Application.Services
         {
 
             IList<Scope> scopes = new List<Scope>();
-            //IList<Role> roles = new List<Role>();
 
             foreach (ScopeDto item in dto.Scopes)
             {
@@ -85,26 +83,10 @@ namespace RSoft.Auth.Application.Services
                     scopes.Add(scope);
             }
 
-            //foreach (RoleDto item in dto.Roles)
-            //{
-            //    Role role = await _roleDomain.GetByKeyAsync(item.Id, cancellationToken);
-            //    if (role == null)
-            //        dto.AddNotification("Roles", $"Role '{item.Id}' not found");
-            //    else
-            //        roles.Add(role);
-            //}
-
-            //foreach (Role role in roles)
-            //{
-            //    if (scopes.FirstOrDefault(s => s.Id == role.Scope?.Id) == null)
-            //        dto.AddNotification("Roles", $"The {role.Name} role belongs to a scope to which the user is not assigned.");
-            //}
-
             if (dto.Notifications.Count > 0)
                 return dto;
 
             dto.Scopes = scopes.Select(s => s.Map(false)).ToList();
-            //dto.Roles = roles.Select(r => r.Map(false)).ToList();
 
             return await base.AddAsync(dto, cancellationToken);
         }
@@ -122,7 +104,7 @@ namespace RSoft.Auth.Application.Services
             => await _dmn.AddScopeAsync(userId, scopeId);
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> AddRoleAsync(Guid scopeId, Guid userId, IEnumerable<string> roles, CancellationToken cancellationToken)
+        public async Task<SimpleOperationResult> AddRoleAsync(Guid scopeId, Guid userId, IEnumerable<Guid> roles, CancellationToken cancellationToken)
         {
 
             bool success = false;
@@ -136,25 +118,24 @@ namespace RSoft.Auth.Application.Services
 
                     IList<Role> rolesList = new List<Role>();
 
-                    foreach (string item in roles)
+                    foreach (Guid item in roles)
                     {
-                        if (!string.IsNullOrWhiteSpace(item))
+                        if (item != Guid.Empty)
                         {
 
-                            Role role = await _roleDomain.GetByNameAsync(scopeId, item, cancellationToken);
+                            Role role = await _roleDomain.GetByKeyAsync(item, cancellationToken);
                             if (role != null)
                             {
-                                rolesList.Add(role);
+                                if (role.Scope.Id == scopeId)
+                                    rolesList.Add(role);
+                                else
+                                    errors.Add(item.ToString(), "This role does not belong to that scope");
                             }
                             else
-                            {
-                                errors.Add(item, "Role not found");
-                            }
+                                errors.Add(item.ToString(), "Role not found");
                         }
                         else
-                        {
-                            errors.Add(item, "Role invalid or empty");
-                        }
+                            errors.Add(item.ToString(), "Role invalid or empty");
                     }
 
                     if (errors.Count == 0)
@@ -164,15 +145,11 @@ namespace RSoft.Auth.Application.Services
 
                 }
                 else
-                {
                     errors.Add("Roles", "Duplicated roles in list");
-                }
 
             }
             else
-            {
-                errors.Add("Roles", "List of role names is required");
-            }
+                errors.Add("Roles", "List of role id key is required");
 
             return new SimpleOperationResult(success, errors);
         }

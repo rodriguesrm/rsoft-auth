@@ -35,9 +35,9 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="scopeId">Scope id key</param>
         /// <param name="userId">User id key</param>
-        /// <param name="roles">List of role name</param>
+        /// <param name="roles">List of role id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> AddRoleAsync(Guid scopeId, Guid userId, IEnumerable<string> roles, CancellationToken cancellationToken);
+        Task<SimpleOperationResult> AddRoleAsync(Guid scopeId, Guid userId, IEnumerable<Guid> roles, CancellationToken cancellationToken);
     }
 
 }

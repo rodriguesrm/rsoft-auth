@@ -157,9 +157,9 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// Perform add roles for user
         /// </summary>
         /// <param name="key">User id key</param>
-        /// <param name="roles">List of role names</param>
+        /// <param name="roles">List of role id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        private async Task<IActionResult> RunAddRoleUserAsync(Guid key, IEnumerable<string> roles, CancellationToken cancellationToken)
+        private async Task<IActionResult> RunAddRoleUserAsync(Guid key, IEnumerable<Guid> roles, CancellationToken cancellationToken)
         {
             SimpleOperationResult result = await _userAppService.AddRoleAsync(AppKey ?? Guid.Empty, key, roles, cancellationToken);
             if (result.Success)
@@ -332,7 +332,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// Adds roles to the user
         /// </summary>
         /// <param name="key">User id key</param>
-        /// <param name="roles">List of role names</param>
+        /// <param name="roles">List of role id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="204">Successful request processing</response>
         /// <response code="400">Invalid request, see details in response</response>
@@ -346,7 +346,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost("{key:guid}/roles")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> AddRoleUser([FromRoute] Guid key, [FromBody] IEnumerable<string> roles, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> AddRoleUser([FromRoute] Guid key, [FromBody] IEnumerable<Guid> roles, CancellationToken cancellationToken = default)
             => await RunActionAsync(RunAddRoleUserAsync(key, roles, cancellationToken), cancellationToken);
 
         #endregion

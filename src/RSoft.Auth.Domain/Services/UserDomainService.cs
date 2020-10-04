@@ -3,7 +3,6 @@ using RSoft.Auth.Domain.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Auth.Cross.Common.Options;
-using Microsoft.Extensions.Options;
 using RSoft.Helpers.Security;
 using System.Threading.Tasks;
 using System.Threading;
@@ -417,9 +416,7 @@ namespace RSoft.Auth.Domain.Services
             if (user != null && user.Credential.Password == hashCurrentPassword)
             {
                 if (_authenticatedUser.Login != user.Credential.Login)
-                {
                     errors.Add("ChangePassword", "Informed user is different from authenticated");
-                }
                 else
                 {
                     if (user.IsActive)
@@ -478,20 +475,14 @@ namespace RSoft.Auth.Domain.Services
                         success = true;
                     }
                     else
-                    {
                         errors.Add("UserScope", "User is already authorized for this scope");
-                    }
                 }
                 else
-                {
                     errors.Add("User", "User not found");
-                }
 
             }
             else
-            {
                 errors.Add("Scope", "Scope not found");
-            }
 
             return new SimpleOperationResult(success, errors);
 
@@ -511,13 +502,9 @@ namespace RSoft.Auth.Domain.Services
                 foreach (Role role in roles)
                 {
                     if (user.Roles.FirstOrDefault(x => x.Id == role.Id) == null)
-                    {
                         ids.Add(role.Id);
-                    }
                     else
-                    {
                         errors.Add(role.Name, $"The user already has this role");
-                    }
                 }
                 if (errors.Count == 0)
                 {
@@ -527,9 +514,7 @@ namespace RSoft.Auth.Domain.Services
                 }
             }
             else
-            {
                 errors.Add("User", "User not found");
-            }
 
             return new SimpleOperationResult(success, errors);
 
