@@ -115,6 +115,18 @@ namespace RSoft.Auth.Infra.Data.Repositories
             }
         }
 
+        ///<inheritdoc/>
+        public Task RemoveUserRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken)
+        {
+            return Task.Run(() =>
+            {
+                DbSet<UserRole> dbSet = _ctx.Set<UserRole>();
+                UserRole userRole = dbSet.Where(x => x.UserId == userId && x.RoleId == roleId).FirstOrDefault();
+                if (userRole != null)
+                    dbSet.Remove(userRole);
+            });
+        }
+
         #endregion
 
     }

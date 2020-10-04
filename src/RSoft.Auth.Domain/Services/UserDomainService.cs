@@ -547,6 +547,31 @@ namespace RSoft.Auth.Domain.Services
 
         }
 
+        ///<inheritdoc/>
+        public async Task<SimpleOperationResult> RemoveRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken)
+        {
+            bool success = false;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            User user = await _repository.GetByKeyAsync(userId, cancellationToken);
+            if (user != null)
+            {
+
+                if (user.Roles.Any(s => s.Id == roleId))
+                {
+                    await _repository.RemoveUserRoleAsync(userId, roleId, cancellationToken);
+                    await _uow.SaveChangesAsync(cancellationToken);
+                    success = true;
+                }
+                else
+                    errors.Add("UserRole", "User does not have this role");
+            }
+            else
+                errors.Add("User", "User not found");
+
+            return new SimpleOperationResult(success, errors);
+        }
+
         #endregion
 
     }

@@ -44,7 +44,7 @@ namespace RSoft.Auth.Domain.Repositories
         Task AddUserScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Remove scope to user
+        /// Remove scope from user
         /// </summary>
         /// <param name="userId">User id key</param>
         /// <param name="scopeId">Scope id key</param>
@@ -58,6 +58,14 @@ namespace RSoft.Auth.Domain.Repositories
         /// <param name="roles">List of role id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task AddUserRoleAsync(Guid userId, IEnumerable<Guid> roles, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Remove role from user
+        /// </summary>
+        /// <param name="userId">User id key</param>
+        /// <param name="roleId">Role id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task RemoveUserRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken);
     }
 
 }

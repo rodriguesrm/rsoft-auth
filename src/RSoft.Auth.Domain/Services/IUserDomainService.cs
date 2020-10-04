@@ -115,6 +115,14 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<SimpleOperationResult> AddRoleAsync(Guid userId, IEnumerable<Role> roles, CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Remove a role for user
+        /// </summary>
+        /// <param name="userId">User id key</param>
+        /// <param name="roleId">Role id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<SimpleOperationResult> RemoveRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken);
+
     }
 
 }

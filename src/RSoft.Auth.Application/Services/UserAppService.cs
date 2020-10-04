@@ -158,6 +158,15 @@ namespace RSoft.Auth.Application.Services
             return new SimpleOperationResult(success, errors);
         }
 
+        /// <summary>
+        /// Remove a role for user
+        /// </summary>
+        /// <param name="userId">User id key</param>
+        /// <param name="roleId">Role id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        public async Task<SimpleOperationResult> RemoveRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken)
+            => await _dmn.RemoveRoleAsync(userId, roleId, cancellationToken);
+
         #endregion
 
     }

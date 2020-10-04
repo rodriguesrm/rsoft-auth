@@ -183,6 +183,21 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                 return BadRequest(PrepareNotifications(result.Errors));
         }
 
+        /// <summary>
+        /// Perform remove a role for user
+        /// </summary>
+        /// <param name="userId">User id key</param>
+        /// <param name="roleId">Role id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<IActionResult> RunRemoveRoleUserAsync(Guid userId, Guid roleId, CancellationToken cancellationToken = default)
+        {
+            SimpleOperationResult result = await _userAppService.RemoveRoleAsync(userId, roleId, cancellationToken);
+            if (result.Success)
+                return NoContent();
+            else
+                return BadRequest(PrepareNotifications(result.Errors));
+        }
+
         #endregion
 
         #region Overrides
@@ -384,6 +399,27 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> AddRoleUser([FromRoute] Guid key, [FromBody] IEnumerable<Guid> roles, CancellationToken cancellationToken = default)
             => await RunActionAsync(RunAddRoleUserAsync(key, roles, cancellationToken), cancellationToken);
+
+        /// <summary>
+        /// Remove role from user
+        /// </summary>
+        /// <param name="key">User id key</param>
+        /// <param name="roleKey">Role id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="204">Successful request processing</response>
+        /// <response code="400">Invalid request, see details in response</response>
+        /// <response code="401">Credentials is invalid or empty</response>
+        /// <response code="403">The use credential does not have access to this resource</response>
+        /// <response code="500">Request processing failed</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpDelete("{key:guid}/roles/{roleKey:guid}")]
+        [MapToApiVersion("1.0")]
+        public async Task<IActionResult> AddRoleUser([FromRoute] Guid key, [FromRoute] Guid roleKey, CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunRemoveRoleUserAsync(key, roleKey, cancellationToken), cancellationToken);
 
         #endregion
 
