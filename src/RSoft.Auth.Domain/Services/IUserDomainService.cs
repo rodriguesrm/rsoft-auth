@@ -25,7 +25,8 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="login">User login</param>
         /// <param name="password">User passoword</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<User> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default);
+        /// <returns>A user instance if sucess / Id key user when password is incorrect</returns>
+        Task<(User, Guid?)> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Checks if the informed login is available
@@ -91,6 +92,20 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="newPassword">New user password</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<SimpleOperationResult> ChangePasswordAsync(string login, string currentPassword, string newPassword, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Logs the user authentication failure count and controls the lockout
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task MarkLoginFail(Guid userId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Clear lockout user information
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task ClearLockout(Guid userId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get all rows

@@ -12,5 +12,10 @@
         /// </summary>
         public string Secret { get; set; }
 
+        /// <summary>
+        /// Lockout options
+        /// </summary>
+        public SecurityLockoutOptions Lockout { get; set; }
+
     }
 }

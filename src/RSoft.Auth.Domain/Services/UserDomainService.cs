@@ -72,7 +72,7 @@ namespace RSoft.Auth.Domain.Services
             _roleRepository = roleRepository;
 
             _securityOptions = new SecurityOptions();
-            configuration.GetSection("Security").Bind(_securityOptions);
+            configuration.GetSection("Application:Security").Bind(_securityOptions);
             if (!int.TryParse(configuration["Jwt:TimeLife"], out _jwtTimeLife))
                 _jwtTimeLife = MINUTES_TIME_LIFE;
         }
@@ -357,17 +357,19 @@ namespace RSoft.Auth.Domain.Services
         }
 
         ///<inheritdoc/>
-        public async Task<User> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default)
+        public async Task<(User, Guid?)> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default)
         {
 
             //BACKLOG: Add LDAP Authenticate
 
-            if (cancellationToken.IsCancellationRequested) return null;
+            if (cancellationToken.IsCancellationRequested) return (null, null);
             User user = await _repository.GetByLoginAsync(login, cancellationToken);
+            Guid? userId = null;
             if (user != null)
             {
                 if (user.Credential.Password != ConvertPassword(password))
                 {
+                    userId = user.Id;
                     user = null;
                 }
                 else
@@ -380,7 +382,7 @@ namespace RSoft.Auth.Domain.Services
                 }
 
             }
-            return user;
+            return (user, userId);
         }
 
         ///<inheritdoc/>
@@ -451,6 +453,33 @@ namespace RSoft.Auth.Domain.Services
             }
             return new SimpleOperationResult(success, errors);
 
+        }
+
+        ///<inheritdoc/>
+        public async Task MarkLoginFail(Guid userId, CancellationToken cancellationToken)
+        {
+            User user = await _repository.GetByKeyAsync(userId, cancellationToken);
+            if (user != null)
+            {
+                user.Credential.AuthFailsQty++;
+                if (user.Credential.AuthFailsQty > _securityOptions.Lockout.Times)
+                    user.Credential.LockoutUntil = DateTime.UtcNow.AddMinutes(_securityOptions.Lockout.Minutes);
+                _credentialRepository.Update(user.Id, user.Credential);
+                await _uow.SaveChangesAsync(cancellationToken);
+            }
+        }
+
+        ///<inheritdoc/>
+        public async Task ClearLockout(Guid userId, CancellationToken cancellationToken)
+        {
+            User user = await _repository.GetByKeyAsync(userId, cancellationToken);
+            if (user != null)
+            {
+                user.Credential.AuthFailsQty  = 0;
+                user.Credential.LockoutUntil = null;
+                _credentialRepository.Update(user.Id, user.Credential);
+                await _uow.SaveChangesAsync(cancellationToken);
+            }
         }
 
         ///<inheritdoc/>

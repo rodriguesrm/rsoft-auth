@@ -99,7 +99,9 @@ namespace RSoft.Auth.Application.Services
             UserDto userDto = null;
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            User user = await _userDomain.GetByLoginAsync(appKey, appAccess, login, password, cancellationToken);
+            (User, Guid?) resultLogin = await _userDomain.GetByLoginAsync(appKey, appAccess, login, password, cancellationToken);
+            User user = resultLogin.Item1;
+            Guid? userId = resultLogin.Item2;
             if (user != null)
             {
 
@@ -114,9 +116,17 @@ namespace RSoft.Auth.Application.Services
                     {
                         if (user.IsActive)
                         {
-                            //BUG: ***** PAREI AQUI *****, lockout (GetByLoginAsync tem que indicar que falhou a senha)
-                            success = true;
-                            userDto = user.Map();
+
+                            if (user.Credential.LockoutUntil.HasValue && user.Credential.LockoutUntil.Value > DateTime.UtcNow)
+                            {
+                                errors.Add("Authenticate", "User is lockout");
+                            }
+                            else
+                            {
+                                success = true;
+                                userDto = user.Map();
+                                await _userDomain.ClearLockout(user.Id, default);
+                            }
                         }
                         else
                         {
@@ -132,6 +142,8 @@ namespace RSoft.Auth.Application.Services
             }
             else
             {
+                if (userId.HasValue)
+                    await _userDomain.MarkLoginFail(userId.Value, cancellationToken);
                 errors.Add("Authenticate", "Invalid username and/or password!");
             }
 

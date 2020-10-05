@@ -33,7 +33,7 @@ namespace RSoft.Auth.Cross.IoC
 
             #region Options
 
-            services.Configure<SecurityOptions>(options => configuration.GetSection("Security").Bind(options));
+            services.Configure<SecurityOptions>(options => configuration.GetSection("Application:Security").Bind(options));
 
             #endregion
 
