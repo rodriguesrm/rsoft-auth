@@ -20,13 +20,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="RSoft.Framework.Web" Version="1.0.0-rc1.0" />
     <PackageReference Include="RSoft.Logs" Version="1.0.0-rc1.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RSoft.Auth.Application\RSoft.Auth.Application.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Cross.IoC\RSoft.Auth.Cross.IoC.csproj" />
-    <ProjectReference Include="..\RSoft.Framework.Web\RSoft.Framework.Web.csproj" />
   </ItemGroup>
 
 
