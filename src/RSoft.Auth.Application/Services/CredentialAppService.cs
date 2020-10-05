@@ -114,6 +114,7 @@ namespace RSoft.Auth.Application.Services
                     {
                         if (user.IsActive)
                         {
+                            //BUG: ***** PAREI AQUI *****, lockout (GetByLoginAsync tem que indicar que falhou a senha)
                             success = true;
                             userDto = user.Map();
                         }

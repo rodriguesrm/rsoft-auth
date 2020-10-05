@@ -66,7 +66,6 @@ namespace RSoft.Auth.Infra.Data.Migrations
             string password = MD5.ByteArrayToString(pwdBuffer);
 
             Guid serviceUserId = new Guid("03f66c4a-9f5a-45c3-afa3-de6801f5592e");
-            Guid userKey = new Guid("3f8dc146-01e1-11eb-bffd-f4ec38809f52");
 
             migrationBuilder.Sql("set foreign_key_checks=0");
 
@@ -184,9 +183,11 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(UserCredential.UserId),
                     nameof(UserCredential.Login),
                     nameof(UserCredential.Password),
-                    nameof(UserCredential.ChangeCredentials)
+                    nameof(UserCredential.ChangeCredentials),
+                    nameof(UserCredential.AuthFailsQty),
+                    nameof(UserCredential.LockoutUntil)
                 },
-                new object[] { userId, "admin", password, _isProd }
+                new object[] { userId, "admin", password, _isProd, 0, null }
             );
 
             // User-Scopes

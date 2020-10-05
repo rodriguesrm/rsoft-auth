@@ -9,7 +9,7 @@ using RSoft.Auth.Infra.Data;
 namespace RSoft.Auth.Infra.Data.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20201003114227_InitialCreate")]
+    [Migration("20201004235653_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -243,9 +243,17 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.Property<Guid?>("UserId")
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("AuthFailsQty")
+                        .HasColumnName("AuthFailsQty")
+                        .HasColumnType("int");
+
                     b.Property<ulong>("ChangeCredentials")
                         .HasColumnName("ChangeCredentials")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LockoutUntil")
+                        .HasColumnName("LockoutUntil")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Login")
                         .IsRequired()

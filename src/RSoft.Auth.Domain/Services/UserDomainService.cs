@@ -178,6 +178,8 @@ namespace RSoft.Auth.Domain.Services
                                         {
                                             user.Credential.Password = convertedPassword;
                                             user.Credential.ChangeCredentials = false;
+                                            user.Credential.AuthFailsQty = 0;
+                                            user.Credential.LockoutUntil = null;
                                             _credentialRepository.Update(user.Id, user.Credential);
                                         }
                                         _tokenRepository.Delete(credentialToken.Id);
@@ -430,6 +432,8 @@ namespace RSoft.Auth.Domain.Services
                         {
                             user.Credential.Password = ConvertPassword(hashNewPassword);
                             user.Credential.ChangeCredentials = false;
+                            user.Credential.AuthFailsQty = 0;
+                            user.Credential.LockoutUntil = null;
                             _credentialRepository.Update(user.Credential.UserId.Value, user.Credential);
                             await _uow.SaveChangesAsync(cancellationToken);
                             success = true;

@@ -20,7 +20,9 @@ namespace RSoft.Auth.Application.Model.Extensions
                 UserId = dto.UserId,
                 Login = dto.Login,
                 Password = dto.Password,
-                ChangeCredentials = dto.ChangeCredentials
+                ChangeCredentials = dto.ChangeCredentials,
+                AuthFailsQty = dto.AuthFailsQty,
+                LockoutUntil = dto.LockoutUntil
             };
         }
 
@@ -37,6 +39,8 @@ namespace RSoft.Auth.Application.Model.Extensions
                 entity.Login = dto.Login;
                 //Password => NEVER MAP THIS FIELD HERE
                 entity.ChangeCredentials = dto.ChangeCredentials;
+                entity.AuthFailsQty = dto.AuthFailsQty;
+                entity.LockoutUntil = dto.LockoutUntil;
             }
             return entity;
         }
@@ -56,6 +60,8 @@ namespace RSoft.Auth.Application.Model.Extensions
             dto.Login = entity.Login;
             //Password => NEVER MAP THIS FIELD HERE
             dto.ChangeCredentials = entity.ChangeCredentials;
+            dto.AuthFailsQty = entity.AuthFailsQty;
+            dto.LockoutUntil = entity.LockoutUntil;
 
             return dto;
 

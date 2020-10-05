@@ -45,6 +45,13 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .HasColumnType("bit")
                 .IsRequired();
 
+            builder.Property(c => c.AuthFailsQty)
+                .HasColumnName(nameof(UserCredential.AuthFailsQty))
+                .IsRequired();
+
+            builder.Property(c => c.LockoutUntil)
+                .HasColumnName(nameof(UserCredential.LockoutUntil));
+
             #endregion
 
             #region FKs

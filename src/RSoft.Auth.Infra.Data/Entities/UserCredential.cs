@@ -32,6 +32,16 @@ namespace RSoft.Auth.Infra.Data.Entities
         /// </summary>
         public bool ChangeCredentials { get; set; }
 
+        /// <summary>
+        /// Quantity authentication failures
+        /// </summary>
+        public int AuthFailsQty { get; set; }
+
+        /// <summary>
+        /// Lockout deadline
+        /// </summary>
+        public DateTime? LockoutUntil { get; set; }
+
         #endregion
 
         #region Navigation/Lazy

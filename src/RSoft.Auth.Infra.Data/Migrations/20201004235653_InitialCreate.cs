@@ -1,12 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.Logging;
 
 namespace RSoft.Auth.Infra.Data.Migrations
 {
     public partial class InitialCreate : InitialSeed
     {
-
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -82,7 +80,9 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     UserId = table.Column<Guid>(nullable: false),
                     Login = table.Column<string>(unicode: false, maxLength: 254, nullable: false),
                     Password = table.Column<string>(unicode: false, maxLength: 32, nullable: true),
-                    ChangeCredentials = table.Column<ulong>(type: "bit", nullable: false)
+                    ChangeCredentials = table.Column<ulong>(type: "bit", nullable: false),
+                    AuthFailsQty = table.Column<int>(nullable: false),
+                    LockoutUntil = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

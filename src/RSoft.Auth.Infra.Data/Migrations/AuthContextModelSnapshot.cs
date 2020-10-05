@@ -241,9 +241,17 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.Property<Guid?>("UserId")
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("AuthFailsQty")
+                        .HasColumnName("AuthFailsQty")
+                        .HasColumnType("int");
+
                     b.Property<ulong>("ChangeCredentials")
                         .HasColumnName("ChangeCredentials")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LockoutUntil")
+                        .HasColumnName("LockoutUntil")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Login")
                         .IsRequired()

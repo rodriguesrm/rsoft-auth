@@ -81,8 +81,6 @@ namespace RSoft.Auth.Domain.Entities
         /// </summary>
         public UserType? Type { get; set; }
 
-        //TODO: Add lockout
-
         #endregion
 
         #region Navigation Lazy

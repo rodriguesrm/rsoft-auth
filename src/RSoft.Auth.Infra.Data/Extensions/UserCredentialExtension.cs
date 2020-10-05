@@ -34,7 +34,9 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     UserId = table.UserId,
                     Login = table.Login,
                     Password = table.Password,
-                    ChangeCredentials = table.ChangeCredentials
+                    ChangeCredentials = table.ChangeCredentials,
+                    AuthFailsQty = table.AuthFailsQty,
+                    LockoutUntil = table.LockoutUntil
                 };
 
             }
@@ -59,7 +61,9 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     UserId = entity.UserId,
                     Login = entity.Login,
                     Password = entity.Password,
-                    ChangeCredentials = entity.ChangeCredentials
+                    ChangeCredentials = entity.ChangeCredentials,
+                    AuthFailsQty = entity.AuthFailsQty,
+                    LockoutUntil = entity.LockoutUntil
                 };
             }
 
@@ -81,6 +85,8 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 table.Login = entity.Login;
                 table.Password = entity.Password;
                 table.ChangeCredentials = entity.ChangeCredentials;
+                table.AuthFailsQty = entity.AuthFailsQty;
+                table.LockoutUntil = entity.LockoutUntil;
             }
 
             return table;
