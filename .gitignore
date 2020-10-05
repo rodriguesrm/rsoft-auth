@@ -245,3 +245,4 @@ ModelManifest.xml
 .fake/
 
 # Files project to ignore
+/src/RSoft.Auth.Web.Api/RSoft.Auth.Web.Api.xml
