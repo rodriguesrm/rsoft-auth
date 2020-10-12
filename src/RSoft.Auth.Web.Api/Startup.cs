@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
+using RSoft.Auth.Web.Api.Extensions;
 using RSoft.Auth.Web.Api.Policies;
 using RSoft.Framework.Web.Extensions;
 using RSoft.Framework.Web.Filters;
@@ -64,6 +65,7 @@ namespace RSoft.Auth.Web.Api
             services.AddAuthRegister(Configuration);
             services.AddAppPolicies(Configuration);
             services.AddMiddlewareLoggingOption(Configuration);
+            services.AddApplicationHealthChecks(Configuration);
 
         }
 
@@ -93,6 +95,7 @@ namespace RSoft.Auth.Web.Api
 
             app.UseMiddleware<RequestResponseLogging<Startup>>();
             app.UseSwaggerDocUI(provider);
+            app.UseApplicationHealthChecks();
 
             app.UseRouting();
 
