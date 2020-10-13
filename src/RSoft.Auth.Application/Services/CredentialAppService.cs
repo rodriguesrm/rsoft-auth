@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Scaffolding;
-using RSoft.Auth.Application.Model;
+﻿using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Model.Extensions;
 using RSoft.Auth.Cross.Common.Model.Args;
 using RSoft.Auth.Cross.Common.Model.Results;
@@ -13,6 +12,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using RSoft.Framework.Cross.Enums;
 using RSoft.Framework.Domain.ValueObjects;
+using System.Net.Http;
+using RSoft.Auth.Cross.Common.Options;
+using Microsoft.Extensions.Options;
+using System.Net;
+using RSoft.Framework.Web.Model.Response;
+using System.Text.Json;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -23,6 +28,7 @@ namespace RSoft.Auth.Application.Services
         #region Local objects/variables
 
         private readonly IUserDomainService _userDomain;
+        private readonly RSApiOptions _apiOptions;
 
         #endregion
 
@@ -32,9 +38,10 @@ namespace RSoft.Auth.Application.Services
         /// Create a new CredentialAppService instance
         /// </summary>
         /// <param name="provider">DIP Service provider</param>
-        public CredentialAppService(IServiceProvider provider)
+        public CredentialAppService(IServiceProvider provider, IOptions<RSApiOptions> options)
         {
             _userDomain = provider.GetService<IUserDomainService>();
+            _apiOptions = options?.Value;
         }
 
         #endregion
@@ -47,7 +54,32 @@ namespace RSoft.Auth.Application.Services
         /// <param name="args">Call arguments</param>
         private async Task<SimpleOperationResult> SendMailTokenPasswordAsync(SendMailArgs args, CancellationToken cancellationToken = default)
         {
-            //TODO: SEND MAIL REFACTOR
+            //TODO: Create libraty to consuming rsoft apis
+
+            HttpClient client = new HttpClient();
+
+            string json = @"request";
+            var content = new StringContent(json);
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+            Guid requestId = Guid.Empty;
+
+            HttpResponseMessage response = await client.PostAsync(_apiOptions.MailService, content);
+            bool success = response.IsSuccessStatusCode;
+            if (success)
+            {
+                string body = await response.Content.ReadAsStringAsync();
+                if (!string.IsNullOrWhiteSpace(body))
+                {
+                    Guid.TryParse(body, out requestId);
+                }
+                else
+                {
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        IEnumerable<GenericNotificationResponse> notifications = JsonSerializer.Deserialize<IEnumerable<GenericNotificationResponse>>(body, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                    }
+                }
+            }
 
             //SendGridClient client = new SendGridClient(Security.SendGridAppKey);
             //SendGridMessage msg = new SendGridMessage()
@@ -60,31 +92,9 @@ namespace RSoft.Auth.Application.Services
 
             //msg.AddTo(new EmailAddress(args.Email, args.Nome));
             //Response response = await client.SendEmailAsync(msg, cancellationToken);
-            //IDictionary<string, string> erros = new Dictionary<string, string>();
 
-            //bool sucesso = (response.StatusCode == HttpStatusCode.Accepted);
-            //if (!sucesso)
-            //{
-            //    string msgErro = string.Empty;
-            //    string body = await response.Body.ReadAsStringAsync();
-            //    if (!string.IsNullOrWhiteSpace(body))
-            //    {
-            //        SendGridResult sendGridResult = JsonSerializer.Deserialize<SendGridResult>(body, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-            //        msgErro = string.Join('|', sendGridResult.Errors.Select(x => x.Message));
-            //    }
-            //    else
-            //    {
-            //        msgErro = response.StatusCode.ToString();
-            //    }
-            //    erros.Add("Email", $"Falha no envio do e-mail => {msgErro}");
-            //}
 
-            //return new SimpleOperationResult(sucesso, erros);
-            return await Task.Run(() =>
-            {
-                Console.WriteLine($"TOKEN: {args.Token.ToString()}");
-                return new SimpleOperationResult(true, null);
-            });
+            return new SimpleOperationResult(success, errors);
         }
 
         #endregion
