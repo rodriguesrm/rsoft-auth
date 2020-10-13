@@ -27,7 +27,7 @@ namespace RSoft.Auth.Web.Api.Extensions
             //WARNING: Only upgrade "HealthChecks.MySql" if Pomelo.EntityFrameworkCore.MySql use mysqlconnector compatible versions
             services.AddHealthChecks()
                     .AddUrlGroup(
-                                new Uri(apiOptions.MailService),
+                                new Uri(apiOptions.Uri),
                                 name: "Access the Email Sending API",
                                 failureStatus: HealthStatus.Degraded,
                                 tags: new string[] { "rsoft.mail.service" })

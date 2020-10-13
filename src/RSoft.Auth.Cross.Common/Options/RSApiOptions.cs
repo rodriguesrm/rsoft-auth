@@ -8,6 +8,11 @@
     {
 
         /// <summary>
+        /// RSoft Mail Service API Uri
+        /// </summary>
+        public string Uri { get; set; }
+
+        /// <summary>
         /// E-mail service
         /// </summary>
         public string MailService { get; set; }

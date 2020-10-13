@@ -18,6 +18,11 @@ using Microsoft.Extensions.Options;
 using System.Net;
 using RSoft.Framework.Web.Model.Response;
 using System.Text.Json;
+using System.Linq;
+using RSoft.Framework.Cross;
+using Microsoft.AspNetCore.Http;
+using RSoft.Framework.Cross.Model.Request;
+using System.Reflection;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -29,6 +34,7 @@ namespace RSoft.Auth.Application.Services
 
         private readonly IUserDomainService _userDomain;
         private readonly RSApiOptions _apiOptions;
+        private readonly JsonSerializerOptions _jsonOptions;
 
         #endregion
 
@@ -38,10 +44,12 @@ namespace RSoft.Auth.Application.Services
         /// Create a new CredentialAppService instance
         /// </summary>
         /// <param name="provider">DIP Service provider</param>
+        /// <param name="options">RSoft Api options parameters object</param>
         public CredentialAppService(IServiceProvider provider, IOptions<RSApiOptions> options)
         {
             _userDomain = provider.GetService<IUserDomainService>();
             _apiOptions = options?.Value;
+            _jsonOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
         }
 
         #endregion
@@ -56,43 +64,53 @@ namespace RSoft.Auth.Application.Services
         {
             //TODO: Create libraty to consuming rsoft apis
 
-            HttpClient client = new HttpClient();
+            HttpClient client = new HttpClient
+            {
+                BaseAddress = new Uri(_apiOptions.Uri)
+            };
 
-            string json = @"request";
-            var content = new StringContent(json);
+            //BUG: Generate token to request
+            string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiI3NDU5OTFjYy1jMjFmLTQ1MTItYmE4Zi05NTMzNDM1YjY0YWIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zdXJuYW1lIjoiUlNvZnQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJtYXN0ZXJAc2VydmVyLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiVXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6ImFkbWluIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9ncm91cHNpZCI6IkF1dGhlbnRpY2F0aW9uIiwibmJmIjoxNjAyNTg5ODAxLCJleHAiOjE2MDI2MDQyMDEsImlzcyI6IlJTb2Z0LkF1dGguRGV2UlIiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUxMDAifQ.vdwTET0HmdH7R5N2xlKzzCvldPx-y6OZEPdfdRewz28";
+
+            client.DefaultRequestHeaders.Add("Authorization", $"bearer {token}");
+
+            //TODO: Add parameters to define sender data and redirect to or body content
+            RsMailRequest request = new RsMailRequest()
+            {
+                From = new EmailAddressRequest() { Email = "noreply@rsoft.com", Name = "RSoft.Auth" },
+                To = new List<EmailAddressRequest>() { new EmailAddressRequest() { Email = args.Email, Name = args.Name } },
+                Subject = $"{(args.FirstAccess ? "First" : "Recovery")} access",
+                Content = $"TOKEN TO RECOVERY: {args.Token}",
+                EnableHtml = true
+            };
+
+            StringContent content = new StringContent(JsonSerializer.Serialize(request, _jsonOptions));
             IDictionary<string, string> errors = new Dictionary<string, string>();
             Guid requestId = Guid.Empty;
 
             HttpResponseMessage response = await client.PostAsync(_apiOptions.MailService, content);
             bool success = response.IsSuccessStatusCode;
-            if (success)
+            if (!success)
             {
                 string body = await response.Content.ReadAsStringAsync();
-                if (!string.IsNullOrWhiteSpace(body))
+                if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    Guid.TryParse(body, out requestId);
+                    IEnumerable<GenericNotificationResponse> notifications = JsonSerializer.Deserialize<IEnumerable<GenericNotificationResponse>>(body, _jsonOptions);
+                    errors = notifications.ToDictionary(k => k.Property, v => v.Message);
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    errors.Add("API SendMail", $"Unauthorized - {body}");
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    errors.Add("API SendMail", $"API SendMail Not Found");
                 }
                 else
                 {
-                    if (response.StatusCode == HttpStatusCode.BadRequest)
-                    {
-                        IEnumerable<GenericNotificationResponse> notifications = JsonSerializer.Deserialize<IEnumerable<GenericNotificationResponse>>(body, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-                    }
+                    errors.Add("API SendMail", $"{response.StatusCode} - {body}");
                 }
             }
-
-            //SendGridClient client = new SendGridClient(Security.SendGridAppKey);
-            //SendGridMessage msg = new SendGridMessage()
-            //{
-            //    From = new EmailAddress("naoresponder@feiraemcasa.com", "Feira em Casa"),
-            //    Subject = args.PrimeiroAcesso ? "Primeiro Acesso" : "Reset de Senha",
-            //    PlainTextContent = "Texto de envio e-mail via C#",
-            //    HtmlContent = $"Para concluir a operação utilize token: <strong>{args.Token}</strong>"
-            //};
-
-            //msg.AddTo(new EmailAddress(args.Email, args.Nome));
-            //Response response = await client.SendEmailAsync(msg, cancellationToken);
-
 
             return new SimpleOperationResult(success, errors);
         }
