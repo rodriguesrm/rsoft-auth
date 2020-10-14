@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
 using RSoft.Auth.Web.Api.Extensions;
+using RSoft.Auth.Web.Api.Helpers;
 using RSoft.Auth.Web.Api.Policies;
 using RSoft.Framework.Web.Extensions;
 using RSoft.Framework.Web.Filters;
@@ -66,6 +67,7 @@ namespace RSoft.Auth.Web.Api
             services.AddAppPolicies(Configuration);
             services.AddMiddlewareLoggingOption(Configuration);
             services.AddApplicationHealthChecks(Configuration);
+            services.AddScoped<ITokenHelper, TokenHelper>();
 
         }
 
