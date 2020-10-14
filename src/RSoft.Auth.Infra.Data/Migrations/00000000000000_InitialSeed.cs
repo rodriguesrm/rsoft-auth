@@ -58,6 +58,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
             Guid scopeId = new Guid("92a4ce2a-26ed-4ae2-9813-b7e5e6a8678d");
             Guid scopeKey = new Guid("8f7318ee-4027-4cde-a6d3-529e6382f532");
+
+            Guid scopeMailId = new Guid("1f0f52a8-aab5-4ebd-af44-15c4cead48b7");
+            Guid scopeMailKey = new Guid("122b5aa2-0e8a-446f-8f05-a41236dac0e1");
+
             Guid roleId = new Guid("6e60ea33-244c-452a-ba49-d745729f8aa4");
             Guid roleServiceId = new Guid("5d41c69f-276a-4b27-ab88-ebade519504d");
 
@@ -87,6 +91,23 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Scope.IsDeleted)
                 },
                 new object[] { scopeId, scopeKey, now, userId, null, null, "Authentication", 1, 0 }
+            );
+            migrationBuilder.InsertData
+            (
+                nameof(Scope),
+                new string[]
+                {
+                    nameof(Scope.Id),
+                    nameof(Scope.AccessKey),
+                    nameof(Scope.CreatedOn),
+                    nameof(Scope.CreatedBy),
+                    nameof(Scope.ChangedOn),
+                    nameof(Scope.ChangedBy),
+                    nameof(Scope.Name),
+                    nameof(Scope.IsActive),
+                    nameof(Scope.IsDeleted)
+                },
+                new object[] { scopeMailId, scopeMailKey, now, userId, null, null, "Mail Service", 1, 0 }
             );
 
             // Roles

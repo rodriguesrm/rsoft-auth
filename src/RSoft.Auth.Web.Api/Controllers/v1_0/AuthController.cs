@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Services;
+using RSoft.Auth.Web.Api.Helpers;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Auth.Web.Api.Model.Response.v1_0;
 using RSoft.Framework.Application.Model;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Web.Api;
 using RSoft.Framework.Web.Model.Response;
-using RSoft.Framework.Web.Options;
 using RSoft.Logs.Model;
 
 namespace RSoft.Auth.Web.Api.Controllers.v1_0
@@ -36,7 +33,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         private IAuthenticatedUser _user;
         private ICredentialAppService _appService;
-        private readonly JwtTokenConfig _jwtTokenOptions;
+        private IScopeAppService _scopeAppService;
+        private readonly ITokenHelper _tokenHelper;
 
         #endregion
 
@@ -47,12 +45,14 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         (
             IAuthenticatedUser user,
             ICredentialAppService appService,
-            IOptions<JwtTokenConfig> jwtTokenOptions
+            IScopeAppService scopeAppService,
+            ITokenHelper tokenHelper
         ) : base()
         {
             _user = user;
             _appService = appService;
-            _jwtTokenOptions = jwtTokenOptions?.Value;
+            _scopeAppService = scopeAppService;
+            _tokenHelper = tokenHelper;
         }
 
         #endregion
@@ -60,49 +60,21 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         #region Local methods
 
         /// <summary>
-        /// Generate access token for authenticated user
+        /// Authenticate application in the system and generate the access-key (token)
         /// </summary>
-        /// <param name="user">User data</param>
-        /// <param name="login">User login</param>
-        /// <param name="expiresIn">Date/date expiration token</param>
-        protected string GenerateToken(UserDto user, string login, out DateTime? expiresIn)
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<IActionResult> AuthenticateApplicationAsync(CancellationToken cancellationToken)
         {
+            if (!AppKey.HasValue || !AppAccess.HasValue)
+                return Unauthorized("Scope not defined or invalid");
 
-            IList<Claim> userClaims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Sid, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Name.FirstName),
-                new Claim(ClaimTypes.Surname, user.Name.LastName),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, login),
-                new Claim(ClaimTypes.UserData, user.Type?.ToString())
-            };
+            ScopeDto scope = await _scopeAppService.GetByKeyAsync(AppKey.Value, cancellationToken);
+            if (scope == null || scope.AccessKey != AppAccess.Value)
+                return Unauthorized("Application Key or Access is invalid");
 
-            foreach (RoleDto role in user.Roles)
-            {
-                userClaims.Add(new Claim(ClaimTypes.Role, role.Name));
-            }
-
-            foreach (ScopeDto scope in user.Scopes)
-            {
-                userClaims.Add(new Claim(ClaimTypes.GroupSid, scope.Name));
-            }
-
-            JwtSecurityToken jwt = new JwtSecurityToken
-            (
-                 issuer: _jwtTokenOptions.Issuer,
-                 audience: _jwtTokenOptions.Audience,
-                 claims: userClaims,
-                 notBefore: _jwtTokenOptions.NotBefore,
-                 expires: _jwtTokenOptions.Expiration,
-                 signingCredentials: _jwtTokenOptions.Credentials
-            );
-
-            string token = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            expiresIn = jwt.ValidTo;
-
-            return token;
+            string token = _tokenHelper.GenerateTokenAplication(scope.Name, out DateTime? expiresIn);
+            AuthenticateResponse result = new AuthenticateResponse(token, expiresIn, null, null);
+            return Ok(result);
 
         }
 
@@ -133,7 +105,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                     roles = authResult.User.Roles?.Select(r => r.Name);
                 }
 
-                string token = GenerateToken(authResult.User, request.Login, out DateTime? expiresIn);
+                string token = _tokenHelper.GenerateToken(authResult.User, request.Login, out DateTime? expiresIn);
 
                 AuthenticateResponse result = new AuthenticateResponse(token, expiresIn, roles, userDetail);
                 return Ok(result);
@@ -154,11 +126,9 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Successfully authenticated</response>
         /// <response code="400">Invalid request, see details in response</response>
-        /// <response code="401">Authentication Failed / Access Denied</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(typeof(AuthenticateResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [MapToApiVersion("1.0")]
@@ -166,7 +136,20 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request, [FromQuery] bool details, CancellationToken cancellationToken = default)
             => await RunActionAsync(AuthenticateAsync(request, details, cancellationToken), cancellationToken);
 
-        //BACKLOG: Add application authentication (ScopeId + ScopeKey)
+
+        /// <summary>
+        /// Authenticate application in the system-application / generate access token
+        /// </summary>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        [ProducesResponseType(typeof(AuthenticateResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpPost("app")]
+        [MapToApiVersion("1.0")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AuthenticateApplication(CancellationToken cancellationToken = default)
+            => await RunActionAsync(AuthenticateApplicationAsync(cancellationToken), cancellationToken);
 
         #endregion
 

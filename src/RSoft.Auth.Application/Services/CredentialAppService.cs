@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Scaffolding;
-using RSoft.Auth.Application.Model;
+﻿using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Model.Extensions;
 using RSoft.Auth.Cross.Common.Model.Args;
 using RSoft.Auth.Cross.Common.Model.Results;
@@ -13,6 +12,15 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using RSoft.Framework.Cross.Enums;
 using RSoft.Framework.Domain.ValueObjects;
+using System.Net.Http;
+using RSoft.Auth.Cross.Common.Options;
+using Microsoft.Extensions.Options;
+using System.Net;
+using RSoft.Framework.Web.Model.Response;
+using System.Text.Json;
+using System.Linq;
+using RSoft.Framework.Cross.Model.Request;
+using System.Text;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -23,6 +31,8 @@ namespace RSoft.Auth.Application.Services
         #region Local objects/variables
 
         private readonly IUserDomainService _userDomain;
+        private readonly RSApiOptions _apiOptions;
+        private readonly JsonSerializerOptions _jsonOptions;
 
         #endregion
 
@@ -32,9 +42,12 @@ namespace RSoft.Auth.Application.Services
         /// Create a new CredentialAppService instance
         /// </summary>
         /// <param name="provider">DIP Service provider</param>
-        public CredentialAppService(IServiceProvider provider)
+        /// <param name="options">RSoft Api options parameters object</param>
+        public CredentialAppService(IServiceProvider provider, IOptions<RSApiOptions> options)
         {
             _userDomain = provider.GetService<IUserDomainService>();
+            _apiOptions = options?.Value;
+            _jsonOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
         }
 
         #endregion
@@ -45,46 +58,59 @@ namespace RSoft.Auth.Application.Services
         /// Sends email to create credentials (new/reset)
         /// </summary>
         /// <param name="args">Call arguments</param>
-        private async Task<SimpleOperationResult> SendMailTokenPasswordAsync(SendMailArgs args, CancellationToken cancellationToken = default)
+        /// <param name="appToken">Application token to access mail-service api</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<SimpleOperationResult> SendMailTokenPasswordAsync(SendMailArgs args, string appToken, CancellationToken cancellationToken = default)
         {
-            //TODO: SEND MAIL REFACTOR
+            //TODO: Create libraty to consuming rsoft apis
 
-            //SendGridClient client = new SendGridClient(Security.SendGridAppKey);
-            //SendGridMessage msg = new SendGridMessage()
-            //{
-            //    From = new EmailAddress("naoresponder@feiraemcasa.com", "Feira em Casa"),
-            //    Subject = args.PrimeiroAcesso ? "Primeiro Acesso" : "Reset de Senha",
-            //    PlainTextContent = "Texto de envio e-mail via C#",
-            //    HtmlContent = $"Para concluir a operação utilize token: <strong>{args.Token}</strong>"
-            //};
-
-            //msg.AddTo(new EmailAddress(args.Email, args.Nome));
-            //Response response = await client.SendEmailAsync(msg, cancellationToken);
-            //IDictionary<string, string> erros = new Dictionary<string, string>();
-
-            //bool sucesso = (response.StatusCode == HttpStatusCode.Accepted);
-            //if (!sucesso)
-            //{
-            //    string msgErro = string.Empty;
-            //    string body = await response.Body.ReadAsStringAsync();
-            //    if (!string.IsNullOrWhiteSpace(body))
-            //    {
-            //        SendGridResult sendGridResult = JsonSerializer.Deserialize<SendGridResult>(body, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-            //        msgErro = string.Join('|', sendGridResult.Errors.Select(x => x.Message));
-            //    }
-            //    else
-            //    {
-            //        msgErro = response.StatusCode.ToString();
-            //    }
-            //    erros.Add("Email", $"Falha no envio do e-mail => {msgErro}");
-            //}
-
-            //return new SimpleOperationResult(sucesso, erros);
-            return await Task.Run(() =>
+            HttpClient client = new HttpClient
             {
-                Console.WriteLine($"TOKEN: {args.Token.ToString()}");
-                return new SimpleOperationResult(true, null);
-            });
+                BaseAddress = new Uri(_apiOptions.Uri)
+            };
+                
+            client.DefaultRequestHeaders.Add("User-Agent", "RSoft.Auth");
+            client.DefaultRequestHeaders.Add("Authorization", $"bearer {appToken}");
+
+            //BACKLOG: Add parameters to define sender data and redirect to or body content
+            RsMailRequest request = new RsMailRequest()
+            {
+                From = new EmailAddressRequest("noreply@rsoft.com", "RSoft.Auth"),
+                Subject = $"{(args.FirstAccess ? "First" : "Recovery")} access",
+                Content = $"TOKEN TO RECOVERY: {args.Token}",
+                EnableHtml = true
+            };
+            request.To.Add(new EmailAddressRequest(args.Email, args.Name));
+
+            StringContent content = new StringContent(JsonSerializer.Serialize(request, _jsonOptions), Encoding.UTF8, "application/json");
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+            Guid requestId = Guid.Empty;
+
+            HttpResponseMessage response = await client.PostAsync(_apiOptions.MailService, content);
+            bool success = response.IsSuccessStatusCode;
+            if (!success)
+            {
+                string body = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    IEnumerable<GenericNotificationResponse> notifications = JsonSerializer.Deserialize<IEnumerable<GenericNotificationResponse>>(body, _jsonOptions);
+                    errors = notifications.ToDictionary(k => k.Property, v => v.Message);
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    errors.Add("API SendMail", $"API SendMail | Unauthorized - {body}");
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    errors.Add("API SendMail", $"API SendMail | Not Found");
+                }
+                else
+                {
+                    errors.Add("API SendMail", $"API SendMail | {response.StatusCode} - {body}");
+                }
+            }
+
+            return new SimpleOperationResult(success, errors);
         }
 
         #endregion
@@ -151,7 +177,7 @@ namespace RSoft.Auth.Application.Services
         }
 
         ///<inheritdoc/>
-        public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default)
+        public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, string appToken, CancellationToken cancellationToken = default)
         {
 
             PasswordProcessResult result = null;
@@ -166,7 +192,7 @@ namespace RSoft.Auth.Application.Services
             }
             else
             {
-                result = await _userDomain.GetFirstAccessAsync(email, (args) => SendMailTokenPasswordAsync(args, cancellationToken).Result, cancellationToken);
+                result = await _userDomain.GetFirstAccessAsync(email, (args) => SendMailTokenPasswordAsync(args, appToken, cancellationToken).Result, cancellationToken);
             }
             return result;
         }
@@ -176,7 +202,7 @@ namespace RSoft.Auth.Application.Services
             => await _userDomain.CreateFirstAccessAsync(tokenId, login, password, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, CancellationToken cancellationToken = default)
+        public async Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, string appToken, CancellationToken cancellationToken = default)
         {
 
             PasswordProcessResult result = null;
@@ -190,7 +216,7 @@ namespace RSoft.Auth.Application.Services
             }
             else
             {
-                result = await _userDomain.GetResetAccessAsync(loginOrEmail, (args) => SendMailTokenPasswordAsync(args, cancellationToken).Result, cancellationToken);
+                result = await _userDomain.GetResetAccessAsync(loginOrEmail, (args) => SendMailTokenPasswordAsync(args, appToken, cancellationToken).Result, cancellationToken);
             }
 
             return result;

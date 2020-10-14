@@ -28,8 +28,9 @@ namespace RSoft.Auth.Application.Services
         /// Create token for password generation (first access) and send by email
         /// </summary>
         /// <param name="email">User e-mail</param>
+        /// <param name="appToken">Application token to access mail-service api</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<PasswordProcessResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default);
+        Task<PasswordProcessResult> GetFirstAccessAsync(string email, string appToken, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates user credentials
@@ -44,8 +45,9 @@ namespace RSoft.Auth.Application.Services
         /// Create token for generating new password and send by email
         /// </summary>
         /// <param name="loginOrEmail">User login or email</param>
+        /// <param name="appToken">Application token to access mail-service api</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, CancellationToken cancellationToken = default);
+        Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, string appToken, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Save new password for recovery access
