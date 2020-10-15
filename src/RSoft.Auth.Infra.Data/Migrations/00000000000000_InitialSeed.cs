@@ -56,13 +56,13 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
             DateTime now = DateTime.UtcNow;
 
-            Guid scopeId = new Guid("92a4ce2a-26ed-4ae2-9813-b7e5e6a8678d");
-            Guid scopeKey = new Guid("8f7318ee-4027-4cde-a6d3-529e6382f532");
+            Guid scopeAuthId = new Guid("92a4ce2a-26ed-4ae2-9813-b7e5e6a8678d");
+            Guid scopeAuthKey = new Guid("8f7318ee-4027-4cde-a6d3-529e6382f532");
 
             Guid scopeMailId = new Guid("1f0f52a8-aab5-4ebd-af44-15c4cead48b7");
             Guid scopeMailKey = new Guid("122b5aa2-0e8a-446f-8f05-a41236dac0e1");
 
-            Guid roleId = new Guid("6e60ea33-244c-452a-ba49-d745729f8aa4");
+            Guid roleAdminId = new Guid("6e60ea33-244c-452a-ba49-d745729f8aa4");
             Guid roleServiceId = new Guid("5d41c69f-276a-4b27-ab88-ebade519504d");
 
             Guid userId = new Guid("745991cc-c21f-4512-ba8f-9533435b64ab");
@@ -90,7 +90,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Scope.IsActive),
                     nameof(Scope.IsDeleted)
                 },
-                new object[] { scopeId, scopeKey, now, userId, null, null, "Authentication", 1, 0 }
+                new object[] { scopeAuthId, scopeAuthKey, now, userId, null, null, "Authentication", 1, 0 }
             );
             migrationBuilder.InsertData
             (
@@ -128,7 +128,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Role.Description),
                     nameof(Role.ScopeId)
                 },
-                new object[] { roleId, now, userId, null, null, "admin", 1, 0, "Administrator privileges, has access granted to all resources", scopeId }
+                new object[] { roleAdminId, now, userId, null, null, "admin", 1, 0, "Administrator privileges, has access granted to all resources", scopeAuthId }
             );
 
             migrationBuilder.InsertData
@@ -147,7 +147,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Role.Description),
                     nameof(Role.ScopeId)
                 },
-                new object[] { roleServiceId, now, userId, null, null, "service", 1, 0, "Service privileges, has access granted to all operations to be performed in the background", scopeId }
+                new object[] { roleServiceId, now, userId, null, null, "service", 1, 0, "Service privileges, has access granted to all operations to be performed in the background", scopeAuthId }
             );
 
             // Users / Credentials
@@ -217,14 +217,14 @@ namespace RSoft.Auth.Infra.Data.Migrations
             (
                 nameof(UserScope),
                 new string[] { nameof(UserScope.UserId), nameof(UserScope.ScopeId) },
-                new object[] { userId, scopeId }
+                new object[] { userId, scopeAuthId }
             );
 
             migrationBuilder.InsertData
             (
                 nameof(UserScope),
                 new string[] { nameof(UserScope.UserId), nameof(UserScope.ScopeId) },
-                new object[] { serviceUserId, scopeId }
+                new object[] { serviceUserId, scopeAuthId }
             );
 
             // User-Roles
@@ -233,7 +233,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
             (
                 nameof(UserRole),
                 new string[] { nameof(UserRole.UserId), nameof(UserRole.RoleId) },
-                new object[] { userId, roleId }
+                new object[] { userId, roleAdminId }
             );
 
             migrationBuilder.InsertData
