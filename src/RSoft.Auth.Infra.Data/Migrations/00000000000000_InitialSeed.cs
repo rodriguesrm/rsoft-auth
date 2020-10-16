@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
+using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Infra.Data.Entities;
 using RSoft.Framework.Cross.Enums;
 using RSoft.Helpers.Security;
@@ -13,8 +14,8 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
         #region Local objects/variables
 
-        private readonly string _passwordSufix;
         private readonly bool _isProd;
+        private readonly SecurityOptions _securityOptions;
 
         #endregion
 
@@ -36,13 +37,20 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true)
                     .AddEnvironmentVariables();
 
-            IConfiguration _configuration = builder.Build();
-            _passwordSufix = _configuration["Security:Secret"];
+            IConfiguration configuration = builder.Build();
+            _securityOptions = new SecurityOptions();
+            configuration.GetSection("Application:Security").Bind(_securityOptions);
         }
 
         #endregion
 
         #region Insert/Update data
+
+        private string GenerateUserDocument()
+        {
+            System.Threading.Thread.Sleep(200);
+            return DateTime.UtcNow.ToString("yy MM dd HH mm ss ff").Replace(" ", string.Empty);
+        }
 
         /// <summary>
         /// Seed initial data
@@ -69,7 +77,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
             Guid roleServiceId = new Guid("5d41c69f-276a-4b27-ab88-ebade519504d");
 
             Guid userId = new Guid("745991cc-c21f-4512-ba8f-9533435b64ab");
-            byte[] pwdBuffer = MD5.HashMD5($"master@soft|{_passwordSufix}");
+            byte[] pwdBuffer = MD5.HashMD5($"master@soft|{_securityOptions.Secret}");
             string password = MD5.ByteArrayToString(pwdBuffer);
 
             migrationBuilder.Sql("set foreign_key_checks=0");
@@ -92,7 +100,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Scope.IsActive),
                     nameof(Scope.IsDeleted)
                 },
-                new object[] { scopeAuthId, scopeAuthKey, true, now, userId, null, null, "Authentication", 1, 0 }
+                new object[] { scopeAuthId, scopeAuthKey, true, now, userId, null, null, "Authentication Service", 1, 0 }
             );
             migrationBuilder.InsertData
             (
@@ -208,6 +216,72 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(UserCredential.LockoutUntil)
                 },
                 new object[] { userId, "admin", password, _isProd, 0, null }
+            );
+
+            migrationBuilder.InsertData
+            (
+                nameof(User),
+                new string[]
+                {
+                    nameof(User.Id),
+                    nameof(User.CreatedOn),
+                    nameof(User.CreatedBy),
+                    nameof(User.ChangedOn),
+                    nameof(User.ChangedBy),
+                    nameof(User.IsActive),
+                    nameof(User.IsDeleted),
+                    nameof(User.Document),
+                    nameof(User.FirstName),
+                    nameof(User.LastName),
+                    nameof(User.BornDate),
+                    nameof(User.Email),
+                    nameof(User.Type)
+                },
+                new object[] { scopeAuthId, now, userId, null, null, 0, 0, GenerateUserDocument(), "Authentication", "Service", DateTime.UtcNow, "auth@service.na", (int)UserType.Service }
+            );
+
+            migrationBuilder.InsertData
+            (
+                nameof(User),
+                new string[]
+                {
+                    nameof(User.Id),
+                    nameof(User.CreatedOn),
+                    nameof(User.CreatedBy),
+                    nameof(User.ChangedOn),
+                    nameof(User.ChangedBy),
+                    nameof(User.IsActive),
+                    nameof(User.IsDeleted),
+                    nameof(User.Document),
+                    nameof(User.FirstName),
+                    nameof(User.LastName),
+                    nameof(User.BornDate),
+                    nameof(User.Email),
+                    nameof(User.Type)
+                },
+                new object[] { scopeMailId, now, userId, null, null, 0, 0, GenerateUserDocument(), "Mail", "Service", DateTime.UtcNow, "mail@service.na", (int)UserType.Service }
+            );
+
+            migrationBuilder.InsertData
+            (
+                nameof(User),
+                new string[]
+                {
+                    nameof(User.Id),
+                    nameof(User.CreatedOn),
+                    nameof(User.CreatedBy),
+                    nameof(User.ChangedOn),
+                    nameof(User.ChangedBy),
+                    nameof(User.IsActive),
+                    nameof(User.IsDeleted),
+                    nameof(User.Document),
+                    nameof(User.FirstName),
+                    nameof(User.LastName),
+                    nameof(User.BornDate),
+                    nameof(User.Email),
+                    nameof(User.Type)
+                },
+                new object[] { scopeEvaluationId, now, userId, null, null, 0, 0, GenerateUserDocument(), "Evaluation", "Service", DateTime.UtcNow, "evaluation@service.na", (int)UserType.Service }
             );
 
             // User-Scopes
