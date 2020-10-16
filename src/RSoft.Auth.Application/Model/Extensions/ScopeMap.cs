@@ -34,6 +34,7 @@ namespace RSoft.Auth.Application.Model.Extensions
 
             entity.Name = dto.Name;
             entity.AccessKey = dto.AccessKey;
+            entity.AllowLogin = dto.AllowLogin;
             entity.IsActive = dto.IsActive;
 
             return entity;
@@ -50,6 +51,7 @@ namespace RSoft.Auth.Application.Model.Extensions
             {
                 entity.Name = dto.Name;
                 entity.AccessKey = dto.AccessKey != Guid.Empty ? dto.AccessKey : entity.AccessKey;
+                entity.AllowLogin = dto.AllowLogin;
                 entity.IsActive = dto.IsActive;
             }
             return entity;
@@ -90,6 +92,7 @@ namespace RSoft.Auth.Application.Model.Extensions
 
             dto.Name = entity.Name;
             dto.AccessKey = entity.AccessKey;
+            dto.AllowLogin = entity.AllowLogin;
             dto.IsActive = entity.IsActive;
 
             return dto;

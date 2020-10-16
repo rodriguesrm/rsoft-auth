@@ -14,7 +14,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.Role", b =>
@@ -93,6 +93,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.Property<Guid>("AccessKey")
                         .HasColumnName("AccessKey")
                         .HasColumnType("char(36)");
+
+                    b.Property<ulong>("AllowLogin")
+                        .HasColumnName("AllowLogin")
+                        .HasColumnType("bit");
 
                     b.Property<Guid?>("ChangedBy")
                         .HasColumnType("char(36)");

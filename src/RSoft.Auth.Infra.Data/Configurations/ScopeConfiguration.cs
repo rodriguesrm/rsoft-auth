@@ -39,6 +39,11 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .HasColumnName(nameof(Scope.AccessKey))
                 .IsRequired();
 
+            builder.Property(c => c.AllowLogin)
+                .HasColumnName(nameof(Scope.AllowLogin))
+                .HasColumnType("bit")
+                .IsRequired();
+
             #endregion
 
             #region FKs

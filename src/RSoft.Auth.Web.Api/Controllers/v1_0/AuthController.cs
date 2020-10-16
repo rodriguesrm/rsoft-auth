@@ -72,7 +72,10 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             if (scope == null || scope.AccessKey != AppAccess.Value)
                 return Unauthorized("Application Key or Access is invalid");
 
-            string token = _tokenHelper.GenerateTokenAplication(scope.Name, out DateTime? expiresIn);
+            if (!scope.AllowLogin || !scope.IsActive)
+                return Unauthorized("Application Key is not allowed to log in");
+
+            string token = _tokenHelper.GenerateTokenAplication(scope.Id, scope.Name, out DateTime? expiresIn);
             AuthenticateResponse result = new AuthenticateResponse(token, expiresIn, null, null);
             return Ok(result);
 

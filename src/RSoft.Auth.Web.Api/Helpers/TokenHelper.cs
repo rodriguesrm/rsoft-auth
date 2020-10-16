@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using RSoft.Auth.Application.Model;
+using RSoft.Auth.Web.Api.Model.Request.v1_0;
+using RSoft.Framework.Cross.Enums;
 using RSoft.Framework.Web.Options;
 using System;
 using System.Collections.Generic;
@@ -37,8 +39,19 @@ namespace RSoft.Auth.Web.Api.Helpers
         #region Public methods
 
         ///<inheritdoc/>
-        public string GenerateTokenAplication(string name, out DateTime? expiresIn)
-            => GenerateToken(null, name, out expiresIn);
+        public string GenerateTokenAplication(Guid scopeId, string scopeName, out DateTime? expiresIn)
+        {
+            UserDto userDto = new UserDto()
+            {
+                Id = scopeId,
+                Name = new FullNameRequest() { FirstName = scopeName, LastName = "Scope/Application" },
+                Email = "N/A",
+                Type = UserType.Service,
+                Roles = new List<RoleDto>() { new RoleDto() { Name = "service" } },
+                Scopes = new List<ScopeDto>() { new ScopeDto() { Name = scopeName } }
+            };
+            return GenerateToken(userDto, scopeName, out expiresIn);
+        }
 
         ///<inheritdoc/>
         public string GenerateToken(UserDto user, string login, out DateTime? expiresIn)
@@ -49,30 +62,26 @@ namespace RSoft.Auth.Web.Api.Helpers
                 new Claim(ClaimTypes.NameIdentifier, login)
             };
 
-            if (user != null)
+            userClaims.Add(new Claim(ClaimTypes.Sid, user.Id.ToString()));
+            userClaims.Add(new Claim(ClaimTypes.Name, user.Name.FirstName));
+            userClaims.Add(new Claim(ClaimTypes.Surname, user.Name.LastName));
+            userClaims.Add(new Claim(ClaimTypes.Email, user.Email));
+            userClaims.Add(new Claim(ClaimTypes.UserData, user.Type?.ToString()));
+
+            if (user.Roles != null)
             {
-                userClaims.Add(new Claim(ClaimTypes.Sid, user.Id.ToString()));
-                userClaims.Add(new Claim(ClaimTypes.Name, user.Name.FirstName));
-                userClaims.Add(new Claim(ClaimTypes.Surname, user.Name.LastName));
-                userClaims.Add(new Claim(ClaimTypes.Email, user.Email));
-                userClaims.Add(new Claim(ClaimTypes.UserData, user.Type?.ToString()));
-
-                if (user.Roles != null)
+                foreach (RoleDto role in user.Roles)
                 {
-                    foreach (RoleDto role in user.Roles)
-                    {
-                        userClaims.Add(new Claim(ClaimTypes.Role, role.Name));
-                    }
+                    userClaims.Add(new Claim(ClaimTypes.Role, role.Name));
                 }
+            }
 
-                if (user.Scopes != null)
+            if (user.Scopes != null)
+            {
+                foreach (ScopeDto scope in user.Scopes)
                 {
-                    foreach (ScopeDto scope in user.Scopes)
-                    {
-                        userClaims.Add(new Claim(ClaimTypes.GroupSid, scope.Name));
-                    }
+                    userClaims.Add(new Claim(ClaimTypes.GroupSid, scope.Name));
                 }
-
             }
 
             JwtSecurityToken jwt = new JwtSecurityToken

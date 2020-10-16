@@ -35,6 +35,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 {
                     Name = table.Name,
                     AccessKey = table.AccessKey,
+                    AllowLogin = table.AllowLogin,
                     CreatedOn = table.CreatedOn,
                     ChangedOn = table.ChangedOn,
                     IsActive = table.IsActive
@@ -70,6 +71,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                 {
                     Name = entity.Name,
                     AccessKey = entity.AccessKey,
+                    AllowLogin = entity.AllowLogin,
                     CreatedOn = entity.CreatedOn,
                     CreatedBy = entity.CreatedAuthor.Id,
                     IsActive = entity.IsActive
@@ -92,6 +94,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
             {
                 table.Name = entity.Name;
                 table.AccessKey = entity.AccessKey;
+                table.AllowLogin = entity.AllowLogin;
                 table.ChangedOn = entity.ChangedOn;
                 table.ChangedBy = entity.ChangedAuthor.Id;
                 table.IsActive = entity.IsActive;

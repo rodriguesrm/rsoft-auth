@@ -62,14 +62,15 @@ namespace RSoft.Auth.Infra.Data.Migrations
             Guid scopeMailId = new Guid("1f0f52a8-aab5-4ebd-af44-15c4cead48b7");
             Guid scopeMailKey = new Guid("122b5aa2-0e8a-446f-8f05-a41236dac0e1");
 
+            Guid scopeEvaluationId = new Guid("d2401226-754a-4535-85bc-6a3e559da66d");
+            Guid scopeEvaluationKey = new Guid("f686e46b-2b6f-4568-b5e4-fec9be48dcdd");
+
             Guid roleAdminId = new Guid("6e60ea33-244c-452a-ba49-d745729f8aa4");
             Guid roleServiceId = new Guid("5d41c69f-276a-4b27-ab88-ebade519504d");
 
             Guid userId = new Guid("745991cc-c21f-4512-ba8f-9533435b64ab");
             byte[] pwdBuffer = MD5.HashMD5($"master@soft|{_passwordSufix}");
             string password = MD5.ByteArrayToString(pwdBuffer);
-
-            Guid serviceUserId = new Guid("03f66c4a-9f5a-45c3-afa3-de6801f5592e");
 
             migrationBuilder.Sql("set foreign_key_checks=0");
 
@@ -82,6 +83,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 {
                     nameof(Scope.Id),
                     nameof(Scope.AccessKey),
+                    nameof(Scope.AllowLogin),
                     nameof(Scope.CreatedOn),
                     nameof(Scope.CreatedBy),
                     nameof(Scope.ChangedOn),
@@ -90,7 +92,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Scope.IsActive),
                     nameof(Scope.IsDeleted)
                 },
-                new object[] { scopeAuthId, scopeAuthKey, now, userId, null, null, "Authentication", 1, 0 }
+                new object[] { scopeAuthId, scopeAuthKey, true, now, userId, null, null, "Authentication", 1, 0 }
             );
             migrationBuilder.InsertData
             (
@@ -99,6 +101,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 {
                     nameof(Scope.Id),
                     nameof(Scope.AccessKey),
+                    nameof(Scope.AllowLogin),
                     nameof(Scope.CreatedOn),
                     nameof(Scope.CreatedBy),
                     nameof(Scope.ChangedOn),
@@ -107,7 +110,25 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Scope.IsActive),
                     nameof(Scope.IsDeleted)
                 },
-                new object[] { scopeMailId, scopeMailKey, now, userId, null, null, "Mail Service", 1, 0 }
+                new object[] { scopeMailId, scopeMailKey, true, now, userId, null, null, "Mail Service", 1, 0 }
+            );
+            migrationBuilder.InsertData
+            (
+                nameof(Scope),
+                new string[]
+                {
+                    nameof(Scope.Id),
+                    nameof(Scope.AccessKey),
+                    nameof(Scope.AllowLogin),
+                    nameof(Scope.CreatedOn),
+                    nameof(Scope.CreatedBy),
+                    nameof(Scope.ChangedOn),
+                    nameof(Scope.ChangedBy),
+                    nameof(Scope.Name),
+                    nameof(Scope.IsActive),
+                    nameof(Scope.IsDeleted)
+                },
+                new object[] { scopeEvaluationId, scopeEvaluationKey, true, now, userId, null, null, "Evaluation Service", 1, 0 }
             );
 
             // Roles
@@ -176,28 +197,6 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
             migrationBuilder.InsertData
             (
-                nameof(User),
-                new string[]
-                {
-                    nameof(User.Id),
-                    nameof(User.CreatedOn),
-                    nameof(User.CreatedBy),
-                    nameof(User.ChangedOn),
-                    nameof(User.ChangedBy),
-                    nameof(User.IsActive),
-                    nameof(User.IsDeleted),
-                    nameof(User.Document),
-                    nameof(User.FirstName),
-                    nameof(User.LastName),
-                    nameof(User.BornDate),
-                    nameof(User.Email),
-                    nameof(User.Type)
-                },
-                new object[] { serviceUserId, now, userId, null, null, 1, 0, "22222222222", "Service", "RSoft", new DateTime(1976, 11, 13, 0, 0, 0, DateTimeKind.Utc), "no-reply@server.com", (int)UserType.Service }
-            );
-
-            migrationBuilder.InsertData
-            (
                 nameof(UserCredential),
                 new string[]
                 {
@@ -220,13 +219,6 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 new object[] { userId, scopeAuthId }
             );
 
-            migrationBuilder.InsertData
-            (
-                nameof(UserScope),
-                new string[] { nameof(UserScope.UserId), nameof(UserScope.ScopeId) },
-                new object[] { serviceUserId, scopeAuthId }
-            );
-
             // User-Roles
             // -------------------------------------------------------
             migrationBuilder.InsertData
@@ -234,13 +226,6 @@ namespace RSoft.Auth.Infra.Data.Migrations
                 nameof(UserRole),
                 new string[] { nameof(UserRole.UserId), nameof(UserRole.RoleId) },
                 new object[] { userId, roleAdminId }
-            );
-
-            migrationBuilder.InsertData
-            (
-                nameof(UserRole),
-                new string[] { nameof(UserRole.UserId), nameof(UserRole.RoleId) },
-                new object[] { serviceUserId, roleServiceId }
             );
 
             migrationBuilder.Sql("set foreign_key_checks=1");

@@ -53,6 +53,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     ChangedBy = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     AccessKey = table.Column<Guid>(nullable: false),
+                    AllowLogin = table.Column<ulong>(type: "bit", nullable: false),
                     IsActive = table.Column<ulong>(type: "bit", nullable: false),
                     IsDeleted = table.Column<ulong>(type: "bit", nullable: false, defaultValue: 0ul)
                 },

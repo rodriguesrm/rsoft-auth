@@ -375,7 +375,7 @@ namespace RSoft.Auth.Domain.Services
                 else
                 {
                     Scope scopeCheck = user.Scopes.FirstOrDefault(x => x.Id == appKey && x.AccessKey == appAccess);
-                    if (scopeCheck == null)
+                    if (scopeCheck == null || !scopeCheck.IsActive)
                         user = null;
                     else
                         user.Roles = GetRolesByUserAsync(appKey, user.Id);

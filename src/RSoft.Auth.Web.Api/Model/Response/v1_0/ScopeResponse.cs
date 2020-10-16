@@ -35,6 +35,11 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         public Guid AccessKey { get; set; }
 
         /// <summary>
+        /// Indicates whether the scope can log in as a service/application
+        /// </summary>
+        public bool AllowLogin { get; set; }
+
+        /// <summary>
         /// Acope active status
         /// </summary>
         public bool? IsActive { get; set; } = true;
