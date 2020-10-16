@@ -133,8 +133,6 @@ namespace RSoft.Auth.Domain.Entities
             //BACKLOG: Globalization
             if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);
             if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
-            if ((Type ?? UserType.User) == UserType.User)
-                AddNotifications(new BrasilianCpfValidationContract(Document, nameof(Document), true).Contract.Notifications);
             AddNotifications(Name.Notifications);
             AddNotifications(Email.Notifications);
             AddNotifications(new RequiredValidationContract<string>(Email?.Address, $"Email.{nameof(Email.Address)}", "Email is required").Contract.Notifications);
@@ -147,30 +145,34 @@ namespace RSoft.Auth.Domain.Entities
                 AddNotifications(Credential.Notifications);
             }
 
-            if (!Scopes.Any())
+            if ((Type ?? UserType.User) == UserType.User)
             {
-                AddNotification(nameof(Scopes), "The user must be assigned to at least one scope");
-            }
-            else
-            {
-                Scopes
-                    .ToList()
-                    .ForEach(scope =>
-                    {
-                        scope.Validate();
-                        AddNotifications(scope.Notifications);
-                    });
-            }
+                AddNotifications(new BrasilianCpfValidationContract(Document, nameof(Document), true).Contract.Notifications);
+                if (!Scopes.Any())
+                {
+                    AddNotification(nameof(Scopes), "The user must be assigned to at least one scope");
+                }
+                else
+                {
+                    Scopes
+                        .ToList()
+                        .ForEach(scope =>
+                        {
+                            scope.Validate();
+                            AddNotifications(scope.Notifications);
+                        });
+                }
 
-            if (Roles != null && !Roles.Any())
-            {
-                Roles
-                    .ToList()
-                    .ForEach(role =>
-                    {
-                        role.Validate();
-                        AddNotifications(role.Notifications);
-                    });
+                if (Roles != null && !Roles.Any())
+                {
+                    Roles
+                        .ToList()
+                        .ForEach(role =>
+                        {
+                            role.Validate();
+                            AddNotifications(role.Notifications);
+                        });
+                }
             }
 
         }

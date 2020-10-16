@@ -48,7 +48,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
         private string GenerateUserDocument()
         {
-            System.Threading.Thread.Sleep(200);
+            System.Threading.Thread.Sleep(150);
             return DateTime.UtcNow.ToString("yy MM dd HH mm ss ff").Replace(" ", string.Empty);
         }
 
