@@ -20,6 +20,7 @@ namespace RSoft.Auth.Web.Api.Extensions
             {
                 Name = dto.Name,
                 AccessKey = dto.AccessKey,
+                AllowLogin = dto.AllowLogin,
                 IsActive = dto.IsActive
             };
 
@@ -31,7 +32,8 @@ namespace RSoft.Auth.Web.Api.Extensions
             => new ScopeDto
             {
                 Name = request.Name,
-                IsActive = request.IsActive.Value
+                IsActive = request.IsActive.Value,
+                AllowLogin = request.AllowLogin.Value
             };
 
     }

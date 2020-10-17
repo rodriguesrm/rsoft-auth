@@ -72,7 +72,10 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             if (scope == null || scope.AccessKey != AppAccess.Value)
                 return Unauthorized("Application Key or Access is invalid");
 
-            string token = _tokenHelper.GenerateTokenAplication(scope.Name, out DateTime? expiresIn);
+            if (!scope.AllowLogin || !scope.IsActive)
+                return Unauthorized("Application Key is not allowed to log in");
+
+            string token = _tokenHelper.GenerateTokenAplication(scope.Id, scope.Name, out DateTime? expiresIn);
             AuthenticateResponse result = new AuthenticateResponse(token, expiresIn, null, null);
             return Ok(result);
 
@@ -126,9 +129,11 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Successfully authenticated</response>
         /// <response code="400">Invalid request, see details in response</response>
+        /// <response code="401">Invalid credentials, access unauthorized, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(typeof(AuthenticateResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [MapToApiVersion("1.0")]
@@ -141,6 +146,10 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// Authenticate application in the system-application / generate access token
         /// </summary>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <response code="200">Successfully authenticated</response>
+        /// <response code="400">Invalid request, see details in response</response>
+        /// <response code="401">Invalid credentials, access unauthorized, see details in response</response>
+        /// <response code="500">Request processing failed</response>
         [ProducesResponseType(typeof(AuthenticateResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]

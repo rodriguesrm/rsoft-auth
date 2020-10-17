@@ -57,7 +57,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected async Task<IActionResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default)
         {
-            PasswordProcessResult result = await _appService.GetFirstAccessAsync(email, _tokenHelper.GenerateTokenAplication("RSoft.Auth", out _), cancellationToken);
+            PasswordProcessResult result = await _appService.GetFirstAccessAsync(email, _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", out _), cancellationToken);
 
             if (result.Success)
                 return Ok("First access information sent to the user's email");
@@ -90,7 +90,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         protected async Task<IActionResult> GetRecoveryAccessAsync(string login, CancellationToken cancellationToken = default)
         {
 
-            PasswordProcessResult result = await _appService.GetResetAccessAsync(login, _tokenHelper.GenerateTokenAplication("RSoft.Auth", out _), cancellationToken);
+            PasswordProcessResult result = await _appService.GetResetAccessAsync(login, _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", out _), cancellationToken);
 
             if (result.Success)
                 return Ok("Recover access information sent to the user's email");

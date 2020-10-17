@@ -15,7 +15,7 @@ using System.Linq;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Domain.ValueObjects;
 using Microsoft.Extensions.Configuration;
-using System.Text.Json;
+using Microsoft.Extensions.Options;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -29,29 +29,37 @@ namespace RSoft.Auth.Domain.Services
         #region Local objects/variables
 
         private readonly SecurityOptions _securityOptions;
-        private readonly int _jwtTimeLife;
+        private readonly CredentialOptions _credentialOptions;
         private readonly IUnitOfWork _uow;
         private new readonly IUserRepository _repository;
         private readonly IUserCredentialRepository _credentialRepository;
         private readonly IUserCredentialTokenRepository _tokenRepository;
         private readonly IScopeRepository _scopeRepository;
         private readonly IRoleRepository _roleRepository;
-        
-        private const int MINUTES_TIME_LIFE = 30;
 
         #endregion
 
         #region Constructors
 
+        ///////// 
+        ///////// 
+        ///////// 
+        ///////// 
+        ///////// <para
+
         /// <summary>
         /// Create a new scopde domain service instance
         /// </summary>
+        /// <param name="authenticatedUser">Authenticated user object</param>
         /// <param name="uow">Unit of Work object</param>
         /// <param name="repository">User repository service</param>
+        /// <param name="credentialRepository">Credential repository service</param>
         /// <param name="tokenRepository">User credential token repository service</param>
         /// <param name="scopeRepository">Scope repository</param>
         /// <param name="roleRepository">Role repository</param>
         /// <param name="securityOptions">Security options configuration</param>
+        /// <param name="credentialOptions">Credential options configuration</param>
+        /// <param name="configuration"></param>
         public UserDomainService
         (
             IAuthenticatedUser authenticatedUser,
@@ -61,6 +69,8 @@ namespace RSoft.Auth.Domain.Services
             IUserCredentialTokenRepository tokenRepository,
             IScopeRepository scopeRepository,
             IRoleRepository roleRepository,
+            IOptions<SecurityOptions> securityOptions,
+            IOptions<CredentialOptions> credentialOptions,
             IConfiguration configuration
         ) : base(repository, authenticatedUser)
         {
@@ -70,11 +80,9 @@ namespace RSoft.Auth.Domain.Services
             _tokenRepository = tokenRepository;
             _scopeRepository = scopeRepository;
             _roleRepository = roleRepository;
-
-            _securityOptions = new SecurityOptions();
-            configuration.GetSection("Application:Security").Bind(_securityOptions);
-            if (!int.TryParse(configuration["Jwt:TimeLife"], out _jwtTimeLife))
-                _jwtTimeLife = MINUTES_TIME_LIFE;
+            
+            _securityOptions = securityOptions?.Value;
+            _credentialOptions = credentialOptions?.Value;
         }
 
         #endregion
@@ -253,7 +261,8 @@ namespace RSoft.Auth.Domain.Services
                         {
                             UserId = user.Id,
                             FirstAccess = firstAccess,
-                            ExpiresOn = DateTime.UtcNow.AddMinutes(_jwtTimeLife)
+                            ExpiresOn = DateTime.UtcNow.AddMinutes(_credentialOptions.Token.TimeLife)
+
                         };
 
                         if (userCredentialToken.Valid)
@@ -375,7 +384,7 @@ namespace RSoft.Auth.Domain.Services
                 else
                 {
                     Scope scopeCheck = user.Scopes.FirstOrDefault(x => x.Id == appKey && x.AccessKey == appAccess);
-                    if (scopeCheck == null)
+                    if (scopeCheck == null || !scopeCheck.IsActive)
                         user = null;
                     else
                         user.Roles = GetRolesByUserAsync(appKey, user.Id);

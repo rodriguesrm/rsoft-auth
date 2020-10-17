@@ -260,6 +260,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [MapToApiVersion("1.0")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateUser([FromBody] UserRequest request, CancellationToken cancellationToken = default)
             => await base.InsertAsync(request, cancellationToken);
 
@@ -316,6 +317,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPut("{key:guid}")]
         [MapToApiVersion("1.0")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid key, UserUpdateRequest request, CancellationToken cancellationToken = default)
             => await RunActionAsync(RunUpdateUserAsync(key, request, cancellationToken), cancellationToken);
 
@@ -334,6 +336,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpDelete("{key:guid}")]
         [MapToApiVersion("1.0")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteUser([FromRoute] Guid key, CancellationToken cancellationToken = default)
             => await RunActionAsync(RunDeleteUserAsync(key, cancellationToken), cancellationToken);
 
@@ -418,7 +421,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpDelete("{key:guid}/roles/{roleKey:guid}")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> AddRoleUser([FromRoute] Guid key, [FromRoute] Guid roleKey, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> RemoveRoleUser([FromRoute] Guid key, [FromRoute] Guid roleKey, CancellationToken cancellationToken = default)
             => await RunActionAsync(RunRemoveRoleUserAsync(key, roleKey, cancellationToken), cancellationToken);
 
         #endregion
