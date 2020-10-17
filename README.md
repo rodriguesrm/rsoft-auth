@@ -177,16 +177,16 @@ The application uses the standard `appsettings.json` and its variants recommende
 
 ```
 
-- `Logging` See microsoft https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1 for defaults parameters and https://github.com/rodriguesrm/rsoft-logs for RSoft.Logs parameters.
-- `ConnectionStrings` needs a `DbServer` parameter to connect MySqlDatabase like in example.
-- `Scope` is a service identification section in the RSoft ecosystem. This key is standard and should not be changed as it will influence the communication between the systems and services of the RSoft platform.
-- `Jwt` is the section where token reading and generation parameters must be informed, in addition to the lifetime. For more details, see Jwt's documentation at https://jwt.io/introduction/.
-- `Swagger` is the section where the behavior definition information for the swagger-ui user interface will be placed. For more information see the `RSoft.Framework.Web` repository at https://github.com/rodriguesrm/rsoft-framework-web.
-- `Application` is the section of settings related to the Authentication Service API, of which:
--- `Application:Security: Secret` is the section for entering a 32-character alphanumeric key for composing each user's individual password. The purpose of this key is to combat the use of brute force to break access to the MD5 key from the hash recorded in the database. It is highly recommended that you change this value to a key specific to your environment, since the keys contained in this repository are exposed to the public.
--- `Application:Security:Lockout` is the section for defining temporary user lockout options when they enter their password for a certain number of times and the time, in minutes, that it will remain locked.
--- `Application:Credential` is the section for defining the lifetime of the token for creating and retrieving access credentials, either in the first access process or in password recovery in case of forgetfulness.
--- `RSoftApis` is the section of the urls to access the services of the RSoft ecosystem that this application uses. See the "requirements" section of this document.
+* `Logging` See microsoft https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1 for defaults parameters and https://github.com/rodriguesrm/rsoft-logs for RSoft.Logs parameters.
+* `ConnectionStrings` needs a `DbServer` parameter to connect MySqlDatabase like in example.
+* `Scope` is a service identification section in the RSoft ecosystem. This key is standard and should not be changed as it will influence the communication between the systems and services of the RSoft platform.
+* `Jwt` is the section where token reading and generation parameters must be informed, in addition to the lifetime. For more details, see Jwt's documentation at https://jwt.io/introduction/.
+* `Swagger` is the section where the behavior definition information for the swagger-ui user interface will be placed. For more information see the `RSoft.Framework.Web` repository at https://github.com/rodriguesrm/rsoft-framework-web.
+* `Application` is the section of settings related to the Authentication Service API, of which:
+* `Application:Security: Secret` is the section for entering a 32-character alphanumeric key for composing each user's individual password. The purpose of this key is to combat the use of brute force to break access to the MD5 key from the hash recorded in the database. It is highly recommended that you change this value to a key specific to your environment, since the keys contained in this repository are exposed to the public.
+* `Application:Security:Lockout` is the section for defining temporary user lockout options when they enter their password for a certain number of times and the time, in minutes, that it will remain locked.
+* `Application:Credential` is the section for defining the lifetime of the token for creating and retrieving access credentials, either in the first access process or in password recovery in case of forgetfulness.
+* `RSoftApis` is the section of the urls to access the services of the RSoft ecosystem that this application uses. See the "requirements" section of this document.
 
 ### API Documentation
 This API service has all the documentation made through swagger-doc that can be accessed through the installation url.
