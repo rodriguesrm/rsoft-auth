@@ -70,6 +70,7 @@ The application uses the standard `appsettings.json` and its variants recommende
       "Microsoft.Hosting.Lifetime": "Information"
     },
     "Elastic": {
+      "Enable": true,
       "Uri": "http://localhost:9200",
       "DefaultIndexName": "rsoft-auth",
       "IgnoreCategories": [

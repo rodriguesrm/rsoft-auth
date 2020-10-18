@@ -12,3 +12,6 @@ User authentication service API. Generates a JWT token for authenticate user in 
 - Scope/Application manager (CRUD).
 - User manager (CRUD).
 - Roles manager (CRUD)
+
+#### Version 1.0.1
+- Upgrade RSoft.Framework and RSoft.Logs NuGet packages
