@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 
-namespace RSoft.Auth.Web.Api.Languages
+namespace RSoft.Auth.Web.Api.Extensions
 {
 
     /// <summary>
@@ -18,7 +18,7 @@ namespace RSoft.Auth.Web.Api.Languages
         /// Index of culture in route
         /// </summary>
         public int IndexOfCulture { get; set; }
-        
+
         /// <summary>
         /// INdex of user interface culture in route
         /// </summary>

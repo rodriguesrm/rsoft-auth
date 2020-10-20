@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using RSoft.Auth.Cross.Common.Options;
 using System.Linq;
 
-namespace RSoft.Auth.Web.Api.Languages
+namespace RSoft.Auth.Web.Api.Extensions
 {
 
     /// <summary>

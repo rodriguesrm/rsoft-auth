@@ -13,7 +13,6 @@ using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
 using RSoft.Auth.Web.Api.Extensions;
 using RSoft.Auth.Web.Api.Helpers;
-using RSoft.Auth.Web.Api.Languages;
 using RSoft.Auth.Web.Api.Policies;
 using RSoft.Framework.Web.Extensions;
 using RSoft.Framework.Web.Filters;
