@@ -126,4 +126,10 @@
   <data name="SCOPE_NOT_DEFINED" xml:space="preserve">
     <value>Escopo não definido ou inválido</value>
   </data>
+  <data name="TOKEN_FIRST_ACCESS_MAIL" xml:space="preserve">
+    <value>Informações de primeiro acesso enviado ao e-mail do usuário</value>
+  </data>
+  <data name="TOKEN_RECOVER_ACCESS_MAIL" xml:space="preserve">
+    <value>Informações de recuperação de acesso enviado ao e-mail do usuário</value>
+  </data>
 </root>
