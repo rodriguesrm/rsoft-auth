@@ -14,8 +14,8 @@ using RSoft.Framework.Infra.Data;
 using System.Linq;
 using RSoft.Framework.Cross;
 using RSoft.Framework.Domain.ValueObjects;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Localization;
 
 namespace RSoft.Auth.Domain.Services
 {
@@ -36,16 +36,11 @@ namespace RSoft.Auth.Domain.Services
         private readonly IUserCredentialTokenRepository _tokenRepository;
         private readonly IScopeRepository _scopeRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IStringLocalizer<UserDomainService> _localizer;
 
         #endregion
 
         #region Constructors
-
-        ///////// 
-        ///////// 
-        ///////// 
-        ///////// 
-        ///////// <para
 
         /// <summary>
         /// Create a new scopde domain service instance
@@ -59,7 +54,7 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="roleRepository">Role repository</param>
         /// <param name="securityOptions">Security options configuration</param>
         /// <param name="credentialOptions">Credential options configuration</param>
-        /// <param name="configuration"></param>
+        /// <param name="localizer">Language string localizer</param>
         public UserDomainService
         (
             IAuthenticatedUser authenticatedUser,
@@ -71,7 +66,7 @@ namespace RSoft.Auth.Domain.Services
             IRoleRepository roleRepository,
             IOptions<SecurityOptions> securityOptions,
             IOptions<CredentialOptions> credentialOptions,
-            IConfiguration configuration
+            IStringLocalizer<UserDomainService> localizer
         ) : base(repository, authenticatedUser)
         {
             _uow = uow;
@@ -83,6 +78,7 @@ namespace RSoft.Auth.Domain.Services
             
             _securityOptions = securityOptions?.Value;
             _credentialOptions = credentialOptions?.Value;
+            _localizer = localizer;
         }
 
         #endregion
@@ -115,7 +111,7 @@ namespace RSoft.Auth.Domain.Services
 
             if (cancellationToken.IsCancellationRequested)
             {
-                errors.Add("CreateCredential", "Operation was canceled");
+                errors.Add("CreateCredential", _localizer["CANCELLATION_REQUESTED"]);
             }
             else
             {
@@ -124,7 +120,7 @@ namespace RSoft.Auth.Domain.Services
 
                 if (string.IsNullOrWhiteSpace(convertedPassword))
                 {
-                    errors.Add("Password", "Password is required");
+                    errors.Add("Password", _localizer["PASSWORD_REQUIRED"]);
                 }
                 else
                 {
@@ -132,21 +128,21 @@ namespace RSoft.Auth.Domain.Services
                     UserCredentialToken credentialToken = await _tokenRepository.GetByKeyAsync(tokenId, cancellationToken);
                     if (credentialToken == null)
                     {
-                        errors.Add("Token", "Token is invalid");
+                        errors.Add("Token", _localizer["PWD_TOKEN_INVALID"]);
                     }
                     else
                     {
 
                         if (credentialToken.Expired())
                         {
-                            errors.Add("Token", "Expired token");
+                            errors.Add("Token", _localizer["TOKEN_EXPIRED"]);
                         }
                         else
                         {
 
                             if (credentialToken.FirstAccess != firstAccess)
                             {
-                                errors.Add("Token", "Invalid token for this operation");
+                                errors.Add("Token", _localizer["INVALID_TOKEN_OPERATION"]);
                                 _tokenRepository.Delete(credentialToken.Id);
                                 await _uow.SaveChangesAsync(cancellationToken);
                             }
@@ -156,7 +152,7 @@ namespace RSoft.Auth.Domain.Services
                                 User user = await _repository.GetByKeyAsync(credentialToken.User.Id, cancellationToken);
                                 if (user.Credential != null && firstAccess)
                                 {
-                                    errors.Add("Credential", "Credentials already exist");
+                                    errors.Add("Credential", _localizer["CREDENTIALS_ALREADY_EXISTS"]);
                                     _tokenRepository.Delete(credentialToken.Id);
                                     await _uow.SaveChangesAsync(cancellationToken);
                                 }
@@ -165,7 +161,7 @@ namespace RSoft.Auth.Domain.Services
 
                                     if (firstAccess && (!(await LoginIsAvailableAsync(user.Id, login, cancellationToken))))
                                     {
-                                        errors.Add("Login", "Login already in use");
+                                        errors.Add("Login", _localizer["LOGIN_ALREADY_EXISTS"]);
                                     }
                                     else
                                     {
@@ -196,7 +192,7 @@ namespace RSoft.Auth.Domain.Services
                                         if (cancellationToken.IsCancellationRequested)
                                         {
                                             await _uow.RollBackAsync(default);
-                                            errors.Add("CreateCredential", "Operation was canceled");
+                                            errors.Add("CreateCredential", _localizer["CANCELLATION_REQUESTED"]);
                                         }
                                         else
                                         {
@@ -240,7 +236,7 @@ namespace RSoft.Auth.Domain.Services
 
             if (cancellationToken.IsCancellationRequested)
             {
-                exception = new Exception("Operation was canceled");
+                exception = new Exception(_localizer["CANCELLATION_REQUESTED"].Value);
             }
             else
             {
@@ -248,7 +244,7 @@ namespace RSoft.Auth.Domain.Services
                 User user = await _repository.GetByLoginAsync(login, cancellationToken);
                 if (user == null)
                 {
-                    errors.Add("Credential", "Credentials not found");
+                    errors.Add("Credential", _localizer["CREDENTIALS_NOT_FOUND"]);
                 }
                 else
                 {
@@ -311,7 +307,7 @@ namespace RSoft.Auth.Domain.Services
                     }
                     else
                     {
-                        errors.Add("Credentials", (firstAccess ? "Credentials already exist" : "Credentials not found"));
+                        errors.Add("Credentials", _localizer[(firstAccess ? "CREDENTIALS_ALREADY_EXISTS" : "CREDENTIALS_NOT_FOUND")]);
                     }
 
                 }
@@ -430,14 +426,14 @@ namespace RSoft.Auth.Domain.Services
             if (user != null && user.Credential.Password == hashCurrentPassword)
             {
                 if (_authenticatedUser.Login != user.Credential.Login)
-                    errors.Add("ChangePassword", "Informed user is different from authenticated");
+                    errors.Add("ChangePassword", _localizer["USER_DIFF_AUTH"]);
                 else
                 {
                     if (user.IsActive)
                     {
                         if (currentPassword == newPassword)
                         {
-                            errors.Add("ChangePassword", "The new password cannot be the same as the current password");
+                            errors.Add("ChangePassword", _localizer["USER_SAME_PASSWORD"]);
                         }
                         else
                         {
@@ -452,13 +448,13 @@ namespace RSoft.Auth.Domain.Services
                     }
                     else
                     {
-                        errors.Add("ChangePassword", "User is inactive or blocked");
+                        errors.Add("ChangePassword", _localizer["USER_INACTIVE_BLOCKED"]);
                     }
                 }
             }
             else
             {
-                errors.Add("ChangePassword", "Invalid username or password");
+                errors.Add("ChangePassword", _localizer["USER_INVALID_PASSWORD"]);
             }
             return new SimpleOperationResult(success, errors);
 
@@ -518,14 +514,14 @@ namespace RSoft.Auth.Domain.Services
                         success = true;
                     }
                     else
-                        errors.Add("UserScope", "User is already authorized for this scope");
+                        errors.Add("UserScope", _localizer["USER_ALREADY_SCOPE"]);
                 }
                 else
-                    errors.Add("User", "User not found");
+                    errors.Add("User", _localizer["USER_NOT_FOUND"]);
 
             }
             else
-                errors.Add("Scope", "Scope not found");
+                errors.Add("Scope", _localizer["SCOPE_NOT_FOUND"]);
 
             return new SimpleOperationResult(success, errors);
 
@@ -553,10 +549,10 @@ namespace RSoft.Auth.Domain.Services
                     success = true;
                 }
                 else
-                    errors.Add("UserScope", "User does not have access to this scope or scope not exists");
+                    errors.Add("UserScope", _localizer["USER_NOT_ACCESS_SCOPE"]);
             }
             else
-                errors.Add("User", "User not found");
+                errors.Add("User", _localizer["USER_NOT_FOUND"]);
 
             return new SimpleOperationResult(success, errors);
 
@@ -578,7 +574,7 @@ namespace RSoft.Auth.Domain.Services
                     if (user.Roles.FirstOrDefault(x => x.Id == role.Id) == null)
                         ids.Add(role.Id);
                     else
-                        errors.Add(role.Name, $"The user already has this role");
+                        errors.Add(role.Name, _localizer["USER_ALREADY_ROLE"]);
                 }
                 if (errors.Count == 0)
                 {
@@ -588,7 +584,7 @@ namespace RSoft.Auth.Domain.Services
                 }
             }
             else
-                errors.Add("User", "User not found");
+                errors.Add("User", _localizer["USER_NOT_FOUND"]);
 
             return new SimpleOperationResult(success, errors);
 
@@ -611,10 +607,10 @@ namespace RSoft.Auth.Domain.Services
                     success = true;
                 }
                 else
-                    errors.Add("UserRole", "User does not have this role");
+                    errors.Add("UserRole", _localizer["USER_NO_ROLE"]);
             }
             else
-                errors.Add("User", "User not found");
+                errors.Add("User", _localizer["USER_NOT_FOUND"]);
 
             return new SimpleOperationResult(success, errors);
         }

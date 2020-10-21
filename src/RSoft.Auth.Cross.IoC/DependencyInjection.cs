@@ -9,6 +9,8 @@ using RSoft.Auth.Application.Services;
 using RSoft.Framework.Infra.Data;
 using RSoft.Auth.Cross.Common.Options;
 using System.Net.Security;
+using RSoft.Auth.Cross.Common.Language;
+using RSoft.Auth.Domain.Language;
 
 namespace RSoft.Auth.Cross.IoC
 {
@@ -56,6 +58,7 @@ namespace RSoft.Auth.Cross.IoC
             services.AddScoped<IUserDomainService, UserDomainService>();
             services.AddScoped<IScopeDomainService, ScopeDomainService>();
             services.AddScoped<IRoleDomainService, RoleDomainService>();
+            services.AddScoped<ILocalizerFactory, DomainStringLocalizerFactory>();
 
             #endregion
 

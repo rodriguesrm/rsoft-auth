@@ -7,6 +7,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using RSoft.Auth.Domain.Services;
+using Microsoft.Extensions.Localization;
+using RSoft.Auth.Application.Language;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -20,6 +22,7 @@ namespace RSoft.Auth.Application.Services
         #region Local objects/variables
 
         private readonly IScopeDomainService _scopeDomain;
+        private readonly IStringLocalizer<AppResource> _localizer;
 
         #endregion
 
@@ -31,9 +34,17 @@ namespace RSoft.Auth.Application.Services
         /// <param name="uow">Unit of work object</param>
         /// <param name="dmn">Role domain service object</param>
         /// <param name="scopeDomain">Scope domain service object</param>
-        public RoleAppService(IUnitOfWork uow, IRoleDomainService dmn, IScopeDomainService scopeDomain) : base(uow, dmn) 
+        /// <param name="localizer">Language string localizer</param>
+        public RoleAppService
+        (
+            IUnitOfWork uow, 
+            IRoleDomainService dmn, 
+            IScopeDomainService scopeDomain,
+            IStringLocalizer<AppResource> localizer
+        ) : base(uow, dmn) 
         {
             _scopeDomain = scopeDomain;
+            _localizer = localizer;
         }
 
         #endregion
@@ -67,7 +78,7 @@ namespace RSoft.Auth.Application.Services
             if (entity.Valid)
             {
                 if (_scopeDomain.GetByKeyAsync(entity.Scope.Id).GetAwaiter().GetResult() == null)
-                    entity.AddNotification("Scope", "Scope not found");
+                    entity.AddNotification("Scope", _localizer["SCOPE_NOT_FOUND"]);
             }
         }
 

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RSoft.Auth.Cross.Common.Language;
 using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
@@ -112,7 +113,8 @@ namespace RSoft.Auth.Web.Api
         /// <param name="env">IWebHostEnvironment object instance</param>
         /// <param name="provider">IApiVersionDescriptionProvider object instance</param>
         /// <param name="factory">Logger factory</param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory factory)
+        /// <param name="serviceProvider">Service provider</param>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory factory, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -137,6 +139,9 @@ namespace RSoft.Auth.Web.Api
 
             IOptions<RequestLocalizationOptions> localizeOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(localizeOptions.Value);
+
+            ILocalizerFactory localizerFactory = serviceProvider.GetService<ILocalizerFactory>();
+            localizerFactory?.Create(app.ApplicationServices);
 
             #endregion
 
