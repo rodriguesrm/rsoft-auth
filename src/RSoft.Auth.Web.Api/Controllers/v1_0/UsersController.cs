@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Model.Extensions;
 using RSoft.Auth.Application.Services;
 using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Web.Api.Extensions;
+using RSoft.Auth.Web.Api.Language;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Auth.Web.Api.Model.Response.v1_0;
 using RSoft.Framework.Application.Model;
@@ -27,7 +29,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Route("api/v{version:apiVersion}/{culture:culture}/[controller]")]
+    //[Route("api/v{version:apiVersion}/{culture:culture}/[controller]")]
     [ApiController]
     [Authorize(Roles = "admin, service")]
     public class UsersController : ApiCrudBaseController<Guid, UserDto, UserRequest, UserDetailResponse>
@@ -37,6 +39,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         private readonly IUserAppService _userAppService;
         private readonly ScopeOptions _scopeOptions;
+        private readonly IStringLocalizer<Resource> _localizer;
 
         #endregion
 
@@ -47,10 +50,17 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// </summary>
         /// <param name="userAppService">User application service</param>
         /// <param name="options">Scope options parameters</param>
-        public UsersController(IUserAppService userAppService, IOptions<ScopeOptions> options)
+        /// <param name="localizer">String language localizer</param>
+        public UsersController
+        (
+            IUserAppService userAppService, 
+            IOptions<ScopeOptions> options,
+            IStringLocalizer<Resource> localizer
+        )
         {
             _userAppService = userAppService;
             _scopeOptions = options?.Value;
+            _localizer = localizer;
         }
 
         #endregion
@@ -97,11 +107,11 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         {
 
             if (AppKey != _scopeOptions.Key)
-                return Forbid("Credentials provided do not have user change privileges");
+                return Forbid(_localizer["CHANGE_USER_DENIED"].Value);
 
             UserDto dto = await GetByIdAsync(key, cancellationToken);
             if (dto == null)
-                return NotFound("Data not found");
+                return NotFound(_localizer["DATA_NOT_FOUND"].Value);
 
             dto = MapUpdateToDto(key, request);
             dto = await SaveUpdateAsync(dto, cancellationToken);
@@ -125,12 +135,12 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         {
 
             if (AppKey != _scopeOptions.Key)
-                return Forbid("Credentials provided do not have user exclusion privileges");
+                return Forbid(_localizer["DELETE_USER_DENIED"].Value);
 
             UserDto dto = await GetByIdAsync(key, cancellationToken);
             if (dto == null)
             {
-                return NotFound("Data not found");
+                return NotFound(_localizer["DATA_NOT_FOUND"].Value);
             }
             else
             {

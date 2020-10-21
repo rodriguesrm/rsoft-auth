@@ -45,7 +45,7 @@ namespace RSoft.Auth.Web.Api.Helpers
             {
                 Id = scopeId,
                 Name = new FullNameRequest() { FirstName = scopeName, LastName = "Scope/Application" },
-                Email = "N/A",
+                Email = "NONE",
                 Type = UserType.Service,
                 Roles = new List<RoleDto>() { new RoleDto() { Name = "service" } },
                 Scopes = new List<ScopeDto>() { new ScopeDto() { Name = scopeName } }

@@ -12,20 +12,20 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
         /// <summary>
         /// Login do usuário (cpf ou e-mail)
         /// </summary>
-        [Required(ErrorMessage = "Login is required")]
+        [Required(ErrorMessage = "LOGIN_REQUIRED")]
         public string Login { get; set; }
 
         /// <summary>
         /// Current password
         /// </summary>
-        [Required(ErrorMessage = "Current password is required")]
+        [Required(ErrorMessage = "CURRENT_PASSWORD_REQUIRED")]
         public string CurrentPassword { get; set; }
 
         /// <summary>
         /// New password
         /// </summary>
-        [Required(ErrorMessage = "New password is required")]
-        [StringLength(maximumLength: 16, MinimumLength = 6, ErrorMessage = "The password must contain 6 to 16 characters.")]
+        [Required(ErrorMessage = "NEW_PASSWORD_REQUIRED")]
+        [StringLength(maximumLength: 16, MinimumLength = 6, ErrorMessage = "PASSWORD_LENGTH")]
         public string NewPasword { get; set; }
 
     }

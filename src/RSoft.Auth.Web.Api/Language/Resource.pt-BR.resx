@@ -120,14 +120,44 @@
   <data name="APP_LOGIN_DIALLOW" xml:space="preserve">
     <value>Applicação não tem permissão para se autenticar</value>
   </data>
+  <data name="CHANGE_USER_DENIED" xml:space="preserve">
+    <value>As credenciais fornecidas não têm privilégios de alteração do usuário</value>
+  </data>
+  <data name="CURRENT_PASSWORD_REQUIRED" xml:space="preserve">
+    <value>A senha atual deve ser informada</value>
+  </data>
+  <data name="DATA_NOT_FOUND" xml:space="preserve">
+    <value>Dados não encontrados</value>
+  </data>
+  <data name="DELETE_USER_DENIED" xml:space="preserve">
+    <value>As credenciais fornecidas não têm privilégios de exclusão de usuário</value>
+  </data>
   <data name="INVALID_APP_KEY_ACCESS" xml:space="preserve">
     <value>Chave de identificação ou chave de acesso inválida</value>
+  </data>
+  <data name="LOGIN_MAX_SIZE" xml:space="preserve">
+    <value>O login deve conter no máximo 254 caracteres</value>
+  </data>
+  <data name="LOGIN_REQUIRED" xml:space="preserve">
+    <value>O login deve ser informado</value>
+  </data>
+  <data name="NEW_PASSWORD_REQUIRED" xml:space="preserve">
+    <value>A nova senha deve ser informada</value>
+  </data>
+  <data name="PASSWORD_LENGTH" xml:space="preserve">
+    <value>A senha deve conter entre 6 e 16 caracteres</value>
+  </data>
+  <data name="PASSWORD_REQUIRED" xml:space="preserve">
+    <value>A senha deve ser informada</value>
   </data>
   <data name="SCOPE_NOT_DEFINED" xml:space="preserve">
     <value>Escopo não definido ou inválido</value>
   </data>
   <data name="TOKEN_FIRST_ACCESS_MAIL" xml:space="preserve">
     <value>Informações de primeiro acesso enviado ao e-mail do usuário</value>
+  </data>
+  <data name="TOKEN_PASSWORD_REQUIRED" xml:space="preserve">
+    <value>O token de criação/recuperação de credenciais deve ser informado</value>
   </data>
   <data name="TOKEN_RECOVER_ACCESS_MAIL" xml:space="preserve">
     <value>Informações de recuperação de acesso enviado ao e-mail do usuário</value>

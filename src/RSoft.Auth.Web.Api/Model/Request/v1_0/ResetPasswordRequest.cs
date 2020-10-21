@@ -13,14 +13,14 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
         /// <summary>
         /// Generated token to create credentials
         /// </summary>
-        [Required(ErrorMessage = "Token is required")]
+        [Required(ErrorMessage = "TOKEN_PASSWORD_REQUIRED")]
         public Guid? Token { get; set; }
 
         /// <summary>
         /// User password
         /// </summary>
-        [Required(ErrorMessage = "Password is required")]
-        [StringLength(maximumLength: 16, MinimumLength = 6, ErrorMessage = "The password must contain 6 to 16 characters")]
+        [Required(ErrorMessage = "PASSWORD_REQUIRED")]
+        [StringLength(maximumLength: 16, MinimumLength = 6, ErrorMessage = "PASSWORD_LENGTH")]
         public string Password { get; set; }
 
     }
