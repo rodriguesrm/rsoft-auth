@@ -8,10 +8,6 @@ using RSoft.Auth.Domain.Services;
 using RSoft.Auth.Application.Services;
 using RSoft.Framework.Infra.Data;
 using RSoft.Auth.Cross.Common.Options;
-using RSoft.Auth.Cross.Common.Language;
-using RSoft.Auth.Domain.Language;
-using RSoft.Auth.Cross.Common.Abstractions;
-using RSoft.Auth.Cross.Common.Factories;
 
 namespace RSoft.Auth.Cross.IoC
 {
@@ -35,7 +31,6 @@ namespace RSoft.Auth.Cross.IoC
 
             // Add Framework services
             services.AddRSoftRegister<AuthContext>(configuration, true);
-            services.AddScoped<IStaticServiceFactory, StaticServiceFactory>();
 
             #endregion
 
@@ -64,7 +59,6 @@ namespace RSoft.Auth.Cross.IoC
             services.AddScoped<IUserDomainService, UserDomainService>();
             services.AddScoped<IScopeDomainService, ScopeDomainService>();
             services.AddScoped<IRoleDomainService, RoleDomainService>();
-            services.AddScoped<ILocalizerFactory, DomainStringLocalizerFactory>();
 
             #endregion
 

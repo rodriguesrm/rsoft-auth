@@ -23,6 +23,7 @@ using RSoft.Framework.Cross.Model.Request;
 using System.Text;
 using Microsoft.Extensions.Localization;
 using RSoft.Auth.Application.Language;
+using System.Globalization;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -81,7 +82,7 @@ namespace RSoft.Auth.Application.Services
                 
             client.DefaultRequestHeaders.Add("User-Agent", "RSoft.Auth");
             client.DefaultRequestHeaders.Add("Authorization", $"bearer {appToken}");
-            //TODO: Add Accepted-Language
+            client.DefaultRequestHeaders.Add("Accepted-Language", CultureInfo.CurrentCulture.Name);
 
             //BACKLOG: Add parameters to define sender data and redirect to or body content
             RsMailRequest request = new RsMailRequest()

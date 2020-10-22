@@ -1,4 +1,3 @@
-using Castle.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RSoft.Auth.Cross.Common.Abstractions;
-using RSoft.Auth.Cross.Common.Language;
 using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
@@ -115,9 +113,11 @@ namespace RSoft.Auth.Web.Api
         /// <param name="env">IWebHostEnvironment object instance</param>
         /// <param name="provider">IApiVersionDescriptionProvider object instance</param>
         /// <param name="factory">Logger factory</param>
-        /// <param name="serviceProvider">Service provider</param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory factory, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory factory)
         {
+
+            ServiceActivator.Configure(app.ApplicationServices);
+
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else
@@ -141,12 +141,6 @@ namespace RSoft.Auth.Web.Api
 
             IOptions<RequestLocalizationOptions> localizeOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(localizeOptions.Value);
-
-            //ILocalizerFactory localizerFactory = serviceProvider.GetService<ILocalizerFactory>();
-            //localizerFactory?.Create(app.ApplicationServices);
-
-            IStaticServiceFactory providerFactory = serviceProvider.GetService<IStaticServiceFactory>();
-            providerFactory.Create(serviceProvider);
 
             #endregion
 
