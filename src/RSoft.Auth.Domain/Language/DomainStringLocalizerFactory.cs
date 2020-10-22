@@ -16,7 +16,7 @@ namespace RSoft.Auth.Domain.Language
         public void Create(IServiceProvider provider)
         {
             IStringLocalizer<DomainResource> localizer = provider.GetService<IStringLocalizer<DomainResource>>();
-            DomainLanguage.RegisterLocalizer(localizer);
+            EntityLanguage.RegisterLocalizer(localizer);
         }
     }
 

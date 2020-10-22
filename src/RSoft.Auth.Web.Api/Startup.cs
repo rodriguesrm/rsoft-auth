@@ -1,3 +1,4 @@
+using Castle.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RSoft.Auth.Cross.Common.Abstractions;
 using RSoft.Auth.Cross.Common.Language;
 using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Cross.IoC;
@@ -140,8 +142,11 @@ namespace RSoft.Auth.Web.Api
             IOptions<RequestLocalizationOptions> localizeOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(localizeOptions.Value);
 
-            ILocalizerFactory localizerFactory = serviceProvider.GetService<ILocalizerFactory>();
-            localizerFactory?.Create(app.ApplicationServices);
+            //ILocalizerFactory localizerFactory = serviceProvider.GetService<ILocalizerFactory>();
+            //localizerFactory?.Create(app.ApplicationServices);
+
+            IStaticServiceFactory providerFactory = serviceProvider.GetService<IStaticServiceFactory>();
+            providerFactory.Create(serviceProvider);
 
             #endregion
 

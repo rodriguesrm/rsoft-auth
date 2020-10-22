@@ -4,9 +4,9 @@ namespace RSoft.Auth.Domain.Language
 {
 
     /// <summary>
-    /// Domain language localizer
+    /// Domain-Entities language localizer manager
     /// </summary>
-    public static class DomainLanguage
+    public static class EntityLanguage
     {
 
         public static IStringLocalizer Localizer { get; private set; }

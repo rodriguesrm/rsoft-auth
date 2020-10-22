@@ -8,9 +8,10 @@ using RSoft.Auth.Domain.Services;
 using RSoft.Auth.Application.Services;
 using RSoft.Framework.Infra.Data;
 using RSoft.Auth.Cross.Common.Options;
-using System.Net.Security;
 using RSoft.Auth.Cross.Common.Language;
 using RSoft.Auth.Domain.Language;
+using RSoft.Auth.Cross.Common.Abstractions;
+using RSoft.Auth.Cross.Common.Factories;
 
 namespace RSoft.Auth.Cross.IoC
 {
@@ -30,8 +31,13 @@ namespace RSoft.Auth.Cross.IoC
         public static IServiceCollection AddAuthRegister(this IServiceCollection services, IConfiguration configuration)
         {
 
+            #region General
+
             // Add Framework services
             services.AddRSoftRegister<AuthContext>(configuration, true);
+            services.AddScoped<IStaticServiceFactory, StaticServiceFactory>();
+
+            #endregion
 
             #region Options
 
