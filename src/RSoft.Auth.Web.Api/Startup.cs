@@ -1,14 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using RSoft.Auth.Cross.Common.Abstractions;
-using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
 using RSoft.Auth.Web.Api.Extensions;
@@ -20,9 +16,6 @@ using RSoft.Framework.Web.Filters;
 using RSoft.Logs.Extensions;
 using RSoft.Logs.Middleware;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Reflection;
 
 namespace RSoft.Auth.Web.Api
@@ -116,7 +109,7 @@ namespace RSoft.Auth.Web.Api
             app.UseSwaggerDocUI(provider);
             app.UseApplicationHealthChecks();
 
-            ServiceActivator.Configure(app.ApplicationServices);
+            //ServiceActivator.Configure(app.ApplicationServices);
             app.ConfigureLangague();
 
             app.UseRouting();

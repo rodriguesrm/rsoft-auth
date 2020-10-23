@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DOC_ALREADY_EXISTS" xml:space="preserve">
-    <value>{0} already exists</value>
+    <value>Document already exists</value>
   </data>
   <data name="DUPLICATED_ROLE_LIST" xml:space="preserve">
     <value>Duplicated roles in list</value>

@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using RSoft.Auth.Cross.Common.Abstractions;
 using RSoft.Framework.Cross.Entities;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using RSoft.Framework.Cross.Abstractions;
 
 namespace RSoft.Auth.Domain.Entities
 {

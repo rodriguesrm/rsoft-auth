@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using RSoft.Auth.Cross.Common.Abstractions;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
 using System;
+using RSoft.Framework.Cross.Abstractions;
 
 namespace RSoft.Auth.Domain.Entities
 {

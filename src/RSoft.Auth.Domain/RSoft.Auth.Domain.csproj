@@ -11,10 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RSoft.Framework" Version="1.0.0-rc1.7" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\..\rsoft-framework\src\RSoft.Framework\RSoft.Framework.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Cross.Common\RSoft.Auth.Cross.Common.csproj" />
   </ItemGroup>
 

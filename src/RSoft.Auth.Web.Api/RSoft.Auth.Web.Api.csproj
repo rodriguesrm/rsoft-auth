@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\rsoft-framework\src\RSoft.Framework\RSoft.Framework.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Application\RSoft.Auth.Application.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Cross.IoC\RSoft.Auth.Cross.IoC.csproj" />
   </ItemGroup>

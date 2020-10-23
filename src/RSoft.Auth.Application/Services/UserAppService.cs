@@ -87,7 +87,7 @@ namespace RSoft.Auth.Application.Services
             if (entity.Valid)
             {
                 if (_dmn.GetByDocumentAsync(entity.Document, default).GetAwaiter().GetResult() != null)
-                    entity.AddNotification(nameof(User.Document), string.Format(_localizer["DOC_ALREADY_EXISTS"], nameof(User.Document)));
+                    entity.AddNotification(nameof(User.Document), _localizer["DOC_ALREADY_EXISTS"]);
             }
         }
 
