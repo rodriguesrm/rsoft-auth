@@ -83,26 +83,7 @@ namespace RSoft.Auth.Web.Api
             services.AddMiddlewareLoggingOption(Configuration);
             services.AddApplicationHealthChecks(Configuration);
             services.AddScoped<ITokenHelper, TokenHelper>();
-
-            #region Language/Culture
-
-            services.AddLocalization();
-
-            services.Configure<RequestLocalizationOptions>(
-                options =>
-                {
-                    CultureOptions cultureOptions = new CultureOptions();
-                    Configuration.GetSection("Application:Culture").Bind(cultureOptions);
-
-                    IList<CultureInfo> supportedCultures = cultureOptions.SupportedLanguage.Select(c => new CultureInfo(c)).ToList();
-
-                    options.DefaultRequestCulture = new RequestCulture(culture: cultureOptions.DefaultLanguage, uiCulture: cultureOptions.DefaultLanguage);
-                    options.SupportedCultures = supportedCultures;
-                    options.SupportedUICultures = supportedCultures;
-                    options.RequestCultureProviders = new[] { new HeaderRequestCultureProvider(cultureOptions.DefaultLanguage, cultureOptions.SupportedLanguage) };
-                });
-
-            #endregion
+            services.AddCultureLanguage(Configuration);
 
         }
 
@@ -115,8 +96,6 @@ namespace RSoft.Auth.Web.Api
         /// <param name="factory">Logger factory</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory factory)
         {
-
-            ServiceActivator.Configure(app.ApplicationServices);
 
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -137,12 +116,8 @@ namespace RSoft.Auth.Web.Api
             app.UseSwaggerDocUI(provider);
             app.UseApplicationHealthChecks();
 
-            #region Language/Culture
-
-            IOptions<RequestLocalizationOptions> localizeOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
-            app.UseRequestLocalization(localizeOptions.Value);
-
-            #endregion
+            ServiceActivator.Configure(app.ApplicationServices);
+            app.ConfigureLangague();
 
             app.UseRouting();
 
