@@ -8,6 +8,7 @@ using RSoft.Auth.Domain.Services;
 using RSoft.Auth.Application.Services;
 using RSoft.Framework.Infra.Data;
 using RSoft.Auth.Cross.Common.Options;
+using RSoft.Framework.Options;
 
 namespace RSoft.Auth.Cross.IoC
 {

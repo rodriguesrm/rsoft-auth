@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\rsoft-framework\src\RSoft.Framework\RSoft.Framework.csproj" />
+    <PackageReference Include="RSoft.Framework" Version="1.0.0-rc1.8" />
   </ItemGroup>
 
 </Project>
