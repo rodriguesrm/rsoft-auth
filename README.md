@@ -11,9 +11,9 @@ User authentication service API. Generates a JWT token for authenticate user in 
 - `RSoft-Mail API Service` for sending credential creation and retrieval emails. See https://github.com/rodriguesrm/rsoft-mail-service.
 
 ### NuGet Package Dependencies
-- `RSoft.Framework (>= 1.0.0-rc1.4)`. See https://www.nuget.org/packages/RSoft.Framework.
+- `RSoft.Framework (>= 1.0.0-rc1.8)`. See https://www.nuget.org/packages/RSoft.Framework.
 - `RSoft.Framework.Web (>= 1.0.0-rc1.3)`. See https://www.nuget.org/packages/RSoft.Framework.Web.
-- `RSoft.Logs (>= 1.0.0-rc1.6)`. See https://www.nuget.org/packages/RSoft.Logs.
+- `RSoft.Logs (>= 1.0.0-rc1.7)`. See https://www.nuget.org/packages/RSoft.Logs.
 
 It was presented here the dependencies related to other projects also available in this repository. To view the total list of project dependencies, I suggest you open the .net core solution and explore the projects.
 
