@@ -13,15 +13,15 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
         /// User login
         /// </summary>
         /// <example>admin</example>
-        [Required(ErrorMessage = "Login is required")]
-        [MaxLength(255, ErrorMessage = "The login must contain a maximum of 254 characters")]
+        [Required(ErrorMessage = "LOGIN_REQUIRED")]
+        [MaxLength(254, ErrorMessage = "LOGIN_MAX_SIZE")]
         public string Login { get; set; }
 
         /// <summary>
         /// User password (base text)
         /// </summary>
         /// <example>admin123</example>
-        [Required(ErrorMessage = "Password is required")]
+        [Required(ErrorMessage = "PASSWORD_REQUIRED")]
         public string Password { get; set; }
 
     }

@@ -15,3 +15,7 @@ User authentication service API. Generates a JWT token for authenticate user in 
 
 #### Version 1.0.1
 - Upgrade RSoft.Framework and RSoft.Logs NuGet packages
+
+#### Version 1.0.2
+- Added globalization feature with en-US and pt-BR languages
+- Upgrade RSoft.Framework to version 1.0.0-rc1.8 because supported langauge globalization

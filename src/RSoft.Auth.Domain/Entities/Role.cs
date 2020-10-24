@@ -1,8 +1,11 @@
-﻿using RSoft.Framework.Cross.Entities;
+﻿using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.DependencyInjection;
+using RSoft.Framework.Cross.Entities;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using RSoft.Framework.Cross.Abstractions;
 
 namespace RSoft.Auth.Domain.Entities
 {
@@ -42,6 +45,7 @@ namespace RSoft.Auth.Domain.Entities
         public Role(string id) : base()
         {
             Id = new Guid(id);
+            Initialize();
         }
 
         #endregion
@@ -94,10 +98,10 @@ namespace RSoft.Auth.Domain.Entities
         /// </summary>
         public override void Validate()
         {
-            //BACKLOG: Globalization
+            IStringLocalizer<Role> localizer = ServiceActivator.GetScope().ServiceProvider.GetService<IStringLocalizer<Role>>();
             if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);
             if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
-            AddNotifications(new RequiredValidationContract<Guid?>(Scope?.Id, nameof(Scope), "Scope id is required").Contract.Notifications);
+            AddNotifications(new RequiredValidationContract<Guid?>(Scope?.Id, nameof(Scope), localizer["SCOPE_REQUIRED"]).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Name, nameof(Name), true, 3, 50).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Description, nameof(Description), true, 3, 150).Contract.Notifications);
         }

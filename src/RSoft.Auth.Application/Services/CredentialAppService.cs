@@ -21,6 +21,9 @@ using System.Text.Json;
 using System.Linq;
 using RSoft.Framework.Cross.Model.Request;
 using System.Text;
+using Microsoft.Extensions.Localization;
+using RSoft.Auth.Application.Language;
+using System.Globalization;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -33,6 +36,7 @@ namespace RSoft.Auth.Application.Services
         private readonly IUserDomainService _userDomain;
         private readonly RSApiOptions _apiOptions;
         private readonly JsonSerializerOptions _jsonOptions;
+        private readonly IStringLocalizer<AppResource> _localizer;
 
         #endregion
 
@@ -43,11 +47,18 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="provider">DIP Service provider</param>
         /// <param name="options">RSoft Api options parameters object</param>
-        public CredentialAppService(IServiceProvider provider, IOptions<RSApiOptions> options)
+        /// <param name="localizer">Language localizer string</param>
+        public CredentialAppService
+        (
+            IServiceProvider provider, 
+            IOptions<RSApiOptions> options,
+            IStringLocalizer<AppResource> localizer
+        )
         {
             _userDomain = provider.GetService<IUserDomainService>();
             _apiOptions = options?.Value;
             _jsonOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            _localizer = localizer;
         }
 
         #endregion
@@ -71,6 +82,7 @@ namespace RSoft.Auth.Application.Services
                 
             client.DefaultRequestHeaders.Add("User-Agent", "RSoft.Auth");
             client.DefaultRequestHeaders.Add("Authorization", $"bearer {appToken}");
+            client.DefaultRequestHeaders.Add("Accepted-Language", CultureInfo.CurrentCulture.Name);
 
             //BACKLOG: Add parameters to define sender data and redirect to or body content
             RsMailRequest request = new RsMailRequest()
@@ -136,7 +148,7 @@ namespace RSoft.Auth.Application.Services
 
                     if (user.Credential.ChangeCredentials)
                     {
-                        errors.Add("Authenticate", "User must change password");
+                        errors.Add("Authenticate", _localizer["USER_MUST_CHANGE_PASSWORD"]);
                     }
                     else
                     {
@@ -145,7 +157,7 @@ namespace RSoft.Auth.Application.Services
 
                             if (user.Credential.LockoutUntil.HasValue && user.Credential.LockoutUntil.Value > DateTime.UtcNow)
                             {
-                                errors.Add("Authenticate", "User is lockout");
+                                errors.Add("Authenticate", _localizer["USER_LOCKOUT"]);
                             }
                             else
                             {
@@ -156,21 +168,21 @@ namespace RSoft.Auth.Application.Services
                         }
                         else
                         {
-                            errors.Add("Authenticate", "Inactive or blocked user");
+                            errors.Add("Authenticate", _localizer["USER_INACTIVE"]);
                         }
                     }
 
                 }
                 else
                 {
-                    errors.Add("Authenticate", "Service user cannot authenticate as a regular user");
+                    errors.Add("Authenticate", _localizer["SERVICE_NOT_AS_USER"]);
                 }
             }
             else
             {
                 if (userId.HasValue)
                     await _userDomain.MarkLoginFail(userId.Value, cancellationToken);
-                errors.Add("Authenticate", "Invalid username and/or password!");
+                errors.Add("Authenticate", _localizer["USER_PASSWORD_FAIL"]);
             }
 
             return new AuthenticateResult<UserDto>(success, userDto, errors);
@@ -186,7 +198,7 @@ namespace RSoft.Auth.Application.Services
             {
                 IDictionary<string, string> errors = new Dictionary<string, string>
                 {
-                    { "Email", "E-mail is invalid or empty" }
+                    { "Email", _localizer["EMAIL_INVALID_OR_EMPTY"] }
                 };
                 result = new PasswordProcessResult(false, null, null, errors, null);
             }
@@ -210,7 +222,7 @@ namespace RSoft.Auth.Application.Services
             {
                 IDictionary<string, string> errors = new Dictionary<string, string>
                 {
-                    { "Login", "Login is required" }
+                    { "Login", _localizer["LOGIN_REQUIRED"] }
                 };
                 result = new PasswordProcessResult(false, null, null, errors, null);
             }
@@ -239,7 +251,7 @@ namespace RSoft.Auth.Application.Services
 
             if (string.IsNullOrEmpty(login))
             {
-                errors.Add("Login", "Login is required");
+                errors.Add("Login", _localizer["LOGIN_REQUIRED"]);
             }
             else
             {

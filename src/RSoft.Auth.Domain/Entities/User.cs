@@ -1,4 +1,6 @@
-﻿using RSoft.Framework.Cross.Entities;
+﻿using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.DependencyInjection;
+using RSoft.Framework.Cross.Entities;
 using RSoft.Framework.Cross.Enums;
 using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
@@ -6,6 +8,7 @@ using RSoft.Framework.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RSoft.Framework.Cross.Abstractions;
 
 namespace RSoft.Auth.Domain.Entities
 {
@@ -130,14 +133,14 @@ namespace RSoft.Auth.Domain.Entities
         public override void Validate()
         {
 
-            //BACKLOG: Globalization
+            IStringLocalizer<User> localizer = ServiceActivator.GetScope().ServiceProvider.GetService<IStringLocalizer<User>>();
             if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);
             if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
             AddNotifications(Name.Notifications);
             AddNotifications(Email.Notifications);
-            AddNotifications(new RequiredValidationContract<string>(Email?.Address, $"Email.{nameof(Email.Address)}", "Email is required").Contract.Notifications);
-            AddNotifications(new RequiredValidationContract<UserType?>(Type, nameof(Type), "User type is required").Contract.Notifications);
-            AddNotifications(new PastDateValidationContract(BornDate, "Born date", "Burn date is required").Contract.Notifications);
+            AddNotifications(new RequiredValidationContract<string>(Email?.Address, $"Email.{nameof(Email.Address)}", localizer["EMAIL_REQUIRED"]).Contract.Notifications);
+            AddNotifications(new RequiredValidationContract<UserType?>(Type, nameof(Type), localizer["USER_TYPE_REQUIRED"]).Contract.Notifications);
+            AddNotifications(new PastDateValidationContract(BornDate, "Born date", localizer["BORN_DATE_REQUIRED"]).Contract.Notifications);
 
             if (Credential != null)
             {
@@ -150,7 +153,7 @@ namespace RSoft.Auth.Domain.Entities
                 AddNotifications(new BrasilianCpfValidationContract(Document, nameof(Document), true).Contract.Notifications);
                 if (!Scopes.Any())
                 {
-                    AddNotification(nameof(Scopes), "The user must be assigned to at least one scope");
+                    AddNotification(nameof(Scopes), localizer["USER_IN_ONE_SCOPE"]);
                 }
                 else
                 {

@@ -172,6 +172,13 @@ The application uses the standard `appsettings.json` and its variants recommende
     "RSoftApis": {
       "Uri": "http://localhost:8081",
       "MailService": "/api/v1.0/Mail"
+    },
+    "Culture": {
+      "SupportedLanguage": [
+        "en-US",
+        "pt-BR"
+      ],
+      "DefaultLanguage": "en-US"
     }
   }
 }
@@ -188,6 +195,7 @@ The application uses the standard `appsettings.json` and its variants recommende
 * `Application:Security:Lockout` is the section for defining temporary user lockout options when they enter their password for a certain number of times and the time, in minutes, that it will remain locked.
 * `Application:Credential` is the section for defining the lifetime of the token for creating and retrieving access credentials, either in the first access process or in password recovery in case of forgetfulness.
 * `RSoftApis` is the section of the urls to access the services of the RSoft ecosystem that this application uses. See the "requirements" section of this document.
+* `Culture` is the section for configuring supported languages and the default application language.
 
 ### API Documentation
 This API service has all the documentation made through swagger-doc that can be accessed through the installation url.

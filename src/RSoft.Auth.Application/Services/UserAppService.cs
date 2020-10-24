@@ -10,6 +10,8 @@ using RSoft.Auth.Domain.Services;
 using System.Collections.Generic;
 using System.Linq;
 using RSoft.Framework.Application.Model;
+using Microsoft.Extensions.Localization;
+using RSoft.Auth.Application.Language;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -25,6 +27,7 @@ namespace RSoft.Auth.Application.Services
         private readonly IScopeDomainService _scopeDomain;
         private readonly IRoleDomainService _roleDomain;
         private new readonly IUserDomainService _dmn;
+        private readonly IStringLocalizer<AppResource> _localizer;
 
         #endregion
 
@@ -37,11 +40,20 @@ namespace RSoft.Auth.Application.Services
         /// <param name="dmn">User domain service object</param>
         /// <param name="scopeDomain">Scope domain service</param>
         /// <param name="roleDomain">Role domain service</param>
-        public UserAppService(IUnitOfWork uow, IUserDomainService dmn, IScopeDomainService scopeDomain, IRoleDomainService roleDomain) : base(uow, dmn) 
+        /// <param name="localizer">Language string localizer</param>
+        public UserAppService
+        (
+            IUnitOfWork uow, 
+            IUserDomainService dmn, 
+            IScopeDomainService scopeDomain, 
+            IRoleDomainService roleDomain,
+            IStringLocalizer<AppResource> localizer
+        ) : base(uow, dmn) 
         {
             _scopeDomain = scopeDomain;
             _roleDomain = roleDomain;
             _dmn = dmn;
+            _localizer = localizer;
         }
 
         #endregion
@@ -75,7 +87,7 @@ namespace RSoft.Auth.Application.Services
             if (entity.Valid)
             {
                 if (_dmn.GetByDocumentAsync(entity.Document, default).GetAwaiter().GetResult() != null)
-                    entity.AddNotification(nameof(User.Document), $"{nameof(User.Document)} alredy exists");
+                    entity.AddNotification(nameof(User.Document), _localizer["DOC_ALREADY_EXISTS"]);
             }
         }
 
@@ -93,7 +105,7 @@ namespace RSoft.Auth.Application.Services
             {
                 Scope scope = await _scopeDomain.GetByKeyAsync(item.Id, cancellationToken);
                 if (scope == null)
-                    dto.AddNotification("Scopes", $"Scope '{item.Id}' not found");
+                    dto.AddNotification("Scopes", string.Format(_localizer["SCOPE_ID_NOT_FOUND"], item.Id));
                 else
                     scopes.Add(scope);
             }
@@ -148,13 +160,13 @@ namespace RSoft.Auth.Application.Services
                                 if (role.Scope.Id == scopeId)
                                     rolesList.Add(role);
                                 else
-                                    errors.Add(item.ToString(), "This role does not belong to that scope");
+                                    errors.Add(item.ToString(), _localizer["ROLE_NOT_BELONG_SCOPE"]);
                             }
                             else
-                                errors.Add(item.ToString(), "Role not found");
+                                errors.Add(item.ToString(), _localizer["ROLE_NOT_FOUND"]);
                         }
                         else
-                            errors.Add(item.ToString(), "Role invalid or empty");
+                            errors.Add(item.ToString(), _localizer["INVALID_ROLE"]);
                     }
 
                     if (errors.Count == 0)
@@ -164,11 +176,11 @@ namespace RSoft.Auth.Application.Services
 
                 }
                 else
-                    errors.Add("Roles", "Duplicated roles in list");
+                    errors.Add("Roles", _localizer["DUPLICATED_ROLE_LIST"]);
 
             }
             else
-                errors.Add("Roles", "List of role id key is required");
+                errors.Add("Roles", _localizer["ROLE_LIST_REQUIRED"]);
 
             return new SimpleOperationResult(success, errors);
         }

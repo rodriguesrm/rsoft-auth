@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using RSoft.Auth.Application.Services;
 using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Web.Api.Helpers;
+using RSoft.Auth.Web.Api.Language;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Framework.Application.Model;
 using RSoft.Framework.Web.Api;
@@ -22,6 +24,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
+    //[Route("api/v{version:apiVersion}/{culture:culture}/[controller]")]
     [ApiController]
     public class CredentialController : ApiBaseController
     {
@@ -30,6 +33,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
         private readonly ICredentialAppService _appService;
         private readonly ITokenHelper _tokenHelper;
+        private readonly IStringLocalizer<Resource> _localizer;
 
         #endregion
 
@@ -40,10 +44,17 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// </summary>
         /// <param name="appService">Credential application service</param>
         /// <param name="tokenHelper">Token helper object</param>
-        public CredentialController(ICredentialAppService appService, ITokenHelper tokenHelper) : base()
+        /// <param name="localizer">String language localizer</param>
+        public CredentialController
+        (
+            ICredentialAppService appService, 
+            ITokenHelper tokenHelper,
+            IStringLocalizer<Resource> localizer
+        ) : base()
         {
             _appService = appService;
             _tokenHelper = tokenHelper;
+            _localizer = localizer;
         }
 
         #endregion
@@ -60,7 +71,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             PasswordProcessResult result = await _appService.GetFirstAccessAsync(email, _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", out _), cancellationToken);
 
             if (result.Success)
-                return Ok("First access information sent to the user's email");
+                return Ok(_localizer["TOKEN_FIRST_ACCESS_MAIL"].Value);
 
             if (result.IsException)
                 return HandleException(500, result.Exception);
@@ -93,7 +104,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             PasswordProcessResult result = await _appService.GetResetAccessAsync(login, _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", out _), cancellationToken);
 
             if (result.Success)
-                return Ok("Recover access information sent to the user's email");
+                return Ok(_localizer["TOKEN_RECOVER_ACCESS_MAIL"].Value);
 
             if (result.IsException)
                 return HandleException(500, result.Exception);

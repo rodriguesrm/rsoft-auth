@@ -8,7 +8,7 @@ using RSoft.Auth.Domain.Services;
 using RSoft.Auth.Application.Services;
 using RSoft.Framework.Infra.Data;
 using RSoft.Auth.Cross.Common.Options;
-using System.Net.Security;
+using RSoft.Framework.Options;
 
 namespace RSoft.Auth.Cross.IoC
 {
@@ -28,14 +28,19 @@ namespace RSoft.Auth.Cross.IoC
         public static IServiceCollection AddAuthRegister(this IServiceCollection services, IConfiguration configuration)
         {
 
+            #region General
+
             // Add Framework services
             services.AddRSoftRegister<AuthContext>(configuration, true);
+
+            #endregion
 
             #region Options
 
             services.Configure<SecurityOptions>(options => configuration.GetSection("Application:Security").Bind(options));
             services.Configure<RSApiOptions>(options => configuration.GetSection("Application:RSoftApis").Bind(options));
             services.Configure<CredentialOptions>(options => configuration.GetSection("Application:Credential").Bind(options));
+            services.Configure<CultureOptions>(options => configuration.GetSection("Application:Culture").Bind(options));
 
             #endregion
 

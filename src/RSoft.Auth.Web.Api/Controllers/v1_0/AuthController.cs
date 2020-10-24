@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Services;
 using RSoft.Auth.Web.Api.Helpers;
+using RSoft.Auth.Web.Api.Language;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Auth.Web.Api.Model.Response.v1_0;
 using RSoft.Framework.Application.Model;
-using RSoft.Framework.Cross;
 using RSoft.Framework.Web.Api;
 using RSoft.Framework.Web.Model.Response;
 using RSoft.Logs.Model;
@@ -25,34 +26,41 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
+    //[Route("api/v{version:apiVersion}/{culture:culture}/[controller]")]
     [ApiController]
     public class AuthController : ApiBaseController
     {
 
         #region Local objects/variables
 
-        private IAuthenticatedUser _user;
-        private ICredentialAppService _appService;
-        private IScopeAppService _scopeAppService;
+        private readonly ICredentialAppService _appService;
+        private readonly IScopeAppService _scopeAppService;
         private readonly ITokenHelper _tokenHelper;
+        private readonly IStringLocalizer<Resource> _localizer;
 
         #endregion
 
         #region Constructors
 
-        ///<inheritdoc/>
+        /// <summary>
+        /// Initialize a new instance of AUthController API
+        /// </summary>
+        /// <param name="appService">Credential application service</param>
+        /// <param name="scopeAppService">Scope application service</param>
+        /// <param name="tokenHelper">Token helper</param>
+        /// <param name="localizer">String language localizer</param>
         public AuthController
         (
-            IAuthenticatedUser user,
             ICredentialAppService appService,
             IScopeAppService scopeAppService,
-            ITokenHelper tokenHelper
+            ITokenHelper tokenHelper,
+            IStringLocalizer<Resource> localizer
         ) : base()
         {
-            _user = user;
             _appService = appService;
             _scopeAppService = scopeAppService;
             _tokenHelper = tokenHelper;
+            _localizer = localizer;
         }
 
         #endregion
@@ -66,14 +74,14 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         private async Task<IActionResult> AuthenticateApplicationAsync(CancellationToken cancellationToken)
         {
             if (!AppKey.HasValue || !AppAccess.HasValue)
-                return Unauthorized("Scope not defined or invalid");
+                return Unauthorized(_localizer["SCOPE_NOT_DEFINED"].Value);
 
             ScopeDto scope = await _scopeAppService.GetByKeyAsync(AppKey.Value, cancellationToken);
             if (scope == null || scope.AccessKey != AppAccess.Value)
-                return Unauthorized("Application Key or Access is invalid");
+                return Unauthorized(_localizer["INVALID_APP_KEY_ACCESS"].Value);
 
             if (!scope.AllowLogin || !scope.IsActive)
-                return Unauthorized("Application Key is not allowed to log in");
+                return Unauthorized(_localizer["APP_LOGIN_DIALLOW"].Value);
 
             string token = _tokenHelper.GenerateTokenAplication(scope.Id, scope.Name, out DateTime? expiresIn);
             AuthenticateResponse result = new AuthenticateResponse(token, expiresIn, null, null);
@@ -91,7 +99,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         {
 
             if (!AppKey.HasValue || !AppAccess.HasValue)
-                return Unauthorized("Scope not defined or invalid");
+                return Unauthorized(_localizer["SCOPE_NOT_DEFINED"].Value);
 
             AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(AppKey.Value, AppAccess.Value, request.Login, request.Password, cancellationToken);
             if (authResult.Success)

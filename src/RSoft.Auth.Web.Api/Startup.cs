@@ -9,6 +9,7 @@ using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.Infra.Data.Extensions;
 using RSoft.Auth.Web.Api.Extensions;
 using RSoft.Auth.Web.Api.Helpers;
+using RSoft.Auth.Web.Api.Language;
 using RSoft.Auth.Web.Api.Policies;
 using RSoft.Framework.Web.Extensions;
 using RSoft.Framework.Web.Filters;
@@ -49,6 +50,13 @@ namespace RSoft.Auth.Web.Api
             
             services
                 .AddControllers(opt => GlobalFilters.Configure(opt))
+                .AddDataAnnotationsLocalization(options =>
+                {
+                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                    {
+                        return factory.Create(typeof(Resource));
+                    };
+                })
                 .AddJsonOptions(opt =>
                 {
                     opt.JsonSerializerOptions.IgnoreNullValues = true;
@@ -68,6 +76,7 @@ namespace RSoft.Auth.Web.Api
             services.AddMiddlewareLoggingOption(Configuration);
             services.AddApplicationHealthChecks(Configuration);
             services.AddScoped<ITokenHelper, TokenHelper>();
+            services.AddCultureLanguage(Configuration);
 
         }
 
@@ -80,6 +89,7 @@ namespace RSoft.Auth.Web.Api
         /// <param name="factory">Logger factory</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory factory)
         {
+
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else
@@ -98,6 +108,9 @@ namespace RSoft.Auth.Web.Api
             app.UseMiddleware<RequestResponseLogging<Startup>>();
             app.UseSwaggerDocUI(provider);
             app.UseApplicationHealthChecks();
+
+            //ServiceActivator.Configure(app.ApplicationServices);
+            app.ConfigureLangague();
 
             app.UseRouting();
 

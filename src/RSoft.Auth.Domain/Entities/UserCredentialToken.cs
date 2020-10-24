@@ -1,6 +1,9 @@
-﻿using RSoft.Framework.Domain.Contracts;
+﻿using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.DependencyInjection;
+using RSoft.Framework.Domain.Contracts;
 using RSoft.Framework.Domain.Entities;
 using System;
+using RSoft.Framework.Cross.Abstractions;
 
 namespace RSoft.Auth.Domain.Entities
 {
@@ -82,10 +85,10 @@ namespace RSoft.Auth.Domain.Entities
         ///<inheritdoc/>
         public override void Validate()
         {
-            //BACKLOG: Globalization
-            AddNotifications(new RequiredValidationContract<Guid?>(UserId, nameof(UserId), "UserId is required").Contract.Notifications);
+            IStringLocalizer<UserCredentialToken> localizer = ServiceActivator.GetScope().ServiceProvider.GetService<IStringLocalizer<UserCredentialToken>>();
+            AddNotifications(new RequiredValidationContract<Guid?>(UserId, nameof(UserId), localizer["USER_REQUIRED"]).Contract.Notifications);
             if (ExpiresOn <= CreatedAt)
-                AddNotification("Dates", "The expiration date must not be the token creation date before");
+                AddNotification("Dates", localizer["EXPIRED_DATE_IN_PAST"]);
         }
 
         /// <summary>
