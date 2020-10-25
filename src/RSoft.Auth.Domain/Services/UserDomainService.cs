@@ -279,7 +279,8 @@ namespace RSoft.Auth.Domain.Services
                                 FirstAccess = firstAccess,
                                 Name = user.Name.GetFullName(),
                                 Email = user.Email.Address,
-                                Token = userCredentialToken.Id
+                                Token = userCredentialToken.Id,
+                                ExpireOn = userCredentialToken.ExpiresOn
                             });
 
                             cancellationToken.ThrowIfCancellationRequested();

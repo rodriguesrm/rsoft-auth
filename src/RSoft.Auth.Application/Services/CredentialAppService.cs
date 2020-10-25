@@ -24,6 +24,7 @@ using System.Text;
 using Microsoft.Extensions.Localization;
 using RSoft.Auth.Application.Language;
 using System.Globalization;
+using System.IO;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -84,12 +85,12 @@ namespace RSoft.Auth.Application.Services
             client.DefaultRequestHeaders.Add("Authorization", $"bearer {appToken}");
             client.DefaultRequestHeaders.Add("Accepted-Language", CultureInfo.CurrentCulture.Name);
 
-            //BACKLOG: Add parameters to define sender data and redirect to or body content
+            //BUG: Add uri parameters to replace hard-code url
             RsMailRequest request = new RsMailRequest()
             {
                 From = new EmailAddressRequest("noreply@rsoft.com", "RSoft.Auth"),
                 Subject = $"{(args.FirstAccess ? "First" : "Recovery")} access",
-                Content = $"TOKEN TO RECOVERY: {args.Token}",
+                Content = GetEmailBody(args.Name, "RSoft System", "http://localhost/assets/html/credential-template.html", args.Token, args.ExpireOn, args.FirstAccess),
                 EnableHtml = true
             };
             request.To.Add(new EmailAddressRequest(args.Email, args.Name));
@@ -123,6 +124,40 @@ namespace RSoft.Auth.Application.Services
             }
 
             return new SimpleOperationResult(success, errors);
+        }
+
+        /// <summary>
+        /// Get e-mail body with action data and links
+        /// </summary>
+        /// <param name="userName">user name</param>
+        /// <param name="serviceName">Client service name</param>
+        /// <param name="uri">System uri base</param>
+        /// <param name="token">Recovery token</param>
+        /// <param name="tokenDeadLine">Token dead limte date/time</param>
+        /// <param name="firstAccess">Is first access flag</param>
+        private string GetEmailBody(string userName, string serviceName, string uri, Guid token, DateTime tokenDeadLine, bool firstAccess)
+        {
+
+            string file = Path.Combine(AppContext.BaseDirectory, "wwwroot", "assets", "credential-template.html");
+            string templateContent = File.OpenText(file).ReadToEnd();
+
+            string url = $"{new Uri(uri).AbsoluteUri}/credential?token={token}";
+
+            string credentialAction = firstAccess ? _localizer["CREDENTIAL_CREATE"] : _localizer["CREDENTIAL_RECOVERY"];
+            templateContent = templateContent.Replace("{CREDENTIAL_ACTION}", credentialAction);
+            templateContent = templateContent.Replace("{CREDENTIAL_MAIL_BODY_OPEN_TEXT}", _localizer["CREDENTIAL_MAIL_BODY_OPEN_TEXT"]);
+            templateContent = templateContent.Replace("{SERVICE_NAME}", serviceName);
+            templateContent = templateContent.Replace("{USERNAME}", userName);
+            templateContent = templateContent.Replace("{ACTION}", firstAccess ? _localizer["CREDENTIAL_ACTION_CREATE"] : _localizer["CREDENTIAL_ACTION_RECOVERY"]);
+            templateContent = templateContent.Replace("{ACTION_PASSWORD}", firstAccess ? _localizer["CREDENTIAL_ACTION_CREATE_PASSWORD"] : _localizer["CREDENTIAL_ACTION_RECOVERY_PASSWORD"]);
+            templateContent = templateContent.Replace("{CREDENTIAL_OR_ELSE_LINK}", _localizer["CREDENTIAL_OR_ELSE_LINK"]);
+            templateContent = templateContent.Replace("{URL}", url);
+            templateContent = templateContent.Replace("{BUTTON_LABEL}", firstAccess ? _localizer["CREDENTIAL_BUTTONL_LABEL_CREATE"] : _localizer["CREDENTIAL_BUTTONL_LABEL_RECOVERY"]);
+            templateContent = templateContent.Replace("{CREDENTIAL_TOKEN_DEADLINE}", _localizer["CREDENTIAL_TOKEN_DEADLINE"]);
+            templateContent = templateContent.Replace("{TOKEN_DEADLINE}", $"{tokenDeadLine.ToLocalTime().ToShortDateString()} {tokenDeadLine.ToLocalTime().ToShortTimeString()}");
+            templateContent = templateContent.Replace("{CREDENTIAL_DISCARD_MESSAGE}", _localizer["CREDENTIAL_DISCARD_MESSAGE"]);
+
+            return templateContent;
         }
 
         #endregion

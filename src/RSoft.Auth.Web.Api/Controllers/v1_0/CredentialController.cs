@@ -24,7 +24,6 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    //[Route("api/v{version:apiVersion}/{culture:culture}/[controller]")]
     [ApiController]
     public class CredentialController : ApiBaseController
     {

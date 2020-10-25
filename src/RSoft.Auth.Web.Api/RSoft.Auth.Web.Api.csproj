@@ -34,5 +34,11 @@
     <ProjectReference Include="..\RSoft.Auth.Cross.IoC\RSoft.Auth.Cross.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\assets\credential-template.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 
 </Project>
