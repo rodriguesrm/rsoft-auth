@@ -141,6 +141,9 @@
   <data name="CREDENTIAL_DISCARD_MESSAGE" xml:space="preserve">
     <value>Caso não tenha solicitado uma nova senha, desconsidere este e-mail.</value>
   </data>
+  <data name="CREDENTIAL_FIRST_ACCESS_SUBJECT" xml:space="preserve">
+    <value>Primeiro Acesso</value>
+  </data>
   <data name="CREDENTIAL_MAIL_BODY_OPEN_TEXT" xml:space="preserve">
     <value>Olá {USERNAME}, você solicitou a {ACTION} de sua credencial de acesso no {SERVICE_NAME}. Crie uma {ACTION_PASSWORD} de acesso clicando no botão abaixo.</value>
   </data>
@@ -148,6 +151,9 @@
     <value>Ou se preferir, você pode acessar o link:</value>
   </data>
   <data name="CREDENTIAL_RECOVERY" xml:space="preserve">
+    <value>Recuperação de Credenciais</value>
+  </data>
+  <data name="CREDENTIAL_RECOVERY_ACCESS_SUBJECT" xml:space="preserve">
     <value>Recuperação de Credenciais</value>
   </data>
   <data name="CREDENTIAL_TOKEN_DEADLINE" xml:space="preserve">

@@ -141,6 +141,9 @@
   <data name="CREDENTIAL_DISCARD_MESSAGE" xml:space="preserve">
     <value>If you have not requested this operation, please disregard this email.</value>
   </data>
+  <data name="CREDENTIAL_FIRST_ACCESS_SUBJECT" xml:space="preserve">
+    <value>First Access</value>
+  </data>
   <data name="CREDENTIAL_MAIL_BODY_OPEN_TEXT" xml:space="preserve">
     <value>Hi {USERNAME}, you requested {ACTION} for your access credential on {SERVICE_NAME}. Create an {ACTION_PASSWORD} access by clicking the button below.</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="CREDENTIAL_RECOVERY" xml:space="preserve">
     <value>Credential Recovery</value>
+  </data>
+  <data name="CREDENTIAL_RECOVERY_ACCESS_SUBJECT" xml:space="preserve">
+    <value>Recovery Credential</value>
   </data>
   <data name="CREDENTIAL_TOKEN_DEADLINE" xml:space="preserve">
     <value>Remembering that the link above is valid until</value>
