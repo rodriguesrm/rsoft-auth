@@ -156,6 +156,12 @@ namespace RSoft.Auth.Domain.Services
                                     _tokenRepository.Delete(credentialToken.Id);
                                     await _uow.SaveChangesAsync(cancellationToken);
                                 }
+                                else if (user.Credential == null && !firstAccess)
+                                {
+                                    errors.Add("Credential", _localizer["CREDENTIALS_NOT_FOUND"]);
+                                    _tokenRepository.Delete(credentialToken.Id);
+                                    await _uow.SaveChangesAsync(cancellationToken);
+                                }
                                 else
                                 {
 
