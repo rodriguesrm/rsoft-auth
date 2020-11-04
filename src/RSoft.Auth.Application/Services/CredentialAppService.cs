@@ -92,7 +92,7 @@ namespace RSoft.Auth.Application.Services
             {
                 From = new EmailAddressRequest("noreply@rsoft.com", "RSoft.Auth"),
                 Subject = args.FirstAccess ? _localizer["CREDENTIAL_FIRST_ACCESS_SUBJECT"] : _localizer["CREDENTIAL_RECOVERY_ACCESS_SUBJECT"],
-                Content = GetEmailBody(args.Name, "RSoft System", args.Token, args.ExpireOn, args.FirstAccess),
+                Content = GetEmailBody(args.Name, "RSoft System", args.Token, args.ExpireOn, args.FirstAccess, args.UrlCredential),
                 EnableHtml = true
             };
             request.To.Add(new EmailAddressRequest(args.Email, args.Name));
@@ -136,13 +136,16 @@ namespace RSoft.Auth.Application.Services
         /// <param name="token">Recovery token</param>
         /// <param name="tokenDeadLine">Token dead limte date/time</param>
         /// <param name="firstAccess">Is first access flag</param>
-        private string GetEmailBody(string userName, string serviceName, Guid token, DateTime tokenDeadLine, bool firstAccess)
+        /// <param name="urlCredential">Url to create/recovery credential pass by header parameter</param>
+        private string GetEmailBody(string userName, string serviceName, Guid token, DateTime tokenDeadLine, bool firstAccess, string urlCredential)
         {
 
             string file = Path.Combine(AppContext.BaseDirectory, "wwwroot", "assets", "credential-template.html");
             string templateContent = File.OpenText(file).ReadToEnd();
 
-            string url = $"{new Uri(_pagesOptions.InputPassword).AbsoluteUri}?token={token}";
+            string urlBase = string.IsNullOrWhiteSpace(urlCredential) ? new Uri(_pagesOptions.InputPassword).AbsoluteUri : urlCredential;
+
+            string url = $"{urlBase}?type={(firstAccess ? "create" : "recovery")}&token={token}";
 
             string credentialAction = firstAccess ? _localizer["CREDENTIAL_CREATE"] : _localizer["CREDENTIAL_RECOVERY"];
             templateContent = templateContent.Replace("{CREDENTIAL_ACTION}", credentialAction);
@@ -228,7 +231,7 @@ namespace RSoft.Auth.Application.Services
         }
 
         ///<inheritdoc/>
-        public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, string appToken, CancellationToken cancellationToken = default)
+        public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, string appToken, string urlCredential, CancellationToken cancellationToken = default)
         {
 
             PasswordProcessResult result = null;
@@ -243,7 +246,7 @@ namespace RSoft.Auth.Application.Services
             }
             else
             {
-                result = await _userDomain.GetFirstAccessAsync(email, (args) => SendMailTokenPasswordAsync(args, appToken, cancellationToken).Result, cancellationToken);
+                result = await _userDomain.GetFirstAccessAsync(email, urlCredential, (args) => SendMailTokenPasswordAsync(args, appToken, cancellationToken).Result, cancellationToken);
             }
             return result;
         }
@@ -253,7 +256,7 @@ namespace RSoft.Auth.Application.Services
             => await _userDomain.CreateFirstAccessAsync(tokenId, login, password, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, string appToken, CancellationToken cancellationToken = default)
+        public async Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, string appToken, string urlCredential, CancellationToken cancellationToken = default)
         {
 
             PasswordProcessResult result = null;
@@ -267,7 +270,7 @@ namespace RSoft.Auth.Application.Services
             }
             else
             {
-                result = await _userDomain.GetResetAccessAsync(loginOrEmail, (args) => SendMailTokenPasswordAsync(args, appToken, cancellationToken).Result, cancellationToken);
+                result = await _userDomain.GetResetAccessAsync(loginOrEmail, urlCredential, (args) => SendMailTokenPasswordAsync(args, appToken, cancellationToken).Result, cancellationToken);
             }
 
             return result;

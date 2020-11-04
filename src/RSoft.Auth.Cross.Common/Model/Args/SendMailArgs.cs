@@ -34,6 +34,11 @@ namespace RSoft.Auth.Cross.Common.Model.Args
         /// </summary>
         public DateTime ExpireOn { get; set; }
 
+        /// <summary>
+        /// Url of the page to be informed in the credential creation email.
+        /// </summary>
+        public string UrlCredential { get; set; }
+
     }
 
 }

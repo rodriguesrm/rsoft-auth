@@ -226,12 +226,12 @@ namespace RSoft.Auth.Domain.Services
         /// <summary>
         /// Starts the process of obtaining credentials for first access or retrieving credentials.
         /// </summary>
-        /// <param name="login"></param>
-        /// <param name="firstAccess"></param>
-        /// <param name="sendMailCallBack"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        private async Task<PasswordProcessResult> RequestNewCredentials(string login, bool firstAccess, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
+        /// <param name="login">Login or email</param>
+        /// <param name="firstAccess">First access flag</param>
+        /// <param name="urlCredential">url to create/recovery credential</param>
+        /// <param name="sendMailCallBack">SendMail callback function</param>
+        /// <param name="cancellationToken">Cancellation token key</param>
+        private async Task<PasswordProcessResult> RequestNewCredentials(string login, bool firstAccess, string urlCredential, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
         {
 
             bool success = false;
@@ -286,7 +286,8 @@ namespace RSoft.Auth.Domain.Services
                                 Name = user.Name.GetFullName(),
                                 Email = user.Email.Address,
                                 Token = userCredentialToken.Id,
-                                ExpireOn = userCredentialToken.ExpiresOn
+                                ExpireOn = userCredentialToken.ExpiresOn,
+                                UrlCredential = urlCredential
                             });
 
                             cancellationToken.ThrowIfCancellationRequested();
@@ -398,8 +399,8 @@ namespace RSoft.Auth.Domain.Services
         }
 
         ///<inheritdoc/>
-        public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
-            => await RequestNewCredentials(email, true, sendMailCallBack, cancellationToken);
+        public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, string urlCredential, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
+            => await RequestNewCredentials(email, true, urlCredential, sendMailCallBack, cancellationToken);
 
         ///<inheritdoc/>
         public ICollection<Role> GetRolesByUserAsync(Guid scopeId, Guid userId)
@@ -413,8 +414,8 @@ namespace RSoft.Auth.Domain.Services
             => await SaveCredentialAsync(tokenId, login, password, true, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<PasswordProcessResult> GetResetAccessAsync(string email, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
-            => await RequestNewCredentials(email, false, sendMailCallBack, cancellationToken);
+        public async Task<PasswordProcessResult> GetResetAccessAsync(string email, string urlCredential, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
+            => await RequestNewCredentials(email, false, urlCredential, sendMailCallBack, cancellationToken);
 
         ///<inheritdoc/>
         public async Task<SimpleOperationResult> SetRecoveryAccessAsync(Guid tokenId, string password, CancellationToken cancellationToken = default)
