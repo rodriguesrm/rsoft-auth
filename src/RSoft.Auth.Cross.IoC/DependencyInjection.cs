@@ -41,6 +41,7 @@ namespace RSoft.Auth.Cross.IoC
             services.Configure<RSApiOptions>(options => configuration.GetSection("Application:RSoftApis").Bind(options));
             services.Configure<CredentialOptions>(options => configuration.GetSection("Application:Credential").Bind(options));
             services.Configure<CultureOptions>(options => configuration.GetSection("Application:Culture").Bind(options));
+            services.Configure<PagesOptions>(options => configuration.GetSection("Application:Pages").Bind(options));
 
             #endregion
 

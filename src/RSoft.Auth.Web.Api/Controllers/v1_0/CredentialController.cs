@@ -24,7 +24,6 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    //[Route("api/v{version:apiVersion}/{culture:culture}/[controller]")]
     [ApiController]
     public class CredentialController : ApiBaseController
     {
@@ -65,10 +64,11 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// Request credentials for first access
         /// </summary>
         /// <param name="email">User e-mail</param>
+        /// <param name="urlCredential">Url of the page to be informed in the credential creation email. The parameters 'type=create' and 'token={token}' will be added via query-string</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> GetFirstAccessAsync(string email, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> GetFirstAccessAsync(string email, string urlCredential, CancellationToken cancellationToken = default)
         {
-            PasswordProcessResult result = await _appService.GetFirstAccessAsync(email, _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", out _), cancellationToken);
+            PasswordProcessResult result = await _appService.GetFirstAccessAsync(email, _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", out _), urlCredential, cancellationToken);
 
             if (result.Success)
                 return Ok(_localizer["TOKEN_FIRST_ACCESS_MAIL"].Value);
@@ -97,11 +97,12 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// Request new access credentials
         /// </summary>
         /// <param name="login">User login or e-mail</param>
+        /// <param name="urlCredential">Url of the page to be informed in the credential creation email. The parameters 'type=create' and 'token={token}' will be added via query-string</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        protected async Task<IActionResult> GetRecoveryAccessAsync(string login, CancellationToken cancellationToken = default)
+        protected async Task<IActionResult> GetRecoveryAccessAsync(string login, string urlCredential, CancellationToken cancellationToken = default)
         {
 
-            PasswordProcessResult result = await _appService.GetResetAccessAsync(login, _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", out _), cancellationToken);
+            PasswordProcessResult result = await _appService.GetResetAccessAsync(login, _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", out _), urlCredential,  cancellationToken);
 
             if (result.Success)
                 return Ok(_localizer["TOKEN_RECOVER_ACCESS_MAIL"].Value);
@@ -163,6 +164,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Request credentials for first access
         /// </summary>
+        /// <param name="urlCredential">Url of the page to be informed in the credential creation email. The parameters 'type=create' and 'token={token}' will be added via query-string</param>
         /// <param name="email">User e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Success in processing the request</response>
@@ -174,8 +176,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [HttpGet("first")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
-        public async Task<IActionResult> FirstAccess([FromQuery] string email, CancellationToken cancellationToken)
-            => await RunActionAsync(GetFirstAccessAsync(email, cancellationToken), cancellationToken);
+        public async Task<IActionResult> FirstAccess([FromQuery] string email, [FromHeader] string urlCredential, CancellationToken cancellationToken)
+            => await RunActionAsync(GetFirstAccessAsync(email, urlCredential, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Create the user credential (first access)
@@ -191,13 +193,14 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [HttpPost("first")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
-        public async Task<IActionResult> FirstAccess(CreateCredentialRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> FirstAccess([FromBody] CreateCredentialRequest request, CancellationToken cancellationToken)
             => await RunActionAsync(CreateFirstAccessAsync(request, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Request new access credentials
         /// </summary>
         /// <param name="login">User login or e-mail</param>
+        /// <param name="urlCredential">Url of the page to be informed in the credential creation email. The parameters 'type=create' and 'token={token}' will be added via query-string</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Success in processing the request</response>
         /// <response code="400">Invalid request, see details in response</response>
@@ -208,8 +211,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [HttpGet("recovery")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
-        public async Task<IActionResult> RecoveryAccess([FromQuery] string login, CancellationToken cancellationToken)
-            => await RunActionAsync(GetRecoveryAccessAsync(login, cancellationToken), cancellationToken);
+        public async Task<IActionResult> RecoveryAccess([FromQuery] string login, [FromHeader] string urlCredential, CancellationToken cancellationToken)
+            => await RunActionAsync(GetRecoveryAccessAsync(login, urlCredential, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Reset user credentials (I forgot my password...

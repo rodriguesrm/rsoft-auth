@@ -29,6 +29,16 @@ namespace RSoft.Auth.Cross.Common.Model.Args
         /// </summary>
         public Guid Token { get; set; }
 
+        /// <summary>
+        /// Date and time the token will expire
+        /// </summary>
+        public DateTime ExpireOn { get; set; }
+
+        /// <summary>
+        /// Url of the page to be informed in the credential creation email.
+        /// </summary>
+        public string UrlCredential { get; set; }
+
     }
 
 }

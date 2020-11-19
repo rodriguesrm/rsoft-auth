@@ -117,6 +117,48 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CREDENTIAL_ACTION_CREATE" xml:space="preserve">
+    <value>create</value>
+  </data>
+  <data name="CREDENTIAL_ACTION_CREATE_PASSWORD" xml:space="preserve">
+    <value>password</value>
+  </data>
+  <data name="CREDENTIAL_ACTION_RECOVERY" xml:space="preserve">
+    <value>recovery</value>
+  </data>
+  <data name="CREDENTIAL_ACTION_RECOVERY_PASSWORD" xml:space="preserve">
+    <value>new password</value>
+  </data>
+  <data name="CREDENTIAL_BUTTONL_LABEL_CREATE" xml:space="preserve">
+    <value>Create Password</value>
+  </data>
+  <data name="CREDENTIAL_BUTTONL_LABEL_RECOVERY" xml:space="preserve">
+    <value>Create New Password</value>
+  </data>
+  <data name="CREDENTIAL_CREATE" xml:space="preserve">
+    <value>Credential Create</value>
+  </data>
+  <data name="CREDENTIAL_DISCARD_MESSAGE" xml:space="preserve">
+    <value>If you have not requested this operation, please disregard this email.</value>
+  </data>
+  <data name="CREDENTIAL_FIRST_ACCESS_SUBJECT" xml:space="preserve">
+    <value>First Access</value>
+  </data>
+  <data name="CREDENTIAL_MAIL_BODY_OPEN_TEXT" xml:space="preserve">
+    <value>Hi {USERNAME}, you requested {ACTION} for your access credential on {SERVICE_NAME}. Create an {ACTION_PASSWORD} access by clicking the button below.</value>
+  </data>
+  <data name="CREDENTIAL_OR_ELSE_LINK" xml:space="preserve">
+    <value>Or if you prefer, you can access the link:</value>
+  </data>
+  <data name="CREDENTIAL_RECOVERY" xml:space="preserve">
+    <value>Credential Recovery</value>
+  </data>
+  <data name="CREDENTIAL_RECOVERY_ACCESS_SUBJECT" xml:space="preserve">
+    <value>Recovery Credential</value>
+  </data>
+  <data name="CREDENTIAL_TOKEN_DEADLINE" xml:space="preserve">
+    <value>Remembering that the link above is valid until</value>
+  </data>
   <data name="DOC_ALREADY_EXISTS" xml:space="preserve">
     <value>Document already exists</value>
   </data>

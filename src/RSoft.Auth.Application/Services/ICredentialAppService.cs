@@ -29,8 +29,9 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="email">User e-mail</param>
         /// <param name="appToken">Application token to access mail-service api</param>
+        /// <param name="urlCredential">Url of the page to be informed in the credential creation email. The parameters 'type=create' and 'token={token}' will be added via query-string</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<PasswordProcessResult> GetFirstAccessAsync(string email, string appToken, CancellationToken cancellationToken = default);
+        Task<PasswordProcessResult> GetFirstAccessAsync(string email, string appToken, string urlCredential, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates user credentials
@@ -46,8 +47,9 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="loginOrEmail">User login or email</param>
         /// <param name="appToken">Application token to access mail-service api</param>
+        /// <param name="urlCredential">Url of the page to be informed in the credential creation email. The parameters 'type=create' and 'token={token}' will be added via query-string</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, string appToken, CancellationToken cancellationToken = default);
+        Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, string appToken, string urlCredential, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Save new password for recovery access

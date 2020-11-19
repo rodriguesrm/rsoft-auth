@@ -89,7 +89,7 @@ namespace RSoft.Auth.Web.Api.Helpers
                  issuer: _jwtTokenOptions.Issuer,
                  audience: _jwtTokenOptions.Audience,
                  claims: userClaims,
-                 notBefore: _jwtTokenOptions.NotBefore,
+                 notBefore: _jwtTokenOptions.NotBefore.AddMinutes(-2),
                  expires: _jwtTokenOptions.Expiration,
                  signingCredentials: _jwtTokenOptions.Credentials
             );
