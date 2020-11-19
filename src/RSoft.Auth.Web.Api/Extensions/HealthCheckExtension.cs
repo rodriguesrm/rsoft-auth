@@ -24,7 +24,6 @@ namespace RSoft.Auth.Web.Api.Extensions
             var apiOptions = new RSApiOptions();
             configuration.GetSection("Application:RSoftApis").Bind(apiOptions);
 
-            //WARNING: Only upgrade "HealthChecks.MySql" if Pomelo.EntityFrameworkCore.MySql use mysqlconnector compatible versions
             services.AddHealthChecks()
                     .AddUrlGroup(
                                 new Uri(apiOptions.Uri),
