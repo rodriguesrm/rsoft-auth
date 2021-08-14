@@ -12,6 +12,7 @@ using RSoft.Auth.Web.Api.Helpers;
 using RSoft.Auth.Web.Api.Language;
 using RSoft.Auth.Web.Api.Policies;
 using RSoft.Framework.Web.Extensions;
+using RSoft.Lib.Web.Extensions;
 using RSoft.Framework.Web.Filters;
 using RSoft.Logs.Extensions;
 using RSoft.Logs.Middleware;

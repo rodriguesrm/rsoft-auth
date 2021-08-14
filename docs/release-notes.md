@@ -25,3 +25,6 @@ User authentication service API. Generates a JWT token for authenticate user in 
 
 #### Version 1.0.4
 - Upgrade from .NET Core 3.1 to .NET 5
+
+#### Version 1.0.5
+- Change package 'RSoft.Framework.Web' to 'RSoft.Lib.Web'

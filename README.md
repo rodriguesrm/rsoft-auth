@@ -12,7 +12,7 @@ User authentication service API. Generates a JWT token for authenticate user in 
 
 ### NuGet Package Dependencies
 - `RSoft.Framework (>= 1.0.0-rc1.8)`. See https://www.nuget.org/packages/RSoft.Framework.
-- `RSoft.Framework.Web (>= 1.0.0-rc1.3)`. See https://www.nuget.org/packages/RSoft.Framework.Web.
+- `RSoft.Lib.Web (>= 1.0.0-rc1.0)`. See https://www.nuget.org/packages/RSoft.Lib.Web.
 - `RSoft.Logs (>= 1.0.0-rc1.7)`. See https://www.nuget.org/packages/RSoft.Logs.
 
 It was presented here the dependencies related to other projects also available in this repository. To view the total list of project dependencies, I suggest you open the .net core solution and explore the projects.
@@ -188,7 +188,7 @@ The application uses the standard `appsettings.json` and its variants recommende
 * `ConnectionStrings` needs a `DbServer` parameter to connect MySqlDatabase like in example.
 * `Scope` is a service identification section in the RSoft ecosystem. This key is standard and should not be changed as it will influence the communication between the systems and services of the RSoft platform.
 * `Jwt` is the section where token reading and generation parameters must be informed, in addition to the lifetime. For more details, see Jwt's documentation at https://jwt.io/introduction/.
-* `Swagger` is the section where the behavior definition information for the swagger-ui user interface will be placed. For more information see the `RSoft.Framework.Web` repository at https://github.com/rodriguesrm/rsoft-framework-web.
+* `Swagger` is the section where the behavior definition information for the swagger-ui user interface will be placed. For more information see the `RSoft.Lib.Web` repository at https://github.com/rodriguesrm/rsoft-lib-web.
 * `Application` is the section of settings related to the Authentication Service API, of which:
 * `Application:Security: Secret` is the section for entering a 32-character alphanumeric key for composing each user's individual password. The purpose of this key is to combat the use of brute force to break access to the MD5 key from the hash recorded in the database. It is highly recommended that you change this value to a key specific to your environment, since the keys contained in this repository are exposed to the public.
 * `Application:Security:Lockout` is the section for defining temporary user lockout options when they enter their password for a certain number of times and the time, in minutes, that it will remain locked.
