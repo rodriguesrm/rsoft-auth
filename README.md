@@ -3,7 +3,7 @@
 User authentication service API. Generates a JWT token for authenticate user in your application.
 
 ##### Available Authentication types
-- Internal users (own database)
+- Internal users (internal database)
 
 ### Requeriments
 - `MySql Server` 5.7.22 or higher for the application to create and use its own database. See https://dev.mysql.com/.
@@ -42,12 +42,12 @@ services:
     build:
       context: .
       dockerfile: RSoft.Auth.Web.Api/Dockerfile
-    image: rsoft/auth-service:1.0.0
+    image: rsoft/auth-service:1.0.4
     ports:
       - "8080:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - Logging:Elastic:Uri=http://localhost:9200
+      - Logging:Seq:Uri=http://localhost:5431
       - ConnectionStrings:DbServer=Server=localhost;Port=3306;database=rsoft_auth;uid=admin;pwd=admin@2020;
       - Application:RSoftApis:Uri=http://localhost:8081
     network_mode: host
@@ -69,10 +69,9 @@ The application uses the standard `appsettings.json` and its variants recommende
       "Microsoft": "Warning",
       "Microsoft.Hosting.Lifetime": "Information"
     },
-    "Elastic": {
+    "Seq": {
       "Enable": true,
-      "Uri": "http://localhost:9200",
-      "DefaultIndexName": "rsoft-auth",
+      "Uri": "http://localhost:5431",
       "IgnoreCategories": [
         "Microsoft.Hosting.Lifetime"
       ]
