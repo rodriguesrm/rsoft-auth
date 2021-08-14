@@ -4,12 +4,12 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<UserSecretsId>55a931f2-4281-42ed-9e38-8b4733448886</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<Version>1.0.3</Version>
+		<Version>1.0.4</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DocumentationFile>RSoft.Auth.Web.Api.xml</DocumentationFile>
-		<OutputPath>bin\Debug\netcoreapp3.1\</OutputPath>
+		<OutputPath>bin\Debug\netcoreapp3.1\net5.0\</OutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
