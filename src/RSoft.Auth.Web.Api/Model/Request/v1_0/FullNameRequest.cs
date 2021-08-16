@@ -1,4 +1,4 @@
-﻿using RSoft.Framework.Cross.Entities;
+﻿using RSoft.Lib.Common.Contracts.Entities;
 
 namespace RSoft.Auth.Web.Api.Model.Request.v1_0
 {

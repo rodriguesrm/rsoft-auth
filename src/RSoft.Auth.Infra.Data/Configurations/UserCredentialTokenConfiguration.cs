@@ -60,7 +60,9 @@ namespace RSoft.Auth.Infra.Data.Configurations
 
             #region Indexes
 
-            builder.HasIndex(i => i.UserId, $"IX_{nameof(UserCredentialToken)}_{nameof(UserCredentialToken.UserId)}");
+            builder
+                .HasIndex(i => i.UserId)
+                .HasDatabaseName($"IX_{nameof(UserCredentialToken)}_{nameof(UserCredentialToken.UserId)}");
 
             #endregion
 

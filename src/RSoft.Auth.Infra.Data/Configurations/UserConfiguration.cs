@@ -80,13 +80,19 @@ namespace RSoft.Auth.Infra.Data.Configurations
 
             #region Indexes
 
-            builder.HasIndex(i => i.Document, $"AK_{nameof(User)}_{nameof(User.Document)}")
+            builder
+                .HasIndex(i => i.Document)
+                .HasDatabaseName($"AK_{nameof(User)}_{nameof(User.Document)}")
                 .IsUnique();
 
-            builder.HasIndex(i => i.Email, $"AK_{nameof(User)}_{nameof(User.Email)}")
+            builder
+                .HasIndex(i => i.Email)
+                .HasDatabaseName($"AK_{nameof(User)}_{nameof(User.Email)}")
                 .IsUnique();
 
-            builder.HasIndex(i => new { i.FirstName, i.LastName }, $"IX_{nameof(User)}_FullName");
+            builder
+                .HasIndex(i => new { i.FirstName, i.LastName })
+                .HasDatabaseName($"IX_{nameof(User)}_FullName");
 
             #endregion
 

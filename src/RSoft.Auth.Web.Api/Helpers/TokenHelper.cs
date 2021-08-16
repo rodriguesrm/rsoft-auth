@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using RSoft.Auth.Application.Model;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
-using RSoft.Framework.Cross.Enums;
+using RSoft.Lib.Common.Enums;
 using RSoft.Lib.Web.Options;
 using System;
 using System.Collections.Generic;

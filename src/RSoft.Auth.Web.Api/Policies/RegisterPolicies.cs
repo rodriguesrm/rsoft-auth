@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Web.Api.Policies.Handlers;
 using RSoft.Auth.Web.Api.Policies.Requirements;
+using RSoft.Lib.Common.Options;
 
 namespace RSoft.Auth.Web.Api.Policies
 {

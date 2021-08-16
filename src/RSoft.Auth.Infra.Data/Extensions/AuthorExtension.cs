@@ -1,8 +1,8 @@
 ﻿using System;
 using RSoft.Auth.Infra.Data.Entities;
-using RSoft.Framework.Domain.Entities;
-using RSoft.Framework.Domain.ValueObjects;
-using RSoft.Framework.Infra.Data;
+using RSoft.Lib.Common.Contracts.Entities;
+using RSoft.Lib.Common.ValueObjects;
+using RSoft.Lib.DDD.Infra.Data;
 
 namespace RSoft.Auth.Infra.Data.Extensions
 {

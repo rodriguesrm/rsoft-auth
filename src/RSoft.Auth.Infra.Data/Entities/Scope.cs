@@ -1,6 +1,6 @@
-﻿using RSoft.Framework.Cross.Entities;
-using RSoft.Framework.Infra.Data;
-using RSoft.Framework.Infra.Data.Tables;
+﻿using RSoft.Lib.Common.Contracts.Entities;
+using RSoft.Lib.DDD.Infra.Data;
+using RSoft.Lib.DDD.Infra.Data.Tables;
 using System;
 using System.Collections.Generic;
 

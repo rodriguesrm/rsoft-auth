@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RSoft.Auth.Infra.Data.Configurations;
 using RSoft.Auth.Infra.Data.Entities;
-using RSoft.Framework.Infra.Data;
+using RSoft.Lib.DDD.Infra.Data;
 using System;
 
 namespace RSoft.Auth.Infra.Data

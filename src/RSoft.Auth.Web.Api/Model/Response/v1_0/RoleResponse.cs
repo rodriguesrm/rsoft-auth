@@ -1,4 +1,4 @@
-﻿using RSoft.Framework.Application.Model;
+﻿using RSoft.Lib.Common.Models;
 using System;
 
 namespace RSoft.Auth.Web.Api.Model.Response.v1_0

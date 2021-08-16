@@ -1,7 +1,7 @@
 ﻿using RSoft.Auth.Application.Model;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Auth.Web.Api.Model.Response.v1_0;
-using RSoft.Framework.Application.Model;
+using RSoft.Lib.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

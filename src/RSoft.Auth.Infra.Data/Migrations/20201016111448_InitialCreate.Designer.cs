@@ -65,23 +65,23 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChangedBy")
-                        .HasName("IX_Role_ChangedBy");
+                        .HasDatabaseName("IX_Role_ChangedBy");
 
                     b.HasIndex("ChangedOn")
-                        .HasName("IX_Role_ChangedOn");
+                        .HasDatabaseName("IX_Role_ChangedOn");
 
                     b.HasIndex("CreatedBy")
-                        .HasName("IX_Role_CreatedBy");
+                        .HasDatabaseName("IX_Role_CreatedBy");
 
                     b.HasIndex("CreatedOn")
-                        .HasName("IX_Role_CreatedOn");
+                        .HasDatabaseName("IX_Role_CreatedOn");
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasName("AK_Role_Name");
+                        .HasDatabaseName("AK_Role_Name");
 
                     b.HasIndex("ScopeId")
-                        .HasName("IX_Role_ScopeId");
+                        .HasDatabaseName("IX_Role_ScopeId");
 
                     b.ToTable("Role");
                 });
@@ -131,23 +131,23 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.HasIndex("AccessKey")
                         .IsUnique()
-                        .HasName("AK_Scope_AccessKey");
+                        .HasDatabaseName("AK_Scope_AccessKey");
 
                     b.HasIndex("ChangedBy")
                         .HasName("IX_Scope_ChangedBy");
 
                     b.HasIndex("ChangedOn")
-                        .HasName("IX_Scope_ChangedOn");
+                        .HasDatabaseName("IX_Scope_ChangedOn");
 
                     b.HasIndex("CreatedBy")
-                        .HasName("IX_Scope_CreatedBy");
+                        .HasDatabaseName("IX_Scope_CreatedBy");
 
                     b.HasIndex("CreatedOn")
-                        .HasName("IX_Scope_CreatedOn");
+                        .HasDatabaseName("IX_Scope_CreatedOn");
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasName("AK_Scope_Name");
+                        .HasDatabaseName("AK_Scope_Name");
 
                     b.ToTable("Scope");
                 });
@@ -217,27 +217,27 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChangedBy")
-                        .HasName("IX_User_ChangedBy");
+                        .HasDatabaseName("IX_User_ChangedBy");
 
                     b.HasIndex("ChangedOn")
-                        .HasName("IX_User_ChangedOn");
+                        .HasDatabaseName("IX_User_ChangedOn");
 
                     b.HasIndex("CreatedBy")
-                        .HasName("IX_User_CreatedBy");
+                        .HasDatabaseName("IX_User_CreatedBy");
 
                     b.HasIndex("CreatedOn")
-                        .HasName("IX_User_CreatedOn");
+                        .HasDatabaseName("IX_User_CreatedOn");
 
                     b.HasIndex("Document")
                         .IsUnique()
-                        .HasName("AK_User_Document");
+                        .HasDatabaseName("AK_User_Document");
 
                     b.HasIndex("Email")
                         .IsUnique()
-                        .HasName("AK_User_Email");
+                        .HasDatabaseName("AK_User_Email");
 
                     b.HasIndex("FirstName", "LastName")
-                        .HasName("IX_User_FullName");
+                        .HasDatabaseName("IX_User_FullName");
 
                     b.ToTable("User");
                 });
@@ -276,7 +276,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.HasIndex("Login")
                         .IsUnique()
-                        .HasName("AK_UserCredential_Login");
+                        .HasDatabaseName("AK_UserCredential_Login");
 
                     b.ToTable("UserCredential");
                 });
@@ -306,7 +306,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("UserId")
-                        .HasName("IX_UserCredentialToken_UserId");
+                        .HasDatabaseName("IX_UserCredentialToken_UserId");
 
                     b.ToTable("UserCredentialToken");
                 });

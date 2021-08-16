@@ -64,10 +64,14 @@ namespace RSoft.Auth.Infra.Data.Configurations
 
             #region Indexes
 
-            builder.HasIndex(i => i.Name, $"AK_{nameof(Scope)}_{nameof(Scope.Name)}")
+            builder
+                .HasIndex(i => i.Name)
+                .HasDatabaseName($"AK_{nameof(Scope)}_{nameof(Scope.Name)}")
                 .IsUnique();
 
-            builder.HasIndex(i => i.AccessKey, $"AK_{nameof(Scope)}_{nameof(Scope.AccessKey)}")
+            builder
+                .HasIndex(i => i.AccessKey)
+                .HasDatabaseName($"AK_{nameof(Scope)}_{nameof(Scope.AccessKey)}")
                 .IsUnique();
 
             #endregion

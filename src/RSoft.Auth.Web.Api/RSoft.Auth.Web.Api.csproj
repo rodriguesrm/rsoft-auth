@@ -4,7 +4,7 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<UserSecretsId>55a931f2-4281-42ed-9e38-8b4733448886</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,13 +24,13 @@
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.MySql" Version="5.0.1" />
 		<PackageReference Include="AspNetCore.HealthChecks.Uris" Version="5.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.7">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
 		<PackageReference Include="RSoft.Lib.Web" Version="1.0.0-rc1.0" />
-		<PackageReference Include="RSoft.Logs" Version="1.1.0-rc1.3" />
+		<PackageReference Include="RSoft.Logs" Version="1.1.0-rc1.7" />
 	</ItemGroup>
 
 	<ItemGroup>

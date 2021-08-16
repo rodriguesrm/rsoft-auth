@@ -11,9 +11,8 @@ using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Web.Api.Helpers;
 using RSoft.Auth.Web.Api.Language;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
-using RSoft.Framework.Application.Model;
-using RSoft.Framework.Web.Api;
-using RSoft.Framework.Web.Model.Response;
+using RSoft.Lib.Common.Models;
+using RSoft.Lib.Common.Web.Api;
 using RSoft.Logs.Model;
 
 namespace RSoft.Auth.Web.Api.Controllers.v1_0
@@ -171,7 +170,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="400">Invalid request, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("first")]
         [MapToApiVersion("1.0")]
@@ -188,7 +187,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="400">Invalid request, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost("first")]
         [MapToApiVersion("1.0")]
@@ -206,7 +205,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="400">Invalid request, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("recovery")]
         [MapToApiVersion("1.0")]
@@ -223,7 +222,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="400">Invalid request, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPut("recovery")]
         [MapToApiVersion("1.0")]
@@ -241,7 +240,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="403">The informed credential does not have access to this resource</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
@@ -261,7 +260,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="403">The informed credential does not have access to this resource</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]

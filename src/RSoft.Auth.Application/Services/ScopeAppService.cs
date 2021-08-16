@@ -1,16 +1,16 @@
 ﻿using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Model.Extensions;
-using RSoft.Framework.Application.Services;
-using RSoft.Framework.Infra.Data;
 using RSoft.Auth.Domain.Entities;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using RSoft.Auth.Domain.Services;
-using RSoft.Framework.Domain.ValueObjects;
-using RSoft.Framework.Cross.Enums;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using RSoft.Lib.DDD.Application.Services;
+using RSoft.Lib.DDD.Infra.Data;
+using RSoft.Lib.Common.ValueObjects;
+using RSoft.Lib.Common.Enums;
 
 namespace RSoft.Auth.Application.Services
 {

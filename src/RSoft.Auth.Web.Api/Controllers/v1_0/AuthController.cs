@@ -13,9 +13,8 @@ using RSoft.Auth.Web.Api.Helpers;
 using RSoft.Auth.Web.Api.Language;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Auth.Web.Api.Model.Response.v1_0;
-using RSoft.Framework.Application.Model;
-using RSoft.Framework.Web.Api;
-using RSoft.Framework.Web.Model.Response;
+using RSoft.Lib.Common.Models;
+using RSoft.Lib.Common.Web.Api;
 using RSoft.Logs.Model;
 
 namespace RSoft.Auth.Web.Api.Controllers.v1_0
@@ -139,7 +138,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="401">Invalid credentials, access unauthorized, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(typeof(AuthenticateResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost]
@@ -158,7 +157,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <response code="401">Invalid credentials, access unauthorized, see details in response</response>
         /// <response code="500">Request processing failed</response>
         [ProducesResponseType(typeof(AuthenticateResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(IEnumerable<GenericNotificationResponse>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpPost("app")]

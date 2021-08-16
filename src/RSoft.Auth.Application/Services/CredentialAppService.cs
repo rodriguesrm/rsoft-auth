@@ -4,28 +4,26 @@ using RSoft.Auth.Cross.Common.Model.Args;
 using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Domain.Entities;
 using RSoft.Auth.Domain.Services;
-using RSoft.Framework.Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using RSoft.Framework.Cross.Enums;
-using RSoft.Framework.Domain.ValueObjects;
 using System.Net.Http;
 using RSoft.Auth.Cross.Common.Options;
 using Microsoft.Extensions.Options;
 using System.Net;
-using RSoft.Framework.Web.Model.Response;
 using System.Text.Json;
 using System.Linq;
-using RSoft.Framework.Cross.Model.Request;
 using System.Text;
 using Microsoft.Extensions.Localization;
 using RSoft.Auth.Application.Language;
 using System.Globalization;
 using System.IO;
 using RSoft.Lib.Common.Models;
+using RSoft.Lib.Common.Web.Models.Request;
+using RSoft.Lib.Common.ValueObjects;
+using RSoft.Lib.Common.Enums;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -109,7 +107,7 @@ namespace RSoft.Auth.Application.Services
                 string body = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    IEnumerable<GenericNotificationResponse> notifications = JsonSerializer.Deserialize<IEnumerable<GenericNotificationResponse>>(body, _jsonOptions);
+                    IEnumerable<GenericNotification> notifications = JsonSerializer.Deserialize<IEnumerable<GenericNotification>>(body, _jsonOptions);
                     errors = notifications.ToDictionary(k => k.Property, v => v.Message);
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)

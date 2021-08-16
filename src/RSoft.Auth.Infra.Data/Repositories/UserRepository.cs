@@ -1,5 +1,4 @@
-﻿using RSoft.Framework.Infra.Data;
-using UserDomain = RSoft.Auth.Domain.Entities.User;
+﻿using UserDomain = RSoft.Auth.Domain.Entities.User;
 using RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
@@ -9,6 +8,7 @@ using System.Threading;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using RSoft.Lib.DDD.Infra.Data;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {

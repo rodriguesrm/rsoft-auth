@@ -1,9 +1,9 @@
-﻿using RSoft.Framework.Infra.Data;
-using UserCredentialDomain = RSoft.Auth.Domain.Entities.UserCredential;
+﻿using UserCredentialDomain = RSoft.Auth.Domain.Entities.UserCredential;
 using RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Auth.Infra.Data.Extensions;
+using RSoft.Lib.DDD.Infra.Data;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {

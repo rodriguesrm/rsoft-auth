@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RSoft.Framework.Cross.IoC;
 using RSoft.Auth.Infra.Data;
 using RSoft.Auth.Infra.Data.Repositories;
 using RSoft.Auth.Domain.Repositories;
 using RSoft.Auth.Domain.Services;
 using RSoft.Auth.Application.Services;
-using RSoft.Framework.Infra.Data;
 using RSoft.Auth.Cross.Common.Options;
-using RSoft.Framework.Options;
+using RSoft.Lib.DDD.IoC;
+using RSoft.Lib.Common.Options;
+using RSoft.Lib.DDD.Infra.Data;
 
 namespace RSoft.Auth.Cross.IoC
 {

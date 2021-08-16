@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using RSoft.Auth.Cross.Common.Options;
 using RSoft.Auth.Infra.Data.Entities;
-using RSoft.Framework.Cross.Enums;
 using RSoft.Helpers.Security;
+using RSoft.Lib.Common.Enums;
 
 namespace RSoft.Auth.Infra.Data.Migrations
 {

@@ -1,9 +1,9 @@
-﻿using RSoft.Framework.Infra.Data;
-using ScopeDomain = RSoft.Auth.Domain.Entities.Scope;
+﻿using ScopeDomain = RSoft.Auth.Domain.Entities.Scope;
 using RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Auth.Infra.Data.Extensions;
+using RSoft.Lib.DDD.Infra.Data;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {
