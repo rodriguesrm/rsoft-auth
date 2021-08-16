@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using RSoft.Framework.Cross.Entities;
-using RSoft.Framework.Cross.Enums;
-using RSoft.Framework.Domain.Contracts;
-using RSoft.Framework.Domain.Entities;
-using RSoft.Framework.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using RSoft.Framework.Cross.Abstractions;
+using RSoft.Lib.DDD.Domain.Entities;
+using RSoft.Lib.Common.Contracts.Entities;
+using RSoft.Lib.Common.Abstractions;
+using RSoft.Lib.Common.Enums;
+using RSoft.Lib.Common.Contracts;
+using RSoft.Lib.Common.ValueObjects;
 
 namespace RSoft.Auth.Domain.Entities
 {

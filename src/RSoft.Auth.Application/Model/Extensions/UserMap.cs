@@ -1,5 +1,5 @@
 ﻿using RSoft.Auth.Domain.Entities;
-using RSoft.Framework.Domain.ValueObjects;
+using RSoft.Lib.Common.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -1,7 +1,5 @@
 ﻿using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Model.Extensions;
-using RSoft.Framework.Application.Services;
-using RSoft.Framework.Infra.Data;
 using RSoft.Auth.Domain.Entities;
 using System;
 using System.Threading;
@@ -9,6 +7,8 @@ using System.Threading.Tasks;
 using RSoft.Auth.Domain.Services;
 using Microsoft.Extensions.Localization;
 using RSoft.Auth.Application.Language;
+using RSoft.Lib.DDD.Application.Services;
+using RSoft.Lib.DDD.Infra.Data;
 
 namespace RSoft.Auth.Application.Services
 {

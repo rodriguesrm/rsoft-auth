@@ -1,5 +1,5 @@
 ﻿using RSoft.Auth.Domain.Entities;
-using RSoft.Framework.Application.Model;
+using RSoft.Lib.Common.Models;
 using System;
 
 namespace RSoft.Auth.Application.Model.Extensions

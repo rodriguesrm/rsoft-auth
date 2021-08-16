@@ -1,7 +1,7 @@
-﻿using RSoft.Framework.Domain.ValueObjects;
-using System.Linq;
+﻿using System.Linq;
 using UserDomain = RSoft.Auth.Domain.Entities.User;
 using RSoft.Auth.Infra.Data.Entities;
+using RSoft.Lib.Common.ValueObjects;
 
 namespace RSoft.Auth.Infra.Data.Extensions
 {

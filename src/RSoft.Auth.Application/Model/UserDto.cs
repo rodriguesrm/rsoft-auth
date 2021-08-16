@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using RSoft.Framework.Application.Dto;
-using RSoft.Framework.Cross.Entities;
-using RSoft.Framework.Cross.Enums;
+using RSoft.Lib.Common.Contracts.Dtos;
+using RSoft.Lib.Common.Contracts.Entities;
+using RSoft.Lib.Common.Dtos;
+using RSoft.Lib.Common.Enums;
 
 namespace RSoft.Auth.Application.Model
 {

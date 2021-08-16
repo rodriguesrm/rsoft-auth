@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RSoft.Framework" Version="1.0.0-rc1.12" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RSoft.Auth.Application\RSoft.Auth.Application.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Cross.Common\RSoft.Auth.Cross.Common.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Infra.Data\RSoft.Auth.Infra.Data.csproj" />

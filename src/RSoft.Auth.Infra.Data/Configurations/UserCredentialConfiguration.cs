@@ -66,8 +66,7 @@ namespace RSoft.Auth.Infra.Data.Configurations
 
             #region Indexes
 
-            builder.HasIndex(c => c.Login)
-                .HasName($"AK_{nameof(UserCredential)}_{nameof(UserCredential.Login)}")
+            builder.HasIndex(c => c.Login, $"AK_{nameof(UserCredential)}_{nameof(UserCredential.Login)}")
                 .IsUnique();
 
             #endregion

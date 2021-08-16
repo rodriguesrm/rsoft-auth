@@ -1,5 +1,4 @@
-﻿using RSoft.Framework.Domain.Services;
-using RSoft.Auth.Domain.Entities;
+﻿using RSoft.Auth.Domain.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Auth.Cross.Common.Options;
@@ -8,14 +7,15 @@ using System.Threading.Tasks;
 using System.Threading;
 using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Cross.Common.Model.Args;
-using RSoft.Framework.Application.Model;
 using System.Collections.Generic;
-using RSoft.Framework.Infra.Data;
 using System.Linq;
-using RSoft.Framework.Cross;
-using RSoft.Framework.Domain.ValueObjects;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Localization;
+using RSoft.Lib.DDD.Domain.Services;
+using RSoft.Lib.DDD.Infra.Data;
+using RSoft.Lib.Common.Models;
+using RSoft.Lib.Common.ValueObjects;
+using RSoft.Lib.Common.Contracts.Web;
 
 namespace RSoft.Auth.Domain.Services
 {

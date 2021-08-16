@@ -1,11 +1,11 @@
-﻿using RSoft.Framework.Domain.Services;
-using RSoft.Auth.Domain.Entities;
+﻿using RSoft.Auth.Domain.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
-using RSoft.Framework.Cross;
-using RSoft.Framework.Domain.ValueObjects;
 using System.Threading.Tasks;
 using System.Threading;
+using RSoft.Lib.DDD.Domain.Services;
+using RSoft.Lib.Common.Contracts.Web;
+using RSoft.Lib.Common.ValueObjects;
 
 namespace RSoft.Auth.Domain.Services
 {

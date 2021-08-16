@@ -25,6 +25,7 @@ using Microsoft.Extensions.Localization;
 using RSoft.Auth.Application.Language;
 using System.Globalization;
 using System.IO;
+using RSoft.Lib.Common.Models;
 
 namespace RSoft.Auth.Application.Services
 {

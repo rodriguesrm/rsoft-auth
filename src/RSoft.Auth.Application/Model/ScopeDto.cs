@@ -1,5 +1,6 @@
 ﻿using System;
-using RSoft.Framework.Application.Dto;
+using RSoft.Lib.Common.Contracts.Dtos;
+using RSoft.Lib.Common.Dtos;
 
 namespace RSoft.Auth.Application.Model
 {

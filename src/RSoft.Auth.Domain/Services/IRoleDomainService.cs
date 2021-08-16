@@ -1,8 +1,8 @@
-﻿using RSoft.Framework.Domain.Services;
-using RSoft.Auth.Domain.Entities;
+﻿using RSoft.Auth.Domain.Entities;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
+using RSoft.Lib.DDD.Domain.Services;
 
 namespace RSoft.Auth.Domain.Services
 {

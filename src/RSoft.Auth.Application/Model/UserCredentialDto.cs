@@ -1,4 +1,4 @@
-﻿using RSoft.Framework.Application.Dto;
+﻿using RSoft.Lib.Common.Dtos;
 using System;
 
 namespace RSoft.Auth.Application.Model

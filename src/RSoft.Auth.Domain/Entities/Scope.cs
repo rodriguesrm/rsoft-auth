@@ -1,6 +1,6 @@
-﻿using RSoft.Framework.Cross.Entities;
-using RSoft.Framework.Domain.Contracts;
-using RSoft.Framework.Domain.Entities;
+﻿using RSoft.Lib.Common.Contracts;
+using RSoft.Lib.Common.Contracts.Entities;
+using RSoft.Lib.DDD.Domain.Entities;
 using System;
 using System.Collections.Generic;
 

@@ -1,12 +1,12 @@
-﻿using RSoft.Framework.Domain.Services;
-using RSoft.Auth.Domain.Entities;
+﻿using RSoft.Auth.Domain.Entities;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using RSoft.Framework.Application.Model;
 using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Cross.Common.Model.Args;
 using System.Collections.Generic;
+using RSoft.Lib.DDD.Domain.Services;
+using RSoft.Lib.Common.Models;
 
 namespace RSoft.Auth.Domain.Services
 {
