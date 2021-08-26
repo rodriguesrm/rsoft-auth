@@ -4,7 +4,7 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<UserSecretsId>55a931f2-4281-42ed-9e38-8b4733448886</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<Version>1.0.6</Version>
+		<Version>1.0.7</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,6 +19,8 @@
 
 	<PropertyGroup>
 		<DisableImplicitAspNetCoreAnalyzers>true</DisableImplicitAspNetCoreAnalyzers>
+		<Authors>Rodrigo Rodrigues</Authors>
+		<Company>RSoft</Company>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -30,7 +32,7 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
 		<PackageReference Include="RSoft.Lib.Web" Version="1.0.0" />
-		<PackageReference Include="RSoft.Logs" Version="1.1.0-rc1.7" />
+		<PackageReference Include="RSoft.Logs" Version="1.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
