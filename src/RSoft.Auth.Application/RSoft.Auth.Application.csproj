@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="RSoft.Lib.DDD" Version="1.0.0-rc1.2" />
+	  <PackageReference Include="RSoft.Lib.DDD" Version="1.0.0" />
     <ProjectReference Include="..\RSoft.Auth.Cross.Common\RSoft.Auth.Cross.Common.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Domain\RSoft.Auth.Domain.csproj" />
   </ItemGroup>
