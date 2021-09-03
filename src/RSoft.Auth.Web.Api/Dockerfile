@@ -12,6 +12,7 @@ COPY ["RSoft.Auth.Domain/RSoft.Auth.Domain.csproj", "RSoft.Auth.Domain/"]
 COPY ["RSoft.Auth.Cross.Common/RSoft.Auth.Cross.Common.csproj", "RSoft.Auth.Cross.Common/"]
 COPY ["RSoft.Auth.Cross.IoC/RSoft.Auth.Cross.IoC.csproj", "RSoft.Auth.Cross.IoC/"]
 COPY ["RSoft.Auth.Infra.Data/RSoft.Auth.Infra.Data.csproj", "RSoft.Auth.Infra.Data/"]
+COPY [".nuget/nuget.config", ""]
 RUN dotnet restore "RSoft.Auth.Web.Api/RSoft.Auth.Web.Api.csproj"
 COPY . .
 WORKDIR "/src/RSoft.Auth.Web.Api"
