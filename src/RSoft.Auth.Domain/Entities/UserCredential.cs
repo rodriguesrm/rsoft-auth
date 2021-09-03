@@ -1,6 +1,6 @@
 ﻿using RSoft.Lib.Common.Contracts;
 using RSoft.Lib.Common.Contracts.Entities;
-using RSoft.Lib.DDD.Domain.Entities;
+using RSoft.Lib.Design.Domain.Entities;
 using System;
 
 namespace RSoft.Auth.Domain.Entities

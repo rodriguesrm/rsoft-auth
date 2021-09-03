@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using RSoft.Auth.Domain.Services;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using RSoft.Lib.DDD.Application.Services;
-using RSoft.Lib.DDD.Infra.Data;
+using RSoft.Lib.Design.Application.Services;
+using RSoft.Lib.Design.Infra.Data;
 using RSoft.Lib.Common.ValueObjects;
 using RSoft.Lib.Common.Enums;
 

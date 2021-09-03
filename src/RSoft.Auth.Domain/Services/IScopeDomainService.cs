@@ -1,6 +1,6 @@
 ﻿using RSoft.Auth.Domain.Entities;
 using System;
-using RSoft.Lib.DDD.Domain.Services;
+using RSoft.Lib.Design.Domain.Services;
 
 namespace RSoft.Auth.Domain.Services
 {

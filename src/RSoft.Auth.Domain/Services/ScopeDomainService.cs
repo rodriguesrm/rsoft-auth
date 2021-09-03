@@ -1,7 +1,7 @@
 ﻿using RSoft.Auth.Domain.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
-using RSoft.Lib.DDD.Domain.Services;
+using RSoft.Lib.Design.Domain.Services;
 using RSoft.Lib.Common.ValueObjects;
 using RSoft.Lib.Common.Contracts.Web;
 

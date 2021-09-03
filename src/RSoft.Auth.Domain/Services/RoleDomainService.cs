@@ -3,7 +3,7 @@ using RSoft.Auth.Domain.Repositories;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
-using RSoft.Lib.DDD.Domain.Services;
+using RSoft.Lib.Design.Domain.Services;
 using RSoft.Lib.Common.Contracts.Web;
 using RSoft.Lib.Common.ValueObjects;
 

@@ -1,4 +1,4 @@
-﻿using RSoft.Lib.DDD.Infra.Data.Tables;
+﻿using RSoft.Lib.Design.Infra.Data.Tables;
 using System;
 
 namespace RSoft.Auth.Infra.Data.Entities

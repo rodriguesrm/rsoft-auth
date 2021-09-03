@@ -6,9 +6,9 @@ using RSoft.Auth.Domain.Repositories;
 using RSoft.Auth.Domain.Services;
 using RSoft.Auth.Application.Services;
 using RSoft.Auth.Cross.Common.Options;
-using RSoft.Lib.DDD.IoC;
+using RSoft.Lib.Design.IoC;
 using RSoft.Lib.Common.Options;
-using RSoft.Lib.DDD.Infra.Data;
+using RSoft.Lib.Design.Infra.Data;
 
 namespace RSoft.Auth.Cross.IoC
 {

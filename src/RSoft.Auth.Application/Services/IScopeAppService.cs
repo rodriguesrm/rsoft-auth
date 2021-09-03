@@ -1,5 +1,5 @@
 ﻿using RSoft.Auth.Application.Model;
-using RSoft.Lib.DDD.Application.Services;
+using RSoft.Lib.Design.Application.Services;
 using System;
 
 namespace RSoft.Auth.Application.Services

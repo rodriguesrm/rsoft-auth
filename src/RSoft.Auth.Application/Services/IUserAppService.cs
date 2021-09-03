@@ -1,6 +1,6 @@
 ﻿using RSoft.Auth.Application.Model;
 using RSoft.Lib.Common.Models;
-using RSoft.Lib.DDD.Application.Services;
+using RSoft.Lib.Design.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading;

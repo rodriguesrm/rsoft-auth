@@ -3,7 +3,7 @@ using RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
 using RSoft.Auth.Infra.Data.Extensions;
-using RSoft.Lib.DDD.Infra.Data;
+using RSoft.Lib.Design.Infra.Data;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {

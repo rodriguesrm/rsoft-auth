@@ -1,4 +1,4 @@
-﻿using frw = RSoft.Lib.DDD.Infra.Data;
+﻿using frw = RSoft.Lib.Design.Infra.Data;
 
 namespace RSoft.Auth.Infra.Data
 {

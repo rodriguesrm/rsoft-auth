@@ -8,7 +8,7 @@ using System.Threading;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using RSoft.Lib.DDD.Infra.Data;
+using RSoft.Lib.Design.Infra.Data;
 
 namespace RSoft.Auth.Infra.Data.Repositories
 {

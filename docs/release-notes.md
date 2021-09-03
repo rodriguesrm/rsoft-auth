@@ -28,7 +28,7 @@ User authentication service API. Generates a JWT token for authenticate user in 
 
 #### Version 1.0.5
 - Change package 'RSoft.Framework.Web' to 'RSoft.Lib.Web'
-- Change package 'RSoft.Framework' to 'RSoft.Lib.Common' and 'RSoft.Lib.DDD'
+- Change package 'RSoft.Framework' to 'RSoft.Lib.Common' and 'RSoft.Lib.Design'
 
 #### Version 1.0.6
 - Update RSoft.Lib.* package versions to oficial released version

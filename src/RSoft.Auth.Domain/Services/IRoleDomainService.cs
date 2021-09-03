@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Threading;
-using RSoft.Lib.DDD.Domain.Services;
+using RSoft.Lib.Design.Domain.Services;
 
 namespace RSoft.Auth.Domain.Services
 {
