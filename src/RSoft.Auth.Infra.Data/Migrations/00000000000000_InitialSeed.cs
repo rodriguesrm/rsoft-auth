@@ -64,19 +64,22 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
             DateTime now = DateTime.UtcNow;
 
-            Guid scopeAuthId = new Guid("92a4ce2a-26ed-4ae2-9813-b7e5e6a8678d");
-            Guid scopeAuthKey = new Guid("8f7318ee-4027-4cde-a6d3-529e6382f532");
+            Guid scopeAuthId = new("92a4ce2a-26ed-4ae2-9813-b7e5e6a8678d");
+            Guid scopeAuthKey = new("8f7318ee-4027-4cde-a6d3-529e6382f532");
 
-            Guid scopeMailId = new Guid("1f0f52a8-aab5-4ebd-af44-15c4cead48b7");
-            Guid scopeMailKey = new Guid("122b5aa2-0e8a-446f-8f05-a41236dac0e1");
+            Guid scopeMailId = new("1f0f52a8-aab5-4ebd-af44-15c4cead48b7");
+            Guid scopeMailKey = new("122b5aa2-0e8a-446f-8f05-a41236dac0e1");
 
-            Guid scopeEvaluationId = new Guid("d2401226-754a-4535-85bc-6a3e559da66d");
-            Guid scopeEvaluationKey = new Guid("f686e46b-2b6f-4568-b5e4-fec9be48dcdd");
+            Guid scopePersonId = new("d2401226-754a-4535-85bc-6a3e559da66d");
+            Guid scopePersonKey = new("f686e46b-2b6f-4568-b5e4-fec9be48dcdd");
 
-            Guid roleAdminId = new Guid("6e60ea33-244c-452a-ba49-d745729f8aa4");
-            Guid roleServiceId = new Guid("5d41c69f-276a-4b27-ab88-ebade519504d");
+            Guid scopeAccountId = new("3f3b94db-d868-4cb3-8098-214a53eccc35");
+            Guid scopeAccountKey = new("cda09ab8-2b05-49e8-8eec-60ad6cfea2e5");
 
-            Guid userId = new Guid("745991cc-c21f-4512-ba8f-9533435b64ab");
+            Guid roleAdminId = new("6e60ea33-244c-452a-ba49-d745729f8aa4");
+            Guid roleServiceId = new("5d41c69f-276a-4b27-ab88-ebade519504d");
+
+            Guid userId = new("745991cc-c21f-4512-ba8f-9533435b64ab");
             byte[] pwdBuffer = MD5.HashMD5($"master@soft|{_securityOptions.Secret}");
             string password = MD5.ByteArrayToString(pwdBuffer);
 
@@ -136,7 +139,25 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Scope.IsActive),
                     nameof(Scope.IsDeleted)
                 },
-                new object[] { scopeEvaluationId, scopeEvaluationKey, true, now, userId, null, null, "Evaluation Service", 1, 0 }
+                new object[] { scopePersonId, scopePersonKey, true, now, userId, null, null, "Person Service", 1, 0 }
+            );
+            migrationBuilder.InsertData
+            (
+                nameof(Scope),
+                new string[]
+                {
+                    nameof(Scope.Id),
+                    nameof(Scope.AccessKey),
+                    nameof(Scope.AllowLogin),
+                    nameof(Scope.CreatedOn),
+                    nameof(Scope.CreatedBy),
+                    nameof(Scope.ChangedOn),
+                    nameof(Scope.ChangedBy),
+                    nameof(Scope.Name),
+                    nameof(Scope.IsActive),
+                    nameof(Scope.IsDeleted)
+                },
+                new object[] { scopeAccountId, scopeAccountKey, true, now, userId, null, null, "Account Service", 1, 0 }
             );
 
             // Roles
@@ -281,7 +302,29 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(User.Email),
                     nameof(User.Type)
                 },
-                new object[] { scopeEvaluationId, now, userId, null, null, 0, 0, GenerateUserDocument(), "Evaluation", "Service", DateTime.UtcNow, "evaluation@service.na", (int)UserType.Service }
+                new object[] { scopePersonId, now, userId, null, null, 0, 0, GenerateUserDocument(), "Person", "Service", DateTime.UtcNow, "person@service.na", (int)UserType.Service }
+            );
+
+            migrationBuilder.InsertData
+            (
+                nameof(User),
+                new string[]
+                {
+                    nameof(User.Id),
+                    nameof(User.CreatedOn),
+                    nameof(User.CreatedBy),
+                    nameof(User.ChangedOn),
+                    nameof(User.ChangedBy),
+                    nameof(User.IsActive),
+                    nameof(User.IsDeleted),
+                    nameof(User.Document),
+                    nameof(User.FirstName),
+                    nameof(User.LastName),
+                    nameof(User.BornDate),
+                    nameof(User.Email),
+                    nameof(User.Type)
+                },
+                new object[] { scopeAccountId, now, userId, null, null, 0, 0, GenerateUserDocument(), "Account", "Service", DateTime.UtcNow, "account@service.na", (int)UserType.Service }
             );
 
             // User-Scopes
