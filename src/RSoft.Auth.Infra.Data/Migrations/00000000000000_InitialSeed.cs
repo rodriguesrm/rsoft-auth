@@ -73,8 +73,8 @@ namespace RSoft.Auth.Infra.Data.Migrations
             Guid scopePersonId = new("d2401226-754a-4535-85bc-6a3e559da66d");
             Guid scopePersonKey = new("f686e46b-2b6f-4568-b5e4-fec9be48dcdd");
 
-            Guid scopeAccountId = new("3f3b94db-d868-4cb3-8098-214a53eccc35");
-            Guid scopeAccountKey = new("cda09ab8-2b05-49e8-8eec-60ad6cfea2e5");
+            Guid scopeEntryId = new("3f3b94db-d868-4cb3-8098-214a53eccc35");
+            Guid scopeEntryKey = new("cda09ab8-2b05-49e8-8eec-60ad6cfea2e5");
 
             Guid roleAdminId = new("6e60ea33-244c-452a-ba49-d745729f8aa4");
             Guid roleServiceId = new("5d41c69f-276a-4b27-ab88-ebade519504d");
@@ -157,7 +157,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Scope.IsActive),
                     nameof(Scope.IsDeleted)
                 },
-                new object[] { scopeAccountId, scopeAccountKey, true, now, userId, null, null, "Account Service", 1, 0 }
+                new object[] { scopeEntryId, scopeEntryKey, true, now, userId, null, null, "Entry Service", 1, 0 }
             );
 
             // Roles
@@ -324,7 +324,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(User.Email),
                     nameof(User.Type)
                 },
-                new object[] { scopeAccountId, now, userId, null, null, 0, 0, GenerateUserDocument(), "Account", "Service", DateTime.UtcNow, "account@service.na", (int)UserType.Service }
+                new object[] { scopeEntryId, now, userId, null, null, 0, 0, GenerateUserDocument(), "Entry", "Service", DateTime.UtcNow, "entry@service.na", (int)UserType.Service }
             );
 
             // User-Scopes
