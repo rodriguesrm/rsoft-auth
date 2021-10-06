@@ -41,7 +41,7 @@ namespace RSoft.Auth.Web.Api.Helpers
         ///<inheritdoc/>
         public string GenerateTokenAplication(Guid scopeId, string scopeName, out DateTime? expiresIn)
         {
-            UserDto userDto = new UserDto()
+            UserDto userDto = new()
             {
                 Id = scopeId,
                 Name = new FullNameRequest() { FirstName = scopeName, LastName = "Scope/Application" },
@@ -84,7 +84,7 @@ namespace RSoft.Auth.Web.Api.Helpers
                 }
             }
 
-            JwtSecurityToken jwt = new JwtSecurityToken
+            JwtSecurityToken jwt = new
             (
                  issuer: _jwtTokenOptions.Issuer,
                  audience: _jwtTokenOptions.Audience,
