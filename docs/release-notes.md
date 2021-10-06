@@ -36,5 +36,8 @@ User authentication service API. Generates a JWT token for authenticate user in 
 #### Version 1.0.7
 - Update RSoft.Logs package
 
-#### Version 1.0.11
-- Update RSoft.Logs nuget package to version 1.2.4 (Fix top proccessor consumer)
+#### Version 1.0.12
+- Update RSoft.Logs nuget package to version 1.2.5 (Fix top proccessor consumer)
+
+#### Version 1.1.0
+- Update RSoft.Logs nuget package to version 1.3.0 (Fix top proccessor consumer and infinite loop)
