@@ -4,7 +4,7 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<UserSecretsId>55a931f2-4281-42ed-9e38-8b4733448886</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<Version>1.0.10</Version>
+		<Version>1.0.11</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -31,8 +31,8 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
-		<PackageReference Include="RSoft.Lib.Web" Version="1.0.0" />
-		<PackageReference Include="RSoft.Logs" Version="1.2.1" />
+		<PackageReference Include="RSoft.Lib.Web" Version="1.5.2" />
+		<PackageReference Include="RSoft.Logs" Version="1.2.4" />
 	</ItemGroup>
 
 	<ItemGroup>
