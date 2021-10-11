@@ -9,6 +9,8 @@ using RSoft.Auth.Cross.Common.Options;
 using RSoft.Lib.Design.IoC;
 using RSoft.Lib.Common.Options;
 using RSoft.Lib.Design.Infra.Data;
+using RSoft.Lib.Messaging.Options;
+using RSoft.Lib.Messaging.Abstractions;
 
 namespace RSoft.Auth.Cross.IoC
 {
@@ -42,8 +44,11 @@ namespace RSoft.Auth.Cross.IoC
             services.Configure<CredentialOptions>(options => configuration.GetSection("Application:Credential").Bind(options));
             services.Configure<CultureOptions>(options => configuration.GetSection("Application:Culture").Bind(options));
             services.Configure<PagesOptions>(options => configuration.GetSection("Application:Pages").Bind(options));
+            services.Configure<MessagingOption>(options => configuration.GetSection("Messaging:Server").Bind(options));
 
             #endregion
+
+            services.AddMassTransitUsingRabbitMq(configuration);
 
             #region Infra
 

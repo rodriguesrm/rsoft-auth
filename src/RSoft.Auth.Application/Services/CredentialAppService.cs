@@ -78,7 +78,7 @@ namespace RSoft.Auth.Application.Services
         {
             //TODO: Create libraty to consuming rsoft apis
 
-            HttpClient client = new HttpClient
+            HttpClient client = new()
             {
                 BaseAddress = new Uri(_apiOptions.Uri)
             };
@@ -87,7 +87,7 @@ namespace RSoft.Auth.Application.Services
             client.DefaultRequestHeaders.Add("Authorization", $"bearer {appToken}");
             client.DefaultRequestHeaders.Add("Accepted-Language", CultureInfo.CurrentCulture.Name);
 
-            RsMailRequest request = new RsMailRequest()
+            RsMailRequest request = new()
             {
                 From = new EmailAddressRequest("noreply@rsoft.com", "RSoft.Auth"),
                 Subject = args.FirstAccess ? _localizer["CREDENTIAL_FIRST_ACCESS_SUBJECT"] : _localizer["CREDENTIAL_RECOVERY_ACCESS_SUBJECT"],
@@ -96,15 +96,15 @@ namespace RSoft.Auth.Application.Services
             };
             request.To.Add(new EmailAddressRequest(args.Email, args.Name));
 
-            StringContent content = new StringContent(JsonSerializer.Serialize(request, _jsonOptions), Encoding.UTF8, "application/json");
+            StringContent content = new(JsonSerializer.Serialize(request, _jsonOptions), Encoding.UTF8, "application/json");
             IDictionary<string, string> errors = new Dictionary<string, string>();
             Guid requestId = Guid.Empty;
 
-            HttpResponseMessage response = await client.PostAsync(_apiOptions.MailService, content);
+            HttpResponseMessage response = await client.PostAsync(_apiOptions.MailService, content, cancellationToken);
             bool success = response.IsSuccessStatusCode;
             if (!success)
             {
-                string body = await response.Content.ReadAsStringAsync();
+                string body = await response.Content.ReadAsStringAsync(cancellationToken);
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     IEnumerable<GenericNotification> notifications = JsonSerializer.Deserialize<IEnumerable<GenericNotification>>(body, _jsonOptions);

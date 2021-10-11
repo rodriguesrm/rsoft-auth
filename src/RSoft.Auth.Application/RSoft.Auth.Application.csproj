@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="MassTransit" Version="7.2.2" />
+	  <PackageReference Include="RSoft.Lib.Contracts" Version="1.0.0" />
 	  <PackageReference Include="RSoft.Lib.Design" Version="1.5.2" />
     <ProjectReference Include="..\RSoft.Auth.Cross.Common\RSoft.Auth.Cross.Common.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Domain\RSoft.Auth.Domain.csproj" />

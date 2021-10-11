@@ -12,6 +12,8 @@ using RSoft.Auth.Application.Language;
 using RSoft.Lib.Design.Application.Services;
 using RSoft.Lib.Design.Infra.Data;
 using RSoft.Lib.Common.Models;
+using MassTransit;
+using RSoft.Lib.Contracts.Events;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -28,6 +30,7 @@ namespace RSoft.Auth.Application.Services
         private readonly IRoleDomainService _roleDomain;
         private new readonly IUserDomainService _dmn;
         private readonly IStringLocalizer<AppResource> _localizer;
+        private readonly IBusControl _bus;
 
         #endregion
 
@@ -41,19 +44,22 @@ namespace RSoft.Auth.Application.Services
         /// <param name="scopeDomain">Scope domain service</param>
         /// <param name="roleDomain">Role domain service</param>
         /// <param name="localizer">Language string localizer</param>
+        /// <param name="bus">Message bus control</param>
         public UserAppService
         (
-            IUnitOfWork uow, 
-            IUserDomainService dmn, 
-            IScopeDomainService scopeDomain, 
+            IUnitOfWork uow,
+            IUserDomainService dmn,
+            IScopeDomainService scopeDomain,
             IRoleDomainService roleDomain,
-            IStringLocalizer<AppResource> localizer
-        ) : base(uow, dmn) 
+            IStringLocalizer<AppResource> localizer,
+            IBusControl bus
+        ) : base(uow, dmn)
         {
             _scopeDomain = scopeDomain;
             _roleDomain = roleDomain;
             _dmn = dmn;
             _localizer = localizer;
+            _bus = bus;
         }
 
         #endregion
@@ -115,7 +121,34 @@ namespace RSoft.Auth.Application.Services
 
             dto.Scopes = scopes.Select(s => s.Map(false)).ToList();
 
-            return await base.AddAsync(dto, cancellationToken);
+            UserDto result = await base.AddAsync(dto, cancellationToken);
+            if (result.Valid)
+            {
+                UserCreatedEvent message = new(result.Id, result.Name.FirstName, result.Name.LastName, result.Email, result.BornDate, result.Type.Value, result.IsActive);
+                await _bus.Publish(message, cancellationToken);
+            }
+            return result;
+
+        }
+
+        ///<inheritdoc/>
+        public override async Task<UserDto> UpdateAsync(Guid key, UserDto dto, CancellationToken cancellationToken = default)
+        {
+            UserDto result = await base.UpdateAsync(key, dto, cancellationToken);
+            if (result.Valid)
+            {
+                UserChangedEvent message = new(result.Id, result.Name.FirstName, result.Name.LastName, result.Email, result.BornDate, result.Type.Value, result.IsActive);
+                await _bus.Publish(message, cancellationToken);
+            }
+            return result;
+        }
+
+        ///<inheritdoc/>
+        public override Task DeleteAsync(Guid key, CancellationToken cancellationToken = default)
+        {
+            base.DeleteAsync(key, cancellationToken);
+            _bus.Publish(new UserDeletedEvent(key), cancellationToken);
+            return Task.CompletedTask;
         }
 
         ///<inheritdoc/>
@@ -128,7 +161,7 @@ namespace RSoft.Auth.Application.Services
 
         ///<inheritdoc/>
         public async Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
-            => await _dmn.AddScopeAsync(userId, scopeId);
+            => await _dmn.AddScopeAsync(userId, scopeId, cancellationToken);
 
         ///<inheritdoc/>
         public async Task<SimpleOperationResult> RemoveScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
