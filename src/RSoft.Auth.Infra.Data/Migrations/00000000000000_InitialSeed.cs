@@ -76,6 +76,9 @@ namespace RSoft.Auth.Infra.Data.Migrations
             Guid scopeEntryId = new("3f3b94db-d868-4cb3-8098-214a53eccc35");
             Guid scopeEntryKey = new("cda09ab8-2b05-49e8-8eec-60ad6cfea2e5");
 
+            Guid scopeAllocateId = new("3f3b94db-d868-4cb3-8098-214a53eccc35");
+            Guid scopeAllocateKey = new("cda09ab8-2b05-49e8-8eec-60ad6cfea2e5");
+
             Guid roleAdminId = new("6e60ea33-244c-452a-ba49-d745729f8aa4");
             Guid roleServiceId = new("5d41c69f-276a-4b27-ab88-ebade519504d");
 
@@ -158,6 +161,24 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(Scope.IsDeleted)
                 },
                 new object[] { scopeEntryId, scopeEntryKey, true, now, userId, null, null, "Entry Service", 1, 0 }
+            );
+            migrationBuilder.InsertData
+            (
+                nameof(Scope),
+                new string[]
+                {
+                    nameof(Scope.Id),
+                    nameof(Scope.AccessKey),
+                    nameof(Scope.AllowLogin),
+                    nameof(Scope.CreatedOn),
+                    nameof(Scope.CreatedBy),
+                    nameof(Scope.ChangedOn),
+                    nameof(Scope.ChangedBy),
+                    nameof(Scope.Name),
+                    nameof(Scope.IsActive),
+                    nameof(Scope.IsDeleted)
+                },
+                new object[] { scopeAllocateId, scopeAllocateKey, true, now, userId, null, null, "Allocate Service", 1, 0 }
             );
 
             // Roles
@@ -325,6 +346,27 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     nameof(User.Type)
                 },
                 new object[] { scopeEntryId, now, userId, null, null, 0, 0, GenerateUserDocument(), "Entry", "Service", DateTime.UtcNow, "entry@service.na", (int)UserType.Service }
+            );
+            migrationBuilder.InsertData
+            (
+                nameof(User),
+                new string[]
+                {
+                    nameof(User.Id),
+                    nameof(User.CreatedOn),
+                    nameof(User.CreatedBy),
+                    nameof(User.ChangedOn),
+                    nameof(User.ChangedBy),
+                    nameof(User.IsActive),
+                    nameof(User.IsDeleted),
+                    nameof(User.Document),
+                    nameof(User.FirstName),
+                    nameof(User.LastName),
+                    nameof(User.BornDate),
+                    nameof(User.Email),
+                    nameof(User.Type)
+                },
+                new object[] { scopeAllocateId, now, userId, null, null, 0, 0, GenerateUserDocument(), "Allocate", "Service", DateTime.UtcNow, "allocate@service.na", (int)UserType.Service }
             );
 
             // User-Scopes
