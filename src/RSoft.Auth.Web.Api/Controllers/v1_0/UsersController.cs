@@ -207,6 +207,20 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                 return BadRequest(PrepareNotifications(result.Errors));
         }
 
+        /// <summary>
+        /// Perform export user data
+        /// </summary>
+        /// <param name="userId">User id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<IActionResult> RunExportUserAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            var result = await _userAppService.ExportUser(userId, cancellationToken);
+            if (result.Sucess)
+                return Ok(result.Result);
+            else
+                return NotFound(result.Message);
+        }
+
         #endregion
 
         #region Overrides
@@ -432,6 +446,22 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> RemoveRoleUser([FromRoute] Guid key, [FromRoute] Guid roleKey, CancellationToken cancellationToken = default)
             => await RunActionAsync(RunRemoveRoleUserAsync(key, roleKey, cancellationToken), cancellationToken);
+
+        /// <summary>
+        /// Export user data
+        /// </summary>
+        /// <param name="key">User id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpGet("{key:guid}/export")]
+        [MapToApiVersion("1.0")]
+        public async Task<IActionResult> ExportUser([FromRoute] Guid key, CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunExportUserAsync(key, cancellationToken), cancellationToken);
 
         #endregion
 

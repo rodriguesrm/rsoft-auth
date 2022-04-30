@@ -54,6 +54,13 @@ namespace RSoft.Auth.Application.Services
         /// <param name="roleId">Role id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<SimpleOperationResult> RemoveRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Export user data (csv format)
+        /// </summary>
+        /// <param name="userId">User id key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<OperationResult<string>> ExportUser(Guid userId, CancellationToken cancellationToken);
     }
 
 }

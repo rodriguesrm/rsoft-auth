@@ -14,6 +14,7 @@ using RSoft.Lib.Design.Infra.Data;
 using RSoft.Lib.Common.Models;
 using MassTransit;
 using RSoft.Lib.Contracts.Events;
+using System.Text;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -226,6 +227,43 @@ namespace RSoft.Auth.Application.Services
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         public async Task<SimpleOperationResult> RemoveRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken)
             => await _dmn.RemoveRoleAsync(userId, roleId, cancellationToken);
+
+        ///<inheritdoc/>
+        public async Task<OperationResult<string>> ExportUser(Guid userId, CancellationToken cancellationToken)
+        {
+
+            OperationResult<string> result = new();
+
+            User user = await _dmn.GetByKeyAsync(userId, cancellationToken);
+            if (user != null)
+            {
+
+                StringBuilder sb = new();
+
+                //sb.AppendLine("Id;CreatedOn;CreatedBy;IsActive;Document;FirstName;LastName;BornDate;Email;Type");
+                sb.Append($"{user.Id};");
+                sb.Append($"{user.CreatedOn:G};");
+                sb.Append($"{user.CreatedAuthor.Id};");
+                sb.Append($"{(user.IsActive ? "1" : "0")};");
+                sb.Append($"{user.Document};");
+                sb.Append($"{user.Name.FirstName};");
+                sb.Append($"{user.Name.LastName};");
+                sb.Append($"{user.BornDate?.ToString("G")};");
+                sb.Append($"{user.Email};");
+                sb.Append(user.Type.ToString());
+
+                result.Sucess = true;
+                result.Result = sb.ToString();
+
+            }
+            else
+            {
+                result.Message = _localizer["USER_NOT_FOUND"];
+            }
+
+            return result;
+
+        }
 
         #endregion
 

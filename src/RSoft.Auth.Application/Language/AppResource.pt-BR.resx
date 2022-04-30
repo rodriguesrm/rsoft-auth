@@ -201,6 +201,9 @@
   <data name="USER_MUST_CHANGE_PASSWORD" xml:space="preserve">
     <value>O usuário deve alterar a senha</value>
   </data>
+  <data name="USER_NOT_FOUND" xml:space="preserve">
+    <value>Usuário não encontrado</value>
+  </data>
   <data name="USER_PASSWORD_FAIL" xml:space="preserve">
     <value>Usuário e/ou senha inválido(s)</value>
   </data>
