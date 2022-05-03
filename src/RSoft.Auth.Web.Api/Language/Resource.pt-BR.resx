@@ -132,8 +132,14 @@
   <data name="DELETE_USER_DENIED" xml:space="preserve">
     <value>As credenciais fornecidas não têm privilégios de exclusão de usuário</value>
   </data>
+  <data name="FILE_NOT_SENT" xml:space="preserve">
+    <value>Arquivo para importação deve ser enviado</value>
+  </data>
   <data name="INVALID_APP_KEY_ACCESS" xml:space="preserve">
     <value>Chave de identificação ou chave de acesso inválida</value>
+  </data>
+  <data name="INVALID_FORMAT_FILE" xml:space="preserve">
+    <value>Formato de arquivo inválido, esperado text/csv</value>
   </data>
   <data name="LOGIN_MAX_SIZE" xml:space="preserve">
     <value>O login deve conter no máximo 254 caracteres</value>
@@ -143,6 +149,9 @@
   </data>
   <data name="NEW_PASSWORD_REQUIRED" xml:space="preserve">
     <value>A nova senha deve ser informada</value>
+  </data>
+  <data name="ONLY_ONE_FILE_MUST_BE_SENT" xml:space="preserve">
+    <value>Somente um arquivo deve ser enviado</value>
   </data>
   <data name="PASSWORD_LENGTH" xml:space="preserve">
     <value>A senha deve conter entre 6 e 16 caracteres</value>

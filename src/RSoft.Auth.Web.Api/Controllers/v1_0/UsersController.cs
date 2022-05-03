@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Model.Extensions;
 using RSoft.Auth.Application.Services;
+using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Web.Api.Extensions;
 using RSoft.Auth.Web.Api.Language;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
@@ -51,7 +52,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="localizer">String language localizer</param>
         public UsersController
         (
-            IUserAppService userAppService, 
+            IUserAppService userAppService,
             IOptions<ScopeOptions> options,
             IStringLocalizer<Resource> localizer
         )
@@ -214,11 +215,51 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         private async Task<IActionResult> RunExportUserAsync(Guid userId, CancellationToken cancellationToken = default)
         {
-            var result = await _userAppService.ExportUser(userId, cancellationToken);
+            OperationResult<byte[]> result = await _userAppService.ExportUser(userId, cancellationToken);
             if (result.Sucess)
-                return Ok(result.Result);
+                return File(result.Result, "text/csv", $"user-{DateTime.Now:yyyy-MM-dd-hh-mm-ss}.csv");
             else
                 return NotFound(result.Message);
+        }
+
+        /// <summary>
+        /// Performa import user data
+        /// </summary>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task<IActionResult> RunImportUserAsync(CancellationToken cancellationToken)
+        {
+
+            IEnumerable<IFormFile> files = null;
+            bool isFileSent = false;
+
+            try 
+            { 
+                files = Request.Form.Files;
+                if (files != null && files.Any())
+                    isFileSent = true;
+            }
+            catch (Exception ex)
+            {
+                if (ex is InvalidOperationException)
+                    isFileSent = false;
+                else
+                    throw;
+            }
+
+            if (!isFileSent )
+                return BadRequest(new GenericNotification("File", _localizer["FILE_NOT_SENT"]));
+
+            if (files.Count() > 1)
+                return BadRequest(new GenericNotification("File", _localizer["ONLY_ONE_FILE_MUST_BE_SENT"]));
+
+            IFormFile file = files.First();
+
+            if (file.ContentType != "text/csv")
+                return BadRequest(new GenericNotification("File", _localizer["INVALID_FORMAT_FILE"]));
+
+            OperationResult<IEnumerable<RowImportResult>> result = await _userAppService.ImportUser(file, cancellationToken);
+
+            return Ok(result.Result);
         }
 
         #endregion
@@ -454,7 +495,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
@@ -462,6 +503,21 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> ExportUser([FromRoute] Guid key, CancellationToken cancellationToken = default)
             => await RunActionAsync(RunExportUserAsync(key, cancellationToken), cancellationToken);
+
+        /// <summary>
+        /// Import user data (By form-file data - only 1 file)
+        /// </summary>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<GenericNotification>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
+        [HttpPost("import")]
+        [MapToApiVersion("1.0")]
+        public async Task<IActionResult> ImportUser(CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunImportUserAsync(cancellationToken), cancellationToken);
 
         #endregion
 

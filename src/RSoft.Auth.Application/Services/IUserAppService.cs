@@ -1,4 +1,6 @@
-﻿using RSoft.Auth.Application.Model;
+﻿using Microsoft.AspNetCore.Http;
+using RSoft.Auth.Application.Model;
+using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Lib.Common.Models;
 using RSoft.Lib.Design.Application.Services;
 using System;
@@ -60,7 +62,15 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="userId">User id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<OperationResult<string>> ExportUser(Guid userId, CancellationToken cancellationToken);
+        Task<OperationResult<byte[]>> ExportUser(Guid userId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Import users data (csv format)
+        /// </summary>
+        /// <param name="file">File to import</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<OperationResult<IEnumerable<RowImportResult>>> ImportUser(IFormFile file, CancellationToken cancellationToken);
+
     }
 
 }

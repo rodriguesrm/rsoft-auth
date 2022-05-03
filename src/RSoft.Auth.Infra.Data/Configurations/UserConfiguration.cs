@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RSoft.Auth.Infra.Data.Entities;
 using System;
-using System.Reflection.Metadata;
 
 namespace RSoft.Auth.Infra.Data.Configurations
 {

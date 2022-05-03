@@ -15,6 +15,10 @@ using RSoft.Lib.Common.Models;
 using MassTransit;
 using RSoft.Lib.Contracts.Events;
 using System.Text;
+using RSoft.Auth.Cross.Common.Model.Results;
+using Microsoft.AspNetCore.Http;
+using RSoft.Lib.Common.Enums;
+using RSoft.Lib.Common.ValueObjects;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -32,6 +36,7 @@ namespace RSoft.Auth.Application.Services
         private new readonly IUserDomainService _dmn;
         private readonly IStringLocalizer<AppResource> _localizer;
         private readonly IBusControl _bus;
+        private const string fileHeader = "Id;CreatedOn;CreatedBy;IsActive;Document;FirstName;LastName;BornDate;Email;Type";
 
         #endregion
 
@@ -229,10 +234,10 @@ namespace RSoft.Auth.Application.Services
             => await _dmn.RemoveRoleAsync(userId, roleId, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<OperationResult<string>> ExportUser(Guid userId, CancellationToken cancellationToken)
+        public async Task<OperationResult<byte[]>> ExportUser(Guid userId, CancellationToken cancellationToken)
         {
 
-            OperationResult<string> result = new();
+            OperationResult<byte[]> result = new();
 
             User user = await _dmn.GetByKeyAsync(userId, cancellationToken);
             if (user != null)
@@ -240,20 +245,20 @@ namespace RSoft.Auth.Application.Services
 
                 StringBuilder sb = new();
 
-                //sb.AppendLine("Id;CreatedOn;CreatedBy;IsActive;Document;FirstName;LastName;BornDate;Email;Type");
+                sb.AppendLine(fileHeader);
                 sb.Append($"{user.Id};");
-                sb.Append($"{user.CreatedOn:G};");
+                sb.Append($"{user.CreatedOn:u};");
                 sb.Append($"{user.CreatedAuthor.Id};");
                 sb.Append($"{(user.IsActive ? "1" : "0")};");
                 sb.Append($"{user.Document};");
                 sb.Append($"{user.Name.FirstName};");
                 sb.Append($"{user.Name.LastName};");
-                sb.Append($"{user.BornDate?.ToString("G")};");
-                sb.Append($"{user.Email};");
-                sb.Append(user.Type.ToString());
+                sb.Append($"{user.BornDate?.ToString("u")};");
+                sb.Append($"{user.Email.Address};");
+                sb.Append(((int)user.Type).ToString());
 
                 result.Sucess = true;
-                result.Result = sb.ToString();
+                result.Result = Encoding.ASCII.GetBytes(sb.ToString());
 
             }
             else
@@ -262,6 +267,79 @@ namespace RSoft.Auth.Application.Services
             }
 
             return result;
+
+        }
+
+        ///<inheritdoc/>
+        public async Task<OperationResult<IEnumerable<RowImportResult>>> ImportUser(IFormFile file, CancellationToken cancellationToken)
+        {
+
+            IList<RowImportResult> rows = new List<RowImportResult>();
+
+            System.IO.Stream fileStream = file.OpenReadStream();
+            byte[] buffer = new byte[fileStream.Length];
+            await fileStream.ReadAsync(buffer, cancellationToken);
+
+            string contentFile = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+            string[] lines = contentFile.Split("\r\n");
+
+            for (int lineNumber = 0; lineNumber < lines.Length; lineNumber++)
+            {
+
+                try
+                {
+
+                    if (lines[lineNumber] != fileHeader)
+                    {
+
+                        string[] columns = lines[lineNumber].Split(";");
+
+                        Guid id = new(columns[0]);
+                        DateTime createdOn = DateTime.Parse(columns[1]);
+                        Guid createdBy = new(columns[2]);
+                        bool isActive = columns[3] == "1";
+                        string document = columns[4];
+                        string firstName = columns[5];
+                        string lastName = columns[6];
+                        DateTime bornDate = DateTime.Parse(columns[7]);
+                        string email = columns[8];
+                        UserType userType = (UserType)int.Parse(columns[9]);
+
+                        UserDto user = new()
+                        {
+                            Id = id,
+                            CreatedBy = new AuditAuthor<Guid>(createdOn, createdBy, string.Empty),
+                            IsActive = isActive,
+                            Document = document,
+                            Name = new Name(firstName, lastName),
+                            BornDate = bornDate,
+                            Email = email,
+                            Type = userType,
+                            Scopes = new List<ScopeDto>()
+                        };
+
+                        user = await AddAsync(user);
+                        if (user.Valid)
+                            rows.Add(new RowImportResult((lineNumber + 1), id, true, null));
+                        else
+                            rows.Add(new RowImportResult((lineNumber + 1), id, false, user.Notifications.First().Message));
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    rows.Add(new RowImportResult((lineNumber + 1), Guid.Empty, false, ex.Message));
+                }
+
+            }
+
+            fileStream.Close();
+
+            return new OperationResult<IEnumerable<RowImportResult>>()
+            {
+                Sucess = true,
+                Result = rows
+            };
 
         }
 
