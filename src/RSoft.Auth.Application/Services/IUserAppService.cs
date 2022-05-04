@@ -57,20 +57,6 @@ namespace RSoft.Auth.Application.Services
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<SimpleOperationResult> RemoveRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Export user data (csv format)
-        /// </summary>
-        /// <param name="userId">User id key</param>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<OperationResult<byte[]>> ExportUser(Guid userId, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Import users data (csv format)
-        /// </summary>
-        /// <param name="file">File to import</param>
-        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<OperationResult<IEnumerable<RowImportResult>>> ImportUser(IFormFile file, CancellationToken cancellationToken);
-
     }
 
 }
