@@ -32,7 +32,6 @@ namespace RSoft.Auth.Application.Services
         private readonly ILogger<ScopeAppService> _logger;
         private readonly IUserDomainService _userDomain;
         private readonly IStringLocalizer<AppResource> _localizer;
-        private const string fileHeader = "Id;Name;AccessKey;AllowLogin;IsActive";
 
         #endregion
 
@@ -99,13 +98,13 @@ namespace RSoft.Auth.Application.Services
 
             dto.AccessKey = dto.AccessKey == Guid.Empty ? Guid.NewGuid() : dto.AccessKey;
             dto = await base.AddAsync(dto, cancellationToken);
-            if (dto.AllowLogin)
+            if (dto.Valid && dto.AllowLogin)
             {
-                User user = new User(dto.Id)
+                User user = new(dto.Id)
                 {
                     Document = GeneratedUserServiceDocument(),
                     Email = new Email($"{dto.Name.ToLower().Replace(" ", string.Empty)}@service.na"),
-                    Name = new Name(dto.Name, "Service"),
+                    Name = new Name(dto.Name.Replace("Service", "").Trim(), "Service"),
                     BornDate = DateTime.UtcNow,
                     IsActive = false,
                     Type = UserType.Service
@@ -144,12 +143,11 @@ namespace RSoft.Auth.Application.Services
                 
                 StringBuilder sb = new();
 
-                sb.AppendLine(fileHeader);
                 sb.Append($"{scope.Id};");
                 sb.Append($"{scope.Name};");
                 sb.Append($"{scope.AccessKey};");
                 sb.Append($"{(scope.AllowLogin ? "1" : "0")};");
-                sb.Append($"{(scope.IsActive ? "1" : "0")};");
+                sb.Append($"{(scope.IsActive ? "1" : "0")}");
 
                 result.Sucess = true;
                 result.Result = Encoding.ASCII.GetBytes(sb.ToString());
@@ -173,45 +171,66 @@ namespace RSoft.Auth.Application.Services
             string contentFile = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
             string[] lines = contentFile.Split("\r\n");
 
-            for (int lineNumber = 0; lineNumber < lines.Length; lineNumber++)
+            for (int pos = 0; pos < lines.Length; pos++)
             {
+
+                int lineNumber = pos + 1;
 
                 try
                 {
 
-                    if (lines[lineNumber] != fileHeader)
+                    if (lines[pos].Trim() == String.Empty)
+                    {
+                        rows.Add(new RowImportResult(lineNumber, null, false, _localizer["LINE_EMPTY"]));
+                    }
+                    else
                     {
 
-                        //"Id;Name;AccessKey;AllowLogin;IsActive";
+                        string[] columns = lines[pos].Split(";");
 
-                        string[] columns = lines[lineNumber].Split(";");
-
-                        Guid id = new(columns[0]);
-                        string name = columns[1];
-                        Guid accessKey = new(columns[2]);
-                        bool allowLogin = columns[3] == "1";
-                        bool isActive = columns[4] == "1";
-
-                        ScopeDto scope = new()
+                        if (columns.Length != 5)
                         {
-                            Id = id,
-                            Name = name,
-                            AccessKey = accessKey,
-                            AllowLogin = allowLogin,
-                            IsActive = isActive
-                        };
-
-                        scope = await AddAsync(scope);
-                        if (scope.Valid)
-                            rows.Add(new RowImportResult((lineNumber + 1), id, true, null));
+                            rows.Add(new RowImportResult(lineNumber, null, false, _localizer["INVALID_LAYOUT"]));
+                        }
                         else
-                            rows.Add(new RowImportResult((lineNumber + 1), id, false, scope.Notifications.First().Message));
+                        {
+
+                            Guid id = new(columns[0]);
+                            string name = columns[1];
+                            Guid accessKey = new(columns[2]);
+                            bool allowLogin = columns[3] == "1";
+                            bool isActive = columns[4] == "1";
+
+                            ScopeDto scope = new()
+                            {
+                                Id = id,
+                                Name = name,
+                                AccessKey = accessKey,
+                                AllowLogin = allowLogin,
+                                IsActive = isActive
+                            };
+
+                            if (await GetByKeyAsync(id, cancellationToken) == null)
+                            {
+                                scope = await AddAsync(scope, cancellationToken);
+                                if (scope.Valid)
+                                    rows.Add(new RowImportResult(lineNumber, id, true, null));
+                                else
+                                    rows.Add(new RowImportResult(lineNumber, id, false, scope.Notifications.First().Message));
+                            }
+                            else
+                            {
+                                rows.Add(new RowImportResult(lineNumber, id, false, _localizer["SCOPE_ALREADY_EXISTS"]));
+                            }
+
+                        }
 
                     }
+
                 }
                 catch (Exception ex)
                 {
-                    rows.Add(new RowImportResult((lineNumber + 1), Guid.Empty, false, ex.Message));
+                    rows.Add(new RowImportResult(lineNumber, null, false, ex.GetBaseException().Message));
                 }
 
             }

@@ -168,8 +168,14 @@
   <data name="EMAIL_INVALID_OR_EMPTY" xml:space="preserve">
     <value>E-mail é inválido ou vazio</value>
   </data>
+  <data name="INVALID_LAYOUT" xml:space="preserve">
+    <value>A linha está em um layout inválido</value>
+  </data>
   <data name="INVALID_ROLE" xml:space="preserve">
     <value>Função inválida ou vazia</value>
+  </data>
+  <data name="LINE_EMPTY" xml:space="preserve">
+    <value>A linha está vazia</value>
   </data>
   <data name="LOGIN_REQUIRED" xml:space="preserve">
     <value>O login deve ser informado</value>
@@ -182,6 +188,9 @@
   </data>
   <data name="ROLE_NOT_FOUND" xml:space="preserve">
     <value>Função não encontrada</value>
+  </data>
+  <data name="SCOPE_ALREADY_EXISTS" xml:space="preserve">
+    <value>O escopo (aplicação) já existe</value>
   </data>
   <data name="SCOPE_ID_NOT_FOUND" xml:space="preserve">
     <value>O escopo '{0}' não foi encontrado</value>
