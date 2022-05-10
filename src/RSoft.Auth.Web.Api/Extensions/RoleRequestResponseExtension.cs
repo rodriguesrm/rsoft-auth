@@ -28,7 +28,7 @@ namespace RSoft.Auth.Web.Api.Extensions
         {
             return new RoleDto()
             {
-                Scope = new SimpleIdentification<Guid>(request.ScopeId, null),
+                AppClient = new SimpleIdentification<Guid>(request.ClientId, null),
                 Name = request.Name,
                 Description = request.Description,
                 IsActive = request.IsActive
@@ -43,7 +43,7 @@ namespace RSoft.Auth.Web.Api.Extensions
         {
             return new RoleResponse(dto.Id)
             {
-                Scope = dto.Scope,
+                AppClient = dto.AppClient,
                 Name = dto.Name,
                 Description = dto.Description,
                 IsActive = dto.IsActive

@@ -138,8 +138,8 @@
   <data name="PWD_TOKEN_INVALID" xml:space="preserve">
     <value>Token is invalid</value>
   </data>
-  <data name="SCOPE_NOT_FOUND" xml:space="preserve">
-    <value>Scope not found</value>
+  <data name="APPCLIENT_NOT_FOUND" xml:space="preserve">
+    <value>Application-Client not found</value>
   </data>
   <data name="TOKEN_EXPIRED" xml:space="preserve">
     <value>Expired token</value>
@@ -147,8 +147,8 @@
   <data name="USER_ALREADY_ROLE" xml:space="preserve">
     <value>The user already has this role</value>
   </data>
-  <data name="USER_ALREADY_SCOPE" xml:space="preserve">
-    <value>User is already authorized for this scope</value>
+  <data name="USER_ALREADY_APPCLIENT" xml:space="preserve">
+    <value>User is already authorized for this application-client</value>
   </data>
   <data name="USER_DIFF_AUTH" xml:space="preserve">
     <value>Informed user is different from authenticated</value>
@@ -159,8 +159,8 @@
   <data name="USER_INVALID_PASSWORD" xml:space="preserve">
     <value>Invalid username or password</value>
   </data>
-  <data name="USER_NOT_ACCESS_SCOPE" xml:space="preserve">
-    <value>User does not have access to this scope or scope not exists</value>
+  <data name="USER_NOT_ACCESS_APPCLIENT" xml:space="preserve">
+    <value>User does not have access to this application-client or application-client not exists</value>
   </data>
   <data name="USER_NOT_FOUND" xml:space="preserve">
     <value>User not found</value>

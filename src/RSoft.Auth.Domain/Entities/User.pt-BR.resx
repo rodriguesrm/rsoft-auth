@@ -123,8 +123,8 @@
   <data name="EMAIL_REQUIRED" xml:space="preserve">
     <value>O e-mail deve ser informado</value>
   </data>
-  <data name="USER_IN_ONE_SCOPE" xml:space="preserve">
-    <value>O usuário deve estar atribuído ao menos em um escopo (aplicação)</value>
+  <data name="USER_IN_ONE_APPCLIENT" xml:space="preserve">
+    <value>O usuário deve estar atribuído ao menos em uma aplicação-cliente</value>
   </data>
   <data name="USER_TYPE_REQUIRED" xml:space="preserve">
     <value>O tipo de usuário deve ser informado</value>

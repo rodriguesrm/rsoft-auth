@@ -34,7 +34,7 @@ namespace RSoft.Auth.Domain.Services
         private new readonly IUserRepository _repository;
         private readonly IUserCredentialRepository _credentialRepository;
         private readonly IUserCredentialTokenRepository _tokenRepository;
-        private readonly IScopeRepository _scopeRepository;
+        private readonly IAppClientRepository _appClientRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IStringLocalizer<UserDomainService> _localizer;
 
@@ -50,7 +50,7 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="repository">User repository service</param>
         /// <param name="credentialRepository">Credential repository service</param>
         /// <param name="tokenRepository">User credential token repository service</param>
-        /// <param name="scopeRepository">Scope repository</param>
+        /// <param name="appClientRepository">Application-Client repository</param>
         /// <param name="roleRepository">Role repository</param>
         /// <param name="securityOptions">Security options configuration</param>
         /// <param name="credentialOptions">Credential options configuration</param>
@@ -62,7 +62,7 @@ namespace RSoft.Auth.Domain.Services
             IUserRepository repository,
             IUserCredentialRepository credentialRepository,
             IUserCredentialTokenRepository tokenRepository,
-            IScopeRepository scopeRepository,
+            IAppClientRepository appClientRepository,
             IRoleRepository roleRepository,
             IOptions<SecurityOptions> securityOptions,
             IOptions<CredentialOptions> credentialOptions,
@@ -73,7 +73,7 @@ namespace RSoft.Auth.Domain.Services
             _repository = repository;
             _credentialRepository = credentialRepository;
             _tokenRepository = tokenRepository;
-            _scopeRepository = scopeRepository;
+            _appClientRepository = appClientRepository;
             _roleRepository = roleRepository;
             
             _securityOptions = securityOptions?.Value;
@@ -387,8 +387,8 @@ namespace RSoft.Auth.Domain.Services
                 }
                 else
                 {
-                    Scope scopeCheck = user.Scopes.FirstOrDefault(x => x.Id == appKey && x.AccessKey == appAccess);
-                    if (scopeCheck == null || !scopeCheck.IsActive)
+                    AppClient appClientCheck = user.ApplicationClients.FirstOrDefault(x => x.Id == appKey && x.AccessKey == appAccess);
+                    if (appClientCheck == null || !appClientCheck.IsActive)
                         user = null;
                     else
                         user.Roles = GetRolesByUserAsync(appKey, user.Id);
@@ -403,9 +403,9 @@ namespace RSoft.Auth.Domain.Services
             => await RequestNewCredentials(email, true, urlCredential, sendMailCallBack, cancellationToken);
 
         ///<inheritdoc/>
-        public ICollection<Role> GetRolesByUserAsync(Guid scopeId, Guid userId)
+        public ICollection<Role> GetRolesByUserAsync(Guid clientId, Guid userId)
         {
-            ICollection<Role> result = _roleRepository.GetRolesByUser(scopeId, userId);
+            ICollection<Role> result = _roleRepository.GetRolesByUser(clientId, userId);
             return result;
         }
 
@@ -496,40 +496,40 @@ namespace RSoft.Auth.Domain.Services
         }
 
         ///<inheritdoc/>
-        public async Task<IEnumerable<User>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default)
-            => await _repository.GetAllAsync(scopeId, cancellationToken);
+        public async Task<IEnumerable<User>> GetAllAsync(Guid clientId, CancellationToken cancellationToken = default)
+            => await _repository.GetAllAsync(clientId, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+        public async Task<SimpleOperationResult> AddAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default)
         {
 
             bool success = false;
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             
-            Scope scope = await _scopeRepository.GetByKeyAsync(scopeId, cancellationToken);
-            if (scope != null)
+            AppClient appClient = await _appClientRepository.GetByKeyAsync(clientId, cancellationToken);
+            if (appClient != null)
             {
 
                 User user = await _repository.GetByKeyAsync(userId, cancellationToken);
                 if (user != null)
                 {
                     
-                    if (!user.Scopes.Any(s => s.Id == scopeId))
+                    if (!user.ApplicationClients.Any(s => s.Id == clientId))
                     {
-                        await _repository.AddUserScopeAsync(userId, scopeId, cancellationToken);
+                        await _repository.AddUserAppClientAsync(userId, clientId, cancellationToken);
                         await _uow.SaveChangesAsync(cancellationToken);
                         success = true;
                     }
                     else
-                        errors.Add("UserScope", _localizer["USER_ALREADY_SCOPE"]);
+                        errors.Add("UserAppClient", _localizer["USER_ALREADY_APPCLIENT"]);
                 }
                 else
                     errors.Add("User", _localizer["USER_NOT_FOUND"]);
 
             }
             else
-                errors.Add("Scope", _localizer["SCOPE_NOT_FOUND"]);
+                errors.Add("AppClient", _localizer["APPCLIENT_NOT_FOUND"]);
 
             return new SimpleOperationResult(success, errors);
 
@@ -540,7 +540,7 @@ namespace RSoft.Auth.Domain.Services
             => await _repository.GetByDocumentAsync(document, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> RemoveScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+        public async Task<SimpleOperationResult> RemoveAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default)
         {
 
             bool success = false;
@@ -550,14 +550,14 @@ namespace RSoft.Auth.Domain.Services
             if (user != null)
             {
 
-                if (user.Scopes.Any(s => s.Id == scopeId))
+                if (user.ApplicationClients.Any(s => s.Id == clientId))
                 {
-                    await _repository.RemoveUserScopeAsync(userId, scopeId, cancellationToken);
+                    await _repository.RemoveUserAppClientAsync(userId, clientId, cancellationToken);
                     await _uow.SaveChangesAsync(cancellationToken);
                     success = true;
                 }
                 else
-                    errors.Add("UserScope", _localizer["USER_NOT_ACCESS_SCOPE"]);
+                    errors.Add("UserAppClient", _localizer["USER_NOT_ACCESS_APPCLIENT"]);
             }
             else
                 errors.Add("User", _localizer["USER_NOT_FOUND"]);

@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using ScopeDomain = RSoft.Auth.Domain.Entities.Scope;
+using AppClientDomain = RSoft.Auth.Domain.Entities.AppClient;
 using RoleDomain = RSoft.Auth.Domain.Entities.Role;
 using RSoft.Auth.Infra.Data.Entities;
 
@@ -46,11 +46,11 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     result.MapAuthor(table);
                     if (table.Users?.Count > 0)
                         result.Users = table.Users.Select(u => u.User.Map(false)).ToList();
-                    result.Scope = table.Scope?.Map(false);
+                    result.AppClient = table.AppClient?.Map(false);
                 }
                 else
                 {
-                    result.Scope = new ScopeDomain(table.ScopeId);
+                    result.AppClient = new AppClientDomain(table.ApplicationClientId);
                 }
 
             }
@@ -72,7 +72,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
             {
                 result = new Role(entity.Id)
                 {
-                    ScopeId = entity.Scope.Id,
+                    ApplicationClientId = entity.AppClient.Id,
                     Name = entity.Name,
                     Description = entity.Description,
                     CreatedOn = entity.CreatedOn,

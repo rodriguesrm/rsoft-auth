@@ -39,18 +39,18 @@ namespace RSoft.Auth.Web.Api.Helpers
         #region Public methods
 
         ///<inheritdoc/>
-        public string GenerateTokenAplication(Guid scopeId, string scopeName, out DateTime? expiresIn)
+        public string GenerateTokenAplication(Guid clientId, string appClientName, out DateTime? expiresIn)
         {
             UserDto userDto = new()
             {
-                Id = scopeId,
-                Name = new FullNameRequest() { FirstName = scopeName, LastName = "Scope/Application" },
+                Id = clientId,
+                Name = new FullNameRequest() { FirstName = appClientName, LastName = "Application-Client" },
                 Email = "NONE",
                 Type = UserType.Service,
                 Roles = new List<RoleDto>() { new RoleDto() { Name = "service" } },
-                Scopes = new List<ScopeDto>() { new ScopeDto() { Name = scopeName } }
+                ApplicationClients = new List<AppClientDto>() { new AppClientDto() { Name = appClientName } }
             };
-            return GenerateToken(userDto, scopeName, out expiresIn);
+            return GenerateToken(userDto, appClientName, out expiresIn);
         }
 
         ///<inheritdoc/>
@@ -76,11 +76,11 @@ namespace RSoft.Auth.Web.Api.Helpers
                 }
             }
 
-            if (user.Scopes != null)
+            if (user.ApplicationClients != null)
             {
-                foreach (ScopeDto scope in user.Scopes)
+                foreach (AppClientDto appClientDto in user.ApplicationClients)
                 {
-                    userClaims.Add(new Claim(ClaimTypes.GroupSid, scope.Name));
+                    userClaims.Add(new Claim(ClaimTypes.GroupSid, appClientDto.Name));
                 }
             }
 

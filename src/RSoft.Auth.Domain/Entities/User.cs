@@ -99,9 +99,9 @@ namespace RSoft.Auth.Domain.Entities
         public virtual ICollection<Role> Roles { get; set; }
 
         /// <summary>
-        /// User scopes list
+        /// User application-clients list
         /// </summary>
-        public virtual ICollection<Scope> Scopes { get; set; }
+        public virtual ICollection<AppClient> ApplicationClients { get; set; }
 
         /// <summary>
         /// List of credential creation or retrieval tokens
@@ -119,7 +119,7 @@ namespace RSoft.Auth.Domain.Entities
         {
             IsActive = true;
             Roles = new HashSet<Role>();
-            Scopes = new HashSet<Scope>();
+            ApplicationClients = new HashSet<AppClient>();
             Tokens = new HashSet<UserCredentialToken>();
         }
 
@@ -151,18 +151,18 @@ namespace RSoft.Auth.Domain.Entities
             if ((Type ?? UserType.User) == UserType.User)
             {
                 AddNotifications(new BrasilianCpfValidationContract(Document, nameof(Document), true).Contract.Notifications);
-                if (!Scopes.Any())
+                if (!ApplicationClients.Any())
                 {
-                    AddNotification(nameof(Scopes), localizer["USER_IN_ONE_SCOPE"]);
+                    AddNotification(nameof(ApplicationClients), localizer["USER_IN_ONE_APPCLIENT"]);
                 }
                 else
                 {
-                    Scopes
+                    ApplicationClients
                         .ToList()
-                        .ForEach(scope =>
+                        .ForEach(appClient =>
                         {
-                            scope.Validate();
-                            AddNotifications(scope.Notifications);
+                            appClient.Validate();
+                            AddNotifications(appClient.Notifications);
                         });
                 }
 

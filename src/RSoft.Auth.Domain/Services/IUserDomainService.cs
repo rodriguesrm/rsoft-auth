@@ -20,8 +20,8 @@ namespace RSoft.Auth.Domain.Services
         /// <summary>
         /// Get user by login and password
         /// </summary>
-        /// <param name="appKey">Authentication scope id value</param>
-        /// <param name="appAccess">Authentication scope key access</param>
+        /// <param name="appKey">Authentication application-client id value</param>
+        /// <param name="appAccess">Authentication application-client key access</param>
         /// <param name="login">User login</param>
         /// <param name="password">User passoword</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
@@ -46,11 +46,11 @@ namespace RSoft.Auth.Domain.Services
         Task<PasswordProcessResult> GetFirstAccessAsync(string email, string urlCredential, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Get all user roles in a specific scope
+        /// Get all user roles in a specific application-client
         /// </summary>
-        /// <param name="scopeId">Scope id key value</param>
+        /// <param name="clientId">Application-Client id key value</param>
         /// <param name="userId">User id key value</param>
-        ICollection<Role> GetRolesByUserAsync(Guid scopeId, Guid userId);
+        ICollection<Role> GetRolesByUserAsync(Guid clientId, Guid userId);
 
         /// <summary>
         /// Creates user credentials
@@ -112,25 +112,25 @@ namespace RSoft.Auth.Domain.Services
         /// <summary>
         /// Get all rows
         /// </summary>
-        /// <param name="scopeId">Scope application id</param>
+        /// <param name="clientId">Application-Client id</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<IEnumerable<User>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<User>> GetAllAsync(Guid clientId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Add scope for user
+        /// Add application-client for user
         /// </summary>
         /// <param name="userId">User</param>
-        /// <param name="scopeId"></param>
+        /// <param name="clientId"></param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
+        Task<SimpleOperationResult> AddAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Remove scope for user
+        /// Remove application-client for user
         /// </summary>
         /// <param name="userId">User id key</param>
-        /// <param name="scopeId">Scope id key</param>
+        /// <param name="clientId">Application-client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> RemoveScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
+        Task<SimpleOperationResult> RemoveAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds roles for user

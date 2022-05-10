@@ -5,9 +5,9 @@ namespace RSoft.Auth.Infra.Data.Entities
 {
 
     /// <summary>
-    /// User Scopes
+    /// User Application-Client
     /// </summary>
-    public class UserScope : TableBase<UserScope>, ITable
+    public class UserAppClient : TableBase<UserAppClient>, ITable
     {
 
         #region Properties
@@ -18,9 +18,9 @@ namespace RSoft.Auth.Infra.Data.Entities
         public Guid? UserId { get; set; }
 
         /// <summary>
-        /// Scope id
+        /// Application-Client id
         /// </summary>
-        public Guid? ScopeId { get; set; }
+        public Guid? AppClientId { get; set; }
 
         #endregion
 
@@ -32,9 +32,9 @@ namespace RSoft.Auth.Infra.Data.Entities
         public virtual User User { get; set; }
 
         /// <summary>
-        /// Scope data
+        /// Application-Client data
         /// </summary>
-        public virtual Scope Scope { get; set; }
+        public virtual AppClient ApplicationClient { get; set; }
 
         #endregion
 

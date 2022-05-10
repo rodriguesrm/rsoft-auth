@@ -57,11 +57,11 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName($"FK_{nameof(Role)}_ChangedAuthor");
 
-            builder.HasOne(o => o.Scope)
+            builder.HasOne(o => o.AppClient)
                 .WithMany(d => d.Roles)
-                .HasForeignKey(fk => fk.ScopeId)
+                .HasForeignKey(fk => fk.ApplicationClientId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName($"FK_{nameof(Role)}_{nameof(Scope)}");
+                .HasConstraintName($"FK_{nameof(Role)}_{nameof(AppClient)}");
 
             #endregion
 
@@ -73,8 +73,8 @@ namespace RSoft.Auth.Infra.Data.Configurations
                 .IsUnique();
 
             builder
-                .HasIndex(i => i.ScopeId)
-                .HasDatabaseName($"IX_{nameof(Role)}_{nameof(Role.ScopeId)}");
+                .HasIndex(i => i.ApplicationClientId)
+                .HasDatabaseName($"IX_{nameof(Role)}_{nameof(Role.ApplicationClientId)}");
 
             #endregion
 

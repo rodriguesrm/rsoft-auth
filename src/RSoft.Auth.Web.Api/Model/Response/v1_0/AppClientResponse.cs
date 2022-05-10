@@ -5,18 +5,18 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
 {
 
     /// <summary>
-    /// Scope response model
+    /// Application-Client response model
     /// </summary>
-    public class ScopeResponse : EntityIdBaseResponse<Guid>
+    public class AppClientResponse : EntityIdBaseResponse<Guid>
     {
 
         #region Constructors
 
         /// <summary>
-        /// Create a new ScopeResponse instance
+        /// Create a new AppClientResponse instance
         /// </summary>
-        /// <param name="id">Scope id key value</param>
-        public ScopeResponse(Guid id) : base(id)
+        /// <param name="id">Client id key value</param>
+        public AppClientResponse(Guid id) : base(id)
         {
         }
 
@@ -25,17 +25,17 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         #region Properties
 
         /// <summary>
-        /// Scope name
+        /// Application-Client name
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Scope access-key application
+        /// Application-Client access-key application
         /// </summary>
         public Guid AccessKey { get; set; }
 
         /// <summary>
-        /// Indicates whether the scope can log in as a service/application
+        /// Indicates whether the application-client can log in as a service/application
         /// </summary>
         public bool AllowLogin { get; set; }
 

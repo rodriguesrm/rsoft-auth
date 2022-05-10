@@ -8,38 +8,38 @@ namespace RSoft.Auth.Domain.Entities
 {
 
     /// <summary>
-    /// Scope of action
+    /// Application Client
     /// </summary>
-    public class Scope : EntityIdNameAuditBase<Guid, Scope>, IEntity, IAuditAuthor<Guid>, IActive
+    public class AppClient : EntityIdNameAuditBase<Guid, AppClient>, IEntity, IAuditAuthor<Guid>, IActive
     {
 
         #region Constructors
 
         /// <summary>
-        /// Create a new application scope instance
+        /// Create a new application client instance
         /// </summary>
-        public Scope() : base(Guid.NewGuid(), null)
+        public AppClient() : base(Guid.NewGuid(), null)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Create a new application scope instance
+        /// Create a new application client instance
         /// </summary>
-        /// <param name="id">application scope id value</param>
-        public Scope(Guid id) : base(id, null)
+        /// <param name="id">application client id value</param>
+        public AppClient(Guid id) : base(id, null)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Create a new application scope instance
+        /// Create a new application client instance
         /// </summary>
-        /// <param name="id">application scope id text</param>
+        /// <param name="id">application client id text</param>
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.FormatException"></exception>
         /// <exception cref="System.OverflowException"></exception>
-        public Scope(string id) : base()
+        public AppClient(string id) : base()
         {
             Id = new Guid(id);
         }
@@ -54,7 +54,7 @@ namespace RSoft.Auth.Domain.Entities
         public Guid AccessKey { get; set; }
 
         /// <summary>
-        /// Indicates whether the scope can log in as a service/application
+        /// Indicates whether the application client can log in as a service/application
         /// </summary>
         public bool AllowLogin { get; set; }
 

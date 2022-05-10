@@ -30,9 +30,9 @@ namespace RSoft.Auth.Application.Model
         public string Description { get; set; }
 
         /// <summary>
-        /// Scope data information
+        /// Application-Client data information
         /// </summary>
-        public SimpleIdentification<Guid> Scope { get; set; }
+        public SimpleIdentification<Guid> AppClient { get; set; }
 
         #endregion
 

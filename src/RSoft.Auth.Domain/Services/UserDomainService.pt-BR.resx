@@ -138,8 +138,8 @@
   <data name="PWD_TOKEN_INVALID" xml:space="preserve">
     <value>O token é inválido</value>
   </data>
-  <data name="SCOPE_NOT_FOUND" xml:space="preserve">
-    <value>Escopo (aplicação) não encontrado</value>
+  <data name="APPCLIENT_NOT_FOUND" xml:space="preserve">
+    <value>Aplicação-Cliente não encontrada</value>
   </data>
   <data name="TOKEN_EXPIRED" xml:space="preserve">
     <value>Token expirado</value>
@@ -147,8 +147,8 @@
   <data name="USER_ALREADY_ROLE" xml:space="preserve">
     <value>Usuário já possui essa função (permissão)</value>
   </data>
-  <data name="USER_ALREADY_SCOPE" xml:space="preserve">
-    <value>Usuário já está liberado para esse escopo (aplicação)</value>
+  <data name="USER_ALREADY_APPCLIENT" xml:space="preserve">
+    <value>Usuário já está liberado para essa aplicação-cliente</value>
   </data>
   <data name="USER_DIFF_AUTH" xml:space="preserve">
     <value>Usuário informado é diferente daquele que está autenticado</value>
@@ -159,8 +159,8 @@
   <data name="USER_INVALID_PASSWORD" xml:space="preserve">
     <value>Usuário ou senha inválida</value>
   </data>
-  <data name="USER_NOT_ACCESS_SCOPE" xml:space="preserve">
-    <value>Usuário não tem acesso a esse escopo (aplicação) ou escopo não existe</value>
+  <data name="USER_NOT_ACCESS_APPCLIENT" xml:space="preserve">
+    <value>Usuário não tem acesso a essa aplicação-cliente ou ela não existe</value>
   </data>
   <data name="USER_NOT_FOUND" xml:space="preserve">
     <value>Usuário não encontrado</value>

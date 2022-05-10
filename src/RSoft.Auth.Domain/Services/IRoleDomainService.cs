@@ -14,12 +14,12 @@ namespace RSoft.Auth.Domain.Services
     {
 
         /// <summary>
-        /// Find role in the scope by name
+        /// Find role in the application-client by name
         /// </summary>
-        /// <param name="scopeId">Scope id key</param>
+        /// <param name="clientId">Client id key</param>
         /// <param name="roleName">Role name</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<Role> GetByNameAsync(Guid scopeId, string roleName, CancellationToken cancellationToken = default);
+        Task<Role> GetByNameAsync(Guid clientId, string roleName, CancellationToken cancellationToken = default);
     }
 
 }

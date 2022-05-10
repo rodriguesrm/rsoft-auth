@@ -6,8 +6,8 @@ namespace RSoft.Auth.Domain.Repositories
 {
 
     /// <summary>
-    /// Scope repository contract interface
+    /// Application-Client repository contract interface
     /// </summary>
-    public interface IScopeRepository : IRepositoryBase<Scope, Guid>  { }
+    public interface IAppClientRepository : IRepositoryBase<AppClient, Guid>  { }
 
 }

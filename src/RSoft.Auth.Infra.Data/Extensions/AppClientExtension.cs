@@ -1,21 +1,21 @@
 ﻿using System.Linq;
-using ScopeDomain = RSoft.Auth.Domain.Entities.Scope;
+using AppClientDomain = RSoft.Auth.Domain.Entities.AppClient;
 using RSoft.Auth.Infra.Data.Entities;
 
 namespace RSoft.Auth.Infra.Data.Extensions
 {
 
     /// <summary>
-    /// Scope extensions
+    /// Application-Client extensions
     /// </summary>
-    public static class ScopeExtension
+    public static class AppClientExtension
     {
 
         /// <summary>
         /// Maps table to entity
         /// </summary>
         /// <param name="table">Table entity to map</param>
-        public static ScopeDomain Map(this Scope table)
+        public static AppClientDomain Map(this AppClient table)
             => Map(table, true);
 
         /// <summary>
@@ -23,15 +23,15 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="table">Table entity to map</param>
         /// <param name="useLazy">Load related data</param>
-        public static ScopeDomain Map(this Scope table, bool useLazy)
+        public static AppClientDomain Map(this AppClient table, bool useLazy)
         {
 
-            ScopeDomain result = null;
+            AppClientDomain result = null;
 
             if (table != null)
             {
 
-                result = new ScopeDomain(table.Id)
+                result = new AppClientDomain(table.Id)
                 {
                     Name = table.Name,
                     AccessKey = table.AccessKey,
@@ -60,14 +60,14 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// Maps entity to table
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
-        public static Scope Map(this ScopeDomain entity)
+        public static AppClient Map(this AppClientDomain entity)
         {
 
-            Scope result = null;
+            AppClient result = null;
 
             if (entity != null)
             {
-                result = new Scope(entity.Id)
+                result = new AppClient(entity.Id)
                 {
                     Name = entity.Name,
                     AccessKey = entity.AccessKey,
@@ -87,7 +87,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// </summary>
         /// <param name="entity">Domain entity to map</param>
         /// <param name="table">Instance of existing table entity</param>
-        public static Scope Map(this ScopeDomain entity, Scope table)
+        public static AppClient Map(this AppClientDomain entity, AppClient table)
         {
 
             if (entity != null && table != null)

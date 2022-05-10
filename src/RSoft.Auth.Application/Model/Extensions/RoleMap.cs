@@ -36,7 +36,7 @@ namespace RSoft.Auth.Application.Model.Extensions
             entity.Name = dto.Name;
             entity.Description = dto.Description;
             entity.IsActive = dto.IsActive;
-            entity.Scope = (dto.Scope?.Id) != null ? new Scope(id: dto.Scope.Id.Value) : null;
+            entity.AppClient = (dto.AppClient?.Id) != null ? new AppClient(id: dto.AppClient.Id.Value) : null;
 
             return entity;
 
@@ -54,7 +54,7 @@ namespace RSoft.Auth.Application.Model.Extensions
                 entity.Name = dto.Name;
                 entity.Description = dto.Description;
                 entity.IsActive = dto.IsActive;
-                entity.Scope = dto.Scope?.Id != null ? new Scope(dto.Scope.Id.Value) : null;
+                entity.AppClient = dto.AppClient?.Id != null ? new AppClient(dto.AppClient.Id.Value) : null;
             }
             return entity;
         }
@@ -94,7 +94,7 @@ namespace RSoft.Auth.Application.Model.Extensions
 
             dto.Name = entity.Name;
             dto.Description = entity.Description;
-            dto.Scope = new SimpleIdentification<Guid>(entity.Scope?.Id, entity.Scope?.Name);
+            dto.AppClient = new SimpleIdentification<Guid>(entity.AppClient?.Id, entity.AppClient?.Name);
             dto.IsActive = entity.IsActive;
 
             return dto;

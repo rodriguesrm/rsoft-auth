@@ -9,20 +9,89 @@ using RSoft.Auth.Infra.Data;
 namespace RSoft.Auth.Infra.Data.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20201016111448_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220510103734_InitialCreateDb")]
+    partial class InitialCreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64)
+                .HasAnnotation("ProductVersion", "5.0.9");
+
+            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.AppClient", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("AccessKey")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("AccessKey");
+
+                    b.Property<ulong>("AllowLogin")
+                        .HasColumnType("bit")
+                        .HasColumnName("AllowLogin");
+
+                    b.Property<Guid?>("ChangedBy")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("ChangedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<ulong>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<ulong>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(0ul);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccessKey")
+                        .IsUnique()
+                        .HasDatabaseName("AK_AppClient_AccessKey");
+
+                    b.HasIndex("ChangedBy")
+                        .HasDatabaseName("IX_AppClient_ChangedBy");
+
+                    b.HasIndex("ChangedOn")
+                        .HasDatabaseName("IX_AppClient_ChangedOn");
+
+                    b.HasIndex("CreatedBy")
+                        .HasDatabaseName("IX_AppClient_CreatedBy");
+
+                    b.HasIndex("CreatedOn")
+                        .HasDatabaseName("IX_AppClient_CreatedOn");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("AK_AppClient_Name");
+
+                    b.ToTable("AppClient");
+                });
 
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ApplicationClientId")
                         .HasColumnType("char(36)");
 
                     b.Property<Guid?>("ChangedBy")
@@ -39,10 +108,10 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnName("Description")
-                        .HasColumnType("varchar(150) CHARACTER SET utf8mb4")
                         .HasMaxLength(150)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("Description");
 
                     b.Property<ulong>("IsActive")
                         .HasColumnType("bit");
@@ -54,15 +123,15 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<Guid>("ScopeId")
-                        .HasColumnType("char(36)");
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationClientId")
+                        .HasDatabaseName("IX_Role_ApplicationClientId");
 
                     b.HasIndex("ChangedBy")
                         .HasDatabaseName("IX_Role_ChangedBy");
@@ -80,76 +149,7 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("AK_Role_Name");
 
-                    b.HasIndex("ScopeId")
-                        .HasDatabaseName("IX_Role_ScopeId");
-
                     b.ToTable("Role");
-                });
-
-            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.Scope", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("AccessKey")
-                        .HasColumnName("AccessKey")
-                        .HasColumnType("char(36)");
-
-                    b.Property<ulong>("AllowLogin")
-                        .HasColumnName("AllowLogin")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ChangedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("ChangedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<ulong>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<ulong>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(0ul);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccessKey")
-                        .IsUnique()
-                        .HasDatabaseName("AK_Scope_AccessKey");
-
-                    b.HasIndex("ChangedBy")
-                        .HasName("IX_Scope_ChangedBy");
-
-                    b.HasIndex("ChangedOn")
-                        .HasDatabaseName("IX_Scope_ChangedOn");
-
-                    b.HasIndex("CreatedBy")
-                        .HasDatabaseName("IX_Scope_CreatedBy");
-
-                    b.HasIndex("CreatedOn")
-                        .HasDatabaseName("IX_Scope_CreatedOn");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("AK_Scope_Name");
-
-                    b.ToTable("Scope");
                 });
 
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.User", b =>
@@ -176,24 +176,24 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.Property<string>("Document")
                         .IsRequired()
-                        .HasColumnName("Document")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                         .HasMaxLength(20)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("Document");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnName("Email")
-                        .HasColumnType("varchar(254) CHARACTER SET utf8mb4")
                         .HasMaxLength(254)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(254)")
+                        .HasColumnName("Email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnName("FirstName")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("FirstName");
 
                     b.Property<ulong>("IsActive")
                         .HasColumnType("bit");
@@ -205,14 +205,14 @@ namespace RSoft.Auth.Infra.Data.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnName("LastName")
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
                         .HasMaxLength(100)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("LastName");
 
                     b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.HasKey("Id");
 
@@ -242,35 +242,52 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserAppClient", b =>
+                {
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("UserId");
+
+                    b.Property<Guid?>("AppClientId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("AppClientId");
+
+                    b.HasKey("UserId", "AppClientId");
+
+                    b.HasIndex("AppClientId");
+
+                    b.ToTable("UserAppClient");
+                });
+
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserCredential", b =>
                 {
                     b.Property<Guid?>("UserId")
                         .HasColumnType("char(36)");
 
                     b.Property<int>("AuthFailsQty")
-                        .HasColumnName("AuthFailsQty")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AuthFailsQty");
 
                     b.Property<ulong>("ChangeCredentials")
-                        .HasColumnName("ChangeCredentials")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("ChangeCredentials");
 
                     b.Property<DateTime?>("LockoutUntil")
-                        .HasColumnName("LockoutUntil")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LockoutUntil");
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnName("Login")
-                        .HasColumnType("varchar(254) CHARACTER SET utf8mb4")
                         .HasMaxLength(254)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(254)")
+                        .HasColumnName("Login");
 
                     b.Property<string>("Password")
-                        .HasColumnName("Password")
-                        .HasColumnType("varchar(32) CHARACTER SET utf8mb4")
                         .HasMaxLength(32)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(32)")
+                        .HasColumnName("Password");
 
                     b.HasKey("UserId");
 
@@ -288,20 +305,20 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnName("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreatedAt");
 
                     b.Property<DateTime>("ExpiresOn")
-                        .HasColumnName("ExpiresOn")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("ExpiresOn");
 
                     b.Property<ulong>("FirstAccess")
-                        .HasColumnName("FirstAccess")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("FirstAccess");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnName("UserId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasColumnName("UserId");
 
                     b.HasKey("Id");
 
@@ -314,12 +331,12 @@ namespace RSoft.Auth.Infra.Data.Migrations
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserRole", b =>
                 {
                     b.Property<Guid?>("UserId")
-                        .HasColumnName("UserId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasColumnName("UserId");
 
                     b.Property<Guid?>("RoleId")
-                        .HasColumnName("RoleId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasColumnName("RoleId");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -328,25 +345,35 @@ namespace RSoft.Auth.Infra.Data.Migrations
                     b.ToTable("UserRole");
                 });
 
-            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserScope", b =>
+            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.AppClient", b =>
                 {
-                    b.Property<Guid?>("UserId")
-                        .HasColumnName("UserId")
-                        .HasColumnType("char(36)");
+                    b.HasOne("RSoft.Auth.Infra.Data.Entities.User", "ChangedAuthor")
+                        .WithMany("ChangedAppClients")
+                        .HasForeignKey("ChangedBy")
+                        .HasConstraintName("FK_AppClient_ChangedAuthor")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Property<Guid?>("ScopeId")
-                        .HasColumnName("ScopeId")
-                        .HasColumnType("char(36)");
+                    b.HasOne("RSoft.Auth.Infra.Data.Entities.User", "CreatedAuthor")
+                        .WithMany("CreatedAppClients")
+                        .HasForeignKey("CreatedBy")
+                        .HasConstraintName("FK_AppClient_CreatedAuthor")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasKey("UserId", "ScopeId");
+                    b.Navigation("ChangedAuthor");
 
-                    b.HasIndex("ScopeId");
-
-                    b.ToTable("UserScope");
+                    b.Navigation("CreatedAuthor");
                 });
 
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.Role", b =>
                 {
+                    b.HasOne("RSoft.Auth.Infra.Data.Entities.AppClient", "AppClient")
+                        .WithMany("Roles")
+                        .HasForeignKey("ApplicationClientId")
+                        .HasConstraintName("FK_Role_AppClient")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RSoft.Auth.Infra.Data.Entities.User", "ChangedAuthor")
                         .WithMany("ChangedRoles")
                         .HasForeignKey("ChangedBy")
@@ -360,28 +387,11 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("RSoft.Auth.Infra.Data.Entities.Scope", "Scope")
-                        .WithMany("Roles")
-                        .HasForeignKey("ScopeId")
-                        .HasConstraintName("FK_Role_Scope")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    b.Navigation("AppClient");
 
-            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.Scope", b =>
-                {
-                    b.HasOne("RSoft.Auth.Infra.Data.Entities.User", "ChangedAuthor")
-                        .WithMany("ChangedScopes")
-                        .HasForeignKey("ChangedBy")
-                        .HasConstraintName("FK_Scope_ChangedAuthor")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.Navigation("ChangedAuthor");
 
-                    b.HasOne("RSoft.Auth.Infra.Data.Entities.User", "CreatedAuthor")
-                        .WithMany("CreatedScopes")
-                        .HasForeignKey("CreatedBy")
-                        .HasConstraintName("FK_Scope_CreatedAuthor")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.Navigation("CreatedAuthor");
                 });
 
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.User", b =>
@@ -398,6 +408,31 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasConstraintName("FK_User_CreatedAuthor")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("ChangedAuthor");
+
+                    b.Navigation("CreatedAuthor");
+                });
+
+            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserAppClient", b =>
+                {
+                    b.HasOne("RSoft.Auth.Infra.Data.Entities.AppClient", "ApplicationClient")
+                        .WithMany("Users")
+                        .HasForeignKey("AppClientId")
+                        .HasConstraintName("FK_UserAppClient_AppClient")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RSoft.Auth.Infra.Data.Entities.User", "User")
+                        .WithMany("ApplicationClients")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_UserAppClient_User")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationClient");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserCredential", b =>
@@ -408,6 +443,8 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasConstraintName("FK_UserCredential_User")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserCredentialToken", b =>
@@ -418,6 +455,8 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasConstraintName("FK_UserCredentialToken_User")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserRole", b =>
@@ -435,23 +474,45 @@ namespace RSoft.Auth.Infra.Data.Migrations
                         .HasConstraintName("FK_UserRole_User")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.UserScope", b =>
+            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.AppClient", b =>
                 {
-                    b.HasOne("RSoft.Auth.Infra.Data.Entities.Scope", "Scope")
-                        .WithMany("Users")
-                        .HasForeignKey("ScopeId")
-                        .HasConstraintName("FK_UserScope_Scope")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Roles");
 
-                    b.HasOne("RSoft.Auth.Infra.Data.Entities.User", "User")
-                        .WithMany("Scopes")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_UserScope_User")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("RSoft.Auth.Infra.Data.Entities.User", b =>
+                {
+                    b.Navigation("ApplicationClients");
+
+                    b.Navigation("ChangedAppClients");
+
+                    b.Navigation("ChangedRoles");
+
+                    b.Navigation("ChangedUsers");
+
+                    b.Navigation("CreatedAppClients");
+
+                    b.Navigation("CreatedRoles");
+
+                    b.Navigation("CreatedUsers");
+
+                    b.Navigation("Credential");
+
+                    b.Navigation("Roles");
+
+                    b.Navigation("Tokens");
                 });
 #pragma warning restore 612, 618
         }

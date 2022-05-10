@@ -12,9 +12,9 @@ namespace RSoft.Auth.Web.Api.Model.Request.v1_0
         #region Properties
 
         /// <summary>
-        /// Scope id key value
+        /// Application-Client id key value
         /// </summary>
-        public Guid? ScopeId { get; set; }
+        public Guid? ClientId { get; set; }
 
         /// <summary>
         /// Role name

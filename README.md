@@ -11,9 +11,9 @@ User authentication service API. Generates a JWT token for authenticate user in 
 - `RSoft-Mail API Service` for sending credential creation and retrieval emails. See https://github.com/rodriguesrm/rsoft-mail-service.
 
 ### NuGet Package Dependencies
-- `RSoft.Framework (>= 1.0.0-rc1.8)`. See https://www.nuget.org/packages/RSoft.Framework.
-- `RSoft.Lib.Web (>= 1.0.0-rc1.0)`. See https://www.nuget.org/packages/RSoft.Lib.Web.
-- `RSoft.Logs (>= 1.0.0-rc1.7)`. See https://www.nuget.org/packages/RSoft.Logs.
+- `RSoft.Lib.Design (>= 1.9.0)`. See https://github.com/rodriguesrm/rsoft-backend-libs/packages/970394.
+- `RSoft.Lib.Web (>= 1.6.0)`. See https://github.com/rodriguesrm/rsoft-backend-libs/packages/957318.
+- `RSoft.Logs (>= 1.3.1)`. See https://www.nuget.org/packages/RSoft.Logs.
 
 It was presented here the dependencies related to other projects also available in this repository. To view the total list of project dependencies, I suggest you open the .net core solution and explore the projects.
 
@@ -137,9 +137,9 @@ The application uses the standard `appsettings.json` and its variants recommende
   "ConnectionStrings": {
     "DbServer": "Server=localhost;Port=3306;database=rsoft_auth;uid=root;pwd=admin;"
   },
-  "Scope": {
-    "Key": "92a4ce2a-26ed-4ae2-9813-b7e5e6a8678d",
-    "Access": "8f7318ee-4027-4cde-a6d3-529e6382f532"
+  "AppClient": {
+    "ClientId": "92a4ce2a-26ed-4ae2-9813-b7e5e6a8678d",
+    "ClientSecret": "8f7318ee-4027-4cde-a6d3-529e6382f532"
   },
   "Jwt": {
     "Issuer": "RSoft.Auth",
@@ -184,9 +184,9 @@ The application uses the standard `appsettings.json` and its variants recommende
 
 ```
 
-* `Logging` See microsoft https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1 for defaults parameters and https://github.com/rodriguesrm/rsoft-logs for RSoft.Logs parameters.
+* `Logging` See microsoft https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-5.0 for defaults parameters and https://github.com/rodriguesrm/rsoft-logs for RSoft.Logs parameters.
 * `ConnectionStrings` needs a `DbServer` parameter to connect MySqlDatabase like in example.
-* `Scope` is a service identification section in the RSoft ecosystem. This key is standard and should not be changed as it will influence the communication between the systems and services of the RSoft platform.
+* `AppClient` is a service identification section in the RSoft ecosystem. This key is standard and should not be changed as it will influence the communication between the systems and services of the RSoft platform.
 * `Jwt` is the section where token reading and generation parameters must be informed, in addition to the lifetime. For more details, see Jwt's documentation at https://jwt.io/introduction/.
 * `Swagger` is the section where the behavior definition information for the swagger-ui user interface will be placed. For more information see the `RSoft.Lib.Web` repository at https://github.com/rodriguesrm/rsoft-lib-web.
 * `Application` is the section of settings related to the Authentication Service API, of which:
@@ -200,9 +200,6 @@ The application uses the standard `appsettings.json` and its variants recommende
 This API service has all the documentation made through swagger-doc that can be accessed through the installation url.
 
 ### TODO's
-
-##### Environment
-- Docker-compose with all requirements/dependencies
 
 ###### Backlog Authentication types
 - LDAP

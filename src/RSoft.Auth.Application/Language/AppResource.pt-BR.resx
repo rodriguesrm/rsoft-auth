@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="APPCLIENT_ALREADY_EXISTS" xml:space="preserve">
+    <value>A aplicação-cliente já existe</value>
+  </data>
+  <data name="APPCLIENT_ID_NOT_FOUND" xml:space="preserve">
+    <value>A aplicação-cliente '{0}' não foi encontrada</value>
+  </data>
+  <data name="APPCLIENT_NOT_FOUND" xml:space="preserve">
+    <value>Aplicação-cliente não encontrada</value>
+  </data>
   <data name="CREDENTIAL_ACTION_CREATE" xml:space="preserve">
     <value>criação</value>
   </data>
@@ -183,20 +192,11 @@
   <data name="ROLE_LIST_REQUIRED" xml:space="preserve">
     <value>A lista de funções (id) é requerida</value>
   </data>
-  <data name="ROLE_NOT_BELONG_SCOPE" xml:space="preserve">
-    <value>Esta função não pertence a esse escopo</value>
+  <data name="ROLE_NOT_BELONG_APPCLIENT" xml:space="preserve">
+    <value>Esta função não pertence a essa aplicação-cliente</value>
   </data>
   <data name="ROLE_NOT_FOUND" xml:space="preserve">
     <value>Função não encontrada</value>
-  </data>
-  <data name="SCOPE_ALREADY_EXISTS" xml:space="preserve">
-    <value>O escopo (aplicação) já existe</value>
-  </data>
-  <data name="SCOPE_ID_NOT_FOUND" xml:space="preserve">
-    <value>O escopo '{0}' não foi encontrado</value>
-  </data>
-  <data name="SCOPE_NOT_FOUND" xml:space="preserve">
-    <value>Escopo (Aplicação) não encontrado</value>
   </data>
   <data name="SERVICE_NOT_AS_USER" xml:space="preserve">
     <value>O usuário do serviço não pode se autenticar como um usuário normal</value>

@@ -21,9 +21,8 @@ namespace RSoft.Auth.Web.Api.Policies
         /// <param name="configuration">Configuration parameters object</param>
         public static IServiceCollection AddAppPolicies(this IServiceCollection services, IConfiguration configuration)
         {
-
-            ScopeOptions scopeOptions = new ScopeOptions();
-            configuration.GetSection("Scope").Bind(scopeOptions);
+            AppClientOptions appClientOptions = new();
+            configuration.GetSection("AppClient").Bind(appClientOptions);
 
             // Handlers
             services.AddSingleton<IAuthorizationHandler, MustApplicationHandler>();
@@ -34,7 +33,7 @@ namespace RSoft.Auth.Web.Api.Policies
                 options.AddPolicy(PolicyNames.OnlyThisApplication, policy => 
                     policy
                         .Requirements
-                        .Add(new MustApplicationRequirement(scopeOptions.Key, scopeOptions.Access))
+                        .Add(new MustApplicationRequirement(appClientOptions.ClientId, appClientOptions.ClientSecret))
                 );
             });
 

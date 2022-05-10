@@ -11,24 +11,24 @@ namespace RSoft.Auth.Application.Services
 {
 
     /// <summary>
-    /// Scope application service interface contract
+    /// Application-Client application service interface contract
     /// </summary>
-    public interface IScopeAppService : IAppServiceBase<ScopeDto, Guid>
+    public interface IAppClientAppService : IAppServiceBase<AppClientDto, Guid>
     {
 
         /// <summary>
-        /// Export scope data (csv format)
+        /// Export application-client data (csv format)
         /// </summary>
-        /// <param name="scopeId">Scope id key</param>
+        /// <param name="clientId">Client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<OperationResult<byte[]>> ExportScope(Guid scopeId, CancellationToken cancellationToken);
+        Task<OperationResult<byte[]>> ExportAppClient(Guid clientId, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Import scopes data (csv format)
+        /// Import application-client data (csv format)
         /// </summary>
         /// <param name="buffer">Buffer file to import</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<OperationResult<IEnumerable<RowImportResult>>> ImportScope(byte[] buffer, CancellationToken cancellationToken);
+        Task<OperationResult<IEnumerable<RowImportResult>>> ImportAppClient(byte[] buffer, CancellationToken cancellationToken);
     }
 
 }

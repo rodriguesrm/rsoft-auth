@@ -61,9 +61,9 @@ namespace RSoft.Auth.Application.Model
         public ICollection<RoleDto> Roles { get; set; }
 
         /// <summary>
-        /// User scopes
+        /// User Applicatio-Clients
         /// </summary>
-        public ICollection<ScopeDto> Scopes { get; set; }
+        public ICollection<AppClientDto> ApplicationClients { get; set; }
 
         #endregion
 

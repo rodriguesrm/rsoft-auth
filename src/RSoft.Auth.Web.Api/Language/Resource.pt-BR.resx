@@ -159,8 +159,8 @@
   <data name="PASSWORD_REQUIRED" xml:space="preserve">
     <value>A senha deve ser informada</value>
   </data>
-  <data name="SCOPE_NOT_DEFINED" xml:space="preserve">
-    <value>Escopo não definido ou inválido</value>
+  <data name="APPCLIENT_NOT_DEFINED" xml:space="preserve">
+    <value>Applicação não definida ou inválida</value>
   </data>
   <data name="TOKEN_FIRST_ACCESS_MAIL" xml:space="preserve">
     <value>Informações de primeiro acesso enviado ao e-mail do usuário</value>

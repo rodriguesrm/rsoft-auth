@@ -52,20 +52,20 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// List all roles
         /// </summary>
-        /// <param name="scopeId">Scope id to filter</param>
+        /// <param name="clientId">Application-Client id to filter</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        private async Task<IActionResult> RunGetAllAsync(Guid? scopeId, CancellationToken cancellationToken)
+        private async Task<IActionResult> RunGetAllAsync(Guid? clientId, CancellationToken cancellationToken)
         {
 
             IEnumerable<RoleResponse> result = 
                 (await _roleAppService.GetAllAsync(cancellationToken))
                 .Select(r => r.Map());
 
-            if ((scopeId ?? Guid.Empty) != Guid.Empty)
-                result = result.Where(r => r.Scope.Id == scopeId);
+            if ((clientId ?? Guid.Empty) != Guid.Empty)
+                result = result.Where(r => r.AppClient.Id == clientId);
 
             result = result
-                .OrderBy(o => o.Scope.Name)
+                .OrderBy(o => o.AppClient.Name)
                 .ThenBy(o => o.Name)
                 .ToList();
 
@@ -138,7 +138,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// List all roles
         /// </summary>
-        /// <param name="scope">Scope id to filter</param>
+        /// <param name="clientId">Application-Client id to filter</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Successful request processing, returns list of roles</response>
         /// <response code="401">Credentials is invalid or empty</response>
@@ -150,8 +150,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetAllRole([FromQuery] Guid? scope, CancellationToken cancellationToken = default)
-            => await RunActionAsync(RunGetAllAsync(scope, cancellationToken), cancellationToken);
+        public async Task<IActionResult> GetAllRole([FromQuery] Guid? clientId, CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunGetAllAsync(clientId, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Get role by key id

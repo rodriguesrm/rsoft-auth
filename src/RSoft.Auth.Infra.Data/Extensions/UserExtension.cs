@@ -50,7 +50,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
                     {
                         result.Credential = table.Credential.Map();
                     }
-                    result.Scopes = table.Scopes.Select(s => s.Scope.Map(false)).ToList();
+                    result.ApplicationClients = table.ApplicationClients.Select(s => s.ApplicationClient.Map(false)).ToList();
                     result.Roles = table.Roles?.Select(r => r.Role.Map(false)).ToList();
                 }
 
@@ -96,7 +96,7 @@ namespace RSoft.Auth.Infra.Data.Extensions
 
                 if (useLazy)
                 {
-                    result.Scopes = entity.Scopes.Select(s => new UserScope() { ScopeId = s.Id, UserId = entity.Id }).ToList();
+                    result.ApplicationClients = entity.ApplicationClients.Select(s => new UserAppClient() { AppClientId = s.Id, UserId = entity.Id }).ToList();
                     result.Roles = entity.Roles?.Select(r => new UserRole() { RoleId = r.Id, UserId = entity.Id }).ToList();
                 }
 

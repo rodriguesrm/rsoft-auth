@@ -20,14 +20,14 @@ namespace RSoft.Auth.Application.Model.Extensions
         private static void LoadLazy(User entity, UserDto dto)
         {
             ICollection<RoleDto> roles = null;
-            ICollection<ScopeDto> scopes = null;
+            ICollection<AppClientDto> appClients = null;
             if (entity.Roles?.Count > 0)
                 roles = entity.Roles.Select(r => r.Map()).ToList();
-            if (entity.Scopes?.Count > 0)
-                scopes = entity.Scopes.Select(s => s.Map()).ToList();
+            if (entity.ApplicationClients?.Count > 0)
+                appClients = entity.ApplicationClients.Select(s => s.Map()).ToList();
 
             dto.Roles = roles;
-            dto.Scopes = scopes;
+            dto.ApplicationClients = appClients;
             if (entity.Credential != null)
                 dto.Credential = entity.Credential.Map();
         }
@@ -39,7 +39,7 @@ namespace RSoft.Auth.Application.Model.Extensions
         public static User Map(this UserDto dto)
         {
             ICollection<Role> roles = dto.Roles?.Select(r => r.Map(true)).ToList();
-            ICollection<Scope> scopes = dto.Scopes?.Select(s => s.Map(true)).ToList();
+            ICollection<AppClient> appClients = dto.ApplicationClients?.Select(s => s.Map(true)).ToList();
             return new User()
             {
                 Document = dto.Document,
@@ -49,7 +49,7 @@ namespace RSoft.Auth.Application.Model.Extensions
                 Type = dto.Type,
                 IsActive = dto.IsActive,
                 Roles = roles,
-                Scopes = scopes
+                ApplicationClients = appClients
             };
         }
 

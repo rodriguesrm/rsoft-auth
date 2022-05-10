@@ -8,8 +8,8 @@ User authentication service API. Generates a JWT token for authenticate user in 
 
 #### Version 1.0.0
 - Internal user authentication
-- Application (Scope) authentication.
-- Scope/Application manager (CRUD).
+- Application-Client authentication.
+- Application-Client manager (CRUD).
 - User manager (CRUD).
 - Roles manager (CRUD)
 

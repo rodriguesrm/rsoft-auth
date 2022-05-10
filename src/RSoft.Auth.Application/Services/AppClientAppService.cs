@@ -22,14 +22,14 @@ namespace RSoft.Auth.Application.Services
 {
 
     /// <summary>
-    /// Scope application service
+    /// Application-Client application service
     /// </summary>
-    public class ScopeAppService : AppServiceBase<ScopeDto, Scope, Guid>, IScopeAppService
+    public class AppClientAppService : AppServiceBase<AppClientDto, AppClient, Guid>, IAppClientAppService
     {
 
         #region Local objects/variables
 
-        private readonly ILogger<ScopeAppService> _logger;
+        private readonly ILogger<AppClientAppService> _logger;
         private readonly IUserDomainService _userDomain;
         private readonly IStringLocalizer<AppResource> _localizer;
 
@@ -38,20 +38,20 @@ namespace RSoft.Auth.Application.Services
         #region Constructors
 
         /// <summary>
-        /// Create a new Scope application service
+        /// Create a new Application-Client application service
         /// </summary>
         /// <param name="uow">Unit of work object</param>
-        /// <param name="dmn">Scope domain service object</param>
+        /// <param name="dmn">Application-Client domain service object</param>
         /// <param name="userDomain">User domain service object</param>
         /// <param name="localizer">Language string localizer</param>
         /// <param name="logger">Logger object</param>
-        public ScopeAppService
+        public AppClientAppService
         (
             IUnitOfWork uow, 
-            IScopeDomainService dmn, 
+            IAppClientDomainService dmn, 
             IUserDomainService userDomain,
             IStringLocalizer<AppResource> localizer,
-            ILogger<ScopeAppService> logger
+            ILogger<AppClientAppService> logger
         ) : base(uow, dmn) 
         {
             _userDomain = userDomain;
@@ -73,19 +73,19 @@ namespace RSoft.Auth.Application.Services
         }
 
         ///<inheritdoc/>
-        protected override async Task<Scope> GetEntityByKeyAsync(ScopeDto dto, CancellationToken cancellationToken = default)
+        protected override async Task<AppClient> GetEntityByKeyAsync(AppClientDto dto, CancellationToken cancellationToken = default)
             => await _dmn.GetByKeyAsync(dto.Id, cancellationToken);
 
         ///<inheritdoc/>
-        protected override ScopeDto MapToDto(Scope entity)
+        protected override AppClientDto MapToDto(AppClient entity)
             => entity.Map();
 
         ///<inheritdoc/>
-        protected override void MapToEntity(ScopeDto dto, Scope entity)
+        protected override void MapToEntity(AppClientDto dto, AppClient entity)
             => entity.Map(dto);
 
         ///<inheritdoc/>
-        protected override Scope MapToEntity(ScopeDto dto)
+        protected override AppClient MapToEntity(AppClientDto dto)
             => dto.Map();
 
         #endregion
@@ -93,7 +93,7 @@ namespace RSoft.Auth.Application.Services
         #region Overrides
 
         ///<inheritdoc/>
-        public override async Task<ScopeDto> AddAsync(ScopeDto dto, CancellationToken cancellationToken = default)
+        public override async Task<AppClientDto> AddAsync(AppClientDto dto, CancellationToken cancellationToken = default)
         {
 
             dto.AccessKey = dto.AccessKey == Guid.Empty ? Guid.NewGuid() : dto.AccessKey;
@@ -130,24 +130,24 @@ namespace RSoft.Auth.Application.Services
         #region Public methods
 
         ///<inheritdoc/>
-        public async Task<OperationResult<byte[]>> ExportScope(Guid scopeId, CancellationToken cancellationToken)
+        public async Task<OperationResult<byte[]>> ExportAppClient(Guid clientId, CancellationToken cancellationToken)
         {
 
             OperationResult<byte[]> result = new();
 
-            Scope scope = await _dmn.GetByKeyAsync(scopeId, cancellationToken);
-            if (scope != null)
+            AppClient appClient = await _dmn.GetByKeyAsync(clientId, cancellationToken);
+            if (appClient != null)
             {
 
                 // Id;Name;AccessKey;AllowLogin;IsActive
                 
                 StringBuilder sb = new();
 
-                sb.Append($"{scope.Id};");
-                sb.Append($"{scope.Name};");
-                sb.Append($"{scope.AccessKey};");
-                sb.Append($"{(scope.AllowLogin ? "1" : "0")};");
-                sb.Append($"{(scope.IsActive ? "1" : "0")}");
+                sb.Append($"{appClient.Id};");
+                sb.Append($"{appClient.Name};");
+                sb.Append($"{appClient.AccessKey};");
+                sb.Append($"{(appClient.AllowLogin ? "1" : "0")};");
+                sb.Append($"{(appClient.IsActive ? "1" : "0")}");
 
                 result.Sucess = true;
                 result.Result = Encoding.ASCII.GetBytes(sb.ToString());
@@ -155,7 +155,7 @@ namespace RSoft.Auth.Application.Services
             }
             else
             {
-                result.Message = _localizer["SCOPE_NOT_FOUND"];
+                result.Message = _localizer["APPCLIENT_NOT_FOUND"];
             }
 
             return result;
@@ -163,7 +163,7 @@ namespace RSoft.Auth.Application.Services
         }
 
         ///<inheritdoc/>
-        public async Task<OperationResult<IEnumerable<RowImportResult>>> ImportScope(byte[] buffer, CancellationToken cancellationToken)
+        public async Task<OperationResult<IEnumerable<RowImportResult>>> ImportAppClient(byte[] buffer, CancellationToken cancellationToken)
         {
 
             IList<RowImportResult> rows = new List<RowImportResult>();
@@ -201,7 +201,7 @@ namespace RSoft.Auth.Application.Services
                             bool allowLogin = columns[3] == "1";
                             bool isActive = columns[4] == "1";
 
-                            ScopeDto scope = new()
+                            AppClientDto appClient = new()
                             {
                                 Id = id,
                                 Name = name,
@@ -212,15 +212,15 @@ namespace RSoft.Auth.Application.Services
 
                             if (await GetByKeyAsync(id, cancellationToken) == null)
                             {
-                                scope = await AddAsync(scope, cancellationToken);
-                                if (scope.Valid)
+                                appClient = await AddAsync(appClient, cancellationToken);
+                                if (appClient.Valid)
                                     rows.Add(new RowImportResult(lineNumber, id, true, null));
                                 else
-                                    rows.Add(new RowImportResult(lineNumber, id, false, scope.Notifications.First().Message));
+                                    rows.Add(new RowImportResult(lineNumber, id, false, appClient.Notifications.First().Message));
                             }
                             else
                             {
-                                rows.Add(new RowImportResult(lineNumber, id, false, _localizer["SCOPE_ALREADY_EXISTS"]));
+                                rows.Add(new RowImportResult(lineNumber, id, false, _localizer["APPCLIENT_ALREADY_EXISTS"]));
                             }
 
                         }

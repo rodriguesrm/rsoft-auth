@@ -36,7 +36,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         #region Local objects/variables
 
         private readonly IUserAppService _userAppService;
-        private readonly ScopeOptions _scopeOptions;
+        private readonly AppClientOptions _appClientOptions;
         private readonly IStringLocalizer<Resource> _localizer;
 
         #endregion
@@ -47,17 +47,17 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// Create a new UserController instance
         /// </summary>
         /// <param name="userAppService">User application service</param>
-        /// <param name="options">Scope options parameters</param>
+        /// <param name="options">Application-Client options parameters</param>
         /// <param name="localizer">String language localizer</param>
         public UsersController
         (
             IUserAppService userAppService,
-            IOptions<ScopeOptions> options,
+            IOptions<AppClientOptions> options,
             IStringLocalizer<Resource> localizer
         )
         {
             _userAppService = userAppService;
-            _scopeOptions = options?.Value;
+            _appClientOptions = options?.Value;
             _localizer = localizer;
         }
 
@@ -104,7 +104,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         private async Task<IActionResult> RunUpdateUserAsync(Guid key, UserUpdateRequest request, CancellationToken cancellationToken = default)
         {
 
-            if (AppKey != _scopeOptions.Key)
+            if (AppKey != _appClientOptions.ClientId)
                 return Forbid(_localizer["CHANGE_USER_DENIED"].Value);
 
             UserDto dto = await GetByIdAsync(key, cancellationToken);
@@ -132,7 +132,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         private async Task<IActionResult> RunDeleteUserAsync(Guid key, CancellationToken cancellationToken = default)
         {
 
-            if (AppKey != _scopeOptions.Key)
+            if (AppKey != _appClientOptions.ClientId)
                 return Forbid(_localizer["DELETE_USER_DENIED"].Value);
 
             UserDto dto = await GetByIdAsync(key, cancellationToken);
@@ -148,14 +148,14 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         }
 
         /// <summary>
-        /// Perform add scope for user
+        /// Perform add application-client for user
         /// </summary>
         /// <param name="userId">User id key</param>
-        /// <param name="scopeId">Scope id key</param>
+        /// <param name="clientId">Application-client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        private async Task<IActionResult> RunAddScopeUserAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+        private async Task<IActionResult> RunAddAppClientUserAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default)
         {
-            SimpleOperationResult result = await _userAppService.AddScopeAsync(userId, scopeId);
+            SimpleOperationResult result = await _userAppService.AddAppClientAsync(userId, clientId);
             if (result.Success)
                 return NoContent();
             else
@@ -163,14 +163,14 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         }
 
         /// <summary>
-        /// Perform remove scope for suer
+        /// Perform remove application-client for suer
         /// </summary>
         /// <param name="userId">User id key</param>
-        /// <param name="scopeId">Scope id key</param>
+        /// <param name="clientId">Application-Client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        private async Task<IActionResult> RunRemoveScopeUserAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+        private async Task<IActionResult> RunRemoveAppClientUserAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default)
         {
-            SimpleOperationResult result = await _userAppService.RemoveScopeAsync(userId, scopeId);
+            SimpleOperationResult result = await _userAppService.RemoveAppClientAsync(userId, clientId);
             if (result.Success)
                 return NoContent();
             else
@@ -223,7 +223,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         protected override async Task<UserDto> GetByIdAsync(Guid key, CancellationToken cancellationToken = default)
         {
             UserDto dto = await _userAppService.GetByKeyAsync(key, cancellationToken);
-            if (dto != null && AppKey != _scopeOptions.Key && !dto.Scopes.Any(s => s.Id == AppKey))
+            if (dto != null && AppKey != _appClientOptions.ClientId && !dto.ApplicationClients.Any(s => s.Id == AppKey))
                 dto = null;
             return dto;
         }
@@ -350,10 +350,10 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             => await RunActionAsync(RunDeleteUserAsync(key, cancellationToken), cancellationToken);
 
         /// <summary>
-        /// Adds a scope to the user
+        /// Adds a application-client to the user
         /// </summary>
-        /// <param name="key">User id key</param>
-        /// <param name="scopeKey">Scope id key</param>
+        /// <param name="userId">User id key</param>
+        /// <param name="clientId">Application-Client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="204">Successful request processing</response>
         /// <response code="400">Invalid request, see details in response</response>
@@ -365,16 +365,16 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
-        [HttpPost("{key:guid}/scopes/{scopeKey:guid}")]
+        [HttpPost("{userId:guid}/appclient/{clientId:guid}")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> AddScopeUser([FromRoute] Guid key, [FromRoute] Guid scopeKey, CancellationToken cancellationToken = default)
-            => await RunActionAsync(RunAddScopeUserAsync(key, scopeKey, cancellationToken), cancellationToken);
+        public async Task<IActionResult> AddAppClientUser([FromRoute] Guid userId, [FromRoute] Guid clientId, CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunAddAppClientUserAsync(userId, clientId, cancellationToken), cancellationToken);
 
         /// <summary>
-        /// Removea scope to the user
+        /// Removea application-client to the user
         /// </summary>
-        /// <param name="key">User id key</param>
-        /// <param name="scopeKey">Scope id key</param>
+        /// <param name="userId">User id key</param>
+        /// <param name="clientId">Application-Client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="204">Successful request processing</response>
         /// <response code="400">Invalid request, see details in response</response>
@@ -386,10 +386,10 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
-        [HttpDelete("{key:guid}/scopes/{scopeKey:guid}")]
+        [HttpDelete("{userId:guid}/appclient/{clientId:guid}")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> RemoveScopeUser([FromRoute] Guid key, [FromRoute] Guid scopeKey, CancellationToken cancellationToken = default)
-            => await RunActionAsync(RunRemoveScopeUserAsync(key, scopeKey, cancellationToken), cancellationToken);
+        public async Task<IActionResult> RemoveAppClientUser([FromRoute] Guid userId, [FromRoute] Guid clientId, CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunRemoveAppClientUserAsync(userId, clientId, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Adds roles to the user

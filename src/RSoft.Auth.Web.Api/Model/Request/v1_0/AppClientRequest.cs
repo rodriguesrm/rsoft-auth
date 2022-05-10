@@ -2,20 +2,20 @@
 {
 
     /// <summary>
-    /// Scope request model
+    /// Application-Client request model
     /// </summary>
-    public class ScopeRequest
+    public class AppClientRequest
     {
 
         #region Properties
 
         /// <summary>
-        /// Scope name
+        /// Application-Client name
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Indicates whether the scope can log in as a service/application
+        /// Indicates whether the application-client can log in as a service/application
         /// </summary>
         public bool? AllowLogin { get; set; } = false;
 

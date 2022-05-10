@@ -1,4 +1,4 @@
-﻿using ScopeDomain = RSoft.Auth.Domain.Entities.Scope;
+﻿using AppClientDomain = RSoft.Auth.Domain.Entities.AppClient;
 using RSoft.Auth.Infra.Data.Entities;
 using RSoft.Auth.Domain.Repositories;
 using System;
@@ -9,30 +9,30 @@ namespace RSoft.Auth.Infra.Data.Repositories
 {
 
     /// <summary>
-    /// Scope repository
+    /// Application-Client repository
     /// </summary>
-    public class ScopeRepository : RepositoryBase<ScopeDomain, Scope, Guid>, IScopeRepository
+    public class AppClientRepository : RepositoryBase<AppClientDomain, AppClient, Guid>, IAppClientRepository
     {
 
         #region Constructors
 
         ///<inheritdoc/>
-        public ScopeRepository(AuthContext ctx) : base(ctx) { }
+        public AppClientRepository(AuthContext ctx) : base(ctx) { }
 
         #endregion
 
         #region Overrides
 
         ///<inheritdoc/>
-        protected override ScopeDomain Map(Scope table)
+        protected override AppClientDomain Map(AppClient table)
             => table.Map();
 
         ///<inheritdoc/>
-        protected override Scope MapForAdd(ScopeDomain entity)
+        protected override AppClient MapForAdd(AppClientDomain entity)
             => entity.Map();
 
         ///<inheritdoc/>
-        protected override Scope MapForUpdate(ScopeDomain entity, Scope table)
+        protected override AppClient MapForUpdate(AppClientDomain entity, AppClient table)
             => entity.Map(table);
 
         #endregion

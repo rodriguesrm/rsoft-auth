@@ -18,11 +18,11 @@ namespace RSoft.Auth.Infra.Data.Extensions
         /// <param name="app">Application builder object instance</param>
         public static IApplicationBuilder MigrateDatabase(this IApplicationBuilder app, ILogger logger)
         {
-            using (var serviceScope = app.ApplicationServices
+            using (IServiceScope serviceAppClient = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope())
             {
-                using (var context = serviceScope.ServiceProvider.GetService<AuthContext>())
+                using (var context = serviceAppClient.ServiceProvider.GetService<AuthContext>())
                 {
                     logger.LogInformation($"Migrating database {nameof(AuthContext)}");
                     context.Database.Migrate();

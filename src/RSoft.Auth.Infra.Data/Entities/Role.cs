@@ -64,9 +64,9 @@ namespace RSoft.Auth.Infra.Data.Entities
         public string Description { get; set; }
 
         /// <summary>
-        /// Scope id value
+        /// Application-Client id value
         /// </summary>
-        public Guid ScopeId { get; set; }
+        public Guid ApplicationClientId { get; set; }
 
         #endregion
 
@@ -83,9 +83,9 @@ namespace RSoft.Auth.Infra.Data.Entities
         public virtual User ChangedAuthor { get; set; }
 
         /// <summary>
-        /// Scope data
+        /// Application-client data
         /// </summary>
-        public virtual Scope Scope { get; set; }
+        public virtual AppClient AppClient { get; set; }
 
         /// <summary>
         /// Users for this role

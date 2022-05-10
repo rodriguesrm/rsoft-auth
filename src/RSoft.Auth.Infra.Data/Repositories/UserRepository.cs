@@ -61,34 +61,34 @@ namespace RSoft.Auth.Infra.Data.Repositories
         }
 
         ///<inheritdoc/>
-        public async Task<IEnumerable<UserDomain>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<UserDomain>> GetAllAsync(Guid clientId, CancellationToken cancellationToken = default)
         {
-            IEnumerable<User> tableUsers = await _dbSet.Where(x => x.Scopes.Any(s => s.ScopeId == scopeId)).ToListAsync(cancellationToken);
+            IEnumerable<User> tableUsers = await _dbSet.Where(x => x.ApplicationClients.Any(s => s.AppClientId == clientId)).ToListAsync(cancellationToken);
             IEnumerable<UserDomain> users = tableUsers.Select(u => u.Map(true));
             return users;
         }
 
         ///<inheritdoc/>
-        public async Task AddUserScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
+        public async Task AddUserAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default)
         {
-            DbSet<UserScope> dbSet = _ctx.Set<UserScope>();
-            UserScope userScope = new UserScope()
+            DbSet<UserAppClient> dbSet = _ctx.Set<UserAppClient>();
+            UserAppClient userAppClient = new UserAppClient()
             {
                 UserId = userId,
-                ScopeId = scopeId
+                AppClientId = clientId
             };
-            await dbSet.AddAsync(userScope, cancellationToken);
+            await dbSet.AddAsync(userAppClient, cancellationToken);
         }
 
         ///<inheritdoc/>
-        public Task RemoveUserScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken)
+        public Task RemoveUserAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
             {
-                DbSet<UserScope> dbSet = _ctx.Set<UserScope>();
-                UserScope userScope = dbSet.Where(x => x.UserId == userId && x.ScopeId == scopeId).FirstOrDefault();
-                if (userScope != null)
-                    dbSet.Remove(userScope);
+                DbSet<UserAppClient> dbSet = _ctx.Set<UserAppClient>();
+                UserAppClient userAppClient = dbSet.Where(x => x.UserId == userId && x.AppClientId == clientId).FirstOrDefault();
+                if (userAppClient != null)
+                    dbSet.Remove(userAppClient);
             });
         }
 

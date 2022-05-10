@@ -31,9 +31,9 @@ namespace RSoft.Auth.Web.Api.Model.Response.v1_0
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Scope data information
+        /// Application-Client data information
         /// </summary>
-        public SimpleIdentification<Guid> Scope { get; set; }
+        public SimpleIdentification<Guid> AppClient { get; set; }
 
         /// <summary>
         /// Role name

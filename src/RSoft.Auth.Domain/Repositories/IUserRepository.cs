@@ -31,25 +31,25 @@ namespace RSoft.Auth.Domain.Repositories
         /// <summary>
         /// Get all rows
         /// </summary>
-        /// <param name="scopeId">Scope application id</param>
+        /// <param name="clientId">Application-Client application id</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<IEnumerable<User>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<User>> GetAllAsync(Guid clientId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Add scope to user
+        /// Add application-client to user
         /// </summary>
         /// <param name="userId">User id key</param>
-        /// <param name="scopeId">Scope id key</param>
+        /// <param name="clientId">Application-client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task AddUserScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
+        Task AddUserAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Remove scope from user
+        /// Remove application-client from user
         /// </summary>
         /// <param name="userId">User id key</param>
-        /// <param name="scopeId">Scope id key</param>
+        /// <param name="clientId">Application-client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task RemoveUserScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken);
+        Task RemoveUserAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Add role to user

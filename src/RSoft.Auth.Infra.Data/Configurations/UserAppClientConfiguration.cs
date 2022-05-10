@@ -7,34 +7,34 @@ namespace RSoft.Auth.Infra.Data.Configurations
 {
 
     /// <summary>
-    /// User Scope entity table configuration
+    /// User App-Client entity table configuration
     /// </summary>
-    public class UserScopeConfiguration : IEntityTypeConfiguration<UserScope>
+    public class UserAppClientConfiguration : IEntityTypeConfiguration<UserAppClient>
     {
 
         ///<inheritdoc/>
-        public void Configure(EntityTypeBuilder<UserScope> builder)
+        public void Configure(EntityTypeBuilder<UserAppClient> builder)
         {
 
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
 
-            builder.ToTable(nameof(UserScope));
+            builder.ToTable(nameof(UserAppClient));
 
             #region PK
 
-            builder.HasKey(k => new { k.UserId, k.ScopeId });
+            builder.HasKey(k => new { k.UserId, k.AppClientId });
 
             #endregion
 
             #region Columns
 
             builder.Property(c => c.UserId)
-                .HasColumnName(nameof(UserScope.UserId))
+                .HasColumnName(nameof(UserAppClient.UserId))
                 .IsRequired();
 
-            builder.Property(c => c.ScopeId)
-                .HasColumnName(nameof(UserScope.ScopeId))
+            builder.Property(c => c.AppClientId)
+                .HasColumnName(nameof(UserAppClient.AppClientId))
                 .IsRequired();
 
             #endregion
@@ -42,16 +42,16 @@ namespace RSoft.Auth.Infra.Data.Configurations
             #region Indexes
 
             builder.HasOne(o => o.User)
-                .WithMany(d => d.Scopes)
+                .WithMany(d => d.ApplicationClients)
                 .HasForeignKey(fk => fk.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName($"FK_{nameof(UserScope)}_{nameof(User)}");
+                .HasConstraintName($"FK_{nameof(UserAppClient)}_{nameof(User)}");
 
-            builder.HasOne(o => o.Scope)
+            builder.HasOne(o => o.ApplicationClient)
                 .WithMany(d => d.Users)
-                .HasForeignKey(fk => fk.ScopeId)
+                .HasForeignKey(fk => fk.AppClientId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName($"FK_{nameof(UserScope)}_{nameof(Scope)}");
+                .HasConstraintName($"FK_{nameof(UserAppClient)}_{nameof(AppClient)}");
 
             #endregion
 

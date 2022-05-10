@@ -7,19 +7,19 @@ namespace RSoft.Auth.Infra.Data.Configurations
 {
 
     /// <summary>
-    /// Scope entity table configuration
+    /// Application-Client entity table configuration
     /// </summary>
-    public class ScopeConfiguration : IEntityTypeConfiguration<Scope>
+    public class AppClientConfiguration : IEntityTypeConfiguration<AppClient>
     {
         
         ///<inheritdoc/>
-        public void Configure(EntityTypeBuilder<Scope> builder)
+        public void Configure(EntityTypeBuilder<AppClient> builder)
         {
 
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
 
-            builder.ToTable(nameof(Scope));
+            builder.ToTable(nameof(AppClient));
 
             #region PK
 
@@ -30,17 +30,17 @@ namespace RSoft.Auth.Infra.Data.Configurations
             #region Columns
 
             builder.Property(c => c.Name)
-                .HasColumnName(nameof(Scope.Name))
+                .HasColumnName(nameof(AppClient.Name))
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .IsRequired();
 
             builder.Property(c => c.AccessKey)
-                .HasColumnName(nameof(Scope.AccessKey))
+                .HasColumnName(nameof(AppClient.AccessKey))
                 .IsRequired();
 
             builder.Property(c => c.AllowLogin)
-                .HasColumnName(nameof(Scope.AllowLogin))
+                .HasColumnName(nameof(AppClient.AllowLogin))
                 .HasColumnType("bit")
                 .IsRequired();
 
@@ -49,16 +49,16 @@ namespace RSoft.Auth.Infra.Data.Configurations
             #region FKs
 
             builder.HasOne(o => o.CreatedAuthor)
-                .WithMany(d => d.CreatedScopes)
+                .WithMany(d => d.CreatedAppClients)
                 .HasForeignKey(fk => fk.CreatedBy)
                 .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName($"FK_{nameof(Scope)}_CreatedAuthor");
+                .HasConstraintName($"FK_{nameof(AppClient)}_CreatedAuthor");
 
             builder.HasOne(o => o.ChangedAuthor)
-                .WithMany(d => d.ChangedScopes)
+                .WithMany(d => d.ChangedAppClients)
                 .HasForeignKey(fk => fk.ChangedBy)
                 .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName($"FK_{nameof(Scope)}_ChangedAuthor");
+                .HasConstraintName($"FK_{nameof(AppClient)}_ChangedAuthor");
 
             #endregion
 
@@ -66,12 +66,12 @@ namespace RSoft.Auth.Infra.Data.Configurations
 
             builder
                 .HasIndex(i => i.Name)
-                .HasDatabaseName($"AK_{nameof(Scope)}_{nameof(Scope.Name)}")
+                .HasDatabaseName($"AK_{nameof(AppClient)}_{nameof(AppClient.Name)}")
                 .IsUnique();
 
             builder
                 .HasIndex(i => i.AccessKey)
-                .HasDatabaseName($"AK_{nameof(Scope)}_{nameof(Scope.AccessKey)}")
+                .HasDatabaseName($"AK_{nameof(AppClient)}_{nameof(AppClient.AccessKey)}")
                 .IsUnique();
 
             #endregion

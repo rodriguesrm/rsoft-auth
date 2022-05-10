@@ -6,9 +6,9 @@ namespace RSoft.Auth.Domain.Services
 {
 
     /// <summary>
-    /// Scope domain service interface
+    /// Application-Client domain service interface
     /// </summary>
-    public interface IScopeDomainService : IDomainServiceBase<Scope, Guid>
+    public interface IAppClientDomainService : IDomainServiceBase<AppClient, Guid>
     {
     }
 

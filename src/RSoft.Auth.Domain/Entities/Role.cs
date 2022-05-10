@@ -67,9 +67,9 @@ namespace RSoft.Auth.Domain.Entities
         #region Navigation Lazy
 
         /// <summary>
-        /// Scope data
+        /// Application-Client data
         /// </summary>
-        public virtual Scope Scope { get; set; }
+        public virtual AppClient AppClient { get; set; }
 
         /// <summary>
         /// Users for this role
@@ -101,7 +101,7 @@ namespace RSoft.Auth.Domain.Entities
             IStringLocalizer<Role> localizer = ServiceActivator.GetScope().ServiceProvider.GetService<IStringLocalizer<Role>>();
             if (CreatedAuthor != null) AddNotifications(CreatedAuthor.Notifications);
             if (ChangedAuthor != null) AddNotifications(ChangedAuthor.Notifications);
-            AddNotifications(new RequiredValidationContract<Guid?>(Scope?.Id, nameof(Scope), localizer["SCOPE_REQUIRED"]).Contract.Notifications);
+            AddNotifications(new RequiredValidationContract<Guid?>(AppClient?.Id, nameof(AppClient), localizer["APPCLIENT_REQUIRED"]).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Name, nameof(Name), true, 3, 50).Contract.Notifications);
             AddNotifications(new SimpleStringValidationContract(Description, nameof(Description), true, 3, 150).Contract.Notifications);
         }

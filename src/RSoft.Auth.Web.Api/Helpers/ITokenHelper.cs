@@ -13,10 +13,10 @@ namespace RSoft.Auth.Web.Api.Helpers
         /// <summary>
         /// Generate access token for authenticated user
         /// </summary>
-        /// <param name="scopeId">Scope/Application id key</param>
-        /// <param name="scopeName">Scope/Application name</param>
+        /// <param name="clientId">Application-Client id key</param>
+        /// <param name="applicationClientName">Application-Client name</param>
         /// <param name="expiresIn">Date/date expiration token</param>
-        string GenerateTokenAplication(Guid scopeId, string scopeName, out DateTime? expiresIn);
+        string GenerateTokenAplication(Guid clientId, string applicationClientName, out DateTime? expiresIn);
 
         /// <summary>
         /// Generate access token for authenticated user

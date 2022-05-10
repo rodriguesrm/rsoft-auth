@@ -123,8 +123,8 @@
   <data name="EMAIL_REQUIRED" xml:space="preserve">
     <value>E-mail is required</value>
   </data>
-  <data name="USER_IN_ONE_SCOPE" xml:space="preserve">
-    <value>The user must be assigned to at least one scope</value>
+  <data name="USER_IN_ONE_APPCLIENT" xml:space="preserve">
+    <value>The user must be assigned to at least one application-client</value>
   </data>
   <data name="USER_TYPE_REQUIRED" xml:space="preserve">
     <value>User type is required</value>

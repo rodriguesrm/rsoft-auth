@@ -6,9 +6,9 @@ namespace RSoft.Auth.Application.Model
 {
 
     /// <summary>
-    /// Scope data transport object
+    /// Application-Client data transport object
     /// </summary>
-    public class ScopeDto : AppDtoIdAuditBase<Guid>, IAuditDto<Guid>
+    public class AppClientDto : AppDtoIdAuditBase<Guid>, IAuditDto<Guid>
     {
 
         #region Properties
@@ -19,7 +19,7 @@ namespace RSoft.Auth.Application.Model
         public Guid AccessKey { get; set; }
 
         /// <summary>
-        /// Indicates whether the scope can log in as a service/application
+        /// Indicates whether the application-client can log in as a service/application
         /// </summary>
         public bool AllowLogin { get; set; }
 

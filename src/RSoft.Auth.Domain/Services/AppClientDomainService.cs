@@ -9,9 +9,9 @@ namespace RSoft.Auth.Domain.Services
 {
 
     /// <summary>
-    /// Scope domain service operations
+    /// Application-Client domain service operations
     /// </summary>
-    public class ScopeDomainService : DomainServiceBase<Scope, Guid, IScopeRepository>, IScopeDomainService
+    public class AppClientDomainService : DomainServiceBase<AppClient, Guid, IAppClientRepository>, IAppClientDomainService
     {
 
         #region Constructors
@@ -19,9 +19,9 @@ namespace RSoft.Auth.Domain.Services
         /// <summary>
         /// Create a new scopde domain service instance
         /// </summary>
-        /// <param name="repository">Scope repository</param>
+        /// <param name="repository">Application-Client repository</param>
         /// <param name="authenticatedUser">Authenticated user</param>
-        public ScopeDomainService(IScopeRepository repository, IAuthenticatedUser authenticatedUser) : base(repository, authenticatedUser)
+        public AppClientDomainService(IAppClientRepository repository, IAuthenticatedUser authenticatedUser) : base(repository, authenticatedUser)
         {
         }
 
@@ -30,7 +30,7 @@ namespace RSoft.Auth.Domain.Services
         #region Overrides
 
         ///<inheritdoc/>
-        public override void PrepareSave(Scope entity, bool isUpdate)
+        public override void PrepareSave(AppClient entity, bool isUpdate)
         {
             if (isUpdate)
             {

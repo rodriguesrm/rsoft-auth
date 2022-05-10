@@ -159,8 +159,8 @@
   <data name="PASSWORD_REQUIRED" xml:space="preserve">
     <value>Password is required</value>
   </data>
-  <data name="SCOPE_NOT_DEFINED" xml:space="preserve">
-    <value>Scope not defined or invalid</value>
+  <data name="APPCLIENT_NOT_DEFINED" xml:space="preserve">
+    <value>Application-Client not defined or invalid</value>
   </data>
   <data name="TOKEN_FIRST_ACCESS_MAIL" xml:space="preserve">
     <value>First access information sent to the user's email</value>

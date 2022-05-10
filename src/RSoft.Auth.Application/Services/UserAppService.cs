@@ -26,7 +26,7 @@ namespace RSoft.Auth.Application.Services
 
         #region Local objects/variables
 
-        private readonly IScopeDomainService _scopeDomain;
+        private readonly IAppClientDomainService _appClientDomain;
         private readonly IRoleDomainService _roleDomain;
         private new readonly IUserDomainService _dmn;
         private readonly IStringLocalizer<AppResource> _localizer;
@@ -42,7 +42,7 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="uow">Unit of work object</param>
         /// <param name="dmn">User domain service object</param>
-        /// <param name="scopeDomain">Scope domain service</param>
+        /// <param name="appClientDomain">Application-client domain service</param>
         /// <param name="roleDomain">Role domain service</param>
         /// <param name="localizer">Language string localizer</param>
         /// <param name="bus">Message bus control</param>
@@ -50,13 +50,13 @@ namespace RSoft.Auth.Application.Services
         (
             IUnitOfWork uow,
             IUserDomainService dmn,
-            IScopeDomainService scopeDomain,
+            IAppClientDomainService appClientDomain,
             IRoleDomainService roleDomain,
             IStringLocalizer<AppResource> localizer,
             IBusControl bus
         ) : base(uow, dmn)
         {
-            _scopeDomain = scopeDomain;
+            _appClientDomain = appClientDomain;
             _roleDomain = roleDomain;
             _dmn = dmn;
             _localizer = localizer;
@@ -106,21 +106,21 @@ namespace RSoft.Auth.Application.Services
         public override async Task<UserDto> AddAsync(UserDto dto, CancellationToken cancellationToken = default)
         {
 
-            IList<Scope> scopes = new List<Scope>();
+            IList<AppClient> appClients = new List<AppClient>();
 
-            foreach (ScopeDto item in dto.Scopes)
+            foreach (AppClientDto item in dto.ApplicationClients)
             {
-                Scope scope = await _scopeDomain.GetByKeyAsync(item.Id, cancellationToken);
-                if (scope == null)
-                    dto.AddNotification("Scopes", string.Format(_localizer["SCOPE_ID_NOT_FOUND"], item.Id));
+                AppClient appClient = await _appClientDomain.GetByKeyAsync(item.Id, cancellationToken);
+                if (appClient == null)
+                    dto.AddNotification("AppClients", string.Format(_localizer["APPCLIENT_ID_NOT_FOUND"], item.Id));
                 else
-                    scopes.Add(scope);
+                    appClients.Add(appClient);
             }
 
             if (dto.Notifications.Count > 0)
                 return dto;
 
-            dto.Scopes = scopes.Select(s => s.Map(false)).ToList();
+            dto.ApplicationClients = appClients.Select(s => s.Map(false)).ToList();
 
             UserDto result = await base.AddAsync(dto, cancellationToken);
             if (result.Valid)
@@ -153,23 +153,23 @@ namespace RSoft.Auth.Application.Services
         }
 
         ///<inheritdoc/>
-        public async Task<IEnumerable<UserDto>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<UserDto>> GetAllAsync(Guid clientId, CancellationToken cancellationToken = default)
         {
-            IEnumerable<User> users = await _dmn.GetAllAsync(scopeId, cancellationToken);
+            IEnumerable<User> users = await _dmn.GetAllAsync(clientId, cancellationToken);
             IEnumerable<UserDto> dtos = users.Select(u => u.Map());
             return dtos;
         }
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
-            => await _dmn.AddScopeAsync(userId, scopeId, cancellationToken);
+        public async Task<SimpleOperationResult> AddAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default)
+            => await _dmn.AddAppClientAsync(userId, clientId, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> RemoveScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default)
-            => await _dmn.RemoveScopeAsync(userId, scopeId, cancellationToken);
+        public async Task<SimpleOperationResult> RemoveAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default)
+            => await _dmn.RemoveAppClientAsync(userId, clientId, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<SimpleOperationResult> AddRoleAsync(Guid scopeId, Guid userId, IEnumerable<Guid> roles, CancellationToken cancellationToken)
+        public async Task<SimpleOperationResult> AddRoleAsync(Guid clientId, Guid userId, IEnumerable<Guid> roles, CancellationToken cancellationToken)
         {
 
             bool success = false;
@@ -191,10 +191,10 @@ namespace RSoft.Auth.Application.Services
                             Role role = await _roleDomain.GetByKeyAsync(item, cancellationToken);
                             if (role != null)
                             {
-                                if (role.Scope.Id == scopeId)
+                                if (role.AppClient.Id == clientId)
                                     rolesList.Add(role);
                                 else
-                                    errors.Add(item.ToString(), _localizer["ROLE_NOT_BELONG_SCOPE"]);
+                                    errors.Add(item.ToString(), _localizer["ROLE_NOT_BELONG_APPCLIENT"]);
                             }
                             else
                                 errors.Add(item.ToString(), _localizer["ROLE_NOT_FOUND"]);

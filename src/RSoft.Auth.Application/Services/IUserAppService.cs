@@ -20,34 +20,34 @@ namespace RSoft.Auth.Application.Services
         /// <summary>
         /// Get all rows
         /// </summary>
-        /// <param name="scopeId">Scope application id</param>
+        /// <param name="clientId">Application-Client application id</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<IEnumerable<UserDto>> GetAllAsync(Guid scopeId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<UserDto>> GetAllAsync(Guid clientId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Add scope for user
+        /// Add application-client for user
         /// </summary>
         /// <param name="userId">User id key</param>
-        /// <param name="scopeId">Scope id key</param>
+        /// <param name="clientId">Application-Client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> AddScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
+        Task<SimpleOperationResult> AddAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Remove scope for user
+        /// Remove application-client for user
         /// </summary>
         /// <param name="userId">User id key</param>
-        /// <param name="scopeId">Scope id key</param>
+        /// <param name="clientId">Application-Client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> RemoveScopeAsync(Guid userId, Guid scopeId, CancellationToken cancellationToken = default);
+        Task<SimpleOperationResult> RemoveAppClientAsync(Guid userId, Guid clientId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds roles for user
         /// </summary>
-        /// <param name="scopeId">Scope id key</param>
+        /// <param name="clientId">Application-client id key</param>
         /// <param name="userId">User id key</param>
         /// <param name="roles">List of role id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<SimpleOperationResult> AddRoleAsync(Guid scopeId, Guid userId, IEnumerable<Guid> roles, CancellationToken cancellationToken);
+        Task<SimpleOperationResult> AddRoleAsync(Guid clientId, Guid userId, IEnumerable<Guid> roles, CancellationToken cancellationToken);
 
         /// <summary>
         /// Remove a role for user

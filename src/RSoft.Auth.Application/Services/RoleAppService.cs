@@ -21,7 +21,7 @@ namespace RSoft.Auth.Application.Services
 
         #region Local objects/variables
 
-        private readonly IScopeDomainService _scopeDomain;
+        private readonly IAppClientDomainService _appClientDomain;
         private readonly IStringLocalizer<AppResource> _localizer;
 
         #endregion
@@ -33,17 +33,17 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="uow">Unit of work object</param>
         /// <param name="dmn">Role domain service object</param>
-        /// <param name="scopeDomain">Scope domain service object</param>
+        /// <param name="appClientDomain">Application-Client domain service object</param>
         /// <param name="localizer">Language string localizer</param>
         public RoleAppService
         (
             IUnitOfWork uow, 
             IRoleDomainService dmn, 
-            IScopeDomainService scopeDomain,
+            IAppClientDomainService appClientDomain,
             IStringLocalizer<AppResource> localizer
         ) : base(uow, dmn) 
         {
-            _scopeDomain = scopeDomain;
+            _appClientDomain = appClientDomain;
             _localizer = localizer;
         }
 
@@ -77,8 +77,8 @@ namespace RSoft.Auth.Application.Services
             base.ValidateEntity(entity);
             if (entity.Valid)
             {
-                if (_scopeDomain.GetByKeyAsync(entity.Scope.Id).GetAwaiter().GetResult() == null)
-                    entity.AddNotification("Scope", _localizer["SCOPE_NOT_FOUND"]);
+                if (_appClientDomain.GetByKeyAsync(entity.AppClient.Id).GetAwaiter().GetResult() == null)
+                    entity.AddNotification("AppClient", _localizer["APPCLIENT_NOT_FOUND"]);
             }
         }
 

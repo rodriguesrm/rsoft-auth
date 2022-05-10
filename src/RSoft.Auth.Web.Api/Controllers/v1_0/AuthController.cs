@@ -32,7 +32,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         #region Local objects/variables
 
         private readonly ICredentialAppService _appService;
-        private readonly IScopeAppService _scopeAppService;
+        private readonly IAppClientAppService _appClientAppService;
         private readonly ITokenHelper _tokenHelper;
         private readonly IStringLocalizer<Resource> _localizer;
 
@@ -44,19 +44,19 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// Initialize a new instance of AUthController API
         /// </summary>
         /// <param name="appService">Credential application service</param>
-        /// <param name="scopeAppService">Scope application service</param>
+        /// <param name="appClientAppService">Application-Client application service</param>
         /// <param name="tokenHelper">Token helper</param>
         /// <param name="localizer">String language localizer</param>
         public AuthController
         (
             ICredentialAppService appService,
-            IScopeAppService scopeAppService,
+            IAppClientAppService appClientAppService,
             ITokenHelper tokenHelper,
             IStringLocalizer<Resource> localizer
         ) : base()
         {
             _appService = appService;
-            _scopeAppService = scopeAppService;
+            _appClientAppService = appClientAppService;
             _tokenHelper = tokenHelper;
             _localizer = localizer;
         }
@@ -72,16 +72,16 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         private async Task<IActionResult> AuthenticateApplicationAsync(CancellationToken cancellationToken)
         {
             if (!AppKey.HasValue || !AppAccess.HasValue)
-                return Unauthorized(_localizer["SCOPE_NOT_DEFINED"].Value);
+                return Unauthorized(_localizer["APPCLIENT_NOT_DEFINED"].Value);
 
-            ScopeDto scope = await _scopeAppService.GetByKeyAsync(AppKey.Value, cancellationToken);
-            if (scope == null || scope.AccessKey != AppAccess.Value)
+            AppClientDto applicationClient = await _appClientAppService.GetByKeyAsync(AppKey.Value, cancellationToken);
+            if (applicationClient == null || applicationClient.AccessKey != AppAccess.Value)
                 return Unauthorized(_localizer["INVALID_APP_KEY_ACCESS"].Value);
 
-            if (!scope.AllowLogin || !scope.IsActive)
+            if (!applicationClient.AllowLogin || !applicationClient.IsActive)
                 return Unauthorized(_localizer["APP_LOGIN_DIALLOW"].Value);
 
-            string token = _tokenHelper.GenerateTokenAplication(scope.Id, scope.Name, out DateTime? expiresIn);
+            string token = _tokenHelper.GenerateTokenAplication(applicationClient.Id, applicationClient.Name, out DateTime? expiresIn);
             AuthenticateResponse result = new AuthenticateResponse(token, expiresIn, null, null);
             return Ok(result);
 
@@ -97,7 +97,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         {
 
             if (!AppKey.HasValue || !AppAccess.HasValue)
-                return Unauthorized(_localizer["SCOPE_NOT_DEFINED"].Value);
+                return Unauthorized(_localizer["APPCLIENT_NOT_DEFINED"].Value);
 
             AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(AppKey.Value, AppAccess.Value, request.Login, request.Password, cancellationToken);
             if (authResult.Success)

@@ -114,9 +114,9 @@ namespace RSoft.Auth.Infra.Data.Entities
         public virtual ICollection<UserRole> Roles { get; set; }
 
         /// <summary>
-        /// User scopes list
+        /// User application-clients list
         /// </summary>
-        public virtual ICollection<UserScope> Scopes { get; set; }
+        public virtual ICollection<UserAppClient> ApplicationClients { get; set; }
 
         /// <summary>
         /// List of Tokens for creating or retrieving credentials
@@ -146,14 +146,14 @@ namespace RSoft.Auth.Infra.Data.Entities
         public virtual ICollection<Role> ChangedRoles { get; set; }
         
         /// <summary>
-        /// Created scopes
+        /// Created application-clients
         /// </summary>
-        public virtual ICollection<Scope> CreatedScopes { get; set; }
+        public virtual ICollection<AppClient> CreatedAppClients { get; set; }
         
         /// <summary>
-        /// Changed scopes
+        /// Changed application-clients
         /// </summary>
-        public virtual ICollection<Scope> ChangedScopes { get; set; }
+        public virtual ICollection<AppClient> ChangedAppClients { get; set; }
 
         #endregion
 
@@ -168,14 +168,14 @@ namespace RSoft.Auth.Infra.Data.Entities
         {
             IsActive = true;
             Roles = new HashSet<UserRole>();
-            Scopes = new HashSet<UserScope>();
+            ApplicationClients = new HashSet<UserAppClient>();
             Tokens = new HashSet<UserCredentialToken>();
             CreatedUsers = new HashSet<User>();
             ChangedUsers = new HashSet<User>();
             CreatedRoles = new HashSet<Role>();
             ChangedRoles = new HashSet<Role>();
-            CreatedScopes = new HashSet<Scope>();
-            ChangedScopes = new HashSet<Scope>();
+            CreatedAppClients = new HashSet<AppClient>();
+            ChangedAppClients = new HashSet<AppClient>();
         }
 
         #endregion

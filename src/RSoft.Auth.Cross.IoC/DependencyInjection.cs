@@ -56,7 +56,7 @@ namespace RSoft.Auth.Cross.IoC
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserCredentialRepository, UserCredentialRepository>();
             services.AddScoped<IUserCredentialTokenRepository, UserCredentialTokenRepository>();
-            services.AddScoped<IScopeRepository, ScopeRepository>();
+            services.AddScoped<IAppClientRepository, AppClientRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
             #endregion
@@ -64,7 +64,7 @@ namespace RSoft.Auth.Cross.IoC
             #region Domain
 
             services.AddScoped<IUserDomainService, UserDomainService>();
-            services.AddScoped<IScopeDomainService, ScopeDomainService>();
+            services.AddScoped<IAppClientDomainService, AppClientDomainService>();
             services.AddScoped<IRoleDomainService, RoleDomainService>();
 
             #endregion
@@ -74,7 +74,7 @@ namespace RSoft.Auth.Cross.IoC
             services.AddScoped<IUserAppService, UserAppService>();
             services.AddScoped<ICredentialAppService, CredentialAppService>();
             services.AddScoped<IRoleAppService, RoleAppService>();
-            services.AddScoped<IScopeAppService, ScopeAppService>();
+            services.AddScoped<IAppClientAppService, AppClientAppService>();
 
             #endregion
 

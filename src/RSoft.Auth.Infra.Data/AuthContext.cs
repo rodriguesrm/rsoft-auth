@@ -29,12 +29,12 @@ namespace RSoft.Auth.Infra.Data
         protected override void SetTableConfiguration(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            modelBuilder.ApplyConfiguration(new ScopeConfiguration());
+            modelBuilder.ApplyConfiguration(new AppClientConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new UserCredentialConfiguration());
             modelBuilder.ApplyConfiguration(new UserCredentialTokenConfiguration());
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
-            modelBuilder.ApplyConfiguration(new UserScopeConfiguration());
+            modelBuilder.ApplyConfiguration(new UserAppClientConfiguration());
         }
 
         #endregion
@@ -47,9 +47,9 @@ namespace RSoft.Auth.Infra.Data
         public virtual DbSet<Role> Roles { get; set; }
 
         /// <summary>
-        /// Scopes dbset
+        /// Application-Client dbset
         /// </summary>
-        public virtual DbSet<Scope> Scopes { get; set; }
+        public virtual DbSet<AppClient> ApplicationClients { get; set; }
 
         /// <summary>
         /// Users dbset
@@ -72,9 +72,9 @@ namespace RSoft.Auth.Infra.Data
         public virtual DbSet<UserRole> UserRoles { get; set; }
 
         /// <summary>
-        /// User scopes dbset
+        /// User Application-Client dbset
         /// </summary>
-        public virtual DbSet<UserScope> UserScopes { get; set; }
+        public virtual DbSet<UserAppClient> UserApplicationClients { get; set; }
 
         #endregion
 
