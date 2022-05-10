@@ -4,7 +4,7 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<UserSecretsId>55a931f2-4281-42ed-9e38-8b4733448886</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<Version>1.3.0</Version>
+		<Version>1.3.1</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
