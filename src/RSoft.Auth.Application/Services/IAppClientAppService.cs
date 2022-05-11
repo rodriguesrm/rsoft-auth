@@ -21,7 +21,7 @@ namespace RSoft.Auth.Application.Services
         /// </summary>
         /// <param name="clientId">Client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<OperationResult<byte[]>> ExportAppClient(Guid clientId, CancellationToken cancellationToken);
+        Task<OperationResult<byte[]>> ExportAppClient(Guid? clientId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Import application-client data (csv format)
