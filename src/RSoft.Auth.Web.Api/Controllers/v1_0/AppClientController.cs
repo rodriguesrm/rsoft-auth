@@ -61,7 +61,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// </summary>
         /// <param name="clientId">Client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        private async Task<IActionResult> RunExportAppClientAsync(Guid clientId, CancellationToken cancellationToken = default)
+        private async Task<IActionResult> RunExportAppClientAsync(Guid? clientId, CancellationToken cancellationToken = default)
         {
             OperationResult<byte[]> result = await _appClientAppService.ExportAppClient(clientId, cancellationToken);
             if (result.Sucess)
@@ -254,7 +254,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Export application-client data
         /// </summary>
-        /// <param name="key">Client id key</param>
+        /// <param name="clientId">Client id key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -262,10 +262,10 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
-        [HttpGet("{key:guid}/export")]
+        [HttpGet("integration")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> ExportUser([FromRoute] Guid key, CancellationToken cancellationToken = default)
-            => await RunActionAsync(RunExportAppClientAsync(key, cancellationToken), cancellationToken);
+        public async Task<IActionResult> ExportAppClient([FromQuery] Guid? clientId, CancellationToken cancellationToken = default)
+            => await RunActionAsync(RunExportAppClientAsync(clientId, cancellationToken), cancellationToken);
 
         /// <summary>
         /// Import Application-Client data (By form-file data - only 1 file)
@@ -276,9 +276,9 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(GerericExceptionResponse), StatusCodes.Status500InternalServerError)]
-        [HttpPost("import")]
+        [HttpPost("integration")]
         [MapToApiVersion("1.0")]
-        public async Task<IActionResult> ImportUser(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> ImportAppClient(CancellationToken cancellationToken = default)
             => await RunActionAsync(RunImportAppClientAsync(cancellationToken), cancellationToken);
 
         #endregion

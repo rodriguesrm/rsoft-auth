@@ -130,24 +130,33 @@ namespace RSoft.Auth.Application.Services
         #region Public methods
 
         ///<inheritdoc/>
-        public async Task<OperationResult<byte[]>> ExportAppClient(Guid clientId, CancellationToken cancellationToken)
+        public async Task<OperationResult<byte[]>> ExportAppClient(Guid? clientId, CancellationToken cancellationToken)
         {
 
             OperationResult<byte[]> result = new();
 
-            AppClient appClient = await _dmn.GetByKeyAsync(clientId, cancellationToken);
-            if (appClient != null)
+            IList<AppClient> appClients = new List<AppClient>();
+            if (clientId.HasValue)
+                appClients.Add(await _dmn.GetByKeyAsync(clientId.Value, cancellationToken));
+            else
+                appClients = (await _dmn.GetAllAsync(cancellationToken)).ToList();
+
+            if (appClients.Count > 0)
             {
 
-                // Id;Name;AccessKey;AllowLogin;IsActive
-                
                 StringBuilder sb = new();
 
-                sb.Append($"{appClient.Id};");
-                sb.Append($"{appClient.Name};");
-                sb.Append($"{appClient.AccessKey};");
-                sb.Append($"{(appClient.AllowLogin ? "1" : "0")};");
-                sb.Append($"{(appClient.IsActive ? "1" : "0")}");
+                foreach (var appClient in appClients)
+                {
+
+                    // Id;Name;AccessKey;AllowLogin;IsActive
+                    sb.Append($"{appClient.Id};");
+                    sb.Append($"{appClient.Name};");
+                    sb.Append($"{appClient.AccessKey};");
+                    sb.Append($"{(appClient.AllowLogin ? "1" : "0")};");
+                    sb.AppendLine($"{(appClient.IsActive ? "1" : "0")}");
+
+                }
 
                 result.Sucess = true;
                 result.Result = Encoding.ASCII.GetBytes(sb.ToString());
