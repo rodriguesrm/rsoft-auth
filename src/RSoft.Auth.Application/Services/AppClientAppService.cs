@@ -252,6 +252,15 @@ namespace RSoft.Auth.Application.Services
 
         }
 
+        ///<inheritdoc/>
+        public async Task<AppClientDto> GetByCredentialsAsync(Guid appKey, Guid appAccess, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            AppClientDto appClient = await base.GetByKeyAsync(appKey, cancellationToken);
+            if (appAccess != appClient.AccessKey)
+                appClient = null;
+            return appClient;
+        }
+
         #endregion
 
     }

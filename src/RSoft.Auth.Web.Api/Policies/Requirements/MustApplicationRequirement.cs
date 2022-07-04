@@ -16,11 +16,9 @@ namespace RSoft.Auth.Web.Api.Policies.Requirements
         /// Creaqte a new requirement instance
         /// </summary>
         /// <param name="appKey">Application id key</param>
-        /// <param name="appAccess">Application access key</param>
-        public MustApplicationRequirement(Guid appKey, Guid appAccess)
+        public MustApplicationRequirement(Guid appKey)
         {
             AppKey = appKey;
-            AppAccess = appAccess;
         }
 
         #endregion
@@ -31,11 +29,6 @@ namespace RSoft.Auth.Web.Api.Policies.Requirements
         /// Application id key
         /// </summary>
         public Guid AppKey { get; private set; }
-
-        /// <summary>
-        /// Application access key
-        /// </summary>
-        public Guid AppAccess { get; private set; }
 
         #endregion
 

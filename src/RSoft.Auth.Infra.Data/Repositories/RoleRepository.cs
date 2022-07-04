@@ -45,12 +45,12 @@ namespace RSoft.Auth.Infra.Data.Repositories
         #region Public methods
 
         ///<inheritdoc/>
-        public ICollection<RoleDomain> GetRolesByUser(Guid clientId, Guid userId)
+        public ICollection<RoleDomain> GetRolesByUser(Guid userId)
         {
 
             ICollection<RoleDomain> result = _ctx
                 .Set<UserRole>()
-                .Where(x => x.Role.ApplicationClientId == clientId && x.UserId == userId)
+                .Where(x => x.UserId == userId)
                 .ToList()
                 .Select(s => s.Role.Map())
                 .ToList();
@@ -60,9 +60,9 @@ namespace RSoft.Auth.Infra.Data.Repositories
         }
 
         ///<inheritdoc/>
-        public async Task<RoleDomain> GetByNameAsync(Guid clientId, string roleName, CancellationToken cancellationToken = default)
+        public async Task<RoleDomain> GetByNameAsync(string roleName, CancellationToken cancellationToken = default)
         {
-            Role table = await _dbSet.FirstOrDefaultAsync(x => x.ApplicationClientId == clientId && x.Name == roleName, cancellationToken);
+            Role table = await _dbSet.FirstOrDefaultAsync(x => x.Name == roleName, cancellationToken);
             RoleDomain entity = table.Map();
             return entity;
         }

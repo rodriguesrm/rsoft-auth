@@ -33,7 +33,7 @@ namespace RSoft.Auth.Web.Api.Policies
                 options.AddPolicy(PolicyNames.OnlyThisApplication, policy => 
                     policy
                         .Requirements
-                        .Add(new MustApplicationRequirement(appClientOptions.ClientId, appClientOptions.ClientSecret))
+                        .Add(new MustApplicationRequirement(appClientOptions.ClientId))
                 );
             });
 

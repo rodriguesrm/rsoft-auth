@@ -44,3 +44,12 @@ User authentication service API. Generates a JWT token for authenticate user in 
 
 #### Version 1.2.0
 - Added publish events for Create, Update and Delete users
+
+#### Version 1.3.0
+- Added Import/Export Application-Client
+
+#### Version 1.3.1
+- Bug fixes
+
+#### Version 1.4.0
+- Refactor App-Client-Headers (only ClientId is necessary for endpoints, except Authenticate)

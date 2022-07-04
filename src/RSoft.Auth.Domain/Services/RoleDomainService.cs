@@ -54,11 +54,10 @@ namespace RSoft.Auth.Domain.Services
         /// <summary>
         /// Find role in the application-client by name
         /// </summary>
-        /// <param name="clientId">Applilcation-Client id key</param>
         /// <param name="roleName">Role name</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        public async Task<Role> GetByNameAsync(Guid clientId, string roleName, CancellationToken cancellationToken = default)
-            => await _repository.GetByNameAsync(clientId, roleName, cancellationToken);
+        public async Task<Role> GetByNameAsync(string roleName, CancellationToken cancellationToken = default)
+            => await _repository.GetByNameAsync(roleName, cancellationToken);
 
         #endregion
 

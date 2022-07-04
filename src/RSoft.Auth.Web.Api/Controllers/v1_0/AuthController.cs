@@ -68,21 +68,29 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Authenticate application in the system and generate the access-key (token)
         /// </summary>
+        /// <param name="appKey">Client id</param>
+        /// <param name="appAccess">Client secret</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        private async Task<IActionResult> AuthenticateApplicationAsync(CancellationToken cancellationToken)
+        private async Task<IActionResult> AuthenticateApplicationAsync(Guid appKey, Guid appAccess, CancellationToken cancellationToken)
         {
-            if (!AppKey.HasValue || !AppAccess.HasValue)
-                return Unauthorized(_localizer["APPCLIENT_NOT_DEFINED"].Value);
 
-            AppClientDto applicationClient = await _appClientAppService.GetByKeyAsync(AppKey.Value, cancellationToken);
-            if (applicationClient == null || applicationClient.AccessKey != AppAccess.Value)
+            if (appKey == Guid.Empty || appAccess == Guid.Empty)
+            {
+                return BadRequest(new List<GenericNotification>()
+                {
+                    new GenericNotification("Credentials", _localizer["APPCLIENT_CREDENTIALS_INVALID"])
+                });
+            }
+
+            AppClientDto applicationClient = await _appClientAppService.GetByCredentialsAsync(appKey, appAccess, cancellationToken);
+            if (applicationClient == null)
                 return Unauthorized(_localizer["INVALID_APP_KEY_ACCESS"].Value);
 
             if (!applicationClient.AllowLogin || !applicationClient.IsActive)
-                return Unauthorized(_localizer["APP_LOGIN_DIALLOW"].Value);
+                return Unauthorized(_localizer["APP_LOGIN_DISALLOW"].Value);
 
             string token = _tokenHelper.GenerateTokenAplication(applicationClient.Id, applicationClient.Name, out DateTime? expiresIn);
-            AuthenticateResponse result = new AuthenticateResponse(token, expiresIn, null, null);
+            AuthenticateResponse result = new(token, expiresIn, null, null);
             return Ok(result);
 
         }
@@ -96,10 +104,10 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         protected async Task<IActionResult> AuthenticateAsync(AuthenticateRequest request, bool details, CancellationToken cancellationToken = default)
         {
 
-            if (!AppKey.HasValue || !AppAccess.HasValue)
+            if (!AppKey.HasValue)
                 return Unauthorized(_localizer["APPCLIENT_NOT_DEFINED"].Value);
 
-            AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(AppKey.Value, AppAccess.Value, request.Login, request.Password, cancellationToken);
+            AuthenticateResult<UserDto> authResult = await _appService.AuthenticateAsync(AppKey.Value, request.Login, request.Password, cancellationToken);
             if (authResult.Success)
             {
                 SimpleUserResponse userDetail = null;
@@ -116,7 +124,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
 
                 string token = _tokenHelper.GenerateToken(authResult.User, request.Login, out DateTime? expiresIn);
 
-                AuthenticateResponse result = new AuthenticateResponse(token, expiresIn, roles, userDetail);
+                AuthenticateResponse result = new(token, expiresIn, roles, userDetail);
                 return Ok(result);
             }
 
@@ -151,6 +159,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <summary>
         /// Authenticate application in the system-application / generate access token
         /// </summary>
+        /// <param name="appKey">Client id</param>
+        /// <param name="appAccess">Client secret</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <response code="200">Successfully authenticated</response>
         /// <response code="400">Invalid request, see details in response</response>
@@ -163,8 +173,13 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         [HttpPost("app")]
         [MapToApiVersion("1.0")]
         [AllowAnonymous]
-        public async Task<IActionResult> AuthenticateApplication(CancellationToken cancellationToken = default)
-            => await RunActionAsync(AuthenticateApplicationAsync(cancellationToken), cancellationToken);
+        public async Task<IActionResult> AuthenticateApplication
+        (
+            [FromForm(Name = "app-key")] Guid appKey, 
+            [FromForm(Name = "app-access")] Guid appAccess,
+            CancellationToken cancellationToken = default
+        )
+            => await RunActionAsync(AuthenticateApplicationAsync(appKey, appAccess, cancellationToken), cancellationToken);
 
         #endregion
 

@@ -7,13 +7,13 @@ User authentication service API. Generates a JWT token for authenticate user in 
 
 ### Requeriments
 - `MySql Server` 5.7.22 or higher for the application to create and use its own database. See https://dev.mysql.com/.
-- `Elastic Server` for the application to send log records. See https://github.com/rodriguesrm/rsoft-logs.
+- `SEQ Server` for the application to send log records. See https://github.com/rodriguesrm/rsoft-logs.
 - `RSoft-Mail API Service` for sending credential creation and retrieval emails. See https://github.com/rodriguesrm/rsoft-mail-service.
 
 ### NuGet Package Dependencies
-- `RSoft.Lib.Design (>= 1.9.0)`. See https://github.com/rodriguesrm/rsoft-backend-libs/packages/970394.
-- `RSoft.Lib.Web (>= 1.6.0)`. See https://github.com/rodriguesrm/rsoft-backend-libs/packages/957318.
-- `RSoft.Logs (>= 1.3.1)`. See https://www.nuget.org/packages/RSoft.Logs.
+- `RSoft.Lib.Design`. See https://github.com/rodriguesrm/rsoft-backend-libs/packages/970394.
+- `RSoft.Lib.Web`. See https://github.com/rodriguesrm/rsoft-backend-libs/packages/957318.
+- `RSoft.Logs`. See https://www.nuget.org/packages/RSoft.Logs.
 
 It was presented here the dependencies related to other projects also available in this repository. To view the total list of project dependencies, I suggest you open the .net core solution and explore the projects.
 
@@ -138,8 +138,8 @@ The application uses the standard `appsettings.json` and its variants recommende
     "DbServer": "Server=localhost;Port=3306;database=rsoft_auth;uid=root;pwd=admin;"
   },
   "AppClient": {
-    "ClientId": "92a4ce2a-26ed-4ae2-9813-b7e5e6a8678d",
-    "ClientSecret": "8f7318ee-4027-4cde-a6d3-529e6382f532"
+    "ClientId": "baf64dba-68c1-491e-a727-f0f0d562cdfe",
+    "ClientSecret": "b99fc723-0e34-4b23-97af-274a11dad361"
   },
   "Jwt": {
     "Issuer": "RSoft.Auth",

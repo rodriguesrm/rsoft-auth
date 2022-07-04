@@ -21,12 +21,11 @@ namespace RSoft.Auth.Domain.Services
         /// Get user by login and password
         /// </summary>
         /// <param name="appKey">Authentication application-client id value</param>
-        /// <param name="appAccess">Authentication application-client key access</param>
         /// <param name="login">User login</param>
         /// <param name="password">User passoword</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         /// <returns>A user instance if sucess / Id key user when password is incorrect</returns>
-        Task<(User, Guid?)> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default);
+        Task<(User, Guid?)> GetByLoginAsync(Guid appKey, string login, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Checks if the informed login is available
@@ -48,9 +47,8 @@ namespace RSoft.Auth.Domain.Services
         /// <summary>
         /// Get all user roles in a specific application-client
         /// </summary>
-        /// <param name="clientId">Application-Client id key value</param>
         /// <param name="userId">User id key value</param>
-        ICollection<Role> GetRolesByUserAsync(Guid clientId, Guid userId);
+        ICollection<Role> GetRolesByUserAsync(Guid userId);
 
         /// <summary>
         /// Creates user credentials

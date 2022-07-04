@@ -370,7 +370,7 @@ namespace RSoft.Auth.Domain.Services
         }
 
         ///<inheritdoc/>
-        public async Task<(User, Guid?)> GetByLoginAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default)
+        public async Task<(User, Guid?)> GetByLoginAsync(Guid appKey, string login, string password, CancellationToken cancellationToken = default)
         {
 
             //BACKLOG: Add LDAP Authenticate
@@ -387,11 +387,11 @@ namespace RSoft.Auth.Domain.Services
                 }
                 else
                 {
-                    AppClient appClientCheck = user.ApplicationClients.FirstOrDefault(x => x.Id == appKey && x.AccessKey == appAccess);
+                    AppClient appClientCheck = user.ApplicationClients.FirstOrDefault(x => x.Id == appKey);
                     if (appClientCheck == null || !appClientCheck.IsActive)
                         user = null;
                     else
-                        user.Roles = GetRolesByUserAsync(appKey, user.Id);
+                        user.Roles = GetRolesByUserAsync(user.Id);
                 }
 
             }
@@ -403,9 +403,9 @@ namespace RSoft.Auth.Domain.Services
             => await RequestNewCredentials(email, true, urlCredential, sendMailCallBack, cancellationToken);
 
         ///<inheritdoc/>
-        public ICollection<Role> GetRolesByUserAsync(Guid clientId, Guid userId)
+        public ICollection<Role> GetRolesByUserAsync(Guid userId)
         {
-            ICollection<Role> result = _roleRepository.GetRolesByUser(clientId, userId);
+            ICollection<Role> result = _roleRepository.GetRolesByUser(userId);
             return result;
         }
 
