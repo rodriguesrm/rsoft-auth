@@ -82,14 +82,14 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                 });
             }
 
-            AppClientDto applicationClient = await _appClientAppService.GetByCredentialsAsync(appKey, appAccess, cancellationToken);
+            (AppClientDto applicationClient, IEnumerable<string> appClients) = await _appClientAppService.GetByCredentialsAsync(appKey, appAccess, cancellationToken);
             if (applicationClient == null)
                 return Unauthorized(_localizer["INVALID_APP_KEY_ACCESS"].Value);
 
             if (!applicationClient.AllowLogin || !applicationClient.IsActive)
                 return Unauthorized(_localizer["APP_LOGIN_DISALLOW"].Value);
 
-            string token = _tokenHelper.GenerateTokenAplication(applicationClient.Id, applicationClient.Name, out DateTime? expiresIn);
+            (string token, DateTime ? expiresIn) = _tokenHelper.GenerateTokenAplication(applicationClient.Id, applicationClient.Name, appClients);
             AuthenticateResponse result = new(token, expiresIn, null, null);
             return Ok(result);
 
@@ -122,7 +122,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                     roles = authResult.User.Roles?.Select(r => r.Name);
                 }
 
-                string token = _tokenHelper.GenerateToken(authResult.User, request.Login, out DateTime? expiresIn);
+                (string token, DateTime ? expiresIn) = _tokenHelper.GenerateToken(authResult.User, request.Login);
 
                 AuthenticateResponse result = new(token, expiresIn, roles, userDetail);
                 return Ok(result);

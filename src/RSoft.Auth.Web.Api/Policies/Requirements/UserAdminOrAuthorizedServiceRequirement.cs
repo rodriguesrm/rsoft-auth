@@ -5,9 +5,9 @@ namespace RSoft.Auth.Web.Api.Policies.Requirements
 {
 
     /// <summary>
-    /// Access request policy for a given application
+    /// Access request policy for Admin users or authorized applications
     /// </summary>
-    public class MustApplicationRequirement : IAuthorizationRequirement
+    public class UserAdminOrAuthorizedServiceRequirement : IAuthorizationRequirement
     {
 
         #region Constructors
@@ -16,7 +16,7 @@ namespace RSoft.Auth.Web.Api.Policies.Requirements
         /// Create a new requirement instance
         /// </summary>
         /// <param name="appKey">Application id key</param>
-        public MustApplicationRequirement(Guid appKey)
+        public UserAdminOrAuthorizedServiceRequirement(Guid appKey)
         {
             AppKey = appKey;
         }

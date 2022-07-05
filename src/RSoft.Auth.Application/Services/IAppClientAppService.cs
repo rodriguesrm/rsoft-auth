@@ -36,7 +36,7 @@ namespace RSoft.Auth.Application.Services
         /// <param name="appKey">Client id key</param>
         /// <param name="appAccess">Client secret key</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<AppClientDto> GetByCredentialsAsync(Guid appKey, Guid appAccess, CancellationToken cancellationToken = default(CancellationToken));
+        Task<(AppClientDto, IEnumerable<string>)> GetByCredentialsAsync(Guid appKey, Guid appAccess, CancellationToken cancellationToken = default(CancellationToken));
 
     }
 

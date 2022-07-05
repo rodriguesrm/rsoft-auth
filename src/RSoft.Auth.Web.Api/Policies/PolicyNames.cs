@@ -12,5 +12,10 @@
         /// </summary>
         public const string OnlyThisApplication = "OnlyRSoftAuth";
 
+        /// <summary>
+        /// Only admin user or authorized service application
+        /// </summary>
+        public const string UserAdminOrAuthorizedService = "UserAdminOrAuthorizedService";
+
     }
 }
