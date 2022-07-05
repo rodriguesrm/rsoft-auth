@@ -26,15 +26,24 @@ namespace RSoft.Auth.Web.Api.Policies
 
             // Handlers
             services.AddSingleton<IAuthorizationHandler, MustApplicationHandler>();
+            services.AddSingleton<IAuthorizationHandler, UserAdminOrAuthorizedServiceHandler>();
 
             // Policies
             services.AddAuthorization(options =>
             {
+
                 options.AddPolicy(PolicyNames.OnlyThisApplication, policy => 
                     policy
                         .Requirements
-                        .Add(new MustApplicationRequirement(appClientOptions.ClientId, appClientOptions.ClientSecret))
+                        .Add(new MustApplicationRequirement(appClientOptions.ClientId))
                 );
+
+                options.AddPolicy(PolicyNames.UserAdminOrAuthorizedService, policy =>
+                    policy
+                    .Requirements
+                    .Add(new UserAdminOrAuthorizedServiceRequirement(appClientOptions.ClientId))
+                );
+
             });
 
             return services;

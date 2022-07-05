@@ -67,7 +67,9 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         protected async Task<IActionResult> GetFirstAccessAsync(string email, string urlCredential, CancellationToken cancellationToken = default)
         {
-            PasswordProcessResult result = await _appService.GetFirstAccessAsync(email, _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", out _), urlCredential, cancellationToken);
+
+            (string token, _) = _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", null);
+            PasswordProcessResult result = await _appService.GetFirstAccessAsync(email, token, urlCredential, cancellationToken);
 
             if (result.Success)
                 return Ok(_localizer["TOKEN_FIRST_ACCESS_MAIL"].Value);
@@ -76,6 +78,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
                 return HandleException(500, result.Exception);
 
             return BadRequest(PrepareNotifications(result.Errors));
+
         }
 
         /// <summary>
@@ -101,7 +104,8 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
         protected async Task<IActionResult> GetRecoveryAccessAsync(string login, string urlCredential, CancellationToken cancellationToken = default)
         {
 
-            PasswordProcessResult result = await _appService.GetResetAccessAsync(login, _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", out _), urlCredential,  cancellationToken);
+            (string token, _) = _tokenHelper.GenerateTokenAplication(AppKey.Value, "RSoft.Auth", null);
+            PasswordProcessResult result = await _appService.GetResetAccessAsync(login, token, urlCredential,  cancellationToken);
 
             if (result.Success)
                 return Ok(_localizer["TOKEN_RECOVER_ACCESS_MAIL"].Value);

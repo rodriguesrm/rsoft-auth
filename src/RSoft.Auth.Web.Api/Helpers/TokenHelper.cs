@@ -6,6 +6,7 @@ using RSoft.Lib.Web.Options;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 
 namespace RSoft.Auth.Web.Api.Helpers
@@ -39,22 +40,28 @@ namespace RSoft.Auth.Web.Api.Helpers
         #region Public methods
 
         ///<inheritdoc/>
-        public string GenerateTokenAplication(Guid clientId, string appClientName, out DateTime? expiresIn)
+        public (string, DateTime?) GenerateTokenAplication(Guid clientId, string appClientName, IEnumerable<string> appClients)
         {
+
+            if (appClients == null) 
+                appClients = new List<string>();
+
             UserDto userDto = new()
             {
                 Id = clientId,
                 Name = new FullNameRequest() { FirstName = appClientName, LastName = "Application-Client" },
                 Email = "NONE",
                 Type = UserType.Service,
-                Roles = new List<RoleDto>() { new RoleDto() { Name = "service" } },
+                Roles = appClients.Select(s => new RoleDto() { Name = s }).ToList(),
                 ApplicationClients = new List<AppClientDto>() { new AppClientDto() { Name = appClientName } }
             };
-            return GenerateToken(userDto, appClientName, out expiresIn);
+
+            return GenerateToken(userDto, appClientName);
+
         }
 
         ///<inheritdoc/>
-        public string GenerateToken(UserDto user, string login, out DateTime? expiresIn)
+        public (string, DateTime?) GenerateToken(UserDto user, string login)
         {
 
             IList<Claim> userClaims = new List<Claim>
@@ -96,9 +103,7 @@ namespace RSoft.Auth.Web.Api.Helpers
 
             string token = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            expiresIn = jwt.ValidTo;
-
-            return token;
+            return (token, jwt.ValidTo);
 
         }
 

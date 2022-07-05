@@ -17,17 +17,15 @@ namespace RSoft.Auth.Domain.Repositories
         /// <summary>
         /// Get all user roles in a specific application-client
         /// </summary>
-        /// <param name="clientId">Application-Client id key value</param>
         /// <param name="userId">User id key value</param>
-        ICollection<Role> GetRolesByUser(Guid clientId, Guid userId);
+        ICollection<Role> GetRolesByUser(Guid userId);
 
         /// <summary>
         /// Find role in the application-client by name
         /// </summary>
-        /// <param name="clientId">Application-Client id key</param>
         /// <param name="roleName">Role name</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<Role> GetByNameAsync(Guid clientId, string roleName, CancellationToken cancellationToken = default);
+        Task<Role> GetByNameAsync(string roleName, CancellationToken cancellationToken = default);
     }
 
 }

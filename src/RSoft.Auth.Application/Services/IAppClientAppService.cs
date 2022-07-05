@@ -29,6 +29,15 @@ namespace RSoft.Auth.Application.Services
         /// <param name="buffer">Buffer file to import</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
         Task<OperationResult<IEnumerable<RowImportResult>>> ImportAppClient(byte[] buffer, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="appKey">Client id key</param>
+        /// <param name="appAccess">Client secret key</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        Task<(AppClientDto, IEnumerable<string>)> GetByCredentialsAsync(Guid appKey, Guid appAccess, CancellationToken cancellationToken = default(CancellationToken));
+
     }
 
 }

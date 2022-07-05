@@ -171,16 +171,14 @@ namespace RSoft.Auth.Application.Services
         #region Public methods
 
         ///<inheritdoc/>
-        public async Task<AuthenticateResult<UserDto>> AuthenticateAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default)
+        public async Task<AuthenticateResult<UserDto>> AuthenticateAsync(Guid appKey, string login, string password, CancellationToken cancellationToken = default)
         {
 
             bool success = false;
             UserDto userDto = null;
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            (User, Guid?) resultLogin = await _userDomain.GetByLoginAsync(appKey, appAccess, login, password, cancellationToken);
-            User user = resultLogin.Item1;
-            Guid? userId = resultLogin.Item2;
+            (User user, Guid? userId) = await _userDomain.GetByLoginAsync(appKey, login, password, cancellationToken);
             if (user != null)
             {
 

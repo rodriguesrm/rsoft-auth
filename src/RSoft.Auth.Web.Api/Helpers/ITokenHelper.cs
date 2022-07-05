@@ -1,5 +1,6 @@
 ﻿using RSoft.Auth.Application.Model;
 using System;
+using System.Collections.Generic;
 
 namespace RSoft.Auth.Web.Api.Helpers
 {
@@ -15,16 +16,15 @@ namespace RSoft.Auth.Web.Api.Helpers
         /// </summary>
         /// <param name="clientId">Application-Client id key</param>
         /// <param name="applicationClientName">Application-Client name</param>
-        /// <param name="expiresIn">Date/date expiration token</param>
-        string GenerateTokenAplication(Guid clientId, string applicationClientName, out DateTime? expiresIn);
+        /// <param name="appClients">Application clients granted list</param>
+        (string, DateTime?) GenerateTokenAplication(Guid clientId, string applicationClientName, IEnumerable<string> appClients);
 
         /// <summary>
         /// Generate access token for authenticated user
         /// </summary>
         /// <param name="user">User data</param>
         /// <param name="login">User login</param>
-        /// <param name="expiresIn">Date/date expiration token</param>
-        string GenerateToken(UserDto user, string login, out DateTime? expiresIn);
+        (string, DateTime?) GenerateToken(UserDto user, string login);
 
         
     }

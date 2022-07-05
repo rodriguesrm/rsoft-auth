@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="APP_LOGIN_DIALLOW" xml:space="preserve">
+  <data name="APP_LOGIN_DISALLOW" xml:space="preserve">
     <value>Application Key is not allowed to log in</value>
   </data>
   <data name="CHANGE_USER_DENIED" xml:space="preserve">
@@ -170,5 +170,8 @@
   </data>
   <data name="TOKEN_RECOVER_ACCESS_MAIL" xml:space="preserve">
     <value>Recover access information sent to the user's email</value>
+  </data>
+  <data name="APPCLIENT_CREDENTIALS_INVALID" xml:space="preserve">
+    <value>App-Client credentials are invalid or not provided</value>
   </data>
 </root>

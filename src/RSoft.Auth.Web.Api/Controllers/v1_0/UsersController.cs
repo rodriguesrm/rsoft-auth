@@ -15,6 +15,7 @@ using RSoft.Auth.Web.Api.Extensions;
 using RSoft.Auth.Web.Api.Language;
 using RSoft.Auth.Web.Api.Model.Request.v1_0;
 using RSoft.Auth.Web.Api.Model.Response.v1_0;
+using RSoft.Auth.Web.Api.Policies;
 using RSoft.Lib.Common.Models;
 using RSoft.Lib.Common.Options;
 using RSoft.Lib.Common.Web.Api;
@@ -29,7 +30,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin, service")]
+    [Authorize(Policy = PolicyNames.UserAdminOrAuthorizedService)]
     public class UsersController : ApiCrudBaseController<Guid, UserDto, UserRequest, UserDetailResponse>
     {
 

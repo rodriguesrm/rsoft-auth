@@ -18,11 +18,10 @@ namespace RSoft.Auth.Application.Services
         /// Authenticate user
         /// </summary>
         /// <param name="appKey">Authentication application-client id</param>
-        /// <param name="appAccess">Authentication application-client key access</param>
         /// <param name="login">User login/param>
         /// <param name="password">User password</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<AuthenticateResult<UserDto>> AuthenticateAsync(Guid appKey, Guid appAccess, string login, string password, CancellationToken cancellationToken = default);
+        Task<AuthenticateResult<UserDto>> AuthenticateAsync(Guid appKey, string login, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Create token for password generation (first access) and send by email

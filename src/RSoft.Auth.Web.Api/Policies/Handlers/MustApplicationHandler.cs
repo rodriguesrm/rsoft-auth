@@ -39,15 +39,13 @@ namespace RSoft.Auth.Web.Api.Policies.Handlers
         {
 
             string appKey = _accessor.HttpContext.Request.Headers["app-key"];
-            string appAccess = _accessor.HttpContext.Request.Headers["app-access"];
 
-            Guid.TryParse(appKey, out Guid guidKey);
-            Guid.TryParse(appAccess, out Guid guidAccess);
+            _ = Guid.TryParse(appKey, out Guid guidKey);
 
-            if (guidKey != Guid.Empty && guidAccess != Guid.Empty)
+            if (guidKey != Guid.Empty)
             {
 
-                if (requirement.AppKey == guidKey && requirement.AppAccess == guidAccess)
+                if (requirement.AppKey == guidKey)
                     context.Succeed(requirement);
 
             }
