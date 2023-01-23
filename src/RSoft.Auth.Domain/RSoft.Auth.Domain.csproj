@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RSoft.Lib.Common" Version="1.8.0" />
-    <PackageReference Include="RSoft.Lib.Design" Version="1.9.0" />
+    <PackageReference Include="RSoft.Lib.Common" Version="2.1.0" />
+    <PackageReference Include="RSoft.Lib.Design" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
