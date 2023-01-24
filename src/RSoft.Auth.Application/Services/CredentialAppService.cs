@@ -24,6 +24,8 @@ using RSoft.Lib.Common.Models;
 using RSoft.Lib.Common.Web.Models.Request;
 using RSoft.Lib.Common.ValueObjects;
 using RSoft.Lib.Common.Enums;
+using MassTransit;
+using RSoft.Lib.Contracts.Events;
 
 namespace RSoft.Auth.Application.Services
 {
@@ -34,6 +36,7 @@ namespace RSoft.Auth.Application.Services
         #region Local objects/variables
 
         private readonly IUserDomainService _userDomain;
+        private readonly IBusControl _bus;
         private readonly RSApiOptions _apiOptions;
         private readonly PagesOptions _pagesOptions;
         private readonly JsonSerializerOptions _jsonOptions;
@@ -47,17 +50,20 @@ namespace RSoft.Auth.Application.Services
         /// Create a new CredentialAppService instance
         /// </summary>
         /// <param name="provider">DIP Service provider</param>
+        /// <param name="bus">Message bus control</param>
         /// <param name="rsApiOptions">RSoft Api options parameters object</param>
         /// <param name="localizer">Language localizer string</param>
         public CredentialAppService
         (
-            IServiceProvider provider, 
+            IServiceProvider provider,
+            IBusControl bus,
             IOptions<RSApiOptions> rsApiOptions,
             IOptions<PagesOptions> pagesOptions,
             IStringLocalizer<AppResource> localizer
         )
         {
             _userDomain = provider.GetService<IUserDomainService>();
+            _bus = bus;
             _apiOptions = rsApiOptions?.Value;
             _pagesOptions = pagesOptions?.Value;
             _jsonOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
@@ -244,7 +250,8 @@ namespace RSoft.Auth.Application.Services
             else
             {
                 result = await _userDomain.GetFirstAccessAsync(email, urlCredential, cancellationToken);
-                //TODO: Event Launch
+                UserRequestAccessEvent message = new(true, "NAME", "rodriguesrm@gmail.com", result.Token.Value, result.ExpirationDate.Value, "URL");
+                await _bus.Publish(message, cancellationToken);
             }
             return result;
         }
@@ -257,7 +264,7 @@ namespace RSoft.Auth.Application.Services
         public async Task<PasswordProcessResult> GetResetAccessAsync(string loginOrEmail, string appToken, string urlCredential, CancellationToken cancellationToken = default)
         {
 
-            PasswordProcessResult result = null;
+            PasswordProcessResult result;
             if (string.IsNullOrWhiteSpace(loginOrEmail))
             {
                 IDictionary<string, string> errors = new Dictionary<string, string>
@@ -268,7 +275,9 @@ namespace RSoft.Auth.Application.Services
             }
             else
             {
-                result = await _userDomain.GetResetAccessAsync(loginOrEmail, urlCredential, (args) => SendMailTokenPasswordAsync(args, appToken, cancellationToken).Result, cancellationToken);
+                result = await _userDomain.GetResetAccessAsync(loginOrEmail, urlCredential, cancellationToken);
+                UserRequestAccessEvent message = new(false, "NAME", "rodriguesrm@gmail.com", result.Token.Value, result.ExpirationDate.Value, "URL");
+                await _bus.Publish(message, cancellationToken);
             }
 
             return result;

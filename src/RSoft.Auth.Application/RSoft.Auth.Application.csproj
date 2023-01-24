@@ -6,7 +6,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="MassTransit" Version="7.3.1" />
-	  <PackageReference Include="RSoft.Lib.Contracts" Version="2.1.0" />
+	  <PackageReference Include="RSoft.Lib.Contracts" Version="2.2.0" />
 	  <PackageReference Include="RSoft.Lib.Design" Version="2.1.0" />
     <ProjectReference Include="..\RSoft.Auth.Cross.Common\RSoft.Auth.Cross.Common.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Domain\RSoft.Auth.Domain.csproj" />
