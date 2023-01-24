@@ -148,7 +148,7 @@
     <value>Criação de Credenciais</value>
   </data>
   <data name="CREDENTIAL_DISCARD_MESSAGE" xml:space="preserve">
-    <value>Caso não tenha solicitado uma nova senha, desconsidere este e-mail.</value>
+    <value>Caso não tenha realizado essa solicitação, por favor desconsidere este e-mail.</value>
   </data>
   <data name="CREDENTIAL_FIRST_ACCESS_SUBJECT" xml:space="preserve">
     <value>Primeiro Acesso</value>

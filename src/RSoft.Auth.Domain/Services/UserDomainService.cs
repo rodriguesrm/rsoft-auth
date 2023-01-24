@@ -6,7 +6,6 @@ using RSoft.Helpers.Security;
 using System.Threading.Tasks;
 using System.Threading;
 using RSoft.Auth.Cross.Common.Model.Results;
-using RSoft.Auth.Cross.Common.Model.Args;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Options;
@@ -100,7 +99,6 @@ namespace RSoft.Auth.Domain.Services
         /// </summary>
         /// <param name="login"></param>
         /// <param name="firstAccess"></param>
-        /// <param name="sendMailCallBack"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         private async Task<SimpleOperationResult> SaveCredentialAsync(Guid tokenId, string login, string password, bool firstAccess, CancellationToken cancellationToken)
@@ -229,9 +227,8 @@ namespace RSoft.Auth.Domain.Services
         /// <param name="login">Login or email</param>
         /// <param name="firstAccess">First access flag</param>
         /// <param name="urlCredential">url to create/recovery credential</param>
-        /// <param name="sendMailCallBack">SendMail callback function</param>
         /// <param name="cancellationToken">Cancellation token key</param>
-        private async Task<PasswordProcessResult> RequestNewCredentials(string login, bool firstAccess, string urlCredential, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
+        private async Task<PasswordProcessResult> RequestNewCredentials(string login, bool firstAccess, string urlCredential, CancellationToken cancellationToken = default)
         {
 
             bool success = false;
@@ -274,35 +271,10 @@ namespace RSoft.Auth.Domain.Services
                             expiresOn = userCredentialToken.ExpiresOn;
 
                             await _uow.BeginTransactionAsync(cancellationToken);
-
                             await _tokenRepository.AddAsync(userCredentialToken, cancellationToken);
                             await _uow.SaveChangesAsync(cancellationToken);
-
-                            cancellationToken.ThrowIfCancellationRequested();
-
-                            SimpleOperationResult emailResult = sendMailCallBack(new SendMailArgs()
-                            {
-                                FirstAccess = firstAccess,
-                                Name = user.Name.GetFullName(),
-                                Email = user.Email.Address,
-                                Token = userCredentialToken.Id,
-                                ExpireOn = userCredentialToken.ExpiresOn,
-                                UrlCredential = urlCredential
-                            });
-
-                            cancellationToken.ThrowIfCancellationRequested();
-
-                            if (emailResult.Success)
-                            {
-                                await _uow.CommitAsync(default);
-                                success = true;
-                            }
-                            else
-                            {
-                                await _uow.RollBackAsync(default);
-                                errors = emailResult.Errors;
-                                exception = new Exception(emailResult.ErrorsMessage);
-                            }
+                            await _uow.CommitAsync(cancellationToken);
+                            success = true;
 
                         }
                         else
@@ -399,8 +371,8 @@ namespace RSoft.Auth.Domain.Services
         }
 
         ///<inheritdoc/>
-        public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, string urlCredential, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
-            => await RequestNewCredentials(email, true, urlCredential, sendMailCallBack, cancellationToken);
+        public async Task<PasswordProcessResult> GetFirstAccessAsync(string email, string urlCredential, CancellationToken cancellationToken = default)
+            => await RequestNewCredentials(email, true, urlCredential, cancellationToken);
 
         ///<inheritdoc/>
         public ICollection<Role> GetRolesByUserAsync(Guid userId)
@@ -414,8 +386,8 @@ namespace RSoft.Auth.Domain.Services
             => await SaveCredentialAsync(tokenId, login, password, true, cancellationToken);
 
         ///<inheritdoc/>
-        public async Task<PasswordProcessResult> GetResetAccessAsync(string email, string urlCredential, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default)
-            => await RequestNewCredentials(email, false, urlCredential, sendMailCallBack, cancellationToken);
+        public async Task<PasswordProcessResult> GetResetAccessAsync(string email, string urlCredential, CancellationToken cancellationToken = default)
+            => await RequestNewCredentials(email, false, urlCredential, cancellationToken);
 
         ///<inheritdoc/>
         public async Task<SimpleOperationResult> SetRecoveryAccessAsync(Guid tokenId, string password, CancellationToken cancellationToken = default)

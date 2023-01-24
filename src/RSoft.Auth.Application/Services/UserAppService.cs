@@ -31,7 +31,6 @@ namespace RSoft.Auth.Application.Services
         private new readonly IUserDomainService _dmn;
         private readonly IStringLocalizer<AppResource> _localizer;
         private readonly IBusControl _bus;
-        private const string fileHeader = "Id;CreatedOn;CreatedBy;IsActive;Document;FirstName;LastName;BornDate;Email;Type";
 
         #endregion
 

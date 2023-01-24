@@ -40,9 +40,8 @@ namespace RSoft.Auth.Domain.Services
         /// </summary>
         /// <param name="email">User e-mail</param>
         /// <param name="urlCredential">Url of the page to be informed in the credential creation email. The parameters 'type=create' and 'token={token}' will be added via query-string</param>
-        /// <param name="sendMailCallBack">Callback function for sending e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<PasswordProcessResult> GetFirstAccessAsync(string email, string urlCredential, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default);
+        Task<PasswordProcessResult> GetFirstAccessAsync(string email, string urlCredential, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get all user roles in a specific application-client
@@ -64,9 +63,8 @@ namespace RSoft.Auth.Domain.Services
         /// </summary>
         /// <param name="email">User e-mail</param>
         /// <param name="urlCredential">Url of the page to be informed in the credential creation email. The parameters 'type=create' and 'token={token}' will be added via query-string</param>
-        /// <param name="sendMailCallBack">Callback function for sending e-mail</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
-        Task<PasswordProcessResult> GetResetAccessAsync(string email, string urlCredential, Func<SendMailArgs, SimpleOperationResult> sendMailCallBack, CancellationToken cancellationToken = default);
+        Task<PasswordProcessResult> GetResetAccessAsync(string email, string urlCredential, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get user by document number
