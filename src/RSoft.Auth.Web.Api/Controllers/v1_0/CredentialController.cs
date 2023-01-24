@@ -91,8 +91,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             SimpleOperationResult result = await _appService.CreateFirstAccessAsync(request.Token.Value, request.Login, request.Password, cancellationToken);
             if (result.Success)
                 return NoContent();
-            else
-                return BadRequest(PrepareNotifications(result.Errors));
+            return BadRequest(PrepareNotifications(result.Errors));
         }
 
         /// <summary>
@@ -127,8 +126,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             SimpleOperationResult result = await _appService.SetRecoveryAccessAsync(request.Token.Value, request.Password, cancellationToken);
             if (result.Success)
                 return NoContent();
-            else
-                return BadRequest(PrepareNotifications(result.Errors));
+            return BadRequest(PrepareNotifications(result.Errors));
         }
 
         /// <summary>
@@ -141,8 +139,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             SimpleOperationResult result = await _appService.ChangePasswordAsync(request.Login, request.CurrentPassword, request.NewPasword, cancellationToken);
             if (result.Success)
                 return NoContent();
-            else
-                return BadRequest(PrepareNotifications(result.Errors));
+            return BadRequest(PrepareNotifications(result.Errors));
         }
 
         /// <summary>
@@ -156,8 +153,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             SimpleOperationResult result = await _appService.LoginIsAvailableAsync(login, userId, cancellationToken);
             if (result.Errors.Count == 0)
                 return Ok(result.Success);
-            else
-                return BadRequest(PrepareNotifications(result.Errors));
+            return BadRequest(PrepareNotifications(result.Errors));
         }
 
         #endregion

@@ -163,13 +163,13 @@
     <value>Applicação não definida ou inválida</value>
   </data>
   <data name="TOKEN_FIRST_ACCESS_MAIL" xml:space="preserve">
-    <value>Informações de primeiro acesso enviado ao e-mail do usuário</value>
+    <value>Informações de primeiro acesso requisitadas com sucesso</value>
   </data>
   <data name="TOKEN_PASSWORD_REQUIRED" xml:space="preserve">
     <value>O token de criação/recuperação de credenciais deve ser informado</value>
   </data>
   <data name="TOKEN_RECOVER_ACCESS_MAIL" xml:space="preserve">
-    <value>Informações de recuperação de acesso enviado ao e-mail do usuário</value>
+    <value>Informações de recuperação de acesso requisitadas com sucesso</value>
   </data>
   <data name="APPCLIENT_CREDENTIALS_INVALID" xml:space="preserve">
     <value>As credenciais do App-Client são inválidas ou não foram fornecidas</value>

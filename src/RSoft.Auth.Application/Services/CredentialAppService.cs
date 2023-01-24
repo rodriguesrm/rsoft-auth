@@ -1,6 +1,5 @@
 ﻿using RSoft.Auth.Application.Model;
 using RSoft.Auth.Application.Model.Extensions;
-using RSoft.Auth.Cross.Common.Model.Args;
 using RSoft.Auth.Cross.Common.Model.Results;
 using RSoft.Auth.Domain.Entities;
 using RSoft.Auth.Domain.Services;
@@ -9,19 +8,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
 using RSoft.Auth.Cross.Common.Options;
 using Microsoft.Extensions.Options;
-using System.Net;
 using System.Text.Json;
-using System.Linq;
-using System.Text;
 using Microsoft.Extensions.Localization;
 using RSoft.Auth.Application.Language;
-using System.Globalization;
-using System.IO;
 using RSoft.Lib.Common.Models;
-using RSoft.Lib.Common.Web.Models.Request;
 using RSoft.Lib.Common.ValueObjects;
 using RSoft.Lib.Common.Enums;
 using MassTransit;
@@ -74,6 +66,20 @@ namespace RSoft.Auth.Application.Services
 
         #region Local methods
 
+        /// <summary>
+        /// Public request access message
+        /// </summary>
+        /// <param name="isFirstAccess">Indicates whether this is first access</param>
+        /// <param name="urlCredential">Url of the page to be informed in the credential creation email
+        /// <param name="result">Password process result object</param>
+        /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete</param>
+        private async Task PublishMessage(bool isFirstAccess, string urlCredential, PasswordProcessResult result, CancellationToken cancellationToken)
+        {
+            string urlBase = string.IsNullOrWhiteSpace(urlCredential) ? new Uri(_pagesOptions.InputPassword).AbsoluteUri : urlCredential;
+            UserRequestAccessEvent message = new(isFirstAccess, result.FullName, result.Email, result.Token.Value, result.ExpirationDate.Value, urlBase);
+            await _bus.Publish(message, cancellationToken);
+        }
+
         ///// <summary>
         ///// Sends email to create credentials (new/reset)
         ///// </summary>
@@ -88,7 +94,7 @@ namespace RSoft.Auth.Application.Services
         //    {
         //        BaseAddress = new Uri(_apiOptions.Uri)
         //    };
-                
+
         //    client.DefaultRequestHeaders.Add("User-Agent", "RSoft.Auth");
         //    client.DefaultRequestHeaders.Add("Authorization", $"bearer {appToken}");
         //    client.DefaultRequestHeaders.Add("Accepted-Language", CultureInfo.CurrentCulture.Name);
@@ -163,10 +169,10 @@ namespace RSoft.Auth.Application.Services
         //    templateContent = templateContent.Replace("{URL_CLIENT}", url);
         //    templateContent = templateContent.Replace("{BUTTON_LABEL}", firstAccess ? _localizer["CREDENTIAL_BUTTONL_LABEL_CREATE"] : _localizer["CREDENTIAL_BUTTONL_LABEL_RECOVERY"]);
         //    templateContent = templateContent.Replace("{CREDENTIAL_TOKEN_DEADLINE}", _localizer["CREDENTIAL_TOKEN_DEADLINE"]);
-            
+
         //    //TODO: Need future manage DateTimeOffset
         //    templateContent = templateContent.Replace("{TOKEN_DEADLINE}", $"{tokenDeadLine.ToLocalTime().ToShortDateString()} {tokenDeadLine.ToLocalTime().ToShortTimeString()}");
-            
+
         //    templateContent = templateContent.Replace("{CREDENTIAL_DISCARD_MESSAGE}", _localizer["CREDENTIAL_DISCARD_MESSAGE"]);
 
         //    return templateContent;
@@ -245,13 +251,14 @@ namespace RSoft.Auth.Application.Services
                 {
                     { "Email", _localizer["EMAIL_INVALID_OR_EMPTY"] }
                 };
-                result = new PasswordProcessResult(false, null, null, errors, null);
+                result = new(errors);
             }
             else
             {
+
                 result = await _userDomain.GetFirstAccessAsync(email, urlCredential, cancellationToken);
-                UserRequestAccessEvent message = new(true, "NAME", "rodriguesrm@gmail.com", result.Token.Value, result.ExpirationDate.Value, "URL");
-                await _bus.Publish(message, cancellationToken);
+                if (result.Success)
+                    await PublishMessage(true, urlCredential, result, cancellationToken);
             }
             return result;
         }
@@ -271,13 +278,13 @@ namespace RSoft.Auth.Application.Services
                 {
                     { "Login", _localizer["LOGIN_REQUIRED"] }
                 };
-                result = new PasswordProcessResult(false, null, null, errors, null);
+                result = new(errors);
             }
             else
             {
                 result = await _userDomain.GetResetAccessAsync(loginOrEmail, urlCredential, cancellationToken);
-                UserRequestAccessEvent message = new(false, "NAME", "rodriguesrm@gmail.com", result.Token.Value, result.ExpirationDate.Value, "URL");
-                await _bus.Publish(message, cancellationToken);
+                if (result.Success)
+                    await PublishMessage(false, urlCredential, result, cancellationToken);
             }
 
             return result;

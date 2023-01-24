@@ -163,13 +163,13 @@
     <value>Application-Client not defined or invalid</value>
   </data>
   <data name="TOKEN_FIRST_ACCESS_MAIL" xml:space="preserve">
-    <value>First access information sent to the user's email</value>
+    <value>First access information successfully requested</value>
   </data>
   <data name="TOKEN_PASSWORD_REQUIRED" xml:space="preserve">
     <value>The credential creation/retrieval token is required</value>
   </data>
   <data name="TOKEN_RECOVER_ACCESS_MAIL" xml:space="preserve">
-    <value>Recover access information sent to the user's email</value>
+    <value>Access recovery information successfully requested</value>
   </data>
   <data name="APPCLIENT_CREDENTIALS_INVALID" xml:space="preserve">
     <value>App-Client credentials are invalid or not provided</value>

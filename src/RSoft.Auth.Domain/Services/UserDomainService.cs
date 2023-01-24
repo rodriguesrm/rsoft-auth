@@ -236,6 +236,8 @@ namespace RSoft.Auth.Domain.Services
             DateTime? expiresOn = null;
             IDictionary<string, string> errors = new Dictionary<string, string>();
             Exception exception = null;
+            string username = null;
+            string email = null;
 
             if (cancellationToken.IsCancellationRequested)
             {
@@ -269,6 +271,8 @@ namespace RSoft.Auth.Domain.Services
 
                             token = userCredentialToken.Id;
                             expiresOn = userCredentialToken.ExpiresOn;
+                            username = user.Name.GetFullName();
+                            email = user.Email.Address;
 
                             await _uow.BeginTransactionAsync(cancellationToken);
                             await _tokenRepository.AddAsync(userCredentialToken, cancellationToken);
@@ -294,7 +298,7 @@ namespace RSoft.Auth.Domain.Services
 
             }
 
-            return new PasswordProcessResult(success, token, expiresOn, errors, exception);
+            return new PasswordProcessResult(success, token, expiresOn, username, email,  errors, exception);
 
         }
 
