@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30413.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Web", "1-Web", "{2F3460FD-F339-431B-8464-9D277A5CFB82}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Application", "2-Application", "{C8576978-EB5F-4CC5-BCD9-2B815EA367FC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Domain", "3-Domain", "{D55C4D31-4643-4C81-96BE-21A1E5F460A6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Domain", "4-Domain", "{D55C4D31-4643-4C81-96BE-21A1E5F460A6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Infra", "4-Infra", "{D588E11C-EAC8-4D39-9A44-25136C5B54BE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Infra", "5-Infra", "{D588E11C-EAC8-4D39-9A44-25136C5B54BE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Cross", "5-Cross", "{D7190585-41F9-4C02-8DE9-3D18F44CA41F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6-Cross", "6-Cross", "{D7190585-41F9-4C02-8DE9-3D18F44CA41F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9-Tests", "9-Tests", "{FE03823E-08A0-4CD7-A71F-236F26091AA4}"
 EndProject
@@ -32,6 +32,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0-Docs", "0-Docs", "{FFCA60
 		..\README.md = ..\README.md
 		..\docs\release-notes.md = ..\docs\release-notes.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Worker", "3-Worker", "{4EED7777-0ADD-469C-BA6E-9312797D1CDB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSoft.Auth.RecoveryAccess.Worker", "RSoft.Auth.RecoveryAccess.Worker\RSoft.Auth.RecoveryAccess.Worker.csproj", "{B043AC7F-8B56-4FD1-873C-06F906D31A5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,6 +119,18 @@ Global
 		{64FB8687-6BC3-4641-ACB0-E4C7B2D6BDF6}.Release|x64.Build.0 = Release|Any CPU
 		{64FB8687-6BC3-4641-ACB0-E4C7B2D6BDF6}.Release|x86.ActiveCfg = Release|Any CPU
 		{64FB8687-6BC3-4641-ACB0-E4C7B2D6BDF6}.Release|x86.Build.0 = Release|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Debug|x64.Build.0 = Debug|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Debug|x86.Build.0 = Debug|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Release|x64.ActiveCfg = Release|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Release|x64.Build.0 = Release|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Release|x86.ActiveCfg = Release|Any CPU
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,6 +142,7 @@ Global
 		{C13FC9C0-5159-4754-9DBD-24ABAAA4108E} = {C8576978-EB5F-4CC5-BCD9-2B815EA367FC}
 		{CB4ACFA2-6105-4963-A5B0-0FAE35ED0F57} = {D7190585-41F9-4C02-8DE9-3D18F44CA41F}
 		{64FB8687-6BC3-4641-ACB0-E4C7B2D6BDF6} = {2F3460FD-F339-431B-8464-9D277A5CFB82}
+		{B043AC7F-8B56-4FD1-873C-06F906D31A5E} = {4EED7777-0ADD-469C-BA6E-9312797D1CDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0AF8D4A1-68F0-4527-8629-1926633A1E52}

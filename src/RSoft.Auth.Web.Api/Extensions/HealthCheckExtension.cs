@@ -26,7 +26,7 @@ namespace RSoft.Auth.Web.Api.Extensions
 
             services.AddHealthChecks()
                     .AddUrlGroup(
-                                new Uri(apiOptions.Uri),
+                                new Uri(apiOptions.Mail.Uri),
                                 name: "Access the Email Sending API",
                                 failureStatus: HealthStatus.Degraded,
                                 tags: new string[] { "rsoft.mail.service" })

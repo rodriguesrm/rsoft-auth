@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="RSoft.Lib.Common" Version="2.1.0" />
+	<PackageReference Include="RSoft.Lib.Design" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

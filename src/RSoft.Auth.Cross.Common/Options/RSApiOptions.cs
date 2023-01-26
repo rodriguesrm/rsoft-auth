@@ -8,14 +8,15 @@
     {
 
         /// <summary>
-        /// RSoft Mail Service API Uri
+        /// Service Authentication parameters options
         /// </summary>
-        public string Uri { get; set; }
+        public RSApiDetailOptions Auth { get; set; }
 
         /// <summary>
-        /// E-mail service
+        /// Service Mail parameters options
         /// </summary>
-        public string MailService { get; set; }
+        public RSApiDetailOptions Mail { get; set; }
+
 
     }
 }
