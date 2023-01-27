@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-RSoft.Auth.RecoveryAccess.Worker-11623b79-995e-4fe5-8994-2239550325a4</UserSecretsId>
+	<Version>1.4.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

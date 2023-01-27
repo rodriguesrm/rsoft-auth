@@ -86,8 +86,6 @@ namespace RSoft.Auth.Application.Services
                 }
             );
 
-            //StringContent content = new(string.Empty, Encoding.UTF8, "application/json");
-
             HttpResponseMessage response = await client.PostAsync(_apiOptions.Auth.Path, formData, cancellationToken);
             string body = await response.Content.ReadAsStringAsync(cancellationToken);
             if (response.IsSuccessStatusCode)
@@ -95,27 +93,20 @@ namespace RSoft.Auth.Application.Services
                 TokenApplication token = JsonSerializer.Deserialize<TokenApplication>(body, _jsonOptions);
                 return token.Token;
             }
-            //else
-            //{
-            //    if (response.StatusCode == HttpStatusCode.BadRequest)
-            //    {
-            //        IEnumerable<GenericNotification> notifications = JsonSerializer.Deserialize<IEnumerable<GenericNotification>>(body, _jsonOptions);
-            //        errors = notifications.ToDictionary(k => k.Property, v => v.Message);
-            //    }
-            //    else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            //    {
-            //        errors.Add("API SendMail", $"API SendMail | Unauthorized - {body}");
-            //    }
-            //    else if (response.StatusCode == HttpStatusCode.NotFound)
-            //    {
-            //        errors.Add("API SendMail", $"API SendMail | Not Found");
-            //    }
-            //    else
-            //    {
-            //        errors.Add("API SendMail", $"API SendMail | {response.StatusCode} - {body}");
-            //    }
-            //}
-            return string.Empty;
+            else
+            {
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.BadRequest:
+                    case HttpStatusCode.Unauthorized:
+                        _logger?.LogWarning($"Fail on autheticate application => {body}");
+                        break;
+                    default:
+                        _logger?.LogWarning($"Fail on autheticate application => {response.StatusCode} - {body}");
+                        break;
+                }
+            }
+            return "AUTH_FAIL";
 
         }
 
@@ -149,7 +140,6 @@ namespace RSoft.Auth.Application.Services
 
             StringContent content = new(JsonSerializer.Serialize(request, _jsonOptions), Encoding.UTF8, "application/json");
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            Guid requestId = Guid.Empty;
 
             HttpResponseMessage response = await client.PostAsync(_apiOptions.Mail.Path, content, cancellationToken);
             bool success = response.IsSuccessStatusCode;

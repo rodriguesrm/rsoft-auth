@@ -351,7 +351,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             => await RunActionAsync(RunDeleteUserAsync(key, cancellationToken), cancellationToken);
 
         /// <summary>
-        /// Adds a application-client to the user
+        /// Adds an application-client to the user
         /// </summary>
         /// <param name="userId">User id key</param>
         /// <param name="clientId">Application-Client id key</param>
@@ -372,7 +372,7 @@ namespace RSoft.Auth.Web.Api.Controllers.v1_0
             => await RunActionAsync(RunAddAppClientUserAsync(userId, clientId, cancellationToken), cancellationToken);
 
         /// <summary>
-        /// Removea application-client to the user
+        /// Remove an application-client to the user
         /// </summary>
         /// <param name="userId">User id key</param>
         /// <param name="clientId">Application-Client id key</param>
