@@ -11,10 +11,7 @@ COPY ["RSoft.Auth.Cross.Common/RSoft.Auth.Cross.Common.csproj", "RSoft.Auth.Cros
 COPY ["RSoft.Auth.Domain/RSoft.Auth.Domain.csproj", "RSoft.Auth.Domain/"]
 COPY ["RSoft.Auth.Cross.IoC/RSoft.Auth.Cross.IoC.csproj", "RSoft.Auth.Cross.IoC/"]
 COPY ["RSoft.Auth.Infra.Data/RSoft.Auth.Infra.Data.csproj", "RSoft.Auth.Infra.Data/"]
-<<<<<<< HEAD
 COPY [".nuget/nuget.config", ""]
-=======
->>>>>>> bb8a3771eb980aae419538c295a6fd0d2ee80c45
 RUN dotnet restore "RSoft.Auth.RecoveryAccess.Worker/RSoft.Auth.RecoveryAccess.Worker.csproj"
 COPY . .
 WORKDIR "/src/RSoft.Auth.RecoveryAccess.Worker"
