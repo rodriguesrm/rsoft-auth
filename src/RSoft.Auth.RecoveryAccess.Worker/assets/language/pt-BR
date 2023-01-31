@@ -1,0 +1,14 @@
+CREDENTIAL_ACTION_CREATE=criação
+CREDENTIAL_ACTION_CREATE_PASSWORD=senha
+CREDENTIAL_ACTION_RECOVERY=recuperação
+CREDENTIAL_ACTION_RECOVERY_PASSWORD=nova senha
+CREDENTIAL_BUTTONL_LABEL_CREATE=Criar Senha
+CREDENTIAL_BUTTONL_LABEL_RECOVERY=Criar Nova Senha
+CREDENTIAL_CREATE=Criação de Credenciais
+CREDENTIAL_DISCARD_MESSAGE=Caso não tenha realizado essa solicitação, por favor desconsidere este e-mail.
+CREDENTIAL_FIRST_ACCESS_SUBJECT=Primeiro Acesso
+CREDENTIAL_MAIL_BODY_OPEN_TEXT=Olá {USERNAME}, você solicitou a {ACTION} de sua credencial de acesso no {SERVICE_NAME}. Crie uma {ACTION_PASSWORD} de acesso clicando no botão abaixo.
+CREDENTIAL_OR_ELSE_LINK=Ou se preferir, você pode acessar o link:
+CREDENTIAL_RECOVERY=Recuperação de Credenciais
+CREDENTIAL_RECOVERY_ACCESS_SUBJECT=Recuperação de Credenciais
+CREDENTIAL_TOKEN_DEADLINE=Lembrando que o link acima é valido até

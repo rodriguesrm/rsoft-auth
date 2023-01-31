@@ -5,12 +5,14 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-RSoft.Auth.RecoveryAccess.Worker-11623b79-995e-4fe5-8994-2239550325a4</UserSecretsId>
-	<Version>1.4.2</Version>
+	<Version>1.4.3</Version>
 	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="assets\credential-template.html" />
+    <None Remove="assets\language\en-US" />
+    <None Remove="assets\language\pt-BR" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +20,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="assets\language\en-US">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\language\pt-BR">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
@@ -33,5 +41,9 @@
     <ProjectReference Include="..\RSoft.Auth.Application\RSoft.Auth.Application.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Cross.Common\RSoft.Auth.Cross.Common.csproj" />
     <ProjectReference Include="..\RSoft.Auth.Cross.IoC\RSoft.Auth.Cross.IoC.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Language\" />
   </ItemGroup>
 </Project>

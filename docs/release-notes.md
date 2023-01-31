@@ -57,3 +57,9 @@ User authentication service API. Generates a JWT token for authenticate user in 
 
 #### Version 1.4.1
 - Upgrade to .NET 6
+
+#### Version 1.4.2
+- Created work server for send mail (create/recovery credential)
+
+#### Version 1.4.3
+- Fix language resource in work service

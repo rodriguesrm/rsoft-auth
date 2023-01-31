@@ -1,6 +1,7 @@
 ﻿using GreenPipes;
 using MassTransit;
 using MassTransit.RabbitMqTransport;
+using RSoft.Auth.Application.Language;
 using RSoft.Auth.Cross.IoC;
 using RSoft.Auth.RecoveryAccess.Worker.Consumers;
 using RSoft.Lib.Common.Abstractions;
@@ -49,6 +50,8 @@ namespace RSoft.Auth.RecoveryAccess.Worker.IoC
 
             services.AddCultureLanguage(configuration);
             services.AddAuthRegister(configuration, cfg => cfg.AddConsumers());
+
+            services.AddSingleton<IAppLanguageLocalizer, AppLanguageLocalizer>();
 
             ServiceActivator.Configure(services.BuildServiceProvider());
 

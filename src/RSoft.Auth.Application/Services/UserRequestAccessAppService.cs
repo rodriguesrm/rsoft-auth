@@ -37,9 +37,10 @@ namespace RSoft.Auth.Application.Services
         private readonly PagesOptions _pagesOptions;
         private readonly AppClientOptions _appClientOptions;
         private readonly ILogger<UserRequestAccessAppService> _logger;
-        private readonly IStringLocalizer<AppResource> _localizer;
+        private readonly IAppLanguageLocalizer _localizer;
 
         private readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
+        private readonly string _cultureName;
 
         #endregion
 
@@ -53,12 +54,15 @@ namespace RSoft.Auth.Application.Services
             IOptions<RSApiOptions> apiOptions, 
             IOptions<PagesOptions> pagesOptions, 
             IOptions<AppClientOptions> appClientOptions,
+            IOptions<CultureOptions> optionsCulture,
             ILogger<UserRequestAccessAppService> logger,
-            IStringLocalizer<AppResource> localizer)
+            IAppLanguageLocalizer localizer
+        )
         {
             _apiOptions = apiOptions?.Value;
             _pagesOptions = pagesOptions?.Value;
             _appClientOptions = appClientOptions?.Value;
+            _cultureName = optionsCulture?.Value?.DefaultLanguage ?? "en-US";
             _logger = logger;
             _localizer = localizer;
         }
@@ -200,7 +204,7 @@ namespace RSoft.Auth.Application.Services
             templateContent = templateContent.Replace("{CREDENTIAL_TOKEN_DEADLINE}", _localizer["CREDENTIAL_TOKEN_DEADLINE"]);
 
             //TODO: Need future manage DateTimeOffset
-            templateContent = templateContent.Replace("{TOKEN_DEADLINE}", $"{tokenDeadLine.ToLocalTime().ToShortDateString()} {tokenDeadLine.ToLocalTime().ToShortTimeString()}");
+            templateContent = templateContent.Replace("{TOKEN_DEADLINE}", tokenDeadLine.ToLocalTime().ToString(new CultureInfo(_cultureName)));
 
             templateContent = templateContent.Replace("{CREDENTIAL_DISCARD_MESSAGE}", _localizer["CREDENTIAL_DISCARD_MESSAGE"]);
 

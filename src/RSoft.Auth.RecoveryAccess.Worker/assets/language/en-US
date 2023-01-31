@@ -1,0 +1,14 @@
+CREDENTIAL_ACTION_CREATE=create
+CREDENTIAL_ACTION_CREATE_PASSWORD=password
+CREDENTIAL_ACTION_RECOVERY=recovery
+CREDENTIAL_ACTION_RECOVERY_PASSWORD=new password
+CREDENTIAL_BUTTONL_LABEL_CREATE=Create Password
+CREDENTIAL_BUTTONL_LABEL_RECOVERY=Create New Password
+CREDENTIAL_CREATE=Credential Create
+CREDENTIAL_DISCARD_MESSAGE=If you have not requested this operation, please disregard this email.
+CREDENTIAL_FIRST_ACCESS_SUBJECT=First Access
+CREDENTIAL_MAIL_BODY_OPEN_TEXT=Hi {USERNAME}, you requested {ACTION} for your access credential on {SERVICE_NAME}. Create an {ACTION_PASSWORD} access by clicking the button below.
+CREDENTIAL_OR_ELSE_LINK=Or if you prefer, you can access the link:
+CREDENTIAL_RECOVERY=Credential Recovery
+CREDENTIAL_RECOVERY_ACCESS_SUBJECT=Recovery Credential
+CREDENTIAL_TOKEN_DEADLINE=Remembering that the link above is valid until

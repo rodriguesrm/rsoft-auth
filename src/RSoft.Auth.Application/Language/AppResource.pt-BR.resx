@@ -126,48 +126,6 @@
   <data name="APPCLIENT_NOT_FOUND" xml:space="preserve">
     <value>Aplicação-cliente não encontrada</value>
   </data>
-  <data name="CREDENTIAL_ACTION_CREATE" xml:space="preserve">
-    <value>criação</value>
-  </data>
-  <data name="CREDENTIAL_ACTION_CREATE_PASSWORD" xml:space="preserve">
-    <value>senha</value>
-  </data>
-  <data name="CREDENTIAL_ACTION_RECOVERY" xml:space="preserve">
-    <value>recuperação</value>
-  </data>
-  <data name="CREDENTIAL_ACTION_RECOVERY_PASSWORD" xml:space="preserve">
-    <value>nova senha</value>
-  </data>
-  <data name="CREDENTIAL_BUTTONL_LABEL_CREATE" xml:space="preserve">
-    <value>Criar Senha</value>
-  </data>
-  <data name="CREDENTIAL_BUTTONL_LABEL_RECOVERY" xml:space="preserve">
-    <value>Criar Nova Senha</value>
-  </data>
-  <data name="CREDENTIAL_CREATE" xml:space="preserve">
-    <value>Criação de Credenciais</value>
-  </data>
-  <data name="CREDENTIAL_DISCARD_MESSAGE" xml:space="preserve">
-    <value>Caso não tenha realizado essa solicitação, por favor desconsidere este e-mail.</value>
-  </data>
-  <data name="CREDENTIAL_FIRST_ACCESS_SUBJECT" xml:space="preserve">
-    <value>Primeiro Acesso</value>
-  </data>
-  <data name="CREDENTIAL_MAIL_BODY_OPEN_TEXT" xml:space="preserve">
-    <value>Olá {USERNAME}, você solicitou a {ACTION} de sua credencial de acesso no {SERVICE_NAME}. Crie uma {ACTION_PASSWORD} de acesso clicando no botão abaixo.</value>
-  </data>
-  <data name="CREDENTIAL_OR_ELSE_LINK" xml:space="preserve">
-    <value>Ou se preferir, você pode acessar o link:</value>
-  </data>
-  <data name="CREDENTIAL_RECOVERY" xml:space="preserve">
-    <value>Recuperação de Credenciais</value>
-  </data>
-  <data name="CREDENTIAL_RECOVERY_ACCESS_SUBJECT" xml:space="preserve">
-    <value>Recuperação de Credenciais</value>
-  </data>
-  <data name="CREDENTIAL_TOKEN_DEADLINE" xml:space="preserve">
-    <value>Lembrando que o link acima é valido até</value>
-  </data>
   <data name="DOC_ALREADY_EXISTS" xml:space="preserve">
     <value>Documento já existe</value>
   </data>
